@@ -38,7 +38,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk.h,v 1.10 2001/09/16 15:02:25 davygrvy Exp $
+ *     RCS:  $Id: itk.h,v 1.11 2001/11/24 22:55:39 davygrvy Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -60,9 +60,15 @@
 #include "tk.h"
 #include "itclInt.h"
 
+#undef TCL_STORAGE_CLASS
 #ifdef BUILD_itk
-# undef TCL_STORAGE_CLASS
-# define TCL_STORAGE_CLASS DLLEXPORT
+#   define TCL_STORAGE_CLASS DLLEXPORT
+#else
+#   ifdef USE_ITK_STUBS
+#	define TCL_STORAGE_CLASS
+#   else
+#	define TCL_STORAGE_CLASS DLLIMPORT
+#   endif
 #endif
 
 /*
@@ -100,7 +106,7 @@ typedef struct ItkClassOption {
  */
 
 #ifdef USE_ITK_STUBS
-
+extern TCL_CPP
 CONST char *		Itk_InitStubs _ANSI_ARGS_((Tcl_Interp *interp,
 			    char *version, int exact));
 #endif
@@ -109,8 +115,8 @@ CONST char *		Itk_InitStubs _ANSI_ARGS_((Tcl_Interp *interp,
  * Public functions that are not accessible via the stubs table.
  */
 
-# undef TCL_STORAGE_CLASS
-# define TCL_STORAGE_CLASS DLLIMPORT
+#undef TCL_STORAGE_CLASS
+#define TCL_STORAGE_CLASS DLLIMPORT
 
 #endif /* RC_INVOKED */
 #endif /* ITK_H */
