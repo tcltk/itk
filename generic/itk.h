@@ -38,7 +38,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk.h,v 1.7 2000/08/04 19:19:12 davidg Exp $
+ *     RCS:  $Id: itk.h,v 1.8 2001/05/22 06:19:31 davygrvy Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -55,7 +55,7 @@
  * and procedure declarations, that occur below.
  */
 
-#ifndef RESOURCE_INCLUDED
+#ifndef RC_INVOKED
 
 #include "itclInt.h"
 #include "tk.h"
@@ -112,5 +112,5 @@ char *		Itk_InitStubs _ANSI_ARGS_((Tcl_Interp *interp,
 # undef TCL_STORAGE_CLASS
 # define TCL_STORAGE_CLASS DLLIMPORT
 
-#endif /* RESOURCE INCLUDED */
+#endif /* RC_INVOKED */
 #endif /* ITK_H */
