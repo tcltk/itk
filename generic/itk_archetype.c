@@ -26,7 +26,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_archetype.c,v 1.2 2000/07/06 06:43:32 mmc Exp $
+ *     RCS:  $Id: itk_archetype.c,v 1.3 2001/05/11 14:31:12 andreas_kupries Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -1809,6 +1809,11 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
         for (objc--,objv++; objc > 0; objc-=2, objv+=2) {
             token = Tcl_GetStringFromObj(objv[0], (int*)NULL);
             if (objc < 2) {
+	        /* Bug 227814
+		 * Ensure that the interp result is unshared.
+		 */
+
+	        Tcl_ResetResult(interp);
                 Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
                     "value for \"", token, "\" missing",
                     (char*)NULL);
