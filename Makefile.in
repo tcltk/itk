@@ -11,7 +11,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.7 1999/09/20 21:55:06 wart Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.8 1999/09/21 18:32:25 wart Exp $
 
 #========================================================================
 # Edit the following few lines when writing a new extension
@@ -268,7 +268,7 @@ install-libraries: libraries
 	    $(INSTALL_DATA) $$i $(includedir) ; \
 	done;
 	@echo "Installing library files in $(ITK_LIBRARY)"
-	@for i in $(srcdir)/library/*.tcl ; do \
+	@for i in $(srcdir)/library/*.* $(srcdir)/library/tclIndex ; do \
 	    echo "Installing $$i" ; \
 	    $(INSTALL_DATA) $$i $(ITK_LIBRARY) ; \
 	done;
