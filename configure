@@ -3705,7 +3705,7 @@ fi
 #--------------------------------------------------------------------
 
 if test "${TEA_PLATFORM}" = "windows" -a "$GCC" != "yes" ; then
-    SHLIB_LD_LIBS="${SHLIB_LD_LIBS} ${itcl_STUB_LIB_PATH}"
+    SHLIB_LD_LIBS="${SHLIB_LD_LIBS} \"`${CYGPATH} ${itcl_STUB_LIB_PATH}`\""
 else
     SHLIB_LD_LIBS="${SHLIB_LD_LIBS} ${itcl_STUB_LIB_SPEC}"
 fi
