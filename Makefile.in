@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.21 2002/04/04 05:40:29 hobbs Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.22 2002/04/05 17:26:05 hobbs Exp $
 
 #========================================================================
 # Edit the following few lines when writing a new extension
@@ -354,7 +354,7 @@ distclean: clean
 # You should not have to modify this target.
 #========================================================================
 
-install-lib-binaries: installdirs
+install-lib-binaries:
 	@mkdir -p $(DESTDIR)$(pkglibdir)
 	@list='$(lib_BINARIES)'; for p in $$list; do \
 	  if test -f $$p; then \
@@ -381,7 +381,7 @@ install-lib-binaries: installdirs
 # You should not have to modify this target.
 #========================================================================
 
-install-bin-binaries: installdirs
+install-bin-binaries:
 	@mkdir -p $(DESTDIR)$(bindir)
 	@list='$(bin_BINARIES)'; for p in $$list; do \
 	  if test -f $$p; then \
