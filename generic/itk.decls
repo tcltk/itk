@@ -9,7 +9,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
-# RCS: $Id: itk.decls,v 1.2 2000/08/04 22:09:06 davidg Exp $
+# RCS: $Id: itk.decls,v 1.3 2001/06/22 04:38:54 davygrvy Exp $
 
 library itk
 interface itk
@@ -26,9 +26,9 @@ interface itk
 declare 0 generic {
     int Itk_Init (Tcl_Interp *interp)
 }
-#declare 1 generic {
-#    int Itk_SafeInit (Tcl_Interp *interp)
-#}
+declare 1 generic {
+    int Itk_SafeInit (Tcl_Interp *interp)
+}
 
 
 #
