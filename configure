@@ -2002,6 +2002,43 @@ fi
 
 
 #--------------------------------------------------------------------
+# A wish shell is needed to run the test suite.
+#--------------------------------------------------------------------
+
+
+    echo $ac_n "checking for wish""... $ac_c" 1>&6
+echo "configure:2011: checking for wish" >&5
+
+    if eval "test \"`echo '$''{'ac_cv_path_wish'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  
+	search_path=`echo ${exec_prefix}/bin:${prefix}/bin:${TCL_BIN_DIR}:${TCL_BIN_DIR}/../bin:${PATH} | sed -e 's/:/ /g'`
+	for dir in $search_path ; do
+	    for j in `ls -r $dir/wish[8-9]*${EXEEXT} 2> /dev/null` \
+		    `ls -r $dir/wish*${EXEEXT} 2> /dev/null` ; do
+		if test x"$ac_cv_path_wish" = x ; then
+		    if test -f "$j" ; then
+			ac_cv_path_wish=$j
+			break
+		    fi
+		fi
+	    done
+	done
+    
+fi
+
+
+    if test -f "$ac_cv_path_wish" ; then
+	WISH_PROG=$ac_cv_path_wish
+	echo "$ac_t""$WISH_PROG" 1>&6
+    else
+	{ echo "configure: error: No wish found in PATH:  $search_path" 1>&2; exit 1; }
+    fi
+    
+
+
+#--------------------------------------------------------------------
 # Finally, substitute all of the various values into the Makefile.
 #--------------------------------------------------------------------
 
@@ -2221,6 +2258,7 @@ s%@itkstub_LIB_FILE@%$itkstub_LIB_FILE%g
 s%@itk_LIB_FILE@%$itk_LIB_FILE%g
 s%@SHLIB_LD_LIBS@%$SHLIB_LD_LIBS%g
 s%@TCLSH_PROG@%$TCLSH_PROG%g
+s%@WISH_PROG@%$WISH_PROG%g
 
 CEOF
 EOF
