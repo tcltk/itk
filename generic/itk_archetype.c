@@ -26,7 +26,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_archetype.c,v 1.4 2001/05/11 14:48:02 andreas_kupries Exp $
+ *     RCS:  $Id: itk_archetype.c,v 1.5 2001/05/22 03:34:47 davygrvy Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -3085,7 +3085,8 @@ Itk_CreateArchComponent(interp, info, name, cdefn, accessCmd)
     ItclClass *cdefn;              /* component created in this class */
     Tcl_Command accessCmd;         /* access command for component */
 {
-    char *wname, *init;
+    char *init;
+    CONST char *wname;
     ArchComponent *archComp;
     ArchOption *archOpt;
     Tk_Window tkwin;
@@ -3097,14 +3098,14 @@ Itk_CreateArchComponent(interp, info, name, cdefn, accessCmd)
      *  Save this component in the itk_component() array.
      */
     wname = Tcl_GetCommandName(interp, accessCmd);
-    Tcl_SetVar2(interp, "itk_component", name, wname, 0);
+    Tcl_SetVar2(interp, "itk_component", name, (char *)wname, 0);
 
     /*
      *  If the symbolic name for the component is "hull", then this
      *  is the toplevel or frame that embodies a mega-widget.  Update
      *  the Archtype info to include the window token.
      */
-    tkwin = Tk_NameToWindow(interp, wname, Tk_MainWindow(interp));
+    tkwin = Tk_NameToWindow(interp, (char *)wname, Tk_MainWindow(interp));
 
     if (strcmp(name, "hull") == 0) {
         if (tkwin == NULL) {

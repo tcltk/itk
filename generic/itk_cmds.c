@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_cmds.c,v 1.9 2001/05/22 00:48:46 davygrvy Exp $
+ *     RCS:  $Id: itk_cmds.c,v 1.10 2001/05/22 03:34:47 davygrvy Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -99,6 +99,7 @@ Initialize(interp)
 {
     Tcl_Namespace *itkNs, *parserNs;
     ClientData parserInfo;
+    extern ItkStubs itkStubs;
 
     if (Tcl_InitStubs(interp, "8.1", 0) == NULL) {
 	return TCL_ERROR;
@@ -190,7 +191,8 @@ Initialize(interp)
     Tcl_SetVar(interp, "::itk::patchLevel", ITCL_PATCH_LEVEL, 0);
 
     /*
-     *  Signal that the package has been loaded.
+     *  Signal that the package has been loaded and provide the Itk Stubs table
+     *  for dependent modules.
      */
     if (Tcl_PkgProvideEx(interp, "Itk", ITCL_VERSION,
             (ClientData) &itkStubs) != TCL_OK) {
