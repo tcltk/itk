@@ -365,4 +365,4 @@ SC_PROG_WISH
 #--------------------------------------------------------------------
 
 AC_OUTPUT([Makefile \
-	pkgIndex.tcl])
+	pkgIndex.tcl itkConfig.sh])
