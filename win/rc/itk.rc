@@ -1,4 +1,4 @@
-// RCS: @(#) $Id: itk.rc,v 1.9 2003/12/23 09:56:36 davygrvy Exp $
+// RCS: @(#) $Id: itk.rc,v 1.10 2003/12/23 10:01:35 davygrvy Exp $
 //
 // Version resource script.
 //
@@ -43,7 +43,7 @@ BEGIN
             VALUE "CompanyName", "Bell Labs Innovations for Lucent Technologies\0"
             VALUE "FileVersion", ITK_PATCH_LEVEL
             VALUE "LegalCopyright", "Copyright \251 1993-2003\0"
-            VALUE "ProductName", "[Incr Tk] " ITCL_VERSION " for Windows\0"
+            VALUE "ProductName", "[Incr Tk] " ITK_VERSION " for Windows\0"
             VALUE "ProductVersion", ITK_PATCH_LEVEL
         END
     END
