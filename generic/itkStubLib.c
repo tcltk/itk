@@ -61,6 +61,10 @@ ItkStubs *itkStubsPtr;
  *----------------------------------------------------------------------
  */
 
+#ifdef Itk_InitStubs
+#undef Itk_InitStubs
+#endif
+
 char *
 Itk_InitStubs (interp, version, exact)
     Tcl_Interp *interp;
