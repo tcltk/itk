@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.21 2003/12/23 06:58:02 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.22 2003/12/23 08:02:34 davygrvy Exp $
 #------------------------------------------------------------------------------
 #  Do not modify this file!
 #------------------------------------------------------------------------------
@@ -75,7 +75,11 @@ LIB_INSTALL_DIR		= $(INSTALLDIR)\lib
 SCRIPT_INSTALL_DIR	= $(INSTALLDIR)\lib\itk$(ITK_DOTVERSION)
 INCLUDE_INSTALL_DIR	= $(INSTALLDIR)\include
 
+!if $(TCL_DOES_STUBS)
 ITKLIBNAME	= $(PROJECT)$(ITCL_VERSION)$(SUFX).$(EXT)
+!else
+ITKLIBNAME	= $(PROJECT)$(ITCL_VERSION)80$(SUFX).$(EXT)
+!endif
 ITKLIB		= "$(OUT_DIR)\$(ITKLIBNAME)"
 
 !if $(TCLINSTALL)
