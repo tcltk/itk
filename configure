@@ -1459,7 +1459,7 @@ echo "configure:1423: checking for tkstub library" >&5
     done
 
     case "`uname -s`" in
-	*win32* | *WIN32* | *CYGWIN_NT*)
+	*win32* | *WIN32* | *CYGWIN_NT* |*CYGWIN_98*|*CYGWIN_95*)
 	    tkstub_LIB_SPEC=\"`${CYGPATH} ${tkstub_LIB_PATH_NAME}`\"
 	    ;;
 	*)
@@ -1494,7 +1494,7 @@ echo "configure:1423: checking for tkstub library" >&5
 echo "configure:1495: checking for Tcl private include files" >&5
 
     case "`uname -s`" in
-	*win32* | *WIN32* | *CYGWIN_NT*)
+	*win32* | *WIN32* | *CYGWIN_NT* |*CYGWIN_98*|*CYGWIN_95*)
 	    TCL_TOP_DIR_NATIVE=\"`${CYGPATH} ${TCL_SRC_DIR}/..`\"
 	    TCL_GENERIC_DIR_NATIVE=\"`${CYGPATH} ${TCL_SRC_DIR}/../generic`\"
 	    TCL_UNIX_DIR_NATIVE=\"`${CYGPATH} ${TCL_SRC_DIR}/../unix`\"
@@ -1535,7 +1535,7 @@ echo "configure:1495: checking for Tcl private include files" >&5
 echo "configure:1536: checking for Tk private include files" >&5
 
     case "`uname -s`" in
-	*win32* | *WIN32* | *CYGWIN_NT*)
+	*win32* | *WIN32* | *CYGWIN_NT* |*CYGWIN_98*|*CYGWIN_95*)
 	    TK_UNIX_DIR_NATIVE=\"`${CYGPATH} ${TK_SRC_DIR}/../unix`\"
 	    TK_WIN_DIR_NATIVE=\"`${CYGPATH} ${TK_SRC_DIR}/../win`\"
 	    TK_GENERIC_DIR_NATIVE=\"`${CYGPATH} ${TK_SRC_DIR}/../generic`\"
@@ -1634,7 +1634,7 @@ EOF
 
 
 	case "`uname -s`" in
-	    *win32* | *WIN32* | *CYGWIN_NT*)
+	    *win32* | *WIN32* | *CYGWIN_NT* | *CYGWIN_98* | *CYGWIN_95*)
 		    echo "$ac_t""yes" 1>&6
 		;;
 	    *)
@@ -1762,7 +1762,7 @@ SHLIB_CFLAGS=${TCL_SHLIB_CFLAGS}
 
 
     case "`uname -s`" in
-	*win32* | *WIN32* | *CYGWIN_NT*)
+	*win32* | *WIN32* | *CYGWIN_NT* | *CYGWIN_98* | *CYGWIN_95*)
 	    tcl_dbgx=d
 	;;
 	*)
@@ -1833,7 +1833,7 @@ EOF
 
 
     case "`uname -s`" in
-	*win32* | *WIN32* | *CYGWIN_NT*)
+	*win32* | *WIN32* | *CYGWIN_NT* |*CYGWIN_98*|*CYGWIN_95*)
 	    if test "${CC-cc}" = "cl"; then
 		MAKE_STATIC_LIB="\${STLIB_LD} -out:\$@ \$(\$@_OBJECTS) "
 		MAKE_SHARED_LIB="\${SHLIB_LD} \${SHLIB_LDFLAGS} \${SHLIB_LD_LIBS} \$(LDFLAGS) -out:\$@ \$(\$@_OBJECTS) "
