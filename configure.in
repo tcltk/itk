@@ -95,13 +95,16 @@ AC_EXEEXT
 case "`uname -s`" in
     *win32* | *WIN32* | *CYGWIN_NT*)
 	CYGPATH="cygpath -w"
+	RELPATH=".. bin"
     ;;
     *)
 	CYGPATH=echo
+	RELPATH=..
     ;;
 esac
 
 AC_SUBST(CYGPATH)
+AC_SUBST(RELPATH)
 
 #--------------------------------------------------------------------
 # Includes for this package
