@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.27 2004/09/22 09:36:54 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.28 2004/09/22 09:43:37 davygrvy Exp $
 #------------------------------------------------------------------------------
 #  Do not modify this file!
 #------------------------------------------------------------------------------
@@ -84,10 +84,14 @@ ITCLIMPLIB	= "$(ITCLDIR)\win\Release\$(ITCLIMPLIBNAME)"
 TKSTUBLIB	= "$(TCLDIR)\lib\tkstub$(TCL_VERSION).lib"
 TKIMPLIB	= "$(TCLDIR)\lib\tk$(TCL_VERSION)$(DBGX).lib"
 WISH		= "$(TCLDIR)\bin\wish$(TCL_VERSION)$(DBGX).exe"
+TCL_LIBRARY	= 
+TK_LIBRARY	= 
 !else
 TKSTUBLIB	= "$(TKDIR)\win\Release\tkstub$(TCL_VERSION).lib"
 TKIMPLIB	= "$(TKDIR)\win\$(OUT_DIR)\tk$(TCL_VERSION)$(DBGX).lib"
 WISH		= "$(TKDIR)\win\$(OUT_DIR)\wish$(TCL_VERSION)$(DBGX).exe"
+TCL_LIBRARY	= "$(TCLDIR)\library"
+TK_LIBRARY	= "$(TKDIR)\library"
 !endif
 ITCL_LIBRARY	= "$(ITCLDIR:\=/)/library"
 ITK_LIBRARY	= "$(ROOT)/library
@@ -240,14 +244,14 @@ test :
 	@echo test target not supported for a static library.
 !else
 test : setup $(ITKLIB) $(ITKSTUBLIB)
-	set TCL_LIBRARY=$(TCLDIR)\..\library
-	set TK_LIBRARY=$(TKDIR) library
+	set TCL_LIBRARY=$(TCL_LIBRARY)
+	set TK_LIBRARY=$(TK_LIBRARY)
 	set ITCL_LIBRARY=$(ITCL_LIBRARY)
 	set ITK_LIBRARY=$(ITK_LIBRARY)
 	$(TCLSH) ..\tests\all.tcl $(TESTFLAGS) -loadfile <<
 	load [file normalize $(ITCLLIB:\=/)] Itcl
 	load [file normalize $(ITKLIB:\=/)] Itk
-<<keep
+<<
 !endif
 
 setup :
