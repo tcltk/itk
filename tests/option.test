@@ -6,7 +6,7 @@
 #            mmclennan@lucent.com
 #            http://www.tcltk.com/itcl
 #
-#      RCS:  $Id: option.test,v 1.1 1998/07/27 18:45:32 stanton Exp $
+#      RCS:  $Id: option.test,v 1.2 2000/04/19 06:51:06 mmc Exp $
 # ----------------------------------------------------------------------
 #            Copyright (c) 1993-1998  Lucent Technologies, Inc.
 # ======================================================================
@@ -115,15 +115,15 @@ test option-2.1 {create a widget for the following tests} {
 } {.testUsual}
 
 test option-2.2 {register some "usual" code} {
-    usual TestOptComp-test {keep -cursor -foreground}
+    itk::usual TestOptComp-test {keep -cursor -foreground}
 } {}
 
 test option-2.3 {query back "usual" code} {
-    usual TestOptComp-test
+    itk::usual TestOptComp-test
 } {keep -cursor -foreground}
 
 test option-2.4 {query back unknown "usual" code} {
-    usual xyzzyxyzzy
+    itk::usual xyzzyxyzzy
 } {}
 
 test option-2.5 {add a component using "usual" code} {

@@ -80,6 +80,8 @@ if {[info commands memory] == ""} {
 #	unixExecs     - 1 means this machine has commands such as 'cat',
 #			'echo' etc available.
 
+package require Itk
+
 catch {unset testConfig}
 if {$tcl_platform(platform) == "unix"} {
     set testConfig(unixOnly) 1

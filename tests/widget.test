@@ -6,7 +6,7 @@
 #            mmclennan@lucent.com
 #            http://www.tcltk.com/itcl
 #
-#      RCS:  $Id: widget.test,v 1.1 1998/07/27 18:45:33 stanton Exp $
+#      RCS:  $Id: widget.test,v 1.2 2000/04/19 06:51:06 mmc Exp $
 # ----------------------------------------------------------------------
 #            Copyright (c) 1993-1998  Lucent Technologies, Inc.
 # ======================================================================
@@ -157,7 +157,7 @@ test widget-1.10 {check the invocation of "config" code} {
 } {{} {test message}}
 
 test widget-1.11a {configure using the "code" command} {
-    .testWidget0 do {configure -command [code $this action "button press"]}
+    .testWidget0 do {configure -command [itcl::code $this action "button press"]}
     .testWidget0 cget -command
 } {namespace inscope ::TestWidget {::.testWidget0 action {button press}}}
 
@@ -204,7 +204,7 @@ test widget-1.16 {dead components are removed from the component list} {
 } {hull test1 test2}
 
 test widget-1.17 {use "configbody" command to change "config" code} {
-    configbody TestWidget::status {lappend status "new"}
+    itcl::configbody TestWidget::status {lappend status "new"}
 } {}
 
 test widget-1.18 {"config" code can really change} {
@@ -215,7 +215,7 @@ test widget-1.18 {"config" code can really change} {
 } {new new}
 
 test widget-1.19 {"config" code can change back} {
-    configbody TestWidget::status {lappend status $itk_option(-status)}
+    itcl::configbody TestWidget::status {lappend status $itk_option(-status)}
 } {}
 
 test widget-1.20 {mega-widgets show up on the object list} {
