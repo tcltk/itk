@@ -26,7 +26,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_archetype.c,v 1.3 2001/05/11 14:31:12 andreas_kupries Exp $
+ *     RCS:  $Id: itk_archetype.c,v 1.4 2001/05/11 14:48:02 andreas_kupries Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -2876,6 +2876,11 @@ Itk_ArchConfigOption(interp, info, name, value)
      */
     entry = Tcl_FindHashEntry(&info->options, name);
     if (!entry) {
+        /* Bug 227876
+	 * Ensure that the interp result is unshared.
+	 */
+
+        Tcl_ResetResult (interp);
         Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
             "unknown option \"", name, "\"",
             (char*)NULL);
