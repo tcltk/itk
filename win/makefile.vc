@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.19 2003/12/23 05:22:45 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.20 2003/12/23 05:45:56 davygrvy Exp $
 #------------------------------------------------------------------------------
 #  Do not modify this file!
 #------------------------------------------------------------------------------
@@ -102,10 +102,11 @@ ITKSTUBLIBNAME = $(STUBPREFIX)$(ITK_VERSION).lib
 ITKSTUBLIB     = "$(OUT_DIR)\$(ITKSTUBLIBNAME)"
 
 
-LIB_INSTALL_DIR		= $(INSTALLDIR)\lib
-BIN_INSTALL_DIR		= $(INSTALLDIR)\bin
-SCRIPT_INSTALL_DIR	= $(INSTALLDIR)\lib\itk$(ITK_DOTVERSION)
-INCLUDE_INSTALL_DIR	= $(INSTALLDIR)\include
+BIN_INSTALL_DIR		= $(_INSTALLDIR)\bin
+DOC_INSTALL_DIR		= $(_INSTALLDIR)\doc
+LIB_INSTALL_DIR		= $(_INSTALLDIR)\lib
+SCRIPT_INSTALL_DIR	= $(_INSTALLDIR)\lib\itk$(ITK_DOTVERSION)
+INCLUDE_INSTALL_DIR	= $(_INSTALLDIR)\include
 
 ITKOBJS = \
 	$(TMP_DIR)\itk_archetype.obj \
@@ -229,6 +230,7 @@ ITK_CFLAGS	= $(ITK_EXE_CFLAGS) -DUSE_TCL_STUBS -DUSE_TK_STUBS -DUSE_ITCL_STUBS
 
 all :     setup $(ITKLIB) $(ITKSTUBLIB)
 release : setup $(ITKLIB) $(ITKSTUBLIB)
+install	: install-binaries install-docs
 
 test:	setup $(ITKLIB) $(ITKSTUBLIB) $(ITKWISH)
 	-@copy $(TCLDLL) $(TMPDIR)
@@ -255,8 +257,8 @@ $(ITKSTUBLIB) : $(ITKSTUBOBJS)
 	$(lib32) -nologo -out:$@ $(ITKSTUBOBJS)
 !endif
 
-install: all
-	if not exist "$(INSTALLDIR)" mkdir "$(INSTALLDIR)"
+install-binaries:
+	if not exist "$(_INSTALLDIR)" mkdir "$(_INSTALLDIR)"
 	if not exist "$(BIN_INSTALL_DIR)" mkdir "$(BIN_INSTALL_DIR)"
 	if not exist "$(LIB_INSTALL_DIR)" mkdir "$(LIB_INSTALL_DIR)"
 	if not exist "$(SCRIPT_INSTALL_DIR)" mkdir "$(SCRIPT_INSTALL_DIR)"
@@ -378,7 +380,7 @@ install-docs:
 	@xcopy /i /y "$(HELPCNT)" "$(DOC_INSTALL_DIR)\"
 	$(TCLSH) <<
 puts "Installing $(PROJECT)'s helpfile contents into Tcl's ..."
-set f [open "$(DOC_INSTALL_DIR:\=/)/tcl$(TCL_VERSION).cnt" r]
+set f [open {$(DOC_INSTALL_DIR:\=/)/tcl$(TCL_VERSION).cnt} r]
 while {![eof $$f]} {
     if {[regexp {:Include $(PROJECT)([0-9]{2}).cnt} [gets $$f] dummy ver]} {
 	if {$$ver == $(ITK_VERSION)} {
@@ -392,7 +394,7 @@ while {![eof $$f]} {
     }
 }
 close $$f
-set f [open $(DOC_INSTALL_DIR:\=/)/tcl$(TCL_VERSION).cnt a]
+set f [open {$(DOC_INSTALL_DIR:\=/)/tcl$(TCL_VERSION).cnt} a]
 puts $$f {:Include $(HLPBASE).cnt}
 close $$f
 <<
