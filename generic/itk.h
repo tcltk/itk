@@ -38,7 +38,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk.h,v 1.2 1998/07/29 15:06:59 escoffon Exp $
+ *     RCS:  $Id: itk.h,v 1.3 1998/08/04 13:31:17 escoffon Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -69,8 +69,8 @@
 #endif
 
 #ifdef BUILD_itk
-# undef EXPORT
-# define EXPORT DLLEXPORT
+# undef TCL_STORAGE_CLASS
+# define TCL_STORAGE_CLASS DLLEXPORT
 #endif
 
 /*
@@ -157,8 +157,8 @@ EXTERN void Itk_OptListAdd _ANSI_ARGS_((ItkOptList* olist,
 EXTERN void Itk_OptListRemove _ANSI_ARGS_((ItkOptList* olist,
     Tcl_HashEntry *entry));
 
-#undef EXPORT
-#define EXPORT DLLIMPORT
+# undef TCL_STORAGE_CLASS
+# define TCL_STORAGE_CLASS DLLIMPORT
 
 #endif /* RESOURCE INCLUDED */
 #endif /* ITK_H */
