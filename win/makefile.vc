@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.7 2001/05/22 03:35:59 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.8 2001/05/22 05:57:35 davygrvy Exp $
 ######################################################################
 # All needed information is derived from running vcvars32.bat
 #
@@ -64,10 +64,10 @@ TCLSH		= "$(TCLROOT)\win\$(OUT_DIR)\tclsh$(TCL_VERSION)$(DBGX).exe"
 WISH		= "$(TCLROOT)\win\$(OUT_DIR)\wish$(TCL_VERSION)$(DBGX).exe"
 !endif
 
-ITCLSTUBLIBNAME	= itclstub$(ITK_VERSION)$(DBGX).lib
-ITCLSTUBLIB	= "$(OUT_DIR)\$(ITCLSTUBLIBNAME)"
+ITCLSTUBLIBNAME	= itclstub$(ITCL_VERSION).lib
+ITCLSTUBLIB	= "$(ITCLDIR)\win\Release\$(ITCLSTUBLIBNAME)"
 
-ITKSTUBLIBNAME = $(STUBPREFIX)$(ITK_VERSION)$(DBGX).lib
+ITKSTUBLIBNAME = $(STUBPREFIX)$(ITK_VERSION).lib
 ITKSTUBLIB     = "$(OUT_DIR)\$(ITKSTUBLIBNAME)"
 
 
@@ -141,7 +141,7 @@ crt	= -MD$(DBGX)
 
 !if $(ISTCLINSTALL)
 TCL_INCLUDES	= -I"$(TCLROOT)\include"
-TK_INCLUDES	= -I"$(TKROOT)\include"
+TK_INCLUDES	= 
 !else
 TCL_INCLUDES	= -I"$(TCLROOT)\generic"
 TK_INCLUDES	= -I"$(TKROOT)\generic" -I"$(TKROOT)\xlib"
@@ -195,23 +195,6 @@ $(ITKSTUBLIB) : $(ITKSTUBOBJS)
 $(ITKSTUBLIB) :
 !endif
 
-#$(ITKWISH): $(ITKWISHOBJS) $(ITKLIB) $(TMPDIR)\itkwish.res
-#	set LIB=$(TOOLS32)\lib
-#	$(link32) $(ldebug) $(guilflags) $(TMPDIR)\itkwish.res -out:$@ \
-#		$(guilibsdll) $(TCLLIB) $(TKLIB) $(ITCLLIB) $(ITKLIB) \
-#		$(ITKWISHOBJS) 
-#
-#$(TMPDIR)\itkvc.def: $(DUMPEXTS) $(ITKOBJS)
-#	$(DUMPEXTS) -o $@ $(ITKDLLNAME) @<<
-#		$(ITKOBJS)
-#<<
-
-#$(DUMPEXTS): $(TCLDIR)\win\winDumpExts.c
-#	$(cc32) $(CON_CFLAGS) -Fo$(TMPDIR)\ $?
-#	set LIB=$(TOOLS32)\lib
-#	$(link32) $(ldebug) $(conlflags) $(guilibs) -out:$@ \
-#		$(TMPDIR)\winDumpExts.obj 
-
 install: all
 	if not exist $(INSTALLDIR) mkdir $(INSTALLDIR)
 	if not exist $(BIN_INSTALL_DIR) mkdir $(BIN_INSTALL_DIR)
@@ -223,25 +206,29 @@ install: all
 	copy $(ROOT)\generic\itk.h "$(INCLUDE_INSTALL_DIR)"
 	copy $(ROOT)\library\*.* "$(SCRIPT_INSTALL_DIR)"
 	copy $(ROOT)\win\*.tcl "$(SCRIPT_INSTALL_DIR)"
+	echo package ifneeded Itk $(ITK_DOTVERSION) [list load [file join $$dir $(ITKDLLNAME).dll] Itk] > \
+		"$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 
-#
+
+######################################################################
 # Regenerate the stubs files.
-#
+######################################################################
+
+!if $(ISTCLINSTALL) == 0
+# Only from the sources of Tcl does genStubs.tcl exist.
 genstubs:
     $(TCLSH) $(TCLDIR)\tools\genStubs.tcl $(GENERICDIR) \
         $(GENERICDIR)\itk.decls
+!endif
 
 ######################################################################
 # Special case object file targets
 ######################################################################
 
-#$(TMPDIR)\winMain.obj: $(ROOT)\win\winMain.c
-#	$(cc32) $(ITK_EXE_CFLAGS) -Fo$@ $?
-
 # The following object is part of the stub library and should not
 # be built as DLL objects but none of the symbols should be exported
 
-$(TMPDIR)\itkStubLib.obj : $(GENERICDIR)\itkStubLib.c
+$(TMP_DIR)\itkStubLib.obj : $(GENERICDIR)\itkStubLib.c
     $(cc32) -DSTATIC_BUILD $(ITK_CFLAGS) -Fo$@ $?
 
 $(TMP_DIR)\dllResource.obj : $(TMP_DIR)\itk.res
@@ -277,15 +264,15 @@ $<
 ######################################################################
 
 clean:
-	-@del $(OUTDIR)\*.exp 
-	-@del $(OUTDIR)\*.lib 
-	-@del $(OUTDIR)\*.dll 
-	-@del $(OUTDIR)\*.exe
-	-@del $(OUTDIR)\*.pdb
-	-@del $(TMPDIR)\*.pch
-	-@del $(TMPDIR)\*.obj
-	-@del $(TMPDIR)\*.res
-	-@del $(TMPDIR)\*.def
-	-@del $(TMPDIR)\*.exe
-	-@rmdir $(OUTDIR)
-	-@rmdir $(TMPDIR)
+	-@del $(OUT_DIR)\*.exp 
+	-@del $(OUT_DIR)\*.lib 
+	-@del $(OUT_DIR)\*.dll 
+	-@del $(OUT_DIR)\*.exe
+	-@del $(OUT_DIR)\*.pdb
+	-@del $(TMP_DIR)\*.pch
+	-@del $(TMP_DIR)\*.obj
+	-@del $(TMP_DIR)\*.res
+	-@del $(TMP_DIR)\*.def
+	-@del $(TMP_DIR)\*.exe
+	-@rmdir $(OUT_DIR)
+	-@rmdir $(TMP_DIR)
