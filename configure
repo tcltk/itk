@@ -1871,18 +1871,20 @@ fi
 # link against the non-stubbed Tcl library.
 #--------------------------------------------------------------------
 
-cat >> confdefs.h <<\EOF
+if test "${SHARED_BUILD}" = "1" ; then
+    cat >> confdefs.h <<\EOF
 #define USE_TCL_STUBS 1
 EOF
 
-cat >> confdefs.h <<\EOF
+    cat >> confdefs.h <<\EOF
 #define USE_TK_STUBS 1
 EOF
 
-cat >> confdefs.h <<\EOF
+    cat >> confdefs.h <<\EOF
 #define USE_ITCL_STUBS 1
 EOF
 
+fi
 
 #--------------------------------------------------------------------
 # This macro generates a line to use when building a library.  It
@@ -1970,7 +1972,7 @@ esac
 
 
     echo $ac_n "checking for tclsh""... $ac_c" 1>&6
-echo "configure:1974: checking for tclsh" >&5
+echo "configure:1976: checking for tclsh" >&5
 
     if eval "test \"`echo '$''{'ac_cv_path_tclsh'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2007,7 +2009,7 @@ fi
 
 
     echo $ac_n "checking for wish""... $ac_c" 1>&6
-echo "configure:2011: checking for wish" >&5
+echo "configure:2013: checking for wish" >&5
 
     if eval "test \"`echo '$''{'ac_cv_path_wish'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
