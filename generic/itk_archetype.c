@@ -26,7 +26,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_archetype.c,v 1.8 2002/08/11 04:10:22 davygrvy Exp $
+ *     RCS:  $Id: itk_archetype.c,v 1.9 2003/12/22 19:58:54 davygrvy Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -2851,7 +2851,8 @@ Itk_ArchSetOption(interp, info, name, value)
     }
     archOpt = (ArchOption*)Tcl_GetHashValue(entry);
 
-    if (!Tcl_SetVar2(interp, "itk_option", archOpt->switchName, value, 0)) {
+    if (!Tcl_SetVar2(interp, "itk_option", archOpt->switchName,
+	    (CONST84 char *)value, 0)) {
         Itk_ArchOptAccessError(interp, info, archOpt);
         return TCL_ERROR;
     }
