@@ -10,15 +10,14 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * SCCS: @(#) tkAppInit.c 1.21 96/03/26 16:47:07
+ * SCCS: @(#) tkAppInit.c 1.22 96/05/29 09:47:08
  */
 
 #include "tk.h"
 #include "itk.h"
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
+/* include tclInt.h for access to namespace API */
+#include "tclInt.h"
 
 /*
  * The following variable is a special hack that is needed in order for
@@ -26,12 +25,11 @@ extern "C" {
  */
 
 extern int matherr();
-static int (*dummyMathPtr)() = matherr;
+int *tclDummyMathPtr = (int *) matherr;
 
-#ifdef	__cplusplus
-}
-#endif
-
+#ifdef TK_TEST
+EXTERN int		Tktest_Init _ANSI_ARGS_((Tcl_Interp *interp));
+#endif /* TK_TEST */
 
 /*
  *----------------------------------------------------------------------
@@ -89,6 +87,14 @@ Tcl_AppInit(interp)
 	return TCL_ERROR;
     }
     Tcl_StaticPackage(interp, "Tk", Tk_Init, Tk_SafeInit);
+#ifdef TK_TEST
+    if (Tktest_Init(interp) == TCL_ERROR) {
+	return TCL_ERROR;
+    }
+    Tcl_StaticPackage(interp, "Tktest", Tktest_Init,
+            (Tcl_PackageInitProc *) NULL);
+#endif /* TK_TEST */
+
 
     /*
      * Call the init procedures for included packages.  Each call should
@@ -101,19 +107,18 @@ Tcl_AppInit(interp)
      * where "Mod" is the name of the module.
      */
     if (Itcl_Init(interp) == TCL_ERROR) {
-	return TCL_ERROR;
+        return TCL_ERROR;
     }
     if (Itk_Init(interp) == TCL_ERROR) {
-	return TCL_ERROR;
+        return TCL_ERROR;
     }
     Tcl_StaticPackage(interp, "Itcl", Itcl_Init, Itcl_SafeInit);
     Tcl_StaticPackage(interp, "Itk", Itk_Init, (Tcl_PackageInitProc *) NULL);
 
     /*
      *  This is itkwish, so import all [incr Tcl] commands by
-     *  default into the global namespace.  Set the "itcl::native"
-     *  variable so we can do the same kind of import automatically
-     *  during the "auto_mkindex" operation.
+     *  default into the global namespace.  Fix up the autoloader
+     *  to do the same.
      */
     if (Tcl_Import(interp, Tcl_GetGlobalNamespace(interp),
             "::itk::*", /* allowOverwrite */ 1) != TCL_OK) {
@@ -125,7 +130,7 @@ Tcl_AppInit(interp)
         return TCL_ERROR;
     }
 
-    if (Tcl_Eval(interp, "auto_mkindex_parser::slavehook { _%@namespace import -force itcl::* itk::* }") != TCL_OK) {
+    if (Tcl_Eval(interp, "auto_mkindex_parser::slavehook { _%@namespace import -force ::itcl::* ::itk::* }") != TCL_OK) {
         return TCL_ERROR;
     }
 

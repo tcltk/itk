@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_cmds.c,v 1.2 1998/07/28 18:16:18 stanton Exp $
+ *     RCS:  $Id: itk_cmds.c,v 1.3 1998/08/11 14:40:54 welch Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -45,28 +45,29 @@ namespace eval ::itk {\n\
         variable library\n\
         variable version\n\
         rename _find_init {}\n\
-	if {[info exists library]} {\n\
-	    lappend dirs $library\n\
-	} else {\n\
-	    if {[catch {uplevel #0 source -rsrc itk}] == 0} {\n\
-		return\n\
-	    }\n\
-	    set dirs {}\n\
-	    if {[info exists env(ITK_LIBRARY)]} {\n\
-		lappend dirs $env(ITK_LIBRARY)\n\
-	    }\n\
-	    lappend dirs [file join [file dirname $tcl_library] itk$version]\n\
-	    set bindir [file dirname [info nameofexecutable]]\n\
-	    lappend dirs [file join $bindir .. lib itk$version]\n\
-	    lappend dirs [file join $bindir .. library]\n\
-	    lappend dirs [file join $bindir .. .. itk$version library]\n\
-	}\n\
+        if {[info exists library]} {\n\
+            lappend dirs $library\n\
+        } else {\n\
+            if {[catch {uplevel #0 source -rsrc itk}] == 0} {\n\
+                return\n\
+            }\n\
+            set dirs {}\n\
+            if {[info exists env(ITK_LIBRARY)]} {\n\
+                lappend dirs $env(ITK_LIBRARY)\n\
+            }\n\
+            lappend dirs [file join [file dirname $tcl_library] itk$version]\n\
+            set bindir [file dirname [info nameofexecutable]]\n\
+            lappend dirs [file join $bindir .. lib itk$version]\n\
+            lappend dirs [file join $bindir .. library]\n\
+            lappend dirs [file join $bindir .. .. library]\n\
+            lappend dirs [file join $bindir .. .. itk library]\n\
+        }\n\
         foreach i $dirs {\n\
             set library $i\n\
-	    set itkfile [file join $i itk.tcl]\n\
+            set itkfile [file join $i itk.tcl]\n\
             if {![catch {uplevel #0 [list source $itkfile]} msg]} {\n\
                 return\n\
-	    }\n\
+            }\n\
         }\n\
         set msg \"Can't find a usable itk.tcl in the following directories:\n\"\n\
         append msg \"    $dirs\n\"\n\
@@ -186,7 +187,7 @@ Initialize(interp)
         (ClientData)NULL, (Tcl_CmdDeleteProc*)NULL);
 
     Tcl_SetVar(interp, "::itk::version", ITCL_VERSION, 0);
-    Tcl_SetVar(interp, "::itk::patchLevel", ITK_PATCH_LEVEL, 0);
+    Tcl_SetVar(interp, "::itk::patchLevel", ITCL_PATCH_LEVEL, 0);
 
     /*
      *  Signal that the package has been loaded.

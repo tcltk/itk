@@ -20,54 +20,54 @@
  */
 #if __POWERPC__
 #pragma precompile_target "MW_ItkHeaderPPC"
+#include "MW_TkHeaderPPC"
 #elif __CFM68K__
 #pragma precompile_target "MW_ItkHeaderCFM68K"
+#include "MW_TkHeaderCFM68K"
 #else
 #pragma precompile_target "MW_ItkHeader68K"
+#include "MW_TkHeader68K"
 #endif
 
 /*
- * The define is used most everywhere to tell Tk (or any Tk
- * extensions) that we are compiling for the Macintosh platform.
- */
-#define MAC_TCL
-
-/*
- * The following defines are for the Xlib.h file to force 
- * it to generate prototypes in the way we need it.  This is
- * defined here in case X.h & company are ever included before
- * tk.h.
+ * Macintosh Tcl must be compiled with certain compiler options to
+ * ensure that it will work correctly.  The following pragmas are 
+ * used to ensure that those options are set correctly.  An error
+ * will occur at compile time if they are not set correctly.
  */
 
-#define NeedFunctionPrototypes 1
-#define NeedWidePrototypes 0
-
-/*
- * The following two defines are used to prepare for the coming
- * of Copland.  Currently, these are turned off.
- */
-
-#define STRICT_CONTROLS 0
-#define STRICT_WINDOWS  0
-
-/*
- * Define the following symbol if you want
- * comprehensive debugging turned on.
- */
-
-/* #define TCL_DEBUG */
-
-#ifdef TCL_DEBUG
-#   define TCL_MEM_DEBUG
-#   define TK_TEST
+#if !__option(enumsalwaysint)
+#error Tcl requires the Metrowerks setting "Enums always ints".
 #endif
 
-/*
- * Place any includes below that will are needed by the majority of the
- * and is OK to be in any file in the system.
- */
+#if !defined(__POWERPC__)
+#if !__option(far_data)
+#error Tcl requires the Metrowerks setting "Far data".
+#endif
+#endif
+
+#if !defined(__POWERPC__)
+#if !__option(fourbyteints)
+#error Tcl requires the Metrowerks setting "4 byte ints".
+#endif
+#endif
+
+#if !defined(__POWERPC__)
+#if !__option(IEEEdoubles)
+#error Tcl requires the Metrowerks setting "8 byte doubles".
+#endif
+#endif
 
 #include <tcl.h>
 #include <tk.h>
 #include <itcl.h>
 
+/*
+ * Place any includes below that will are needed by the majority of the
+ * and is OK to be in any file in the system.  The pragma's are used
+ * to control what functions are exported in the Tcl shared library.
+ */
+
+#pragma export on
+#include "itk.h"
+#pragma export reset

@@ -26,7 +26,7 @@
 #include <tcl.h>
 #include <tk.h>
 #include "itcl.h"
-#include "itkPatch.h"
+#include "itk.h"
 
 #if (TK_RELEASE_LEVEL == 0)
 #   define RELEASE_LEVEL alpha
@@ -51,14 +51,14 @@ resource 'vers' (1) {
 	ITCL_MAJOR_VERSION, MINOR_VERSION,
 	RELEASE_LEVEL, 0x00, verUS,
 	ITK_PATCH_LEVEL,
-	ITK_PATCH_LEVEL ", by Michael McLennan © 1996" "\n" "Lucent Technologies"
+	ITK_PATCH_LEVEL ", by Michael McLennan © 1993-1998" "\n" "Lucent Technologies, Inc."
 };
 
 resource 'vers' (2) {
 	ITCL_MAJOR_VERSION, MINOR_VERSION,
 	RELEASE_LEVEL, 0x00, verUS,
 	ITK_PATCH_LEVEL,
-	"ItkWish " ITK_PATCH_LEVEL " © 1996"
+	"ItkWish " ITK_PATCH_LEVEL " © 1993-1998"
 };
 
 
@@ -74,7 +74,7 @@ resource 'vers' (2) {
 resource 'STR ' (-16397, purgeable) {
 	"Itk Library\n\n"
 	"This is the library needed to run add Itcl to the Tcl/Tk shell. "
-	"To work properly, it should be placed in the ÔTool Command LanguageÕ folder "
+	"To work properly, it should be placed in the ŒTool Command Language¹ folder "
 	"within the Extensions folder."
 };
 
@@ -89,6 +89,6 @@ read 'TEXT' (ITK_LIBRARY_RESOURCES+12, "itk:tclIndex", purgeable)
 	"::mac:tclIndex";
 data 'TEXT' (ITK_LIBRARY_RESOURCES+13,"pkgIndex",purgeable, preload) {
 	"# Tcl package index file, version 1.0\n"
-	"package ifneeded Itk 2.2 [list load [file join $dir itk2.2[info sharedlibextension]] Itk]\n"
+	"package ifneeded Itk 3.0 [list package require Itcl 3.0 \; load [file join $dir itk30[info sharedlibextension]] Itk \; source -rsrc itk:tclIndex]\n"
 };
 

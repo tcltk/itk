@@ -38,7 +38,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk.h,v 1.3 1998/08/04 13:31:17 escoffon Exp $
+ *     RCS:  $Id: itk.h,v 1.4 1998/08/11 14:40:54 welch Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -47,11 +47,6 @@
  */
 #ifndef ITK_H
 #define ITK_H
-
-#include "itclInt.h"
-#include "tk.h"
-
-#define ITK_PATCH_LEVEL "3.0a2"
 
 /*
  * A special definition used to allow this header file to be included
@@ -62,21 +57,13 @@
 
 #ifndef RESOURCE_INCLUDED
 
-#if defined(__WIN32__)
-#   define WIN32_LEAN_AND_MEAN
-#   include <windows.h>
-#   undef WIN32_LEAN_AND_MEAN
-#endif
+#include "itclInt.h"
+#include "tk.h"
 
 #ifdef BUILD_itk
 # undef TCL_STORAGE_CLASS
 # define TCL_STORAGE_CLASS DLLEXPORT
 #endif
-
-/*
- *  FORWARD DECLARATIONS
- */
-EXTERN int Itk_Init _ANSI_ARGS_((Tcl_Interp *interp));
 
 /*
  *  List of options in alphabetical order:
@@ -106,6 +93,12 @@ typedef struct ItkClassOption {
     char *init;                   /* initial value for option */
 } ItkClassOption;
 
+
+/*
+ *  Exported functions:
+ */
+EXTERN int Itk_Init _ANSI_ARGS_((Tcl_Interp *interp));
+EXTERN int Itk_SafeInit _ANSI_ARGS_((Tcl_Interp *interp));
 
 /*
  *  Functions used internally by this package:

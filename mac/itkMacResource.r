@@ -51,14 +51,14 @@ resource 'vers' (1) {
 	ITCL_MAJOR_VERSION, MINOR_VERSION,
 	RELEASE_LEVEL, 0x00, verUS,
 	ITK_PATCH_LEVEL,
-	ITK_PATCH_LEVEL ", by Michael McLennan © 1996" "\n" "Lucent Technologies"
+	ITK_PATCH_LEVEL ", by Michael McLennan © 1993-1998" "\n" "Lucent Technologies, Inc."
 };
 
 resource 'vers' (2) {
 	ITCL_MAJOR_VERSION, MINOR_VERSION,
 	RELEASE_LEVEL, 0x00, verUS,
 	ITK_PATCH_LEVEL,
-	"ItkWish " ITK_PATCH_LEVEL " © 1996"
+	"ItkWish " ITK_PATCH_LEVEL " © 1993-1998"
 };
 
 
@@ -192,7 +192,7 @@ resource 'DITL' (129, "About Box", purgeable) {
 	    "ItkWish" ITK_PATCH_LEVEL " - an Object-Oriented Wish" 
 	    "\n\n" "Michael McLennan" 
 	     "\n" "Jim Ingham" "\n" "Lee Bernhard" "\n\n"
-	    "©Lucent Technologies 1996" "\n\n" "For more Info, see:" "\n" 
+	    "©Lucent Technologies, Inc. 1993-1998" "\n\n" "For more Info, see:" "\n" 
 	    "http://www.tcltk.com/itcl"},	    
         { 37,  22, 204, 182}, Picture  {enabled, 128}
     }

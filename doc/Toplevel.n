@@ -4,14 +4,14 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 '\"
-'\" RCS: $Id: Toplevel.n,v 1.2 1998/08/07 17:41:47 stanton Exp $
+'\" RCS: $Id: Toplevel.n,v 1.3 1998/08/11 14:40:53 welch Exp $
 '\"
 .so man.macros
 .TH Toplevel n 3.0 itk "[incr\ Tk]"
 .BS
 '\" Note:  do not modify the .SH NAME line immediately below!
 .SH NAME
-Toplevel \- base class for mega-widgets in a toplevel
+Toplevel \- base class for mega-widgets in a top-level window
 .SH "INHERITANCE"
 itk::Archetype <- itk::Toplevel
 .SH "STANDARD OPTIONS"

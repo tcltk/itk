@@ -4,40 +4,43 @@
  *	Provides a version of the Tcl_AppInit procedure for the example shell.
  *
  * Copyright (c) 1993-1994 Lockheed Missle & Space Company, AI Center
- * Copyright (c) 1995-1996 Sun Microsystems, Inc.
+ * Copyright (c) 1995-1997 Sun Microsystems, Inc.
  *
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * SCCS: @(#) tkMacAppInit.c 1.27 96/12/18 13:40:11
+ * SCCS: @(#) tkMacAppInit.c 1.35 97/07/28 11:18:55
  */
 
-#include <Windows.h>
 #include <Gestalt.h>
 #include <ToolUtils.h>
 #include <Fonts.h>
 #include <Dialogs.h>
-#include <Memory.h>
 #include <SegLoad.h>
+#include <Traps.h>
+#include <Appearance.h>
 
 #include "tk.h"
 #include "tkInt.h"
 #include "tkMacInt.h"
-#include "tclMacInt.h"
+#include "tclMac.h"
+
+#include "itk.h"
+
+/* include tclInt.h for access to namespace API */
+#include "tclInt.h"
 
 #ifdef TK_TEST
 EXTERN int		Tktest_Init _ANSI_ARGS_((Tcl_Interp *interp));
 #endif /* TK_TEST */
 
-EXTERN int		Itcl_Init _ANSI_ARGS_((Tcl_Interp *interp));
-EXTERN int		Itk_Init _ANSI_ARGS_((Tcl_Interp *interp));
-EXTERN int		Itcl_SafeInit _ANSI_ARGS_((Tcl_Interp *interp));
+#ifdef TCL_TEST
+EXTERN int		TclObjTest_Init _ANSI_ARGS_((Tcl_Interp *interp));
+EXTERN int		Tcltest_Init _ANSI_ARGS_((Tcl_Interp *interp));
+#endif /* TCL_TEST */
 
-
-/*typedef int (*TclMacConvertEventPtr) _ANSI_ARGS_((EventRecord *eventPtr));*/
 Tcl_Interp *gStdoutInterp = NULL;
 
-void 	TclMacSetEventProc _ANSI_ARGS_((TclMacConvertEventPtr procPtr));
 int 	TkMacConvertEvent _ANSI_ARGS_((EventRecord *eventPtr));
 
 /*
@@ -50,7 +53,14 @@ long			ReadCharsFromConsole _ANSI_ARGS_((char *buff, long n));
 extern char *		__ttyname _ANSI_ARGS_((long fildes));
 short			SIOUXHandleOneEvent _ANSI_ARGS_((EventRecord *event));
 
-
+/*
+ * Prototypes for functions from the tkConsole.c file.
+ */
+ 
+EXTERN void		TkConsoleCreate _ANSI_ARGS_((void));
+EXTERN int		TkConsoleInit _ANSI_ARGS_((Tcl_Interp *interp));
+EXTERN void		TkConsolePrint _ANSI_ARGS_((Tcl_Interp *interp,
+			    int devId, char *buffer, long size));
 /*
  * Forward declarations for procedures defined later in this file:
  */
@@ -77,9 +87,9 @@ static int		SetupMainInterp _ANSI_ARGS_((Tcl_Interp *interp));
  */
 
 void
-main(argc, argv)
-    int argc;				/* Number of arguments. */
-    char **argv;			/* Array of argument strings. */
+main(
+    int argc,				/* Number of arguments. */
+    char **argv)			/* Array of argument strings. */
 {
     char *newArgv[2];
 
@@ -88,7 +98,7 @@ main(argc, argv)
     }
 
     argc = 1;
-    newArgv[0] = "Wish";
+    newArgv[0] = "itkwish";
     newArgv[1] = NULL;
     Tk_Main(argc, newArgv, Tcl_AppInit);
 }
@@ -113,8 +123,8 @@ main(argc, argv)
  */
 
 int
-Tcl_AppInit(interp)
-    Tcl_Interp *interp;		/* Interpreter for application. */
+Tcl_AppInit(
+    Tcl_Interp *interp)		/* Interpreter for application. */
 {
     if (Tcl_Init(interp) == TCL_ERROR) {
 	return TCL_ERROR;
@@ -122,7 +132,7 @@ Tcl_AppInit(interp)
     if (Tk_Init(interp) == TCL_ERROR) {
 	return TCL_ERROR;
     }
-    Tcl_StaticPackage(interp, "Tk", Tk_Init, (Tcl_PackageInitProc *) NULL);
+    Tcl_StaticPackage(interp, "Tk", Tk_Init, Tk_SafeInit);
 	
     /*
      * Call the init procedures for included packages.  Each call should
@@ -134,17 +144,17 @@ Tcl_AppInit(interp)
      *
      * where "Mod" is the name of the module.
      */
-     
-    if (Itcl_Init(interp) == TCL_ERROR) {
+
+#ifdef TCL_TEST
+    if (Tcltest_Init(interp) == TCL_ERROR) {
 	return TCL_ERROR;
     }
-    Tcl_StaticPackage(interp, "Itcl", Itcl_Init, Itcl_SafeInit);
-
-    if (Itk_Init(interp) == TCL_ERROR) {
+    Tcl_StaticPackage(interp, "Tcltest", Tcltest_Init,
+            (Tcl_PackageInitProc *) NULL);
+    if (TclObjTest_Init(interp) == TCL_ERROR) {
 	return TCL_ERROR;
     }
-    Tcl_StaticPackage(interp, "Itk", Itk_Init, (Tcl_PackageInitProc *) NULL);
-
+#endif /* TCL_TEST */
 
 #ifdef TK_TEST
     if (Tktest_Init(interp) == TCL_ERROR) {
@@ -157,10 +167,37 @@ Tcl_AppInit(interp)
     /*
      * Call Tcl_CreateCommand for application-specific commands, if
      * they weren't already created by the init procedures called above.
-     * Each call would loo like this:
+     * Each call would look like this:
      *
      * Tcl_CreateCommand(interp, "tclName", CFuncCmd, NULL, NULL);
      */
+    if (Itcl_Init(interp) == TCL_ERROR) {
+        return TCL_ERROR;
+    }
+    if (Itk_Init(interp) == TCL_ERROR) {
+        return TCL_ERROR;
+    }
+    Tcl_StaticPackage(interp, "Itcl", Itcl_Init, Itcl_SafeInit);
+    Tcl_StaticPackage(interp, "Itk", Itk_Init, (Tcl_PackageInitProc *) NULL);
+
+    /*
+     *  This is itkwish, so import all [incr Tcl] commands by
+     *  default into the global namespace.  Fix up the autoloader
+     *  to do the same.
+     */
+    if (Tcl_Import(interp, Tcl_GetGlobalNamespace(interp),
+            "::itk::*", /* allowOverwrite */ 1) != TCL_OK) {
+        return TCL_ERROR;
+    }
+
+    if (Tcl_Import(interp, Tcl_GetGlobalNamespace(interp),
+            "::itcl::*", /* allowOverwrite */ 1) != TCL_OK) {
+        return TCL_ERROR;
+    }
+
+    if (Tcl_Eval(interp, "auto_mkindex_parser::slavehook { _%@namespace import -force ::itcl::* ::itk::* }") != TCL_OK) {
+        return TCL_ERROR;
+    }
 
     SetupMainInterp(interp);
 
@@ -171,8 +208,8 @@ Tcl_AppInit(interp)
      * may also used.  (I highly recommend using the resource method.)
      */
 
-    Tcl_SetVar(interp, "tcl_rcRsrcName", "tclshrc", TCL_GLOBAL_ONLY);
-    /* Tcl_SetVar(interp, "tcl_rcFileName", "~/.tclshrc", TCL_GLOBAL_ONLY); */
+    Tcl_SetVar(interp, "tcl_rcRsrcName", "itkwishrc", TCL_GLOBAL_ONLY);
+    /* Tcl_SetVar(interp, "tcl_rcFileName", "~/.itkwishrc", TCL_GLOBAL_ONLY); */
 
     return TCL_OK;
 }
@@ -201,8 +238,34 @@ MacintoshInit()
 {
     int i;
     long result, mask = 0x0700; 		/* mask = system 7.x */
-    
-    InitGraf(&qd.thePort);
+
+#if GENERATING68K && !GENERATINGCFM
+    SetApplLimit(GetApplLimit() - (TK_MAC_68K_STACK_GROWTH));
+#endif
+    MaxApplZone();
+    for (i = 0; i < 4; i++) {
+	(void) MoreMasters();
+    }
+
+    /*
+     * Tk needs us to set the qd pointer it uses.  This is needed
+     * so Tk doesn't have to assume the availablity of the qd global
+     * variable.  Which in turn allows Tk to be used in code resources.
+     */
+    tcl_macQdPtr = &qd;
+
+    /*
+     * If appearance is present, then register Tk as an Appearance client
+     * This means that the mapping from non-Appearance to Appearance cdefs
+     * will be done for Tk regardless of the setting in the Appearance
+     * control panel.  
+     */
+     
+     if (TkMacHaveAppearance()) {
+         RegisterAppearanceClient();
+     }
+
+    InitGraf(&tcl_macQdPtr->thePort);
     InitFonts();
     InitWindows();
     InitMenus();
@@ -213,8 +276,10 @@ MacintoshInit()
      * Make sure we are running on system 7 or higher
      */
      
-    if (((Gestalt(gestaltSystemVersion, &result) != noErr)
-	    || (mask != (result & mask)))) {
+    if ((NGetTrapAddress(_Gestalt, ToolTrap) == 
+    	    NGetTrapAddress(_Unimplemented, ToolTrap))
+    	    || (((Gestalt(gestaltSystemVersion, &result) != noErr)
+	    || (result < mask)))) {
 	panic("Tcl/Tk requires System 7 or higher.");
     }
 
@@ -222,7 +287,7 @@ MacintoshInit()
      * Make sure we have color quick draw 
      * (this means we can't run on 68000 macs)
      */
-    
+     
     if (((Gestalt(gestaltQuickdrawVersion, &result) != noErr)
 	    || (result < gestalt32BitQD13))) {
 	panic("Tk requires Color QuickDraw.");
@@ -232,20 +297,8 @@ MacintoshInit()
     FlushEvents(everyEvent, 0);
     SetEventMask(everyEvent);
 
-    /*
-     * Set up stack & heap sizes
-     */
-    /* TODO: stack size
-       size = StackSpace(); */
-       
-	SetApplLimit(GetApplLimit() - 104000);
-	MaxApplZone();
-    
-    for (i = 0; i < 4; i++) {
-	(void) MoreMasters();
-    }
 
-    TclMacSetEventProc(TkMacConvertEvent);
+    Tcl_MacSetEventProc(TkMacConvertEvent);
     TkConsoleCreate();
 
     return TCL_OK;
@@ -271,27 +324,28 @@ MacintoshInit()
  */
 
 static int
-SetupMainInterp(interp)
-    Tcl_Interp *interp;
+SetupMainInterp(
+    Tcl_Interp *interp)
 {
     /*
      * Initialize the console only if we are running as an interactive
      * application.
      */
 
+    TkMacInitAppleEvents(interp);
+    TkMacInitMenus(interp);
+
     if (strcmp(Tcl_GetVar(interp, "tcl_interactive", TCL_GLOBAL_ONLY), "1")
 	    == 0) {
 	if (TkConsoleInit(interp) == TCL_ERROR) {
-	goto error;
+	    goto error;
 	}
     }
 
-    TkMacInitAppleEvents(interp);
-    TkMacInitMenus(interp);
-    
     /*
      * Attach the global interpreter to tk's expected global console
      */
+
     gStdoutInterp = interp;
 
     return TCL_OK;
