@@ -7,7 +7,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
-# RCS: $Id: itk.decls,v 1.4 2001/11/24 22:55:39 davygrvy Exp $
+# RCS: $Id: itk.decls,v 1.5 2002/03/03 01:57:11 andreas_kupries Exp $
 
 library itk
 interface itk
@@ -57,7 +57,7 @@ declare 5 generic {
 }
 declare 6 generic {
     int Itk_ConfigClassOption (Tcl_Interp *interp, ItclObject *contextObj, \
-        ClientData cdata, char* newVal)
+        ClientData cdata, CONST char* newVal)
 }
 declare 7 generic {
     ItkClassOptTable* Itk_CreateClassOptTable( Tcl_Interp *interp, \

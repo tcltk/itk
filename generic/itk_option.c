@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_option.c,v 1.1 1998/07/27 18:45:25 stanton Exp $
+ *     RCS:  $Id: itk_option.c,v 1.2 2002/03/03 01:57:11 andreas_kupries Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -204,7 +204,7 @@ Itk_ConfigClassOption(interp, contextObj, cdata, newval)
     Tcl_Interp *interp;        /* interpreter managing the class */
     ItclObject *contextObj;    /* object being configured */
     ClientData cdata;          /* class option */
-    char *newval;              /* new value for this option */
+    CONST char *newval;        /* new value for this option */
 {
     ItkClassOption *opt = (ItkClassOption*)cdata;
     int result = TCL_OK;
