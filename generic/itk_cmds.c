@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_cmds.c,v 1.4 1998/08/18 10:48:32 suresh Exp $
+ *     RCS:  $Id: itk_cmds.c,v 1.5 1999/05/24 21:10:47 redman Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -80,6 +80,10 @@ namespace eval ::itk {\n\
     _find_init\n\
 }";
 
+extern ItkStubs itkStubs;
+ItclStubs *itclStubsPtr;
+ItclIntStubs *itclIntStubsPtr;
+
 
 /*
  * ------------------------------------------------------------------------
@@ -101,12 +105,19 @@ Initialize(interp)
     Tcl_Namespace *itkNs, *parserNs;
     ClientData parserInfo;
 
-    if (Tcl_PkgRequire(interp, "Tk", TK_VERSION, 0) == NULL) {
+    if (Tcl_InitStubs(interp, "8.0", 0) == NULL) {
+	return TCL_ERROR;
+    };
+    if (Tk_InitStubs(interp, "8.0", 0) == NULL) {
+	return TCL_ERROR;
+    };
+    if (Tcl_PkgRequireEx(interp, "Itcl", ITCL_VERSION, 0,
+            (ClientData *) &itclStubsPtr) == NULL) {
 	return TCL_ERROR;
     }
-    if (Tcl_PkgRequire(interp, "Itcl", ITCL_VERSION, 0) == NULL) {
-	return TCL_ERROR;
-    }
+
+    itclIntStubsPtr = itclStubsPtr->hooks->itclIntStubs;
+
 
     /*
      *  Add the "itk_option" ensemble to the itcl class definition parser.
@@ -189,7 +200,8 @@ Initialize(interp)
     /*
      *  Signal that the package has been loaded.
      */
-    if (Tcl_PkgProvide(interp, "Itk", ITCL_VERSION) != TCL_OK) {
+    if (Tcl_PkgProvideEx(interp, "Itk", ITCL_VERSION,
+            (ClientData) &itkStubs) != TCL_OK) {
 	return TCL_ERROR;
     }
     return TCL_OK;

@@ -3,6 +3,7 @@
 // Version
 //
 
+#define VS_VERSION_INFO 1
 #define RESOURCE_INCLUDED
 #include <itcl.h>
 #include <itk.h>
@@ -20,9 +21,8 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "FileDescription", "Itk DLL\0"
+            VALUE "FileDescription", "Itk language extension for Tcl\0"
             VALUE "Authors", "Michael McLennan\0"
-
             VALUE "OriginalFilename", "itk" STRINGIFY(ITCL_MAJOR_VERSION) STRINGIFY(ITCL_MINOR_VERSION) ".dll\0"
             VALUE "CompanyName", "Bell Labs Innovations for Lucent Technologies\0"
             VALUE "FileVersion", ITCL_PATCH_LEVEL
