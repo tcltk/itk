@@ -1,9 +1,11 @@
-// RCS: @(#) $Id: itk.rc,v 1.6 2001/05/22 22:41:54 davygrvy Exp $
+// RCS: @(#) $Id: itk.rc,v 1.7 2001/05/25 01:09:15 davygrvy Exp $
 //
 // Version resource script.
 //
 
-#include <windows.h>
+#include <winver.h>
+
+#define RESOURCE_INCLUDED
 #include <itcl.h>
 
 //
