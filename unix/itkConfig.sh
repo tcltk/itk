@@ -17,15 +17,15 @@ ITCL_MAJOR_VERSION='3'
 ITCL_MINOR_VERSION='0'
 
 # The name of the Itk library (may be either a .a file or a shared library):
-ITK_LIB_FILE=libitk3.0.so
+ITK_LIB_FILE=libitk3.0.a
 
 # String to pass to linker to pick up the Itk library from its
 # build directory.
-ITK_BUILD_LIB_SPEC='-L/home/mmc/itcl/itcl3.0/itk/unix -litk3.0'
+ITK_BUILD_LIB_SPEC='-L/home/stanton/ws/itcl3.0.1/itk/unix -litk3.0'
 
 # String to pass to linker to pick up the Itk library from its
 # installed directory.
-ITK_LIB_SPEC='-L/tmp/itcl/lib -litk3.0'
+ITK_LIB_SPEC='-L/home/stanton/ws/lib -litk3.0'
 
 # Location of the top-level source directories from which [incr Tk]
 # was built.  This is the directory that contains a README file as well
@@ -33,4 +33,4 @@ ITK_LIB_SPEC='-L/tmp/itcl/lib -litk3.0'
 # compiled in a different place than the directory containing the source
 # files, this points to the location of the sources, not the location
 # where [incr Tk] was compiled.
-ITK_SRC_DIR='/home/mmc/itcl/itcl3.0/itk'
+ITK_SRC_DIR='/home/stanton/ws/itcl3.0.1/itk'
