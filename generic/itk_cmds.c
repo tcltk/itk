@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_cmds.c,v 1.1 1998/07/27 18:45:24 stanton Exp $
+ *     RCS:  $Id: itk_cmds.c,v 1.2 1998/07/28 18:16:18 stanton Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -29,16 +29,6 @@
  *  FORWARD DECLARATIONS
  */
 static int Initialize _ANSI_ARGS_((Tcl_Interp *interp));
-
-/*
- * Default directory in which to look for libraries:
- */
-
-#ifndef ITK_LIBRARY
-#define ITK_LIBRARY ""
-#endif
-
-static char defaultLibraryDir[200] = ITK_LIBRARY;
 
 /*
  * The following string is the startup script executed in new
@@ -55,23 +45,28 @@ namespace eval ::itk {\n\
         variable library\n\
         variable version\n\
         rename _find_init {}\n\
-        if {[catch {uplevel #0 source -rsrc itk}] == 0} {\n\
-            return\n\
-        }\n\
-        set dirs {}\n\
-        if [info exists env(ITCL_LIBRARY)] {\n\
-            lappend dirs $env(ITCL_LIBRARY)\n\
-        }\n\
-        lappend dirs [file join [file dirname $tcl_library] itk$version]\n\
-        set bindir [file dirname [info nameofexecutable]]\n\
-        lappend dirs [file join $bindir .. lib itk$version]\n\
-        lappend dirs [file join $bindir .. library]\n\
-        lappend dirs [file join $bindir .. .. itk$version library]\n\
+	if {[info exists library]} {\n\
+	    lappend dirs $library\n\
+	} else {\n\
+	    if {[catch {uplevel #0 source -rsrc itk}] == 0} {\n\
+		return\n\
+	    }\n\
+	    set dirs {}\n\
+	    if {[info exists env(ITK_LIBRARY)]} {\n\
+		lappend dirs $env(ITK_LIBRARY)\n\
+	    }\n\
+	    lappend dirs [file join [file dirname $tcl_library] itk$version]\n\
+	    set bindir [file dirname [info nameofexecutable]]\n\
+	    lappend dirs [file join $bindir .. lib itk$version]\n\
+	    lappend dirs [file join $bindir .. library]\n\
+	    lappend dirs [file join $bindir .. .. itk$version library]\n\
+	}\n\
         foreach i $dirs {\n\
             set library $i\n\
-            if {[catch {uplevel #0 [list source [file join $i itk.tcl]]}] == 0} {\n\
+	    set itkfile [file join $i itk.tcl]\n\
+            if {![catch {uplevel #0 [list source $itkfile]} msg]} {\n\
                 return\n\
-            }\n\
+	    }\n\
         }\n\
         set msg \"Can't find a usable itk.tcl in the following directories:\n\"\n\
         append msg \"    $dirs\n\"\n\
@@ -104,7 +99,6 @@ Initialize(interp)
 {
     Tcl_Namespace *itkNs, *parserNs;
     ClientData parserInfo;
-    char *libDir;
 
     if (Tcl_PkgRequire(interp, "Tk", TK_VERSION, 0) == NULL) {
 	return TCL_ERROR;
@@ -191,13 +185,6 @@ Initialize(interp)
     Tcl_CreateObjCommand(interp, "::itcl::configbody", Itk_ConfigBodyCmd,
         (ClientData)NULL, (Tcl_CmdDeleteProc*)NULL);
 
-    /*
-     *  Set up the library and load the "itk.tcl" file.
-     */
-    libDir = Tcl_GetVar(interp, "::itk::library", 0);
-    if (libDir == NULL) {
-	Tcl_SetVar(interp, "::itk::library", defaultLibraryDir, 0);
-    }
     Tcl_SetVar(interp, "::itk::version", ITCL_VERSION, 0);
     Tcl_SetVar(interp, "::itk::patchLevel", ITK_PATCH_LEVEL, 0);
 
