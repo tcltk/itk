@@ -1,0 +1,73 @@
+/*
+ * MW_ItkHeader.pch --
+ *
+ *  This file is the source for a pre-compilied header that gets used
+ *  for all files in the Tk projects.  This make compilies go a bit
+ *  faster.  This file is only intended to be used in the MetroWerks
+ *  CodeWarrior environment.  It essentially acts as a place to set 
+ *  compiler flags.  See MetroWerks documention for more details.
+ *
+ * Copyright (c) 1995-1996 Sun Microsystems, Inc.
+ *
+ * See the file "license.terms" for information on usage and redistribution
+ * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+ *
+ * SCCS: @(#) MW_TkHeader.pch 1.16 96/09/04 17:01:00
+ */
+
+/*
+ * Support for automatically naming the precompiled header file ...
+ */
+#if __POWERPC__
+#pragma precompile_target "MW_ItkHeaderPPC"
+#elif __CFM68K__
+#pragma precompile_target "MW_ItkHeaderCFM68K"
+#else
+#pragma precompile_target "MW_ItkHeader68K"
+#endif
+
+/*
+ * The define is used most everywhere to tell Tk (or any Tk
+ * extensions) that we are compiling for the Macintosh platform.
+ */
+#define MAC_TCL
+
+/*
+ * The following defines are for the Xlib.h file to force 
+ * it to generate prototypes in the way we need it.  This is
+ * defined here in case X.h & company are ever included before
+ * tk.h.
+ */
+
+#define NeedFunctionPrototypes 1
+#define NeedWidePrototypes 0
+
+/*
+ * The following two defines are used to prepare for the coming
+ * of Copland.  Currently, these are turned off.
+ */
+
+#define STRICT_CONTROLS 0
+#define STRICT_WINDOWS  0
+
+/*
+ * Define the following symbol if you want
+ * comprehensive debugging turned on.
+ */
+
+/* #define TCL_DEBUG */
+
+#ifdef TCL_DEBUG
+#   define TCL_MEM_DEBUG
+#   define TK_TEST
+#endif
+
+/*
+ * Place any includes below that will are needed by the majority of the
+ * and is OK to be in any file in the system.
+ */
+
+#include <tcl.h>
+#include <tk.h>
+#include <itcl.h>
+
