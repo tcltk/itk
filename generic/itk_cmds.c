@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_cmds.c,v 1.3 1998/08/11 14:40:54 welch Exp $
+ *     RCS:  $Id: itk_cmds.c,v 1.4 1998/08/18 10:48:32 suresh Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -109,17 +109,6 @@ Initialize(interp)
     }
 
     /*
-     *  Install [incr Tk] facilities if not already installed.
-     */
-    itkNs = Tcl_FindNamespace(interp, "::itk", (Tcl_Namespace*)NULL,
-        /* flags */ 0);
-
-    if (itkNs) {
-        Tcl_SetResult(interp, "already installed: [incr Tk]", TCL_STATIC);
-        return TCL_ERROR;
-    }
-
-    /*
      *  Add the "itk_option" ensemble to the itcl class definition parser.
      */
     parserNs = Tcl_FindNamespace(interp, "::itcl::parser",
@@ -160,12 +149,20 @@ Initialize(interp)
     }
 
     /*
-     *  Create the "itk" namespace.  Export all the commands in
-     *  the namespace so that they can be imported by a command
-     *  such as "namespace import itk::*"
+     *  Install [incr Tk] facilities if not already installed.
      */
-    itkNs = Tcl_CreateNamespace(interp, "::itk",
-        (ClientData)NULL, (Tcl_NamespaceDeleteProc*)NULL);
+    itkNs = Tcl_FindNamespace(interp, "::itk", (Tcl_Namespace*)NULL,
+        /* flags */ 0);
+
+    if (itkNs == NULL) {
+	/*
+	 *  Create the "itk" namespace.  Export all the commands in
+	 *  the namespace so that they can be imported by a command
+	 *  such as "namespace import itk::*"
+	 */
+	itkNs = Tcl_CreateNamespace(interp, "::itk",
+	    (ClientData)NULL, (Tcl_NamespaceDeleteProc*)NULL);
+    }
 
     if (!itkNs ||
         Tcl_Export(interp, itkNs, "*", /* resetListFirst */ 1) != TCL_OK) {
