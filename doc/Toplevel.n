@@ -4,14 +4,14 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 '\"
-'\" RCS: $Id: Toplevel.n,v 1.1 1998/07/27 18:45:35 stanton Exp $
+'\" RCS: $Id: Toplevel.n,v 1.2 1998/08/07 17:41:47 stanton Exp $
 '\"
 .so man.macros
 .TH Toplevel n 3.0 itk "[incr\ Tk]"
 .BS
 '\" Note:  do not modify the .SH NAME line immediately below!
 .SH NAME
-Widget \- base class for mega-widgets within a frame
+Toplevel \- base class for mega-widgets in a toplevel
 .SH "INHERITANCE"
 itk::Archetype <- itk::Toplevel
 .SH "STANDARD OPTIONS"
@@ -126,7 +126,7 @@ usual MessageInfo {
 #
 # EXAMPLE:  Create a notice window:
 #
-MessageInfo .m -message "File not found:\n/usr/local/bin/foo"
+MessageInfo .m -message "File not found:\\n/usr/local/bin/foo"
 .CE
 
 .SH KEYWORDS
