@@ -6,7 +6,7 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: $Id: itkDecls.h,v 1.6 2002/03/03 01:57:11 andreas_kupries Exp $
+ * RCS: $Id: itkDecls.h,v 1.7 2002/08/11 04:14:54 davygrvy Exp $
  */
 
 #ifndef _ITKDECLS
@@ -30,59 +30,59 @@
  */
 
 /* 0 */
-EXTERN int		Itk_Init _ANSI_ARGS_((Tcl_Interp * interp));
+TCL_EXTERN(int)		Itk_Init _ANSI_ARGS_((Tcl_Interp * interp));
 /* 1 */
-EXTERN int		Itk_SafeInit _ANSI_ARGS_((Tcl_Interp * interp));
+TCL_EXTERN(int)		Itk_SafeInit _ANSI_ARGS_((Tcl_Interp * interp));
 /* 2 */
-EXTERN int		Itk_ConfigBodyCmd _ANSI_ARGS_((ClientData cdata, 
+TCL_EXTERN(int)		Itk_ConfigBodyCmd _ANSI_ARGS_((ClientData cdata, 
 				Tcl_Interp * interp, int objc, 
 				Tcl_Obj *CONST objv[]));
 /* 3 */
-EXTERN int		Itk_UsualCmd _ANSI_ARGS_((ClientData cdata, 
+TCL_EXTERN(int)		Itk_UsualCmd _ANSI_ARGS_((ClientData cdata, 
 				Tcl_Interp * interp, int objc, 
 				Tcl_Obj *CONST objv[]));
 /* 4 */
-EXTERN int		Itk_ClassOptionDefineCmd _ANSI_ARGS_((
+TCL_EXTERN(int)		Itk_ClassOptionDefineCmd _ANSI_ARGS_((
 				ClientData cdata, Tcl_Interp * interp, 
 				int objc, Tcl_Obj *CONST objv[]));
 /* 5 */
-EXTERN int		Itk_ClassOptionIllegalCmd _ANSI_ARGS_((
+TCL_EXTERN(int)		Itk_ClassOptionIllegalCmd _ANSI_ARGS_((
 				ClientData cdata, Tcl_Interp * interp, 
 				int objc, Tcl_Obj *CONST objv[]));
 /* 6 */
-EXTERN int		Itk_ConfigClassOption _ANSI_ARGS_((
+TCL_EXTERN(int)		Itk_ConfigClassOption _ANSI_ARGS_((
 				Tcl_Interp * interp, ItclObject * contextObj, 
 				ClientData cdata, CONST char* newVal));
 /* 7 */
-EXTERN ItkClassOptTable* Itk_CreateClassOptTable _ANSI_ARGS_((
+TCL_EXTERN(ItkClassOptTable*) Itk_CreateClassOptTable _ANSI_ARGS_((
 				Tcl_Interp * interp, ItclClass * cdefn));
 /* 8 */
-EXTERN ItkClassOptTable* Itk_FindClassOptTable _ANSI_ARGS_((
+TCL_EXTERN(ItkClassOptTable*) Itk_FindClassOptTable _ANSI_ARGS_((
 				ItclClass * cdefn));
 /* Slot 9 is reserved */
 /* 10 */
-EXTERN int		Itk_CreateClassOption _ANSI_ARGS_((
+TCL_EXTERN(int)		Itk_CreateClassOption _ANSI_ARGS_((
 				Tcl_Interp * interp, ItclClass * cdefn, 
 				char * switchName, char * resName, 
 				char * resClass, char * defVal, 
 				char * config, ItkClassOption ** optPtr));
 /* 11 */
-EXTERN ItkClassOption*	Itk_FindClassOption _ANSI_ARGS_((ItclClass * cdefn, 
-				char * switchName));
+TCL_EXTERN(ItkClassOption*) Itk_FindClassOption _ANSI_ARGS_((
+				ItclClass * cdefn, char * switchName));
 /* 12 */
-EXTERN void		Itk_DelClassOption _ANSI_ARGS_((ItkClassOption * opt));
+TCL_EXTERN(void)	Itk_DelClassOption _ANSI_ARGS_((ItkClassOption * opt));
 /* 13 */
-EXTERN int		Itk_ArchetypeInit _ANSI_ARGS_((Tcl_Interp* interp));
+TCL_EXTERN(int)		Itk_ArchetypeInit _ANSI_ARGS_((Tcl_Interp* interp));
 /* 14 */
-EXTERN void		Itk_OptListInit _ANSI_ARGS_((ItkOptList* olist, 
+TCL_EXTERN(void)	Itk_OptListInit _ANSI_ARGS_((ItkOptList* olist, 
 				Tcl_HashTable * options));
 /* 15 */
-EXTERN void		Itk_OptListFree _ANSI_ARGS_((ItkOptList* olist));
+TCL_EXTERN(void)	Itk_OptListFree _ANSI_ARGS_((ItkOptList* olist));
 /* 16 */
-EXTERN void		Itk_OptListAdd _ANSI_ARGS_((ItkOptList* olist, 
+TCL_EXTERN(void)	Itk_OptListAdd _ANSI_ARGS_((ItkOptList* olist, 
 				Tcl_HashEntry * entry));
 /* 17 */
-EXTERN void		Itk_OptListRemove _ANSI_ARGS_((ItkOptList* olist, 
+TCL_EXTERN(void)	Itk_OptListRemove _ANSI_ARGS_((ItkOptList* olist, 
 				Tcl_HashEntry * entry));
 
 typedef struct ItkStubs {
@@ -109,13 +109,7 @@ typedef struct ItkStubs {
     void (*itk_OptListRemove) _ANSI_ARGS_((ItkOptList* olist, Tcl_HashEntry * entry)); /* 17 */
 } ItkStubs;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-extern ItkStubs *itkStubsPtr;
-#ifdef __cplusplus
-}
-#endif
+TCL_EXTRNC ItkStubs *itkStubsPtr;
 
 #if defined(USE_ITK_STUBS) && !defined(USE_ITK_STUB_PROCS)
 
