@@ -26,7 +26,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_archetype.c,v 1.7 2002/05/14 22:53:11 davygrvy Exp $
+ *     RCS:  $Id: itk_archetype.c,v 1.8 2002/08/11 04:10:22 davygrvy Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -179,7 +179,7 @@ static int Itk_PropagatePublicVar _ANSI_ARGS_((Tcl_Interp *interp,
     ItclObject *contextObj, ClientData cdata, CONST char *newval));
 
 static int Itk_ArchSetOption _ANSI_ARGS_((Tcl_Interp *interp,
-    ArchInfo *info, char *name, char *value));
+    ArchInfo *info, CONST char *name, CONST char *value));
 static int Itk_ArchConfigOption _ANSI_ARGS_((Tcl_Interp *interp,
     ArchInfo *info, char *name, char *value));
 static void Itk_ArchOptConfigError _ANSI_ARGS_((Tcl_Interp *interp,
@@ -1533,7 +1533,7 @@ Itk_ArchOptUsualCmd(clientData, interp, objc, objv)
 {
     ArchMergeInfo *mergeInfo = (ArchMergeInfo*)clientData;
 
-    char *tag;
+    CONST char *tag;
     Tcl_HashEntry *entry;
     Tcl_Obj *codePtr;
 
@@ -2836,8 +2836,8 @@ static int
 Itk_ArchSetOption(interp, info, name, value)
     Tcl_Interp *interp;        /* interpreter managing this widget */
     ArchInfo *info;            /* Archetype info */
-    char *name;                /* name of configuration option */
-    char *value;               /* new value for configuration option */
+    CONST char *name;          /* name of configuration option */
+    CONST char *value;               /* new value for configuration option */
 {
     Tcl_HashEntry *entry;
     ArchOption *archOpt;
@@ -3109,7 +3109,7 @@ Itk_CreateArchComponent(interp, info, name, cdefn, accessCmd)
     ItclClass *cdefn;              /* component created in this class */
     Tcl_Command accessCmd;         /* access command for component */
 {
-    char *init;
+    CONST char *init;
     CONST char *wname;
     ArchComponent *archComp;
     ArchOption *archOpt;
