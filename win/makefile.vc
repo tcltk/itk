@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.17 2003/12/23 03:11:40 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.18 2003/12/23 04:16:38 davygrvy Exp $
 #------------------------------------------------------------------------------
 #  Do not modify this file!
 #------------------------------------------------------------------------------
@@ -19,14 +19,43 @@ Please `cd` to its location first.
 
 PROJECT	= itk
 !include "..\..\rules.vc"
-!include "..\..\pkg.vc"
 
 
 !if $(TCLINSTALL)
 !message *** Warning: [Incr Tk] requires the source distribution of Tcl to build from,
-!message ***    at this time, sorry.  Please set the TCLDIR macro to point to the
-!message ***    sources.
+!message ***    at this time, sorry.  Please set the TCLDIR  and TKDIR macros to point
+!message ***    to the sources.
 !endif
+
+ITCLDIR		= ..\..\itcl
+
+
+!if [nmakehlp -g $(ITCLDIR)\generic\itcl.h ITCL_VERSION] == 33
+ITCL_DOTVERSION	= 3.3
+!elseif [nmakehlp -g $(ITCLDIR)\generic\itcl.h ITCL_VERSION] == 34
+ITCL_DOTVERSION	= 3.4
+!elseif [nmakehlp -g $(ITCLDIR)\generic\itcl.h ITCL_VERSION] == 35
+ITCL_DOTVERSION	= 3.5
+!elseif [nmakehlp -g $(ITCLDIR)\generic\itcl.h ITCL_VERSION] == 0
+MSG =^
+Can't get version string from ..\generic\itcl.h
+!error $(MSG)
+!endif
+ITCL_VERSION	= $(ITCL_DOTVERSION:.=)
+
+!if [nmakehlp -g ..\generic\itk.h ITK_VERSION] == 33
+ITK_DOTVERSION	= 3.3
+!elseif [nmakehlp -g ..\generic\itk.h ITK_VERSION] == 34
+ITK_DOTVERSION	= 3.4
+!elseif [nmakehlp -g ..\generic\itk.h ITK_VERSION] == 35
+ITK_DOTVERSION	= 3.5
+!elseif [nmakehlp -g ..\generic\itk.h ITK_VERSION] == 0
+MSG =^
+Can't get version string from ..\generic\itk.h
+!error $(MSG)
+!endif
+ITK_VERSION	= $(ITK_DOTVERSION:.=)
+
 
 BINROOT		= .
 ROOT		= ..
@@ -34,7 +63,6 @@ STUBPREFIX	= $(PROJECT)stub
 
 PKGINDEX	= "$(TMP_DIR)\pkgIndex.tcl"
 
-ITCLDIR		= ..\..\itcl
 ITCLLIBNAME	= $(PROJECT)$(ITCL_VERSION)$(SUFX).$(EXT)
 ITCLLIB		= "$(OUT_DIR)\$(ITCLLIBNAME)"
 ITKIMPLIB	= "$(OUT_DIR)\$(PROJECT)$(ITCL_VERSION)$(SUFX).lib"
@@ -51,19 +79,20 @@ ITKLIBNAME	= $(PROJECT)$(ITCL_VERSION)$(SUFX).$(EXT)
 ITKLIB		= "$(OUT_DIR)\$(ITKLIBNAME)"
 
 !if $(TCLINSTALL)
-TCLSTUBLIB	= "$(TCLDIR)\lib\tclstub$(TCL_VERSION).lib"
 TKSTUBLIB	= "$(TCLDIR)\lib\tkstub$(TCL_VERSION).lib"
-TCLIMPLIB	= "$(TCLDIR)\lib\tcl$(TCL_VERSION)$(DBGX).lib"
 TKIMPLIB	= "$(TCLDIR)\lib\tk$(TCL_VERSION)$(DBGX).lib"
-TCLSH		= "$(TCLDIR)\bin\tclsh$(TCL_VERSION)$(DBGX).exe"
 WISH		= "$(TCLDIR)\bin\wish$(TCL_VERSION)$(DBGX).exe"
 !else
-TCLSTUBLIB	= "$(TCLDIR)\win\Release\tclstub$(TCL_VERSION).lib"
 TKSTUBLIB	= "$(TKDIR)\win\Release\tkstub$(TCL_VERSION).lib"
-TCLIMPLIB	= "$(TCLDIR)\win\$(OUT_DIR)\tcl$(TCL_VERSION)$(DBGX).lib"
 TKIMPLIB	= "$(TKDIR)\win\$(OUT_DIR)\tk$(TCL_VERSION)$(DBGX).lib"
-TCLSH		= "$(TCLDIR)\win\$(OUT_DIR)\tclsh$(TCL_VERSION)$(DBGX).exe"
 WISH		= "$(TCLDIR)\win\$(OUT_DIR)\wish$(TCL_VERSION)$(DBGX).exe"
+!endif
+
+### For Tcl 8.0
+!if !$(TCL_DOES_STUBS)
+TCLSTUBLIB	= $(TCLIMPLIB)
+TKSTUBLIB	= $(TKIMPLIB)
+ITCLSTUBLIB	= $(ITCLIMPLIB)
 !endif
 
 ITCLSTUBLIBNAME	= itclstub$(ITCL_VERSION).lib
@@ -87,10 +116,14 @@ ITKOBJS = \
 	$(TMP_DIR)\dllEntryPoint.obj \
 	$(TMP_DIR)\itk.res \
 !endif
+!if $(TCL_DOES_STUBS)
 	$(TMP_DIR)\itkStubInit.obj
+!endif
 
 ITKSTUBOBJS = \
+!if $(TCL_DOES_STUBS)
     $(TMP_DIR)\itkStubLib.obj
+!endif
 
 WINDIR		= $(ROOT)\win
 GENERICDIR	= $(ROOT)\generic
@@ -127,6 +160,12 @@ lflags	= $(lflags) -ws:aggressive
 
 ITK_LFLAGS = $(lflags) -subsystem:windows -dll
 ITK_LLIBS	= $(TCLSTUBLIB) $(TKSTUBLIB) $(ITCLSTUBLIB)
+
+!if exist("$(TCLDIR)\win\coffbase.txt")
+ITK_DLLBASE	= -base:@$(TCLDIR)\win\coffbase.txt,itk
+!else
+ITK_DLLBASE	=
+!endif
 
 #---------------------------------------------------------------------
 # Compile flags
@@ -203,15 +242,16 @@ $(ITKLIB): $(ITKOBJS)
 !if $(STATIC_BUILD)
 	$(lib32) -nologo -machine:$(MACHINE) -out:$@ @<<
 !else
-	$(link32) $(ITK_LFLAGS) -base:@$(TCLDIR)\win\coffbase.txt,itk \
-	    -out:$@ $(ITK_LLIBS) @<<
+	$(link32) $(ITK_LFLAGS) $(ITK_DLLBASE) -out:$@ $(ITK_LLIBS) @<<
 !endif
 		$(ITKOBJS)
 <<
 
 
+!if $(TCL_DOES_STUBS)
 $(ITKSTUBLIB) : $(ITKSTUBOBJS)
 	$(lib32) -nologo -out:$@ $(ITKSTUBOBJS)
+!endif
 
 install: all
 	if not exist "$(INSTALLDIR)" mkdir "$(INSTALLDIR)"
