@@ -10,7 +10,7 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: $Id: itkStubLib.c,v 1.5 2001/05/25 00:15:04 davygrvy Exp $
+ * RCS: $Id: itkStubLib.c,v 1.6 2003/12/23 10:28:04 davygrvy Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ ItkStubs *itkStubsPtr;
 CONST char *
 Itk_InitStubs (interp, version, exact)
     Tcl_Interp *interp;
-    char *version;
+    CONST char *version;
     int exact;
 {
     CONST char *actualVersion;
