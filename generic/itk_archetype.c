@@ -26,7 +26,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_archetype.c,v 1.1 1998/07/27 18:45:23 stanton Exp $
+ *     RCS:  $Id: itk_archetype.c,v 1.2 2000/07/06 06:43:32 mmc Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -1100,6 +1100,8 @@ Itk_ArchCompDeleteCmd(dummy, interp, objc, objv)
     ArchComponent *archComp;
     ArchOption *archOpt;
     ArchOptionPart *optPart;
+    Itcl_List delOptList;
+    Tcl_DString buffer;
 
     /*
      *  Get the Archetype info associated with this widget.
@@ -1131,8 +1133,31 @@ Itk_ArchCompDeleteCmd(dummy, interp, objc, objv)
             return TCL_ERROR;
         }
         archComp = (ArchComponent*)Tcl_GetHashValue(entry);
+
+       /*
+        *  Clean up the binding tag that causes the widget to
+        *  call this method automatically when destroyed.
+        *  Ignore errors if anything goes wrong.
+        */
+        Tcl_DStringInit(&buffer);
+        Tcl_DStringAppend(&buffer, "itk::remove_destroy_hook ", -1);
+        Tcl_DStringAppend(&buffer, Tk_PathName(archComp->tkwin), -1);
+        (void) Tcl_Eval(interp, Tcl_DStringValue(&buffer));
+        Tcl_ResetResult(interp);
+        Tcl_DStringFree(&buffer);
+
+        Tcl_UnsetVar2(interp, "itk_component", token, 0);
         Tcl_DeleteHashEntry(entry);
 
+        /*
+         *  Clean up the options that belong to the component.  Do this
+         *  by scanning through all available options and looking for
+         *  those that belong to the component.  If we remove them as
+         *  we go, we'll mess up Tcl_NextHashEntry.  So instead, we
+         *  build up a list of options to remove, and then remove the
+         *  options below.
+         */
+        Itcl_InitList(&delOptList);
         entry = Tcl_FirstHashEntry(&info->options, &place);
         while (entry) {
             archOpt = (ArchOption*)Tcl_GetHashValue(entry);
@@ -1140,15 +1165,27 @@ Itk_ArchCompDeleteCmd(dummy, interp, objc, objv)
             while (elem) {
                 optPart = (ArchOptionPart*)Itcl_GetListValue(elem);
                 if (optPart->from == (ClientData)archComp) {
-                    Itk_DelOptionPart(optPart);
-                    elem = Itcl_DeleteListElem(elem);
+                    Itcl_AppendList(&delOptList, (ClientData)entry);
                 }
-                else {
-                    elem = Itcl_NextListElem(elem);
-                }
+                elem = Itcl_NextListElem(elem);
             }
             entry = Tcl_NextHashEntry(&place);
         }
+
+        /*
+         *  Now that we've figured out which options to delete,
+         *  go through the list and remove them.
+         */
+        elem = Itcl_FirstListElem(&delOptList);
+        while (elem) {
+            entry = (Tcl_HashEntry*)Itcl_GetListValue(elem);
+            token = Tcl_GetHashKey(&info->options, entry);
+
+            Itk_RemoveArchOptionPart(info, token, (ClientData)archComp);
+
+            elem = Itcl_NextListElem(elem);
+        }
+        Itcl_DeleteList(&delOptList);
 
         Itk_DelArchComponent(archComp);
     }

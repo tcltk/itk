@@ -6,7 +6,7 @@
 #            mmclennan@lucent.com
 #            http://www.tcltk.com/itcl
 #
-#      RCS:  $Id: widget.test,v 1.3 2000/06/01 21:32:37 wart Exp $
+#      RCS:  $Id: widget.test,v 1.4 2000/07/06 06:43:33 mmc Exp $
 # ----------------------------------------------------------------------
 #            Copyright (c) 1993-1998  Lucent Technologies, Inc.
 # ======================================================================
@@ -241,6 +241,29 @@ test widget-1.23 {when an object is deleted the widget is destroyed} {
     itcl::delete object .testWidget0
     winfo exists .testWidget0
 } {0}
+
+test widget-1.24 {recreate another test widget} {
+    TestWidget .testWidget
+} {.testWidget}
+
+test widget-1.25 {when an internal component is destroyed, it is removed from the list of components, and any dead options disappear} {
+    list [lsort [.testWidget component]] \
+         [.testWidget configure] \
+      [catch {destroy [.testWidget component test1]}] \
+         [.testWidget component] \
+         [.testWidget do {return [lsort [array names itk_component]]}] \
+         [.testWidget configure]
+} {{hull test1 test2} {{-background background Background linen linen} {-borderwidth borderWidth BorderWidth 2 2} {-clientdata clientData ClientData {} {}} {-command command Command {} {}} {-cursor cursor Cursor {} {}} {-foreground foreground Foreground navy navy} {-highlight highlight Foreground white white} {-normal normal Background ivory ivory} {-status status Status {} {}} {-text text Text {} {}}} 0 {hull test2} {hull test2} {{-background background Background linen linen} {-borderwidth borderWidth BorderWidth 2 2} {-clientdata clientData ClientData {} {}} {-command command Command {} {}} {-cursor cursor Cursor {} {}} {-foreground foreground Foreground navy navy} {-highlight highlight Foreground white white} {-normal normal Background ivory ivory} {-status status Status {} {}}}}
+
+test widget-1.26 {when an internal component is deleted (but not destroyed) it is disconnected from the option list and its binding tags are updated} {
+    set comp [.testWidget component test2]
+    list [bindtags $comp] \
+         [bind itk-destroy-$comp <Destroy>] \
+      [catch {.testWidget do {itk_component delete test2}}] \
+         [bindtags $comp] \
+         [bind itk-destroy-$comp <Destroy>] \
+         [.testWidget configure]
+} {{itk-destroy-.testWidget.t2 .testWidget.t2 Button . all} {namespace inscope ::itk::Archetype {::.testWidget itk_component delete test2}} 0 {.testWidget.t2 Button . all} {} {{-background background Background linen linen} {-clientdata clientData ClientData {} {}} {-cursor cursor Cursor {} {}} {-status status Status {} {}}}}
 
 # ----------------------------------------------------------------------
 #  Clean up
