@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_cmds.c,v 1.10 2001/05/22 03:34:47 davygrvy Exp $
+ *     RCS:  $Id: itk_cmds.c,v 1.11 2001/05/25 00:15:04 davygrvy Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -107,7 +107,7 @@ Initialize(interp)
     if (Tk_InitStubs(interp, "8.1", 0) == NULL) {
 	return TCL_ERROR;
     };
-    if (Itcl_InitStubs(interp, ITCL_VERSION, 0) == NULL) {
+    if (Itcl_InitStubs(interp, ITCL_VERSION, 1) == NULL) {
 	return TCL_ERROR;
     }
 
@@ -192,7 +192,9 @@ Initialize(interp)
 
     /*
      *  Signal that the package has been loaded and provide the Itk Stubs table
-     *  for dependent modules.
+     *  for dependent modules.  I know this is unlikely, but possible that
+     *  someone could be extending Itk.  Who is to say that Itk is the
+     *  end-of-the-line?
      */
     if (Tcl_PkgProvideEx(interp, "Itk", ITCL_VERSION,
             (ClientData) &itkStubs) != TCL_OK) {
