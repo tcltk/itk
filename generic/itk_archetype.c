@@ -26,7 +26,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_archetype.c,v 1.6 2002/03/03 01:57:11 andreas_kupries Exp $
+ *     RCS:  $Id: itk_archetype.c,v 1.7 2002/05/14 22:53:11 davygrvy Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -54,6 +54,11 @@ typedef struct ArchComponent {
     ItclMember *member;         /* contains protection level for this comp */
     Tcl_Command accessCmd;      /* access command for component widget */
     Tk_Window tkwin;            /* Tk window for this component widget */
+    char *pathName;             /* Tk path name for this component widget.
+                                   We can't use the tkwin pointer after
+                                   the window has been destroyed so we
+                                   need to save a copy for use in
+                                   Itk_ArchCompDeleteCmd() */
 } ArchComponent;
 
 /*
@@ -1142,7 +1147,7 @@ Itk_ArchCompDeleteCmd(dummy, interp, objc, objv)
         */
         Tcl_DStringInit(&buffer);
         Tcl_DStringAppend(&buffer, "itk::remove_destroy_hook ", -1);
-        Tcl_DStringAppend(&buffer, Tk_PathName(archComp->tkwin), -1);
+        Tcl_DStringAppend(&buffer, archComp->pathName, -1);
         (void) Tcl_Eval(interp, Tcl_DStringValue(&buffer));
         Tcl_ResetResult(interp);
         Tcl_DStringFree(&buffer);
@@ -3183,6 +3188,8 @@ Itk_CreateArchComponent(interp, info, name, cdefn, accessCmd)
     archComp->member     = memPtr;
     archComp->accessCmd  = accessCmd;
     archComp->tkwin      = tkwin;
+    archComp->pathName   = (char *) ckalloc((unsigned)(strlen(wname)+1));
+    strcpy(archComp->pathName, wname);
 
     return archComp;
 }
@@ -3201,6 +3208,7 @@ Itk_DelArchComponent(archComp)
     ArchComponent *archComp;  /* pointer to component data */
 {
     ckfree((char*)archComp->member);
+    ckfree((char*)archComp->pathName);
     ckfree((char*)archComp);
 }
 
