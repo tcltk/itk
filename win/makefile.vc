@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.24 2003/12/24 03:38:03 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.25 2004/04/29 17:40:44 davygrvy Exp $
 #------------------------------------------------------------------------------
 #  Do not modify this file!
 #------------------------------------------------------------------------------
@@ -267,7 +267,7 @@ install-binaries:
 	if not exist "$(SCRIPT_INSTALL_DIR)" mkdir "$(SCRIPT_INSTALL_DIR)"
 	if not exist "$(INCLUDE_INSTALL_DIR)" mkdir "$(INCLUDE_INSTALL_DIR)"
 	copy $(ITKLIB) "$(SCRIPT_INSTALL_DIR)"
-!if exist($(ITKSTUBLIB))
+!if "$(ITKSTUBLIB)" != ""
 	copy $(ITKSTUBLIB) "$(LIB_INSTALL_DIR)"
 !endif
 	copy $(ROOT)\generic\itk.h "$(INCLUDE_INSTALL_DIR)"
