@@ -38,7 +38,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk.h,v 1.1 1998/07/27 18:45:23 stanton Exp $
+ *     RCS:  $Id: itk.h,v 1.2 1998/07/29 15:06:59 escoffon Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -66,32 +66,17 @@
 #   define WIN32_LEAN_AND_MEAN
 #   include <windows.h>
 #   undef WIN32_LEAN_AND_MEAN
+#endif
 
-/*
- * VC++ has an alternate entry point called DllMain, so we need to rename
- * our entry point.
- */
-
-#   undef EXPORT
-#   undef DllEntryPoint
-#   if defined(_MSC_VER)
-#	define EXPORT(a,b) __declspec(dllexport) a b
-#	define DllEntryPoint DllMain
-#   else
-#	if defined(__BORLANDC__)
-#	    define EXPORT(a,b) a _export b
-#	else
-#	    define EXPORT(a,b) a b
-#	endif
-#   endif
-#else
-#   define EXPORT(a,b) a b
+#ifdef BUILD_itk
+# undef EXPORT
+# define EXPORT DLLEXPORT
 #endif
 
 /*
  *  FORWARD DECLARATIONS
  */
-EXTERN EXPORT(int,Itk_Init) _ANSI_ARGS_((Tcl_Interp *interp));
+EXTERN int Itk_Init _ANSI_ARGS_((Tcl_Interp *interp));
 
 /*
  *  List of options in alphabetical order:
@@ -172,6 +157,8 @@ EXTERN void Itk_OptListAdd _ANSI_ARGS_((ItkOptList* olist,
 EXTERN void Itk_OptListRemove _ANSI_ARGS_((ItkOptList* olist,
     Tcl_HashEntry *entry));
 
+#undef EXPORT
+#define EXPORT DLLIMPORT
 
 #endif /* RESOURCE INCLUDED */
 #endif /* ITK_H */
