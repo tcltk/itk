@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.8 2001/05/22 05:57:35 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.9 2001/05/22 07:35:07 davygrvy Exp $
 ######################################################################
 # All needed information is derived from running vcvars32.bat
 #
@@ -92,7 +92,7 @@ ITKSTUBOBJS = \
 
 WINDIR		= $(ROOT)\win
 GENERICDIR	= $(ROOT)\generic
-RCDIR		= $(WINDIR)\rc
+RCDIR		= $(ROOT)\win\rc
 
 ######################################################################
 # Link flags
@@ -109,10 +109,10 @@ lcommon = -nologo -link50compat -machine:$(MACHINE)
 
 ITK_LFLAGS = $(lcommon) -subsystem:windows -dll
 
-!if $(USE_TCL_STUBS) == 0
-ITK_LLIBS	= $(TCLIMPLIB) $(TKIMPLIB) $(ITCLIMPLIB)
-!else
+!if $(USE_TCL_STUBS)
 ITK_LLIBS	= $(TCLSTUBLIB) $(TKSTUBLIB) $(ITCLSTUBLIB)
+!else
+ITK_LLIBS	= $(TCLIMPLIB) $(TKIMPLIB) $(ITCLIMPLIB)
 !endif
 
 ######################################################################
@@ -152,10 +152,10 @@ ITCL_INCLUDES	= -I"$(ITCLDIR)\generic"
 ITK_DEFINES	= -DBUILD_itk $(DEBUGDEFINES) -DTCL_THREADS=1
 ITK_EXE_CFLAGS	= $(ccommon) $(cdebug) $(crt) $(TCL_INCLUDES) $(TK_INCLUDES) $(ITCL_INCLUDES) $(ITK_DEFINES)
 
-!if $(USE_TCL_STUBS) == 0
-ITK_CFLAGS	= $(ITK_EXE_CFLAGS)
-!else
+!if $(USE_TCL_STUBS)
 ITK_CFLAGS	= $(ITK_EXE_CFLAGS) -DUSE_TCL_STUBS -DUSE_TK_STUBS -DUSE_ITCL_STUBS
+!else
+ITK_CFLAGS	= $(ITK_EXE_CFLAGS)
 !endif
 
 ######################################################################
@@ -257,22 +257,22 @@ $<
 <<
 
 {$(RCDIR)}.rc{$(TMP_DIR)}.res :
-	$(rc32) -fo $@ -r $(ITK_INCLUDES) $(TCL_INCLUDES) $(ITCL_INCLUDES) $(ITK_DEFINES) $<
+	$(rc32) -fo $@ -DDEBUG=$(DEBUG) $(ITK_INCLUDES) $(TCL_INCLUDES) $(ITCL_INCLUDES) $(ITK_DEFINES) $<
 
 ######################################################################
 # Clean up
 ######################################################################
 
-clean:
-	-@del $(OUT_DIR)\*.exp 
-	-@del $(OUT_DIR)\*.lib 
-	-@del $(OUT_DIR)\*.dll 
-	-@del $(OUT_DIR)\*.exe
-	-@del $(OUT_DIR)\*.pdb
-	-@del $(TMP_DIR)\*.pch
-	-@del $(TMP_DIR)\*.obj
-	-@del $(TMP_DIR)\*.res
-	-@del $(TMP_DIR)\*.def
-	-@del $(TMP_DIR)\*.exe
-	-@rmdir $(OUT_DIR)
-	-@rmdir $(TMP_DIR)
+tidy :
+	-del $(TMP_DIR)\*.pch
+	-del $(TMP_DIR)\*.obj
+	-del $(TMP_DIR)\*.res
+
+clean : tidy
+	-del $(OUT_DIR)\*.exp
+	-del $(OUT_DIR)\*.lib
+	-del $(OUT_DIR)\*.dll
+
+hose : clean
+	-rmdir $(OUT_DIR)
+	-rmdir $(TMP_DIR)
