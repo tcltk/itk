@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_cmds.c,v 1.8 2000/08/07 04:24:39 welch Exp $
+ *     RCS:  $Id: itk_cmds.c,v 1.9 2001/05/22 00:48:46 davygrvy Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -79,9 +79,6 @@ namespace eval ::itk {\n\
     }\n\
     _find_init\n\
 }";
-
-extern ItkStubs itkStubs;
-
 
 /*
  * ------------------------------------------------------------------------
