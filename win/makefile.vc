@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.16 2002/08/11 07:02:31 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.17 2003/12/23 03:11:40 davygrvy Exp $
 #------------------------------------------------------------------------------
 #  Do not modify this file!
 #------------------------------------------------------------------------------
@@ -203,7 +203,8 @@ $(ITKLIB): $(ITKOBJS)
 !if $(STATIC_BUILD)
 	$(lib32) -nologo -machine:$(MACHINE) -out:$@ @<<
 !else
-	$(link32) $(ITK_LFLAGS) -out:$@ $(ITK_LLIBS) @<<
+	$(link32) $(ITK_LFLAGS) -base:@$(TCLDIR)\win\coffbase.txt,itk \
+	    -out:$@ $(ITK_LLIBS) @<<
 !endif
 		$(ITKOBJS)
 <<
