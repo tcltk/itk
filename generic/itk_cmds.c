@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_cmds.c,v 1.12 2001/06/22 04:38:54 davygrvy Exp $
+ *     RCS:  $Id: itk_cmds.c,v 1.13 2003/12/22 20:21:43 davygrvy Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -113,10 +113,10 @@ Initialize(interp)
     ClientData parserInfo;
     extern ItkStubs itkStubs;
 
-    if (Tcl_InitStubs(interp, "8.1", 0) == NULL) {
+    if (Tcl_InitStubs(interp, TCL_VERSION, 0) == NULL) {
 	return TCL_ERROR;
     };
-    if (Tk_InitStubs(interp, "8.1", 0) == NULL) {
+    if (Tk_InitStubs(interp, TK_VERSION, 0) == NULL) {
 	return TCL_ERROR;
     };
     if (Itcl_InitStubs(interp, ITCL_VERSION, 1) == NULL) {
