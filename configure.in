@@ -39,15 +39,7 @@ TEA_LOAD_TKCONFIG
 TEA_PATH_CONFIG(itcl)
 TEA_LOAD_CONFIG(itcl)
 
-AC_ARG_WITH(itcl,
-	[  --with-itclinclude=DIR          use Itcl headers from DIR],
-	ITCL_LIB_DIR=$withval, ITCL_LIB_DIR=${itcl_SRC_DIR})
-
-if test ! -r "${ITCL_LIB_DIR}/generic/itclInt.h" ; then
-    AC_MSG_ERROR([Cannot find Itcl private header files.  Use --with-itclinclude to specify the directory containing the Itcl private headers on your system.])
-fi
-
-ITCL_INCLUDES="-I\"`${CYGPATH} ${ITCL_LIB_DIR}/generic`\""
+ITCL_INCLUDES="-I\"`${CYGPATH} ${itcl_SRC_DIR}/generic`\""
 
 #--------------------------------------------------------------------
 # Handle the --prefix=... option by defaulting to what Tcl gave.

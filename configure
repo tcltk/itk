@@ -857,7 +857,6 @@ Optional Packages:
   --with-tcl              directory containing tcl configuration (tclConfig.sh)
   --with-tk               directory containing tk configuration (tkConfig.sh)
   --with-itcl              directory containing itcl configuration (itclConfig.sh)
-  --with-itclinclude=DIR          use Itcl headers from DIR
   --with-x                use the X Window System
   --with-celib=DIR        use Windows/CE support library from DIR
 
@@ -1860,22 +1859,7 @@ echo "$as_me: WARNING: Found Makefile - using build library specs for itcl" >&2;
 
 
 
-
-# Check whether --with-itcl or --without-itcl was given.
-if test "${with_itcl+set}" = set; then
-  withval="$with_itcl"
-  ITCL_LIB_DIR=$withval
-else
-  ITCL_LIB_DIR=${itcl_SRC_DIR}
-fi;
-
-if test ! -r "${ITCL_LIB_DIR}/generic/itclInt.h" ; then
-    { { echo "$as_me:$LINENO: error: Cannot find Itcl private header files.  Use --with-itclinclude to specify the directory containing the Itcl private headers on your system." >&5
-echo "$as_me: error: Cannot find Itcl private header files.  Use --with-itclinclude to specify the directory containing the Itcl private headers on your system." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-ITCL_INCLUDES="-I\"`${CYGPATH} ${ITCL_LIB_DIR}/generic`\""
+ITCL_INCLUDES="-I\"`${CYGPATH} ${itcl_SRC_DIR}/generic`\""
 
 #--------------------------------------------------------------------
 # Handle the --prefix=... option by defaulting to what Tcl gave.
