@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_cmds.c,v 1.15 2003/12/23 06:57:54 davygrvy Exp $
+ *     RCS:  $Id: itk_cmds.c,v 1.16 2005/03/25 21:08:03 hobbs Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -73,6 +73,13 @@ namespace eval ::itk {\n\
             lappend dirs [file join $bindir .. library]\n\
             lappend dirs [file join $bindir .. .. library]\n\
             lappend dirs [file join $bindir .. .. itk library]\n\
+            # On MacOSX, check the directories in the tcl_pkgPath\n\
+            if {[string equal $::tcl_platform(platform) \"unix\"] && \
+                    [string equal $::tcl_platform(os) \"Darwin\"]} {\n\
+                foreach d $::tcl_pkgPath {\n\
+                    lappend dirs [file join $d itk$version]\n\
+                }\n\
+            }\n\
         }\n\
         foreach i $dirs {\n\
             set library $i\n\
