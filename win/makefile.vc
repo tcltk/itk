@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.18 2003/12/23 04:16:38 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.19 2003/12/23 05:22:45 davygrvy Exp $
 #------------------------------------------------------------------------------
 #  Do not modify this file!
 #------------------------------------------------------------------------------
@@ -125,9 +125,11 @@ ITKSTUBOBJS = \
     $(TMP_DIR)\itkStubLib.obj
 !endif
 
-WINDIR		= $(ROOT)\win
 GENERICDIR	= $(ROOT)\generic
+DOCDIR		= $(ROOT)\doc
+WINDIR		= $(ROOT)\win
 RCDIR		= $(ROOT)\win\rc
+TOOLSDIR	= ..\..\tools
 
 #---------------------------------------------------------------------
 # Link flags
@@ -275,7 +277,7 @@ install: all
 !if !$(TCLINSTALL)
 # Only from the sources of Tcl does genStubs.tcl exist.
 genstubs:
-    $(TCLSH) $(TCLDIR)\tools\genStubs.tcl $(GENERICDIR) \
+    $(TCLSH) $(TOOLSDIR)\genStubs.tcl $(GENERICDIR) \
         $(GENERICDIR)\itk.decls
 !else
 genstubs:
@@ -308,6 +310,94 @@ $<
 
 {$(RCDIR)}.rc{$(TMP_DIR)}.res :
 	$(rc32) -fo $@ -DDEBUG=$(DEBUG) $(ITK_INCLUDES) $(TCL_INCLUDES) $(ITCL_INCLUDES) $(ITK_DEFINES) $<
+
+#---------------------------------------------------------------------
+# Generate the windows help files.
+#---------------------------------------------------------------------
+
+HLPBASE		= $(PROJECT)$(ITK_VERSION)
+HELPFILE	= $(OUT_DIR)\$(HLPBASE).hlp
+HELPCNT		= $(OUT_DIR)\$(HLPBASE).cnt
+DOCTMP_DIR	= $(OUT_DIR)\$(PROJECT)_docs
+HELPRTF		= $(DOCTMP_DIR)\$(PROJECT).rtf
+MAN2HELP	= $(DOCTMP_DIR)\man2help.tcl
+MAN2HELP2	= $(DOCTMP_DIR)\man2help2.tcl
+INDEX		= $(DOCTMP_DIR)\index.tcl
+BMP		= $(DOCTMP_DIR)\toaster.bmp
+BMP_NOPATH	= toaster.bmp
+MAN2TCL		= $(DOCTMP_DIR)\man2tcl.exe
+
+winhelp: docsetup $(HELPFILE)
+
+docsetup:
+	@if not exist $(DOCTMP_DIR)\nul mkdir $(DOCTMP_DIR)
+
+$(MAN2HELP) $(MAN2HELP2) $(INDEX): $(TCLTOOLSDIR)\$$(@F)
+	copy $(TCLTOOLSDIR)\$(@F) $(@D)
+
+$(BMP):
+	copy $(WINDIR)\$(@F) $(@D)
+
+$(HELPFILE): $(HELPRTF) $(BMP)
+	cd $(DOCTMP_DIR)
+	start /wait hcrtf.exe -x <<$(PROJECT).hpj
+[OPTIONS]
+COMPRESS=12 Hall Zeck
+LCID=0x409 0x0 0x0 ; English (United States)
+TITLE=[Incr Tk] Reference Manual
+BMROOT=.
+CNT=$(@B).cnt
+HLP=$(@B).hlp
+
+[FILES]
+$(PROJECT).rtf
+
+[WINDOWS]
+main="[Incr Tk] Reference Manual",,27648,(r15263976),(r65280)
+
+[CONFIG]
+BrowseButtons()
+CreateButton(1, "Web", ExecFile("http://www.tcl.tk"))
+CreateButton(2, "SF", ExecFile("http://sf.net/projects/incrtcl"))
+CreateButton(3, "Wiki", ExecFile("http://wiki.tcl.tk"))
+CreateButton(4, "FAQ", ExecFile("http://www.purl.org/NET/Tcl-FAQ/"))
+<<
+	cd $(MAKEDIR)
+	copy "$(DOCTMP_DIR)\$(@B).hlp" "$(OUT_DIR)"
+	copy "$(DOCTMP_DIR)\$(@B).cnt" "$(OUT_DIR)"
+
+$(MAN2TCL): $(TCLTOOLSDIR)\$$(@B).c
+	$(cc32) -nologo -G4 -ML -O2 -Fo$(@D)\ $(TCLTOOLSDIR)\$(@B).c -link -out:$@
+
+$(HELPRTF): $(MAN2TCL) $(MAN2HELP) $(MAN2HELP2) $(INDEX)
+	$(TCLSH) $(MAN2HELP) -bitmap $(BMP_NOPATH) $(PROJECT) $(ITK_VERSION) $(DOCDIR:\=/)
+
+install-docs:
+!if exist($(HELPFILE))
+	@xcopy /i /y "$(HELPFILE)" "$(DOC_INSTALL_DIR)\"
+	@xcopy /i /y "$(HELPCNT)" "$(DOC_INSTALL_DIR)\"
+	$(TCLSH) <<
+puts "Installing $(PROJECT)'s helpfile contents into Tcl's ..."
+set f [open "$(DOC_INSTALL_DIR:\=/)/tcl$(TCL_VERSION).cnt" r]
+while {![eof $$f]} {
+    if {[regexp {:Include $(PROJECT)([0-9]{2}).cnt} [gets $$f] dummy ver]} {
+	if {$$ver == $(ITK_VERSION)} {
+	    puts "Already installed."
+	    exit
+	} else {
+	    # do something here logical to remove (or replace) it.
+	    puts "$$ver != $(ITK_VERSION), unfinished code path, die, die!"
+	    exit 1
+	}
+    }
+}
+close $$f
+set f [open $(DOC_INSTALL_DIR:\=/)/tcl$(TCL_VERSION).cnt a]
+puts $$f {:Include $(HLPBASE).cnt}
+close $$f
+<<
+	start /wait winhlp32 -g $(DOC_INSTALL_DIR)\tcl$(TCL_VERSION).hlp
+!endif
 
 #---------------------------------------------------------------------
 # Clean up

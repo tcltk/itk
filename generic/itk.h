@@ -38,7 +38,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk.h,v 1.13 2002/08/11 04:10:46 davygrvy Exp $
+ *     RCS:  $Id: itk.h,v 1.14 2003/12/23 05:22:45 davygrvy Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -47,6 +47,26 @@
  */
 #ifndef ITK_H
 #define ITK_H
+
+#ifndef TCL_ALPHA_RELEASE
+#   define TCL_ALPHA_RELEASE	0
+#endif
+#ifndef TCL_BETA_RELEASE
+#   define TCL_BETA_RELEASE	1
+#endif
+#ifndef TCL_FINAL_RELEASE
+#   define TCL_FINAL_RELEASE	2
+#endif
+
+
+#define ITK_MAJOR_VERSION	3
+#define ITK_MINOR_VERSION	3
+#define ITK_RELEASE_LEVEL	TCL_BETA_RELEASE
+#define ITK_RELEASE_SERIAL	1
+
+#define ITK_VERSION		"3.3"
+#define ITK_PATCH_LEVEL		"3.3b1"
+
 
 /*
  * A special definition used to allow this header file to be included
@@ -106,7 +126,7 @@ typedef struct ItkClassOption {
  */
 
 #ifdef USE_ITK_STUBS
-TCL_EXTRNC
+TCL_EXTERNC
 CONST char *		Itk_InitStubs _ANSI_ARGS_((Tcl_Interp *interp,
 			    char *version, int exact));
 #endif

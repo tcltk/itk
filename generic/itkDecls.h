@@ -6,7 +6,7 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: $Id: itkDecls.h,v 1.7 2002/08/11 04:14:54 davygrvy Exp $
+ * RCS: $Id: itkDecls.h,v 1.8 2003/12/23 05:22:45 davygrvy Exp $
  */
 
 #ifndef _ITKDECLS
@@ -29,61 +29,112 @@
  * Exported function declarations:
  */
 
+#ifndef Itk_Init_TCL_DECLARED
+#define Itk_Init_TCL_DECLARED
 /* 0 */
 TCL_EXTERN(int)		Itk_Init _ANSI_ARGS_((Tcl_Interp * interp));
+#endif
+#ifndef Itk_SafeInit_TCL_DECLARED
+#define Itk_SafeInit_TCL_DECLARED
 /* 1 */
 TCL_EXTERN(int)		Itk_SafeInit _ANSI_ARGS_((Tcl_Interp * interp));
+#endif
+#ifndef Itk_ConfigBodyCmd_TCL_DECLARED
+#define Itk_ConfigBodyCmd_TCL_DECLARED
 /* 2 */
 TCL_EXTERN(int)		Itk_ConfigBodyCmd _ANSI_ARGS_((ClientData cdata, 
 				Tcl_Interp * interp, int objc, 
 				Tcl_Obj *CONST objv[]));
+#endif
+#ifndef Itk_UsualCmd_TCL_DECLARED
+#define Itk_UsualCmd_TCL_DECLARED
 /* 3 */
 TCL_EXTERN(int)		Itk_UsualCmd _ANSI_ARGS_((ClientData cdata, 
 				Tcl_Interp * interp, int objc, 
 				Tcl_Obj *CONST objv[]));
+#endif
+#ifndef Itk_ClassOptionDefineCmd_TCL_DECLARED
+#define Itk_ClassOptionDefineCmd_TCL_DECLARED
 /* 4 */
 TCL_EXTERN(int)		Itk_ClassOptionDefineCmd _ANSI_ARGS_((
 				ClientData cdata, Tcl_Interp * interp, 
 				int objc, Tcl_Obj *CONST objv[]));
+#endif
+#ifndef Itk_ClassOptionIllegalCmd_TCL_DECLARED
+#define Itk_ClassOptionIllegalCmd_TCL_DECLARED
 /* 5 */
 TCL_EXTERN(int)		Itk_ClassOptionIllegalCmd _ANSI_ARGS_((
 				ClientData cdata, Tcl_Interp * interp, 
 				int objc, Tcl_Obj *CONST objv[]));
+#endif
+#ifndef Itk_ConfigClassOption_TCL_DECLARED
+#define Itk_ConfigClassOption_TCL_DECLARED
 /* 6 */
 TCL_EXTERN(int)		Itk_ConfigClassOption _ANSI_ARGS_((
 				Tcl_Interp * interp, ItclObject * contextObj, 
 				ClientData cdata, CONST char* newVal));
+#endif
+#ifndef Itk_CreateClassOptTable_TCL_DECLARED
+#define Itk_CreateClassOptTable_TCL_DECLARED
 /* 7 */
 TCL_EXTERN(ItkClassOptTable*) Itk_CreateClassOptTable _ANSI_ARGS_((
 				Tcl_Interp * interp, ItclClass * cdefn));
+#endif
+#ifndef Itk_FindClassOptTable_TCL_DECLARED
+#define Itk_FindClassOptTable_TCL_DECLARED
 /* 8 */
 TCL_EXTERN(ItkClassOptTable*) Itk_FindClassOptTable _ANSI_ARGS_((
 				ItclClass * cdefn));
+#endif
 /* Slot 9 is reserved */
+#ifndef Itk_CreateClassOption_TCL_DECLARED
+#define Itk_CreateClassOption_TCL_DECLARED
 /* 10 */
 TCL_EXTERN(int)		Itk_CreateClassOption _ANSI_ARGS_((
 				Tcl_Interp * interp, ItclClass * cdefn, 
 				char * switchName, char * resName, 
 				char * resClass, char * defVal, 
 				char * config, ItkClassOption ** optPtr));
+#endif
+#ifndef Itk_FindClassOption_TCL_DECLARED
+#define Itk_FindClassOption_TCL_DECLARED
 /* 11 */
 TCL_EXTERN(ItkClassOption*) Itk_FindClassOption _ANSI_ARGS_((
 				ItclClass * cdefn, char * switchName));
+#endif
+#ifndef Itk_DelClassOption_TCL_DECLARED
+#define Itk_DelClassOption_TCL_DECLARED
 /* 12 */
 TCL_EXTERN(void)	Itk_DelClassOption _ANSI_ARGS_((ItkClassOption * opt));
+#endif
+#ifndef Itk_ArchetypeInit_TCL_DECLARED
+#define Itk_ArchetypeInit_TCL_DECLARED
 /* 13 */
 TCL_EXTERN(int)		Itk_ArchetypeInit _ANSI_ARGS_((Tcl_Interp* interp));
+#endif
+#ifndef Itk_OptListInit_TCL_DECLARED
+#define Itk_OptListInit_TCL_DECLARED
 /* 14 */
 TCL_EXTERN(void)	Itk_OptListInit _ANSI_ARGS_((ItkOptList* olist, 
 				Tcl_HashTable * options));
+#endif
+#ifndef Itk_OptListFree_TCL_DECLARED
+#define Itk_OptListFree_TCL_DECLARED
 /* 15 */
 TCL_EXTERN(void)	Itk_OptListFree _ANSI_ARGS_((ItkOptList* olist));
+#endif
+#ifndef Itk_OptListAdd_TCL_DECLARED
+#define Itk_OptListAdd_TCL_DECLARED
 /* 16 */
 TCL_EXTERN(void)	Itk_OptListAdd _ANSI_ARGS_((ItkOptList* olist, 
 				Tcl_HashEntry * entry));
+#endif
+#ifndef Itk_OptListRemove_TCL_DECLARED
+#define Itk_OptListRemove_TCL_DECLARED
 /* 17 */
 TCL_EXTERN(void)	Itk_OptListRemove _ANSI_ARGS_((ItkOptList* olist, 
 				Tcl_HashEntry * entry));
+#endif
 
 typedef struct ItkStubs {
     int magic;
@@ -109,7 +160,7 @@ typedef struct ItkStubs {
     void (*itk_OptListRemove) _ANSI_ARGS_((ItkOptList* olist, Tcl_HashEntry * entry)); /* 17 */
 } ItkStubs;
 
-TCL_EXTRNC ItkStubs *itkStubsPtr;
+TCL_EXTERNC ItkStubs *itkStubsPtr;
 
 #if defined(USE_ITK_STUBS) && !defined(USE_ITK_STUB_PROCS)
 
