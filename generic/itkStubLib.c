@@ -25,20 +25,12 @@
 #endif
 #undef USE_TCL_STUB_PROCS
 
-#ifndef USE_ITCL_STUBS
-#define USE_ITCL_STUBS
+#ifndef USE_ITK_STUBS
+#define USE_ITK_STUBS
 #endif
-#undef USE_ITCL_STUB_PROCS
+#undef USE_ITK_STUB_PROCS
 
 #include "itk.h"
-
-/*
- * Ensure that Itcl_InitStubs is built as an exported symbol.  The other stub
- * functions should be built as non-exported symbols.
- */
-
-#undef TCL_STORAGE_CLASS
-#define TCL_STORAGE_CLASS DLLEXPORT
 
 ItkStubs *itkStubsPtr;
 
@@ -60,10 +52,6 @@ ItkStubs *itkStubsPtr;
  *
  *----------------------------------------------------------------------
  */
-
-#ifdef Itk_InitStubs
-#undef Itk_InitStubs
-#endif
 
 char *
 Itk_InitStubs (interp, version, exact)

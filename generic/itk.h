@@ -38,7 +38,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk.h,v 1.6 2000/08/02 02:09:37 davidg Exp $
+ *     RCS:  $Id: itk.h,v 1.7 2000/08/04 19:19:12 davidg Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -95,24 +95,19 @@ typedef struct ItkClassOption {
 
 #include "itkDecls.h"
 
+/*
+ *  This function is contained in the itkstub static library
+ */
+
+#ifdef USE_ITK_STUBS
+
+char *		Itk_InitStubs _ANSI_ARGS_((Tcl_Interp *interp,
+			    char *version, int exact));
+#endif
 
 /*
  * Public functions that are not accessible via the stubs table.
  */
-
-EXTERN char *		Itk_InitStubs _ANSI_ARGS_((Tcl_Interp *interp,
-			    char *version, int exact));
-
-#ifndef USE_ITK_STUBS
-
-/*
- * When not using stubs, make it a macro.
- */
-
-#define Itk_InitStubs(interp, version, exact) \
-    Tcl_PkgRequire(interp, "Itk", version, exact)
-
-#endif
 
 # undef TCL_STORAGE_CLASS
 # define TCL_STORAGE_CLASS DLLIMPORT
