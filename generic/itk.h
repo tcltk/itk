@@ -38,7 +38,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk.h,v 1.11 2001/11/24 22:55:39 davygrvy Exp $
+ *     RCS:  $Id: itk.h,v 1.12 2002/08/11 03:59:36 davygrvy Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -106,7 +106,7 @@ typedef struct ItkClassOption {
  */
 
 #ifdef USE_ITK_STUBS
-extern TCL_CPP
+TCL_EXTERNC
 CONST char *		Itk_InitStubs _ANSI_ARGS_((Tcl_Interp *interp,
 			    char *version, int exact));
 #endif
