@@ -216,7 +216,7 @@ $(ITKLIB) : $(ITKDLL) $(ITKSTUBLIB)
 $(ITKDLL) : $(ITKOBJS) $(TMPDIR)\itk.res $(TMPDIR)\itkvc.def
 	set LIB=$(TOOLS32)\lib
        $(link32) $(ldebug) $(dlllflags) -def:$(TMPDIR)\itkvc.def \
-		-out:$@ $(TMPDIR)\itk.res $(TCLSTUBLIB)  \
+		-out:$@ $(TMPDIR)\itk.res $(TCLSTUBLIB) $(ITCLSTUBLIB) \
                 $(TKSTUBLIB) $(guilibsdll) @<<
 			$(ITKOBJS)
 <<
