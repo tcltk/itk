@@ -11,7 +11,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.15 2000/07/23 20:29:33 wart Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.16 2000/08/02 03:50:36 welch Exp $
 
 #========================================================================
 # Edit the following few lines when writing a new extension
@@ -143,7 +143,8 @@ pkgincludedir = $(includedir)/@PACKAGE@@VERSION@
 
 top_builddir = .
 
-INSTALL = $(top_srcdir)/../config/install-sh -c
+#INSTALL = $(top_srcdir)/../config/install-sh -c
+INSTALL = $(TCLSH_PROG) `@CYGPATH@ $(top_srcdir)/../config/installFile.tcl` -c
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
