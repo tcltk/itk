@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.15 2002/08/11 06:03:25 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.16 2002/08/11 07:02:31 davygrvy Exp $
 #------------------------------------------------------------------------------
 #  Do not modify this file!
 #------------------------------------------------------------------------------
@@ -209,12 +209,8 @@ $(ITKLIB): $(ITKOBJS)
 <<
 
 
-!if !$(DEBUG)
 $(ITKSTUBLIB) : $(ITKSTUBOBJS)
 	$(lib32) -nologo -out:$@ $(ITKSTUBOBJS)
-!else
-$(ITKSTUBLIB) :
-!endif
 
 install: all
 	if not exist "$(INSTALLDIR)" mkdir "$(INSTALLDIR)"
@@ -227,7 +223,7 @@ install: all
 	copy $(ROOT)\generic\itk.h "$(INCLUDE_INSTALL_DIR)"
 	copy $(ROOT)\generic\itkDecls.h "$(INCLUDE_INSTALL_DIR)"
 	copy $(ROOT)\library\*.* "$(SCRIPT_INSTALL_DIR)"
-	echo package ifneeded Itk $(ITK_DOTVERSION) [list load [file join $$dir $(ITKOUTNAME).dll] Itk] > \
+	echo package ifneeded Itk $(ITK_DOTVERSION) [list load [file join $$dir $(ITKLIB)] Itk] > \
 		"$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 
 
