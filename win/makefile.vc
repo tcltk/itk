@@ -56,8 +56,7 @@ SCRIPT_INSTALL_DIR	= $(INSTALLDIR)\lib\itk$(DOTVERSION)
 INCLUDE_INSTALL_DIR	= $(INSTALLDIR)\include
 
 ITKWISHOBJS = \
-	$(TMPDIR)\winMain.obj \
-	$(TMPDIR)\tkConsole.obj
+	$(TMPDIR)\winMain.obj
 
 ITKOBJS = \
 	$(TMPDIR)\itk_archetype.obj \
@@ -235,9 +234,6 @@ install: all
 #
 
 $(TMPDIR)\winMain.obj: $(ROOT)\win\winMain.c
-	$(cc32) -DBUILD_tcl -DBUILD_tk $(ITK_CFLAGS) -Fo$@ $?
-
-$(TMPDIR)\tkConsole.obj: $(TKDIR)\generic\tkConsole.c
 	$(cc32) -DBUILD_tcl -DBUILD_tk $(ITK_CFLAGS) -Fo$@ $?
 
 #
