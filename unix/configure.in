@@ -3,7 +3,7 @@ dnl	generate the file "configure", which is run during Tk installation
 dnl	to configure the system for the local environment.
 
 AC_INIT(../generic/itk.h)
-# RCS: $Id: configure.in,v 1.4 1999/06/26 01:59:23 wart Exp $
+# RCS: $Id: configure.in,v 1.5 1999/06/28 18:47:35 hershey Exp $
 
 ITCL_VERSION=3.1
 ITCL_MAJOR_VERSION=3
@@ -120,7 +120,7 @@ file=$TK_LIB_DIR/tkConfig.sh
 #   If not, assume that its top-level directory is a sibling of ours.
 #--------------------------------------------------------------------
 
-AC_ARG_WITH(itcl, [  --with-itcl=DIR          use Itcl 3.0 binaries from DIR],
+AC_ARG_WITH(itcl, [  --with-itcl=DIR          use Itcl binaries from DIR],
         ITCL_LIB_DIR=$withval, ITCL_LIB_DIR=`cd ../../itcl/unix; pwd`)
 
 if test ! -r "$ITCL_LIB_DIR/itclConfig.sh"; then
