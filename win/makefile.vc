@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.23 2003/12/23 09:31:58 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.24 2003/12/24 03:38:03 davygrvy Exp $
 #------------------------------------------------------------------------------
 #  Do not modify this file!
 #------------------------------------------------------------------------------
@@ -70,11 +70,14 @@ ITKSTUBLIBNAME	= $(STUBPREFIX)$(ITCL_VERSION).lib
 ITKSTUBLIB	= "$(OUT_DIR)\$(ITCLSTUBLIBNAME)"
 
 !if $(TCL_DOES_STUBS)
-ITKLIBNAME	= $(PROJECT)$(ITCL_VERSION)$(SUFX).$(EXT)
+ITKLIBNAME	= $(PROJECT)$(ITK_VERSION)$(SUFX).$(EXT)
+ITCLIMPLIBNAME	= itcl$(ITCL_VERSION)$(SUFX).$(EXT)
 !else
-ITKLIBNAME	= $(PROJECT)$(ITCL_VERSION)80$(SUFX).$(EXT)
+ITKLIBNAME	= $(PROJECT)$(ITK_VERSION)80$(SUFX).$(EXT)
+ITCLIMPLIBNAME	= itcl$(ITCL_VERSION)80$(SUFX).lib
 !endif
 ITKLIB		= "$(OUT_DIR)\$(ITKLIBNAME)"
+ITCLIMPLIB	= "$(ITCLDIR)\win\Release\$(ITCLIMPLIBNAME)"
 
 !if $(TCLINSTALL)
 TKSTUBLIB	= "$(TCLDIR)\lib\tkstub$(TCL_VERSION).lib"
@@ -86,15 +89,15 @@ TKIMPLIB	= "$(TKDIR)\win\$(OUT_DIR)\tk$(TCL_VERSION)$(DBGX).lib"
 WISH		= "$(TCLDIR)\win\$(OUT_DIR)\wish$(TCL_VERSION)$(DBGX).exe"
 !endif
 
+ITCLSTUBLIBNAME	= itclstub$(ITCL_VERSION).lib
+ITCLSTUBLIB	= "$(ITCLDIR)\win\Release\$(ITCLSTUBLIBNAME)"
+
 ### For Tcl 8.0
 !if !$(TCL_DOES_STUBS)
 TCLSTUBLIB	= $(TCLIMPLIB)
 TKSTUBLIB	= $(TKIMPLIB)
 ITCLSTUBLIB	= $(ITCLIMPLIB)
 !endif
-
-ITCLSTUBLIBNAME	= itclstub$(ITCL_VERSION).lib
-ITCLSTUBLIB	= "$(ITCLDIR)\win\Release\$(ITCLSTUBLIBNAME)"
 
 ITKSTUBLIBNAME = $(STUBPREFIX)$(ITK_VERSION).lib
 ITKSTUBLIB     = "$(OUT_DIR)\$(ITKSTUBLIBNAME)"
@@ -264,7 +267,9 @@ install-binaries:
 	if not exist "$(SCRIPT_INSTALL_DIR)" mkdir "$(SCRIPT_INSTALL_DIR)"
 	if not exist "$(INCLUDE_INSTALL_DIR)" mkdir "$(INCLUDE_INSTALL_DIR)"
 	copy $(ITKLIB) "$(SCRIPT_INSTALL_DIR)"
+!if exist($(ITKSTUBLIB))
 	copy $(ITKSTUBLIB) "$(LIB_INSTALL_DIR)"
+!endif
 	copy $(ROOT)\generic\itk.h "$(INCLUDE_INSTALL_DIR)"
 	copy $(ROOT)\generic\itkDecls.h "$(INCLUDE_INSTALL_DIR)"
 	copy $(ROOT)\library\*.* "$(SCRIPT_INSTALL_DIR)"
