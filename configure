@@ -1477,6 +1477,65 @@ echo "configure:1423: checking for tkstub library" >&5
 
 
 
+
+    echo $ac_n "checking for itclstub library""... $ac_c" 1>&6
+echo "configure:1483: checking for itclstub library" >&5
+
+    # Look in exec-prefix and prefix for the library.  If neither of
+    # these were specified, look in libdir.  It doesn't matter if libdir
+    # wasn't specified since a search in the unspecified directory will
+    # fail (NONE/lib)
+
+    if test x"${exec_prefix}" != x"NONE" ; then
+	sc_lib_name_dir="${exec_prefix}/lib"
+    elif test x"${prefix}" != "NONE" ; then
+	sc_lib_name_dir="${prefix}/lib"
+    else
+	eval "sc_lib_name_dir=${libdir}"
+    fi
+
+    if test x"../itcl" != x ; then
+	sc_extra_lib_dir=../itcl
+    else
+	sc_extra_lib_dir=NONE
+    fi
+
+    for i in \
+	    `ls -dr ${sc_extra_lib_dir}/itclstub[0-9]*.lib 2>/dev/null ` \
+	    `ls -dr ${sc_extra_lib_dir}/libitclstub[0-9]* 2>/dev/null ` \
+	    `ls -dr ${sc_lib_name_dir}/itclstub[0-9]*.lib 2>/dev/null ` \
+	    `ls -dr ${sc_lib_name_dir}/libitclstub[0-9]* 2>/dev/null ` \
+	    `ls -dr /usr/lib/itclstub[0-9]*.lib 2>/dev/null ` \
+	    `ls -dr /usr/lib/libitclstub[0-9]* 2>/dev/null ` \
+	    `ls -dr /usr/local/lib/itclstub[0-9]*.lib 2>/dev/null ` \
+	    `ls -dr /usr/local/lib/libitclstub[0-9]* 2>/dev/null ` ; do
+	if test -f "$i" ; then
+
+	    sc_lib_name_dir=`dirname $i`
+	    itclstub_LIB_NAME=`basename $i`
+	    itclstub_LIB_PATH_NAME=$i
+	    break
+	fi
+    done
+
+    case "`uname -s`" in
+	*win32* | *WIN32* | *CYGWIN_NT* |*CYGWIN_98*|*CYGWIN_95*)
+	    itclstub_LIB_SPEC=\"`${CYGPATH} ${itclstub_LIB_PATH_NAME}`\"
+	    ;;
+	*)
+	    # Strip off the leading "lib" and trailing ".a" or ".so"
+
+	    sc_lib_name_lib=`echo ${itclstub_LIB_NAME}|sed -e 's/^lib//' -e 's/\.[^.]*$//'`
+	    itclstub_LIB_SPEC="-L${sc_lib_name_dir} -l${sc_lib_name_lib}"
+	    ;;
+    esac
+    if test "xitclstub_LIB_NAME" = x ; then
+	{ echo "configure: error: not found" 1>&2; exit 1; }
+    else
+	echo "$ac_t""${itclstub_LIB_SPEC}" 1>&6
+    fi
+
+
 #--------------------------------------------------------------------
 # __CHANGE__
 # Choose which headers you need.  Extension authors should try very
@@ -1491,7 +1550,7 @@ echo "configure:1423: checking for tkstub library" >&5
 #SC_PUBLIC_TCL_HEADERS
 
     echo $ac_n "checking for Tcl private include files""... $ac_c" 1>&6
-echo "configure:1495: checking for Tcl private include files" >&5
+echo "configure:1554: checking for Tcl private include files" >&5
 
     case "`uname -s`" in
 	*win32* | *WIN32* | *CYGWIN_NT* |*CYGWIN_98*|*CYGWIN_95*)
@@ -1532,7 +1591,7 @@ echo "configure:1495: checking for Tcl private include files" >&5
 #SC_PUBLIC_TK_HEADERS
 
     echo $ac_n "checking for Tk private include files""... $ac_c" 1>&6
-echo "configure:1536: checking for Tk private include files" >&5
+echo "configure:1595: checking for Tk private include files" >&5
 
     case "`uname -s`" in
 	*win32* | *WIN32* | *CYGWIN_NT* |*CYGWIN_98*|*CYGWIN_95*)
@@ -1612,7 +1671,7 @@ esac
 
 
     echo $ac_n "checking for building with threads""... $ac_c" 1>&6
-echo "configure:1616: checking for building with threads" >&5
+echo "configure:1675: checking for building with threads" >&5
     # Check whether --enable-threads or --disable-threads was given.
 if test "${enable_threads+set}" = set; then
   enableval="$enable_threads"
@@ -1639,7 +1698,7 @@ EOF
 		;;
 	    *)
 		echo $ac_n "checking for pthread_mutex_init in -lpthread""... $ac_c" 1>&6
-echo "configure:1643: checking for pthread_mutex_init in -lpthread" >&5
+echo "configure:1702: checking for pthread_mutex_init in -lpthread" >&5
 ac_lib_var=`echo pthread'_'pthread_mutex_init | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -1647,7 +1706,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lpthread  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 1651 "configure"
+#line 1710 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -1658,7 +1717,7 @@ int main() {
 pthread_mutex_init()
 ; return 0; }
 EOF
-if { (eval echo configure:1662: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:1721: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -1704,7 +1763,7 @@ fi
 
 
     echo $ac_n "checking how to build libraries""... $ac_c" 1>&6
-echo "configure:1708: checking how to build libraries" >&5
+echo "configure:1767: checking how to build libraries" >&5
     # Check whether --enable-shared or --disable-shared was given.
 if test "${enable_shared+set}" = set; then
   enableval="$enable_shared"
@@ -1771,7 +1830,7 @@ SHLIB_CFLAGS=${TCL_SHLIB_CFLAGS}
     esac
 
     echo $ac_n "checking for build with symbols""... $ac_c" 1>&6
-echo "configure:1775: checking for build with symbols" >&5
+echo "configure:1834: checking for build with symbols" >&5
     # Check whether --enable-symbols or --disable-symbols was given.
 if test "${enable_symbols+set}" = set; then
   enableval="$enable_symbols"
@@ -1880,7 +1939,7 @@ case "`uname -s`" in
 	;;
     *)
 	if test "${SHARED_BUILD}" = "1" ; then
-	    SHLIB_LD_LIBS="${TCL_STUB_LIB_SPEC} ${tkstub_LIB_SPEC} ../itcl/${itclstub_LIB_FILE}"
+	    SHLIB_LD_LIBS="${tkstub_LIB_SPEC} ${TCL_STUB_LIB_SPEC} ../itcl/${itcl_STUB_LIB_FILE}"
 	    eval "${PACKAGE}_LIB_FILE=lib${PACKAGE}${SHARED_LIB_SUFFIX}"
 	    RANLIB=:
 	else
@@ -1911,7 +1970,7 @@ esac
 
 
     echo $ac_n "checking for tclsh""... $ac_c" 1>&6
-echo "configure:1915: checking for tclsh" >&5
+echo "configure:1974: checking for tclsh" >&5
 
     if eval "test \"`echo '$''{'ac_cv_path_tclsh'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6

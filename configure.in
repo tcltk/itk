@@ -173,6 +173,8 @@ AC_SUBST(itclstub_LIB_FILE)
 SC_LIB_SPEC(tkstub, ${TK_BIN_DIR})
 AC_SUBST(tkstub_LIB_SPEC)
 
+SC_LIB_SPEC(itclstub, ../itcl)
+
 #--------------------------------------------------------------------
 # __CHANGE__
 # Choose which headers you need.  Extension authors should try very
@@ -319,7 +321,7 @@ case "`uname -s`" in
 	;;
     *)
 	if test "${SHARED_BUILD}" = "1" ; then
-	    SHLIB_LD_LIBS="${TCL_STUB_LIB_SPEC} ${tkstub_LIB_SPEC} ../itcl/${itclstub_LIB_FILE}"
+	    SHLIB_LD_LIBS="${tkstub_LIB_SPEC} ${TCL_STUB_LIB_SPEC} ../itcl/${itcl_STUB_LIB_FILE}"
 	    eval "${PACKAGE}_LIB_FILE=lib${PACKAGE}${SHARED_LIB_SUFFIX}"
 	    RANLIB=:
 	else
