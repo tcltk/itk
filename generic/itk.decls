@@ -9,7 +9,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
-# RCS: 
+# RCS: $Id: itk.decls,v 1.2 2000/08/04 22:09:06 davidg Exp $
 
 library itk
 interface itk
