@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.9 2001/05/22 07:35:07 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.10 2001/05/22 22:41:45 davygrvy Exp $
 ######################################################################
 # All needed information is derived from running vcvars32.bat
 #
@@ -73,7 +73,7 @@ ITKSTUBLIB     = "$(OUT_DIR)\$(ITKSTUBLIBNAME)"
 
 LIB_INSTALL_DIR		= $(INSTALLDIR)\lib
 BIN_INSTALL_DIR		= $(INSTALLDIR)\bin
-SCRIPT_INSTALL_DIR	= $(INSTALLDIR)\lib\itcl$(ITK_DOTVERSION)
+SCRIPT_INSTALL_DIR	= $(INSTALLDIR)\lib\itk$(ITK_DOTVERSION)
 INCLUDE_INSTALL_DIR	= $(INSTALLDIR)\include
 
 ITKOBJS = \
@@ -122,12 +122,22 @@ ITK_LLIBS	= $(TCLIMPLIB) $(TKIMPLIB) $(ITCLIMPLIB)
 !if $(DEBUG) == 0
 !if "$(MACHINE)" == "ALPHA"
 # MSVC on Alpha doesn't understand -Ot
-cdebug = -O2i -Gs -GD
+cdebug = -O2i
 !else
-cdebug = -Ox -GD -G5
+cdebug = -Ox
 !endif
 !else
-cdebug = -Od -Z7 -WX
+!if $(MSDEV_VER) < 6
+cdebug = -Zi -Od -WX
+!else
+cdebug = -ZI -Od -WX
+!endif
+!endif
+
+!if $(STATIC_BUILD)
+cdll	=
+!else
+cdll	= -GD
 !endif
 
 # declarations common to all compiler options
@@ -149,8 +159,9 @@ TK_INCLUDES	= -I"$(TKROOT)\generic" -I"$(TKROOT)\xlib"
 
 ITK_INCLUDES	= -I$(WINDIR) -I$(GENERICDIR)
 ITCL_INCLUDES	= -I"$(ITCLDIR)\generic"
-ITK_DEFINES	= -DBUILD_itk $(DEBUGDEFINES) -DTCL_THREADS=1
-ITK_EXE_CFLAGS	= $(ccommon) $(cdebug) $(crt) $(TCL_INCLUDES) $(TK_INCLUDES) $(ITCL_INCLUDES) $(ITK_DEFINES)
+ITK_DEFINES	= -DBUILD_itk -DTCL_THREADS=1
+ITK_EXE_CFLAGS	= $(ccommon) $(cdebug) $(crt) $(cdll) $(TCL_INCLUDES) $(TK_INCLUDES) \
+		$(ITCL_INCLUDES) $(ITK_DEFINES)
 
 !if $(USE_TCL_STUBS)
 ITK_CFLAGS	= $(ITK_EXE_CFLAGS) -DUSE_TCL_STUBS -DUSE_TK_STUBS -DUSE_ITCL_STUBS
@@ -162,7 +173,7 @@ ITK_CFLAGS	= $(ITK_EXE_CFLAGS)
 # Project specific targets
 ######################################################################
 
-#all:    setup $(ITKWISH) $(ITKDLL) $(ITKSTUBLIB)
+all :     setup $(ITKTARGET) $(ITKSTUBLIB)
 release : setup $(ITKTARGET) $(ITKSTUBLIB)
 
 test:	setup $(ITKDLL) $(ITKSTUBLIB) $(ITKWISH)
@@ -196,17 +207,17 @@ $(ITKSTUBLIB) :
 !endif
 
 install: all
-	if not exist $(INSTALLDIR) mkdir $(INSTALLDIR)
-	if not exist $(BIN_INSTALL_DIR) mkdir $(BIN_INSTALL_DIR)
-	if not exist $(LIB_INSTALL_DIR) mkdir $(LIB_INSTALL_DIR)
-	if not exist $(SCRIPT_INSTALL_DIR) mkdir $(SCRIPT_INSTALL_DIR)
-	if not exist $(INCLUDE_INSTALL_DIR) mkdir $(INCLUDE_INSTALL_DIR)
-	copy $(ITKWISH) "$(BIN_INSTALL_DIR)"
-	copy $(ITKDLL) "$(BIN_INSTALL_DIR)"
+	if not exist "$(INSTALLDIR)" mkdir "$(INSTALLDIR)"
+	if not exist "$(BIN_INSTALL_DIR)" mkdir "$(BIN_INSTALL_DIR)"
+	if not exist "$(LIB_INSTALL_DIR)" mkdir "$(LIB_INSTALL_DIR)"
+	if not exist "$(SCRIPT_INSTALL_DIR)" mkdir "$(SCRIPT_INSTALL_DIR)"
+	if not exist "$(INCLUDE_INSTALL_DIR)" mkdir "$(INCLUDE_INSTALL_DIR)"
+	copy $(ITKTARGET) "$(SCRIPT_INSTALL_DIR)"
+	copy $(ITKSTUBLIB) "$(LIB_INSTALL_DIR)"
 	copy $(ROOT)\generic\itk.h "$(INCLUDE_INSTALL_DIR)"
+	copy $(ROOT)\generic\itkDecls.h "$(INCLUDE_INSTALL_DIR)"
 	copy $(ROOT)\library\*.* "$(SCRIPT_INSTALL_DIR)"
-	copy $(ROOT)\win\*.tcl "$(SCRIPT_INSTALL_DIR)"
-	echo package ifneeded Itk $(ITK_DOTVERSION) [list load [file join $$dir $(ITKDLLNAME).dll] Itk] > \
+	echo package ifneeded Itk $(ITK_DOTVERSION) [list load [file join $$dir $(ITKOUTNAME).dll] Itk] > \
 		"$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 
 
@@ -229,7 +240,7 @@ genstubs:
 # be built as DLL objects but none of the symbols should be exported
 
 $(TMP_DIR)\itkStubLib.obj : $(GENERICDIR)\itkStubLib.c
-    $(cc32) -DSTATIC_BUILD $(ITK_CFLAGS) -Fo$@ $?
+    $(cc32) -DSTATIC_BUILD $(ITK_EXE_CFLAGS) -Zl -Fo$@ $?
 
 $(TMP_DIR)\dllResource.obj : $(TMP_DIR)\itk.res
 	$(cvtres32) -nologo -machine:$(MACHINE) -out:$@ $?
