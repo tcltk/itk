@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.22 2003/12/23 08:02:34 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.23 2003/12/23 09:31:58 davygrvy Exp $
 #------------------------------------------------------------------------------
 #  Do not modify this file!
 #------------------------------------------------------------------------------
@@ -23,7 +23,7 @@ PROJECT	= itk
 
 !if $(TCLINSTALL)
 !message *** Warning: [Incr Tk] requires the source distribution of Tcl to build from,
-!message ***    at this time, sorry.  Please set the TCLDIR  and TKDIR macros to point
+!message ***    at this time, sorry.  Please set the TCLDIR and TKDIR macros to point
 !message ***    to the sources.
 !endif
 
@@ -68,12 +68,6 @@ ITCLLIB		= "$(OUT_DIR)\$(ITCLLIBNAME)"
 ITKIMPLIB	= "$(OUT_DIR)\$(PROJECT)$(ITCL_VERSION)$(SUFX).lib"
 ITKSTUBLIBNAME	= $(STUBPREFIX)$(ITCL_VERSION).lib
 ITKSTUBLIB	= "$(OUT_DIR)\$(ITCLSTUBLIBNAME)"
-
-BIN_INSTALL_DIR		= $(INSTALLDIR)\bin
-DOC_INSTALL_DIR		= $(INSTALLDIR)\doc
-LIB_INSTALL_DIR		= $(INSTALLDIR)\lib
-SCRIPT_INSTALL_DIR	= $(INSTALLDIR)\lib\itk$(ITK_DOTVERSION)
-INCLUDE_INSTALL_DIR	= $(INSTALLDIR)\include
 
 !if $(TCL_DOES_STUBS)
 ITKLIBNAME	= $(PROJECT)$(ITCL_VERSION)$(SUFX).$(EXT)
@@ -274,8 +268,26 @@ install-binaries:
 	copy $(ROOT)\generic\itk.h "$(INCLUDE_INSTALL_DIR)"
 	copy $(ROOT)\generic\itkDecls.h "$(INCLUDE_INSTALL_DIR)"
 	copy $(ROOT)\library\*.* "$(SCRIPT_INSTALL_DIR)"
-	echo package ifneeded Itk $(ITK_DOTVERSION) [list load [file join $$dir $(ITKLIB)] Itk] > \
-		"$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+	echo if {[package vsatisfies 8.0 [package provide Tcl]]} {\
+		> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+	echo ^ ^ ^ ^ set add 80>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+	echo } else {>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+	echo ^ ^ ^ ^ set add {}>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+	echo }>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+	echo if {[info exists ::tcl_platform(debug)] ^&^&\
+		$$::tcl_platform(debug)	^&^& \>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+	echo ^ ^ ^ ^ ^ ^ ^ ^ [file exists [file join $$dir\
+		$(PROJECT)$(ITK_VERSION)$${add}g.dll]]}\
+		{>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+	echo ^ ^ ^ ^ package ifneeded Itk $(ITK_DOTVERSION) [list load\
+		[file join $$dir $(PROJECT)$(ITK_VERSION)$${add}g.dll]\
+		Itk]>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+	echo } else {>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+	echo ^ ^ ^ ^ package ifneeded Itk $(ITK_DOTVERSION) [list load\
+		[file join $$dir $(PROJECT)$(ITK_VERSION)$${add}.dll]\
+		Itk]>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+	echo }>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+	echo unset add>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 
 
 #---------------------------------------------------------------------
