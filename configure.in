@@ -352,4 +352,4 @@ SC_PROG_TCLSH
 #--------------------------------------------------------------------
 
 AC_OUTPUT([Makefile \
-	mkIndex.tcl])
+	pkgIndex.tcl])
