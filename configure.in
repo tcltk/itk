@@ -171,7 +171,7 @@ AC_SUBST(ITCL_INCLUDES)
 # appears in the Itcl configure script.
 #--------------------------------------------------------------------
 
-AC_MSG_CHECKING(for name if Itcl stub library)
+AC_MSG_CHECKING(for name if itclstub library)
 AC_CACHE_VAL(ac_cv_itclstub_LIB_FILE, ac_cv_itclstub_LIB_FILE="NONE")
 if test x"${ac_cv_itclstub_LIB_FILE}" = x"NONE" ; then
     AC_MSG_ERROR(Can't find name of Itcl stub library.  How did this happen?)
@@ -184,7 +184,7 @@ AC_SUBST(itclstub_LIB_FILE)
 SC_LIB_SPEC(tkstub, ${TK_BIN_DIR})
 AC_SUBST(tkstub_LIB_SPEC)
 
-SC_LIB_SPEC(itclstub, ../itcl)
+#SC_LIB_SPEC(itclstub, ../itcl)
 
 #--------------------------------------------------------------------
 # __CHANGE__
@@ -261,13 +261,16 @@ SC_ENABLE_SHARED
 # is all taken from the tclConfig.sh file.
 #--------------------------------------------------------------------
 
-CFLAGS_DEBUG=${TCL_CFLAGS_DEBUG}
-CFLAGS_OPTIMIZE=${TCL_CFLAGS_OPTIMIZE}
-LDFLAGS_DEBUG=${TCL_LDFLAGS_DEBUG}
-LDFLAGS_OPTIMIZE=${TCL_LDFLAGS_OPTIMIZE}
-SHLIB_LD=${TCL_SHLIB_LD}
-STLIB_LD=${TCL_STLIB_LD}
-SHLIB_CFLAGS=${TCL_SHLIB_CFLAGS}
+#CC=${TCL_CC}
+#CFLAGS_DEBUG=${TCL_CFLAGS_DEBUG}
+#CFLAGS_OPTIMIZE=${TCL_CFLAGS_OPTIMIZE}
+#LDFLAGS_DEBUG=${TCL_LDFLAGS_DEBUG}
+#LDFLAGS_OPTIMIZE=${TCL_LDFLAGS_OPTIMIZE}
+#SHLIB_LD=${TCL_SHLIB_LD}
+#STLIB_LD=${TCL_STLIB_LD}
+#SHLIB_CFLAGS=${TCL_SHLIB_CFLAGS}
+
+SC_CONFIG_CFLAGS
 
 AC_SUBST(CFLAGS_DEBUG)
 AC_SUBST(CFLAGS_OPTIMIZE)
