@@ -29,7 +29,7 @@ ITCLDIR     = ..\..\itcl
 ######################################################################
 
 ITKNAMEPREFIX  = itk
-#WISHNAMEPREFIX = itkwish
+WISHNAMEPREFIX = itkwish
 VERSION	       = 31
 DOTVERSION     = 3.1
 STUBPREFIX = $(ITKNAMEPREFIX)stub
@@ -85,15 +85,15 @@ GENERICDIR	= $(ROOT)\generic
 RCDIR       = $(WINDIR)\rc
 
 TCLBUILDDIR	= $(TCLDIR)\win\$(OUTDIR)
-#TCLLIB      = $(TCLBUILDDIR)\tcl81$(DBGX).lib
+TCLLIB      = $(TCLBUILDDIR)\tcl81$(DBGX).lib
 TCLSTUBLIB      = $(TCLBUILDDIR)\tclstub81$(DBGX).lib
 TCLDLL      = $(TCLBUILDDIR)\tcl81$(DBGX).dll
 TKBUILDDIR	= $(TKDIR)\win\$(OUTDIR)
-#TKLIB       = $(TKBUILDDIR)\tk81$(DBGX).lib
+TKLIB       = $(TKBUILDDIR)\tk81$(DBGX).lib
 TKSTUBLIB       = $(TKBUILDDIR)\tkstub81$(DBGX).lib
 TKDLL       = $(TKBUILDDIR)\tk81$(DBGX).dll
 ITCLBUILDDIR = $(ITCLDIR)\win\$(OUTDIR)
-#ITCLLIB      = $(ITCLBUILDDIR)\itcl$(VERSION)$(DBGX).lib
+ITCLLIB      = $(ITCLBUILDDIR)\itcl$(VERSION)$(DBGX).lib
 ITCLDLL      = $(ITCLBUILDDIR)\itcl$(VERSION)$(DBGX).dll
 
 ITCLSTUBLIBNAME = itclstub$(VERSION)$(DBGX).lib
@@ -101,12 +101,16 @@ ITCLSTUBLIB     = $(ITCLBUILDDIR)\$(ITCLSTUBLIBNAME)
 
 ITK_INCLUDES	= -I$(WINDIR) -I$(GENERICDIR) \
 			-I$(TCLDIR)\generic -I$(TKDIR)\generic \
+			-I$(TCLDIR)\win -I$(TKDIR)\win \
 			-I$(TKDIR)\xlib -I$(ITCLDIR)\generic
-ITK_DEFINES	= -DBUILD_itk -DUSE_TCL_STUBS -DUSE_ITCL_STUBS \
-			-DUSE_TK_STUBS $(DEBUGDEFINES)
 
-ITK_CFLAGS	= $(cdebug) $(cflags) $(cvarsdll) $(include32) \
-			$(ITK_INCLUDES) $(ITK_DEFINES) 
+ITK_EXE_DEFINES	= -DBUILD_itk $(DEBUGDEFINES)
+
+ITK_EXE_CFLAGS	= $(cdebug) $(cflags) $(cvarsdll) $(include32) \
+			$(ITK_INCLUDES) $(ITK_EXE_DEFINES) 
+
+ITK_CFLAGS	= $(ITK_EXE_CFLAGS) -DUSE_TK_STUBS -DUSE_TCL_STUBS \
+		         -DUSE_ITCL_STUBS
 
 ######################################################################
 # Link flags
@@ -197,8 +201,8 @@ CON_CFLAGS	= $(cdebug) $(cflags) $(cvars) $(include32) -DCONSOLE
 # Project specific targets
 ######################################################################
 
-all:    setup $(ITKDLL) $(ITKSTUBLIB)
-test:	setup $(ITKDLL) $(ITKSTUBLIB)
+all:    setup $(ITKWISH) $(ITKDLL) $(ITKSTUBLIB)
+test:	setup $(ITKDLL) $(ITKSTUBLIB) $(ITKWISH)
 	-@copy $(TCLDLL) $(TMPDIR)
 	-@copy $(TKDLL) $(TMPDIR)
 	-@copy $(ITCLDLL) $(TMPDIR)
@@ -208,7 +212,8 @@ setup:
 	if not exist $(TMPDIR) mkdir $(TMPDIR)
 	if not exist $(OUTDIR) mkdir $(OUTDIR)
 
-$(ITKDLL): $(ITKOBJS) $(TMPDIR)\itk.res $(TMPDIR)\itkvc.def
+$(ITKLIB) : $(ITKDLL) $(ITKSTUBLIB)
+$(ITKDLL) : $(ITKOBJS) $(TMPDIR)\itk.res $(TMPDIR)\itkvc.def
 	set LIB=$(TOOLS32)\lib
        $(link32) $(ldebug) $(dlllflags) -def:$(TMPDIR)\itkvc.def \
 		-out:$@ $(TMPDIR)\itk.res $(TCLSTUBLIB)  \
@@ -216,15 +221,15 @@ $(ITKDLL): $(ITKOBJS) $(TMPDIR)\itk.res $(TMPDIR)\itkvc.def
 			$(ITKOBJS)
 <<
 
-#$(ITCLSTUBLIB)
 
 $(ITKSTUBLIB): $(ITKSTUBOBJS)
     $(lib32) -nologo -out:$@ $(ITKSTUBOBJS)
 
-#$(ITKWISH): $(ITKWISHOBJS) $(ITKLIB) $(TMPDIR)\itkwish.res
-#	set LIB=$(TOOLS32)\lib
-#	$(link32) $(ldebug) $(guilflags) $(TMPDIR)\itkwish.res -out:$@ \
-#		$(guilibsdll) $(TCLLIB) $(TKLIB) $(ITCLLIB) $(ITKLIB) $(ITKWISHOBJS) 
+$(ITKWISH): $(ITKWISHOBJS) $(ITKLIB) $(TMPDIR)\itkwish.res
+	set LIB=$(TOOLS32)\lib
+	$(link32) $(ldebug) $(guilflags) $(TMPDIR)\itkwish.res -out:$@ \
+		$(guilibsdll) $(TCLLIB) $(TKLIB) $(ITCLLIB) $(ITKLIB) \
+		$(ITKWISHOBJS) 
 
 $(TMPDIR)\itkvc.def: $(DUMPEXTS) $(ITKOBJS)
 	$(DUMPEXTS) -o $@ $(ITKDLLNAME) @<<
@@ -260,8 +265,8 @@ genstubs:
 # Special case object file targets
 #
 
-#$(TMPDIR)\winMain.obj: $(ROOT)\win\winMain.c
-#	$(cc32) -DBUILD_tcl -DBUILD_tk $(ITK_CFLAGS) -Fo$@ $?
+$(TMPDIR)\winMain.obj: $(ROOT)\win\winMain.c
+	$(cc32) $(ITK_EXE_CFLAGS) -Fo$@ $?
 
 # The following object is part of the stub library and should not
 # be built as DLL objects but none of the symbols should be exported
