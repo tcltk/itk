@@ -1,3 +1,4 @@
+#!/bin/bash -norc
 #--------------------------------------------------------------------
 # Sample configure.in for Tcl Extensions.  The only places you should
 # need to modify this file are marked by the string __CHANGE__
@@ -31,7 +32,6 @@ PATCHLEVEL=.1
 
 VERSION=${MAJOR_VERSION}.${MINOR_VERSION}
 NODOT_VERSION=${MAJOR_VERSION}${MINOR_VERSION}
-
 
 AC_SUBST(PACKAGE)
 AC_SUBST(VERSION)
@@ -91,31 +91,19 @@ AC_OBJEXT
 AC_EXEEXT
 
 #--------------------------------------------------------------------
-# "cygpath" is used on windows to generate native path names for include
-# files.
-# These variables should only be used with the compiler and linker since
-# they generate native path names.
-#
+# Call SC_TEA_INIT as the first SC_ macro to set up initial vars
+# This will define a ${TEA_PLATFORM} variable == "unix" or "windows".
+#--------------------------------------------------------------------
+
+SC_TEA_INIT
+
+#--------------------------------------------------------------------
 # Unix tclConfig.sh points SRC_DIR at the top-level directory of
 # the Tcl sources, while the Windows tclConfig.sh points SRC_DIR at
 # the win subdirectory.  Hence the different usages of SRC_DIR below.
 #
 # This must be done before calling SC_PUBLIC_TCL_HEADERS
 #--------------------------------------------------------------------
-
-case "`uname -s`" in
-    *win32* | *WIN32* | *CYGWIN_NT*|*CYGWIN_98*|*CYGWIN_95*)
-	AC_CHECK_PROG(CYGPATH, cygpath, cygpath -w, echo)
-	RELPATH=".. .. bin"
-    ;;
-    *)
-	CYGPATH=echo
-	RELPATH=..
-    ;;
-esac
-
-AC_SUBST(CYGPATH)
-AC_SUBST(RELPATH)
 
 #--------------------------------------------------------------------
 # Includes for this package
@@ -125,14 +113,11 @@ ITK_GENERIC_DIR_NATIVE=`${CYGPATH} ${srcdir}/generic`
 ITK_WIN_DIR_NATIVE=`${CYGPATH} ${srcdir}/win`
 ITK_UNIX_DIR_NATIVE=`${CYGPATH} ${srcdir}/unix`
 
-case "`uname -s`" in
-    *win32* | *WIN32* | *CYGWIN_NT*|*CYGWIN_98*|*CYGWIN_95*)
-	ITK_PLATFORM_DIR_NATIVE=${ITK_WIN_DIR_NATIVE}
-    ;;
-    *)
-	ITK_PLATFORM_DIR_NATIVE=${ITK_UNIX_DIR_NATIVE}
-    ;;
-esac
+if test "${TEA_PLATFORM}" = "windows" ; then
+    ITK_PLATFORM_DIR_NATIVE=${ITK_WIN_DIR_NATIVE}
+else
+    ITK_PLATFORM_DIR_NATIVE=${ITK_UNIX_DIR_NATIVE}
+fi
 
 ITK_INCLUDES="-I\"${ITK_GENERIC_DIR_NATIVE}\" -I\"${ITK_PLATFORM_DIR_NATIVE}\""
 
@@ -155,36 +140,18 @@ SC_LOAD_TCLCONFIG
 SC_PATH_TKCONFIG
 SC_LOAD_TKCONFIG
 
+SC_PATH_CONFIG(itcl)
+SC_LOAD_CONFIG(itcl)
+
 AC_ARG_WITH(itcl, [  --with-itclinclude=DIR          use Itcl headers from DIR],
         ITCL_LIB_DIR=$withval, ITCL_LIB_DIR=`cd ${srcdir}/../itcl; pwd`)
 
 if test ! -r "${ITCL_LIB_DIR}/generic/itclInt.h" ; then
-    AC_MSG_ERROR(Can't find Itcl private header files.  Use --with-itclinclude to specify the directory containing the Itcl private headers on your system.)
+    AC_MSG_ERROR([Cannot find Itcl private header files.  Use --with-itclinclude to specify the directory containing the Itcl private headers on your system.])
 fi
 
 ITCL_INCLUDES=-I\"`${CYGPATH} ${ITCL_LIB_DIR}/generic`\"
 AC_SUBST(ITCL_INCLUDES)
-
-#--------------------------------------------------------------------
-# The value for this should have been cached during the Itcl configuration.
-# Make sure the cache-ID that appears here is the same as the one that
-# appears in the Itcl configure script.
-#--------------------------------------------------------------------
-
-AC_MSG_CHECKING(for name if itclstub library)
-AC_CACHE_VAL(ac_cv_itclstub_LIB_FILE, ac_cv_itclstub_LIB_FILE="NONE")
-if test x"${ac_cv_itclstub_LIB_FILE}" = x"NONE" ; then
-    AC_MSG_ERROR(Can't find name of Itcl stub library.  How did this happen?)
-else
-    AC_MSG_RESULT(${ac_cv_itclstub_LIB_FILE})
-fi
-itclstub_LIB_FILE=${ac_cv_itclstub_LIB_FILE}
-AC_SUBST(itclstub_LIB_FILE)
-
-SC_LIB_SPEC(tkstub, ${TK_BIN_DIR})
-AC_SUBST(tkstub_LIB_SPEC)
-
-#SC_LIB_SPEC(itclstub, ../itcl)
 
 #--------------------------------------------------------------------
 # __CHANGE__
@@ -220,21 +187,18 @@ SC_PRIVATE_TK_HEADERS
 # your system.
 #--------------------------------------------------------------------
 
-case "`uname -s`" in
-    *win32* | *WIN32* | *CYGWIN_NT*|*CYGWIN_98*|*CYGWIN_95*)
-	AC_DEFINE_UNQUOTED(BUILD_${PACKAGE})
-	CLEANFILES="*.lib *.dll *.exp *.ilk *.pdb vc50.pch"
-	PLATFORM_SOURCES='$(WIN_SOURCES)'
-	PLATFORM_OBJECTS='$(WIN_OBJECTS)'
-	PLATFORM_DIR='$(WIN_DIR)'
-    ;;
-    *)
-	CLEANFILES=
-	PLATFORM_SOURCES='$(UNIX_SOURCES)'
-	PLATFORM_OBJECTS='$(UNIX_OBJECTS)'
-	PLATFORM_DIR='$(UNIX_DIR)'
-    ;;
-esac
+if test "${TEA_PLATFORM}" = "windows" ; then
+    AC_DEFINE(BUILD_itk)
+    CLEANFILES="*.lib *.dll *.exp *.ilk *.pdb vc*.pch"
+    PLATFORM_SOURCES='$(WIN_SOURCES)'
+    PLATFORM_OBJECTS='$(WIN_OBJECTS)'
+    PLATFORM_DIR='$(WIN_DIR)'
+else
+    CLEANFILES=
+    PLATFORM_SOURCES='$(UNIX_SOURCES)'
+    PLATFORM_OBJECTS='$(UNIX_OBJECTS)'
+    PLATFORM_DIR='$(UNIX_DIR)'
+fi
 
 AC_SUBST(CLEANFILES)
 AC_SUBST(PLATFORM_SOURCES)
@@ -261,23 +225,7 @@ SC_ENABLE_SHARED
 # is all taken from the tclConfig.sh file.
 #--------------------------------------------------------------------
 
-#CC=${TCL_CC}
-#CFLAGS_DEBUG=${TCL_CFLAGS_DEBUG}
-#CFLAGS_OPTIMIZE=${TCL_CFLAGS_OPTIMIZE}
-#LDFLAGS_DEBUG=${TCL_LDFLAGS_DEBUG}
-#LDFLAGS_OPTIMIZE=${TCL_LDFLAGS_OPTIMIZE}
-#SHLIB_LD=${TCL_SHLIB_LD}
-#STLIB_LD=${TCL_STLIB_LD}
-#SHLIB_CFLAGS=${TCL_SHLIB_CFLAGS}
-
 SC_CONFIG_CFLAGS
-
-AC_SUBST(CFLAGS_DEBUG)
-AC_SUBST(CFLAGS_OPTIMIZE)
-AC_SUBST(STLIB_LD)
-AC_SUBST(SHLIB_LD)
-AC_SUBST(SHLIB_CFLAGS)
-AC_SUBST(SHLIB_LDFLAGS)
 
 #--------------------------------------------------------------------
 # Set the default compiler switches based on the --enable-symbols 
@@ -314,38 +262,15 @@ fi
 SC_MAKE_LIB
 
 #--------------------------------------------------------------------
-# eval these two values to dereference the ${DBGX} variable.
+# __CHANGE__
+# Add platform libs to LIBS or SHLIB_LD_LIBS as necessary.
 #--------------------------------------------------------------------
 
-eval "SHARED_LIB_SUFFIX=${TCL_SHARED_LIB_SUFFIX}"
-eval "UNSHARED_LIB_SUFFIX=${TCL_UNSHARED_LIB_SUFFIX}"
-
-#--------------------------------------------------------------------
-# Shared libraries and static libraries have different names.
-#--------------------------------------------------------------------
-
-case "`uname -s`" in
-    *win32* | *WIN32* | *CYGWIN_NT*|*CYGWIN_98*|*CYGWIN_95*)
-	if test "${SHARED_BUILD}" = "1" ; then
-	    SHLIB_LD_LIBS="${SHLIB_LD_LIBS} \"`cygpath -w ${TCL_BIN_DIR}/${TCL_STUB_LIB_FILE}`\" \"`${CYGPATH} ../itcl/${itclstub_LIB_FILE}`\" ${tkstub_LIB_SPEC} "
-	    eval "${PACKAGE}_LIB_FILE=${PACKAGE}${SHARED_LIB_SUFFIX}"
-	    RANLIB=:
-	else
-	    eval "${PACKAGE}_LIB_FILE=${PACKAGE}${UNSHARED_LIB_SUFFIX}"
-	fi
-	eval "${PACKAGE}stub_LIB_FILE=${PACKAGE}stub${UNSHARED_LIB_SUFFIX}"
-	;;
-    *)
-	if test "${SHARED_BUILD}" = "1" ; then
-	    SHLIB_LD_LIBS="${SHLIB_LD_LIBS} ${tkstub_LIB_SPEC} ${TCL_BUILD_STUB_LIB_SPEC} ../itcl/${itclstub_LIB_FILE}"
-	    eval "${PACKAGE}_LIB_FILE=lib${PACKAGE}${SHARED_LIB_SUFFIX}"
-	    RANLIB=:
-	else
-	    eval "${PACKAGE}_LIB_FILE=lib${PACKAGE}${UNSHARED_LIB_SUFFIX}"
-	fi
-	eval "${PACKAGE}stub_LIB_FILE=lib${PACKAGE}stub${UNSHARED_LIB_SUFFIX}"
-	;;
-esac
+if test "${TEA_PLATFORM}" = "windows" -a "$GCC" != "yes" ; then
+    SHLIB_LD_LIBS="${SHLIB_LD_LIBS} ${itcl_STUB_LIB_PATH}"
+else
+    SHLIB_LD_LIBS="${SHLIB_LD_LIBS} ${itcl_STUB_LIB_SPEC}"
+fi
 
 #--------------------------------------------------------------------
 # __CHANGE__
@@ -356,7 +281,6 @@ esac
 
 AC_SUBST(itkstub_LIB_FILE)
 AC_SUBST(itk_LIB_FILE)
-AC_SUBST(SHLIB_LD_LIBS)
 
 #--------------------------------------------------------------------
 # Find tclsh so that we can run pkg_mkIndex to generate the pkgIndex.tcl
@@ -378,5 +302,4 @@ SC_PROG_WISH
 # Finally, substitute all of the various values into the Makefile.
 #--------------------------------------------------------------------
 
-AC_OUTPUT([Makefile \
-	pkgIndex.tcl itkConfig.sh])
+AC_OUTPUT([Makefile pkgIndex.tcl itkConfig.sh])
