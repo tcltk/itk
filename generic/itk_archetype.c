@@ -26,7 +26,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_archetype.c,v 1.9 2003/12/22 19:58:54 davygrvy Exp $
+ *     RCS:  $Id: itk_archetype.c,v 1.10 2003/12/23 06:57:54 davygrvy Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -2380,7 +2380,7 @@ Itk_ArchCompAccessCmd(dummy, interp, objc, objv)
             archComp = (ArchComponent*)Tcl_GetHashValue(entry);
             if (Itcl_CanAccess(archComp->member, callingNs)) {
                 name = Tcl_GetHashKey(&info->components, entry);
-                Tcl_AppendElement(interp, name);
+                Tcl_AppendElement(interp, (CONST84 char *)name);
             }
             entry = Tcl_NextHashEntry(&place);
         }
@@ -2579,7 +2579,7 @@ Itk_ArchConfigureCmd(dummy, interp, objc, objv)
             (archOpt->resClass) ? archOpt->resClass : "");
         Tcl_AppendElement(interp,
             (archOpt->init) ? archOpt->init : "");
-        Tcl_AppendElement(interp, val);
+        Tcl_AppendElement(interp, (CONST84 char *)val);
 
         return TCL_OK;
     }
@@ -2709,7 +2709,7 @@ Itk_PropagateOption(interp, contextObj, cdata, newval)
     int result;
     Tcl_Obj *objPtr;
 
-    objPtr = Tcl_NewStringObj(newval, -1);
+    objPtr = Tcl_NewStringObj((CONST84 char *)newval, -1);
     Tcl_IncrRefCount(objPtr);
 
     cmdlinePtr->objv[3] = objPtr;
