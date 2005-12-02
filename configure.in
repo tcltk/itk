@@ -18,7 +18,7 @@ AC_INIT([itk], [3.3])
 # as well as PKG_LIB_FILE and PKG_STUB_LIB_FILE.
 #--------------------------------------------------------------------
 
-TEA_INIT([3.2])
+TEA_INIT([3.4])
 
 AC_PROG_LN_S
 CONFIG_CLEAN_FILES=
@@ -168,7 +168,7 @@ TEA_ENABLE_SHARED
 #--------------------------------------------------------------------
 # This macro figures out what flags to use with the compiler/linker
 # when building shared/static debug/optimized objects.  This information
-# is all taken from the tclConfig.sh file.
+# can be taken from the tclConfig.sh file, but this figures it all out.
 #--------------------------------------------------------------------
 
 TEA_CONFIG_CFLAGS
