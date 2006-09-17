@@ -5,7 +5,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
-# RCS: $Id: makefile.vc,v 1.28 2004/09/22 09:43:37 davygrvy Exp $
+# RCS: $Id: makefile.vc,v 1.29 2006/09/17 01:11:49 davygrvy Exp $
 #------------------------------------------------------------------------------
 #  Do not modify this file!
 #------------------------------------------------------------------------------
@@ -224,11 +224,11 @@ ITK_EXE_CFLAGS	= $(cdebug) $(cflags) $(crt) $(ITCL_INCLUDES) $(ITK_INCLUDES) \
 ### By convention, static builds do not use Stubs.  This is just a practice,
 ### not a technical limitation.
 !if $(STATIC_BUILD)
-ITK_CFLAGS	= $(ITK_EXE_CFLAGS) -DSTATIC_BUILD
+ITK_CFLAGS	= $(ITK_EXE_CFLAGS) -DSTATIC_BUILD $(OPTDEFINES)
 !elseif $(TCL_DOES_STUBS)
-ITK_CFLAGS	= $(ITK_EXE_CFLAGS) -DUSE_TCL_STUBS -DUSE_TK_STUBS -DUSE_ITCL_STUBS
+ITK_CFLAGS	= $(ITK_EXE_CFLAGS) -DUSE_TCL_STUBS -DUSE_TK_STUBS -DUSE_ITCL_STUBS $(OPTDEFINES)
 !else
-ITK_CFLAGS	= $(ITK_EXE_CFLAGS)
+ITK_CFLAGS	= $(ITK_EXE_CFLAGS) $(OPTDEFINES)
 !endif
 
 #---------------------------------------------------------------------
