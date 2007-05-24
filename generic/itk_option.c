@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_option.c,v 1.4 2002/08/11 04:12:54 davygrvy Exp $
+ *     RCS:  $Id: itk_option.c,v 1.5 2007/05/24 21:40:24 hobbs Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -250,7 +250,7 @@ Itk_CreateClassOptTable(interp, cdefn)
     Tcl_HashTable *itkClasses;
     Tcl_HashEntry *entry;
     ItkClassOptTable *optTable;
-    Tcl_CallFrame frame;
+    Itcl_CallFrame frame;
 
     /*
      *  Look for the specified class definition in the table.
@@ -271,7 +271,7 @@ Itk_CreateClassOptTable(interp, cdefn)
 
         Tcl_SetHashValue(entry, (ClientData)optTable);
 
-        result = Tcl_PushCallFrame(interp, &frame,
+        result = Tcl_PushCallFrame(interp, (Tcl_CallFrame *) &frame,
              cdefn->namesp, /* isProcCallFrame */ 0);
 
         if (result == TCL_OK) {

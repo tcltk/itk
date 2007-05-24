@@ -26,7 +26,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_archetype.c,v 1.10 2003/12/23 06:57:54 davygrvy Exp $
+ *     RCS:  $Id: itk_archetype.c,v 1.11 2007/05/24 21:40:24 hobbs Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -687,7 +687,7 @@ Itk_ArchCompAddCmd(dummy, interp, objc, objv)
     ItclClass *contextClass, *ownerClass;
     ItclObject *contextObj;
     ArchInfo *info;
-    Tcl_CallFrame frame, *uplevelFramePtr, *oldFramePtr;
+    Itcl_CallFrame frame, *uplevelFramePtr, *oldFramePtr;
     Tcl_Command accessCmd;
     Tcl_Obj *objPtr;
     Tcl_DString buffer;
@@ -981,7 +981,7 @@ Itk_ArchCompAddCmd(dummy, interp, objc, objv)
         objPtr = objv[3];
     }
 
-    result = Tcl_PushCallFrame(interp, &frame,
+    result = Tcl_PushCallFrame(interp, (Tcl_CallFrame *) &frame,
         parserNs, /* isProcCallFrame */ 0);
 
     if (result == TCL_OK) {
@@ -1706,7 +1706,7 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
     int i, result;
     CONST char *val;
     char *token;
-    Tcl_CallFrame *framePtr;
+    Itcl_CallFrame *framePtr;
     ItkClassOption *opt;
     ItkClassOptTable *optTable;
     Itcl_ListElem *part;
@@ -2339,7 +2339,7 @@ Itk_ArchCompAccessCmd(dummy, interp, objc, objv)
     Tcl_Namespace *callingNs;
     ItclClass *contextClass;
     ItclObject *contextObj;
-    Tcl_CallFrame *framePtr;
+    Itcl_CallFrame *framePtr;
     Tcl_HashEntry *entry;
     Tcl_HashSearch place;
     ArchInfo *info;
@@ -2747,7 +2747,7 @@ Itk_PropagatePublicVar(interp, contextObj, cdata, newval)
     CONST char *val;
     ItclContext context;
     ItclMemberCode *mcode;
-    Tcl_CallFrame *uplevelFramePtr, *oldFramePtr;
+    Itcl_CallFrame *uplevelFramePtr, *oldFramePtr;
 
     /*
      *  Update the public variable with the new option value.
