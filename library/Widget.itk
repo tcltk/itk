@@ -22,7 +22,7 @@
 #            mmclennan@lucent.com
 #            http://www.tcltk.com/itcl
 #
-#      RCS:  $Id: Widget.itk,v 1.2 2002/06/13 22:46:28 davygrvy Exp $
+#      RCS:  $Id: Widget.itk,v 1.3 2007/05/24 23:27:05 hobbs Exp $
 # ----------------------------------------------------------------------
 #            Copyright (c) 1993-1998  Lucent Technologies, Inc.
 # ======================================================================
@@ -47,7 +47,7 @@ itcl::class itk::Widget {
         } {
             keep -background -cursor
         }
-        bind itk-delete-$itk_hull <Destroy> "itcl::delete object $this"
+        bind itk-delete-$itk_hull <Destroy> [list itcl::delete object $this]
 
         set tags [bindtags $itk_hull]
         bindtags $itk_hull [linsert $tags 0 itk-delete-$itk_hull]
