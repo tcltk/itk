@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_option.c,v 1.5 2007/05/24 21:40:24 hobbs Exp $
+ *     RCS:  $Id: itk_option.c,v 1.6 2007/05/24 22:12:56 hobbs Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -84,13 +84,13 @@ Itk_ClassOptionDefineCmd(clientData, interp, objc, objv)
 
     switchName = Tcl_GetStringFromObj(objv[1], (int*)NULL);
     if (*switchName != '-') {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+        Tcl_AppendResult(interp,
             "bad option name \"", switchName, "\": should be -", switchName,
             (char*)NULL);
         return TCL_ERROR;
     }
     if (strstr(switchName, ".")) {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+        Tcl_AppendResult(interp,
             "bad option name \"", switchName, "\": illegal character \".\"",
             (char*)NULL);
         return TCL_ERROR;
@@ -98,7 +98,7 @@ Itk_ClassOptionDefineCmd(clientData, interp, objc, objv)
 
     resName = Tcl_GetStringFromObj(objv[2], (int*)NULL);
     if (!islower((int)*resName)) {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+        Tcl_AppendResult(interp,
             "bad resource name \"", resName,
             "\": should start with a lower case letter",
             (char*)NULL);
@@ -107,7 +107,7 @@ Itk_ClassOptionDefineCmd(clientData, interp, objc, objv)
 
     resClass = Tcl_GetStringFromObj(objv[3], (int*)NULL);
     if (!isupper((int)*resClass)) {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+        Tcl_AppendResult(interp,
             "bad resource class \"", resClass,
             "\": should start with an upper case letter",
             (char*)NULL);
@@ -126,7 +126,7 @@ Itk_ClassOptionDefineCmd(clientData, interp, objc, objv)
     entry = Tcl_CreateHashEntry(&optTable->options, switchName, &newEntry);
 
     if (!newEntry) {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+        Tcl_AppendResult(interp,
             "option \"", switchName, "\" already defined in class \"",
             cdefn->fullname, "\"",
             (char*)NULL);
@@ -176,7 +176,7 @@ Itk_ClassOptionIllegalCmd(clientData, interp, objc, objv)
 {
     char *op = Tcl_GetStringFromObj(objv[0], (int*)NULL);
 
-    Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+    Tcl_AppendResult(interp,
         "can only ", op, " options for a specific widget\n",
         "(move this command into the constructor)",
         (char*)NULL);

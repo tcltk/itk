@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_cmds.c,v 1.16 2005/03/25 21:08:03 hobbs Exp $
+ *     RCS:  $Id: itk_cmds.c,v 1.17 2007/05/24 22:12:56 hobbs Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -149,7 +149,7 @@ Initialize(interp)
         (Tcl_Namespace*)NULL, /* flags */ 0);
 
     if (!parserNs) {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+        Tcl_AppendResult(interp,
             "cannot initialize [incr Tk]: [incr Tcl] has not been installed\n",
             "Make sure that Itcl_Init() is called before Itk_Init()",
             (char*)NULL);
@@ -348,7 +348,7 @@ Itk_ConfigBodyCmd(dummy, interp, objc, objv)
     Itcl_ParseNamespPath(token, &buffer, &head, &tail);
 
     if (!head || *head == '\0') {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+        Tcl_AppendResult(interp,
             "missing class specifier for body declaration \"", token, "\"",
             (char*)NULL);
         result = TCL_ERROR;
