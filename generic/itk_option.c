@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk_option.c,v 1.6 2007/05/24 22:12:56 hobbs Exp $
+ *     RCS:  $Id: itk_option.c,v 1.7 2007/05/24 23:23:59 hobbs Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -277,7 +277,7 @@ Itk_CreateClassOptTable(interp, cdefn)
         if (result == TCL_OK) {
             Tcl_TraceVar(interp, "_itk_option_data",
                 (TCL_TRACE_UNSETS | TCL_NAMESPACE_ONLY),
-                ItkTraceClassDestroy, (ClientData)cdefn);
+                (Tcl_VarTraceProc*) ItkTraceClassDestroy, (ClientData)cdefn);
             Tcl_PopCallFrame(interp);
         }
     }
@@ -418,7 +418,8 @@ Itk_CreateClassOption(interp, cdefn, switchName, resName, resClass,
             return TCL_ERROR;
         }
         Itcl_PreserveData((ClientData)mcode);
-        Itcl_EventuallyFree((ClientData)mcode, Itcl_DeleteMemberCode);
+        Itcl_EventuallyFree((ClientData)mcode,
+		(Tcl_FreeProc*) Itcl_DeleteMemberCode);
     }
     else {
         mcode = NULL;
