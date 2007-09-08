@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkArchBase.c,v 1.1.2.1 2007/09/08 12:03:22 wiede Exp $
+ *     RCS:  $Id: itkArchBase.c,v 1.1.2.2 2007/09/08 12:32:42 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -182,7 +182,7 @@ Itk_ArchCompAddCmd(
     Tcl_Obj *hullNamePtr = NULL;
     int pLevel = ITCL_PUBLIC;
 
-//ItclShowArgs("Itk_ArchCompAddCmd", objc, objv);
+    ItclShowArgs(2, "Itk_ArchCompAddCmd", objc, objv);
     int newEntry;
     int result;
     CONST char *cmd;
@@ -213,8 +213,6 @@ Itk_ArchCompAddCmd(
         return TCL_ERROR;
     }
 
-//fprintf(stderr, "contextObj!%p!%s!%s!\n", contextObj, Tcl_GetCommandName(interp, contextObj->accessCmd), Tcl_GetCurrentNamespace(interp)->fullName);
-//fprintf(stderr, "Itk_GetArchInfo contextClass!%s!nsPtr!%s!\n", contextClass->namesp->fullName, nsPtr->fullName);
     if (Itk_GetArchInfo(interp, contextObj, &info) != TCL_OK) {
         return TCL_ERROR;
     }
@@ -224,10 +222,8 @@ Itk_ArchCompAddCmd(
      */
     cmd = Tcl_GetString(objv[0]);
 
-//fprintf(stderr, "cmd!%s!%p!\n", cmd, info);
     while (objc > 1) {
         token = Tcl_GetString(objv[1]);
-//fprintf(stderr, "token!%s!\n", token);
         if (*token != '-') {
             break;
         } else {
@@ -263,7 +259,7 @@ Itk_ArchCompAddCmd(
         return TCL_ERROR;
     }
 
-//ItclShowArgs("COMPADD2", objc, objv);
+    ItclShowArgs(2, "COMPADD2", objc, objv);
     /*
      *  See if a component already exists with the symbolic name.
      */
@@ -276,7 +272,6 @@ Itk_ArchCompAddCmd(
         return TCL_ERROR;
     }
 
-//fprintf(stderr, "component!%s!%p!\n", name, entry);
     /*
      *  If this component is the "hull" for the mega-widget, then
      *  move the object access command out of the way before
@@ -288,7 +283,6 @@ Itk_ArchCompAddCmd(
     Tcl_GetCommandFullName(contextObj->iclsPtr->interp, contextObj->accessCmd,
             objNamePtr);
     Tcl_IncrRefCount(objNamePtr);
-//fprintf(stderr, "component 2!%s!object!%s!\n", name, Tcl_GetString(objNamePtr));
 
     if (strcmp(name, "hull") == 0) {
         tmpNamePtr = Tcl_NewStringObj((char*)NULL, 0);
@@ -297,7 +291,6 @@ Itk_ArchCompAddCmd(
         Tcl_AppendToObj(tmpNamePtr, "-widget-", -1);
         Tcl_IncrRefCount(tmpNamePtr);
         
-//fprintf(stderr, "REN1!%s!%s!\n", Tcl_GetString(objNamePtr), Tcl_GetString(tmpNamePtr));
         result = TclRenameCommand(interp, Tcl_GetString(objNamePtr),
                 Tcl_GetString(tmpNamePtr));
 
@@ -310,10 +303,8 @@ Itk_ArchCompAddCmd(
      *  Execute the <createCmds> to create the component widget.
      *  Do this one level up, in the scope of the calling routine.
      */
-//fprintf(stderr, "RESOLVE!%s!%p!%p!%p!\n", contextClass->namesp->fullName, contextClass->resolvePtr, contextClass->resolvePtr->varProcPtr, contextClass->resolvePtr->cmdProcPtr);
     Itcl_SetCallFrameResolver(interp, contextClass->resolvePtr);
     Tcl_Namespace *saveNsPtr = Tcl_GetCurrentNamespace(interp);
-//fprintf(stderr, "createCmds!%s!%s!\n", saveNsPtr->fullName, contextClass->namesp->fullName);
     ItclObjectInfo *infoPtr;
     infoPtr = Tcl_GetAssocData(interp, ITCL_INTERP_DATA, NULL);
     int idx;
@@ -325,8 +316,6 @@ Itk_ArchCompAddCmd(
     callContextPtr = Itcl_GetStackValue(&infoPtr->contextStack,
             Itcl_GetStackSize(&infoPtr->contextStack)-idx);
     Itcl_SetCallFrameNamespace(interp, callContextPtr->nsPtr);
-//fprintf(stderr, "SAVE!%s!%s!\n", contextClass->namesp->fullName, Tcl_GetCurrentNamespace(interp)->fullName);
-//fprintf(stderr, "EXE!%s!\n", Tcl_GetString(objv[2]));
     result = Tcl_EvalObjEx(interp, objv[2], 0);
     Itcl_SetCallFrameNamespace(interp, saveNsPtr);
     if (result != TCL_OK) {
@@ -342,7 +331,6 @@ Itk_ArchCompAddCmd(
     path = (char*)ckalloc((unsigned)(strlen(resultStr)+1));
     strcpy(path, resultStr);
 
-//fprintf(stderr, "PATH!%s!%s!\n", path, resultStr);
     /*
      *  Look for the access command token in the context of the
      *  calling namespace.  By-pass any protection at this point.
@@ -362,7 +350,6 @@ Itk_ArchCompAddCmd(
     winNamePtr = Tcl_NewStringObj((char*)NULL, 0);
     Tcl_GetCommandFullName(interp, accessCmd, winNamePtr);
     Tcl_IncrRefCount(winNamePtr);
-//fprintf(stderr, "accessCmd!%s!\n", Tcl_GetString(winNamePtr));
 
 
     /*
@@ -370,7 +357,6 @@ Itk_ArchCompAddCmd(
      *  according to the "-protected" or "-private" option.
      */
     ownerClass = contextClass;
-//fprintf(stderr, "ownerClass 1!%s!%p!%p!\n", ownerClass->namesp->fullName, cfInfo.callerVarPtr, cfInfo.callerPtr);
     Tcl_Namespace *ownerNsPtr;
     callContextPtr = Itcl_PeekStack(&infoPtr->contextStack);
     ownerNsPtr = callContextPtr->nsPtr;
@@ -385,10 +371,8 @@ Itk_ArchCompAddCmd(
         hPtr = Tcl_FindHashEntry(&infoPtr->namespaceClasses,
                 (char *)callContextPtr->nsPtr);
         ownerClass = (ItclClass*)Tcl_GetHashValue(hPtr);
-//fprintf(stderr, "ownerClass 2!%s!\n", ownerClass->namesp->fullName);
     }
 
-//fprintf(stderr, "Itk_CreateArchComponent!%s!%s!%s!\n", name, ownerClass->namesp->fullName, Tcl_GetCommandName(interp, accessCmd));
     archComp = Itk_CreateArchComponent(interp, info, name, ownerClass,
             accessCmd);
 
@@ -398,7 +382,6 @@ Itk_ArchCompAddCmd(
 
     Tcl_SetHashValue(entry, (ClientData)archComp);
     archComp->protection = pLevel;
-//fprintf(stderr, "handling archComp!%s!\n", name);
 
     /*
      *  If this component is the "hull" for the mega-widget, then
@@ -413,7 +396,6 @@ Itk_ArchCompAddCmd(
         Tcl_AppendToObj(hullNamePtr, "-itk_hull", -1);
         Tcl_IncrRefCount(hullNamePtr);
 
-//fprintf(stderr, "REN 3!%s!%s!\n", Tcl_GetString(winNamePtr), Tcl_GetString(hullNamePtr));
         result = TclRenameCommand(interp, Tcl_GetString(winNamePtr),
                 Tcl_GetString(hullNamePtr));
 
@@ -428,7 +410,6 @@ Itk_ArchCompAddCmd(
         result = TclRenameCommand(interp, Tcl_GetString(tmpNamePtr),
                 Tcl_GetString(objNamePtr));
 
-//fprintf(stderr, "REN 4!%s!%s!\n", Tcl_GetString(tmpNamePtr), Tcl_GetString(objNamePtr));
         if (result != TCL_OK) {
             goto compFail;
         }
@@ -466,7 +447,6 @@ Itk_ArchCompAddCmd(
         Tcl_DStringAppend(&buffer, " ", -1);
         Tcl_DStringAppend(&buffer, Tcl_GetStringResult(interp), -1);
         Tcl_DStringAppend(&buffer, "}", -1);
-//fprintf(stderr, "BINDTAGS!%s!\n", Tcl_DStringValue(&buffer));
         if (Tcl_Eval(interp, Tcl_DStringValue(&buffer)) != TCL_OK) {
             goto compFail;
         }
@@ -483,13 +463,11 @@ Itk_ArchCompAddCmd(
         Tcl_GetStringFromObj(winNamePtr, (int*)NULL));
     Tcl_DStringAppendElement(&buffer, "configure");
 
-//fprintf(stderr, "CONFIG!%s!%s!\n", Tcl_DStringValue(&buffer), Tcl_GetCurrentNamespace(interp)->fullName);
     result = Tcl_Eval(interp, Tcl_DStringValue(&buffer));
 
     if (result != TCL_OK) {
         goto compFail;
     }
-//fprintf(stderr, "EVAL 1!%s!\n", Tcl_GetStringResult(interp));
     Tcl_DStringSetLength(&buffer, 0);
     Tcl_DStringAppend(&buffer, Tcl_GetStringResult(interp), -1);
 
@@ -536,7 +514,6 @@ Itk_ArchCompAddCmd(
             /* isProcCallFrame */ 0);
 
     if (result == TCL_OK) {
-//fprintf(stderr, "PARSE OPTIONS !%s!%s!\n", Tcl_GetString(objPtr), parserNs->fullName);
         result = Tcl_EvalObj(interp, objPtr);
         Tcl_PopCallFrame(interp);
     }
@@ -576,7 +553,6 @@ Itk_ArchCompAddCmd(
      *  If any errors were encountered, clean up and return.
      */
 compFail:
-//fprintf(stderr, "compFail:\n");
     if (archComp) {
         Itk_DelArchComponent(archComp);
     }
@@ -622,7 +598,6 @@ compFail:
     Tcl_AddErrorInfo(interp, Tcl_GetStringFromObj(objPtr, (int*)NULL));
     Tcl_DecrRefCount(objPtr);
 
-//fprintf(stderr, "compFail!%s!\n", Tcl_GetStringResult(interp));
 
     return TCL_ERROR;
 }
@@ -663,7 +638,7 @@ Itk_ArchCompDeleteCmd(dummy, interp, objc, objv)
     Itcl_List delOptList;
     Tcl_DString buffer;
 
-//ItclShowArgs("Itk_ArchCompDeleteCmd", objc, objv);
+    ItclShowArgs(2, "Itk_ArchCompDeleteCmd", objc, objv);
     /*
      *  Get the Archetype info associated with this widget.
      */
@@ -680,7 +655,6 @@ Itk_ArchCompDeleteCmd(dummy, interp, objc, objv)
     if (Itk_GetArchInfo(interp, contextObj, &info) != TCL_OK) {
         return TCL_ERROR;
     }
-//fprintf(stderr, "Itk_GetArchInfo %p!%s!\n", info, Tcl_GetCurrentNamespace(interp)->fullName);
 
     /*
      *  Scan through the list of component names and delete each
@@ -689,7 +663,6 @@ Itk_ArchCompDeleteCmd(dummy, interp, objc, objv)
     for (i=1; i < objc; i++) {
         token = Tcl_GetString(objv[i]);
         entry = Tcl_FindHashEntry(&info->components, token);
-//fprintf(stderr, "§DEL!%s!%p!\n", token, entry);
         if (!entry) {
             Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
                 "name \"", token, "\" is not a component",
@@ -698,11 +671,8 @@ Itk_ArchCompDeleteCmd(dummy, interp, objc, objv)
         }
         archComp = (ArchComponent*)Tcl_GetHashValue(entry);
 if (archComp == NULL) {
-fprintf(stderr, "ERROR!archComp == NULL\n");
     continue;
 }
-//fprintf(stderr, "DEL2!%p!\n", archComp->accessCmd);
-//fprintf(stderr, "DEL2!%p!%s!\n", archComp->accessCmd, Tcl_GetCommandName(interp, archComp->accessCmd));
 
        /*
         *  Clean up the binding tag that causes the widget to
@@ -717,7 +687,6 @@ fprintf(stderr, "ERROR!archComp == NULL\n");
         Tcl_DStringFree(&buffer);
 
         Tcl_UnsetVar2(interp, "itk_component", token, 0);
-//fprintf(stderr, "DELETEARCHCOMP!%s!%p!%p!%p!%s!\n", token, entry, archComp, archComp->accessCmd, Tcl_GetStringResult(interp));
         Tcl_DeleteHashEntry(entry);
 
         /*
@@ -752,17 +721,14 @@ fprintf(stderr, "ERROR!archComp == NULL\n");
             entry = (Tcl_HashEntry*)Itcl_GetListValue(elem);
             token = Tcl_GetHashKey(&info->options, entry);
 
-//fprintf(stderr, "DELOPT!%s!%p!\n", token, entry);
             Itk_RemoveArchOptionPart(info, token, (ClientData)archComp);
 
             elem = Itcl_NextListElem(elem);
         }
         Itcl_DeleteList(&delOptList);
 
-//fprintf(stderr, "DELARCHCOMP!%s!\n", archComp->pathName);
         Itk_DelArchComponent(archComp);
     }
-//fprintf(stderr, "DEL DONE\n");
     return TCL_OK;
 }
 
@@ -802,7 +768,7 @@ Itk_ArchOptKeepCmd(clientData, interp, objc, objv)
     ArchOptionPart *optPart;
     ConfigCmdline *cmdlinePtr;
 
-//ItclShowArgs("Itk_ArchOptKeepCmd", objc, objv);
+    ItclShowArgs(2, "Itk_ArchOptKeepCmd", objc, objv);
     if (objc < 2) {
         Tcl_WrongNumArgs(interp, 1, objv, "option ?option...?");
         return TCL_ERROR;
@@ -852,10 +818,6 @@ Itk_ArchOptKeepCmd(clientData, interp, objc, objv)
         cmdlinePtr = Itk_CreateConfigCmdline(interp,
             mergeInfo->archComp->accessCmd, token);
 
-//fprintf(stderr, "cmdlinePtr arg 1!%s!\n", cmdlinePtr->objv[0] == NULL ? "(nil)" : Tcl_GetString(cmdlinePtr->objv[0]));
-//fprintf(stderr, "arg 2!%s!\n", cmdlinePtr->objv[1] == NULL ? "(nil)" : Tcl_GetString(cmdlinePtr->objv[1]));
-//fprintf(stderr, "arg 3!%s!\n", cmdlinePtr->objv[2] == NULL ? "(nil)" : Tcl_GetString(cmdlinePtr->objv[2]));
-//fprintf(stderr, "arg 4!%s!\n", cmdlinePtr->objv[3] == NULL ? "(nil)" : Tcl_GetString(cmdlinePtr->objv[2]));
         optPart = Itk_CreateOptionPart(interp, (ClientData)cmdlinePtr,
             Itk_PropagateOption, Itk_DeleteConfigCmdline,
             (ClientData)mergeInfo->archComp);
@@ -908,7 +870,7 @@ Itk_ArchOptIgnoreCmd(clientData, interp, objc, objv)
     Tcl_HashEntry *entry;
     GenericConfigOpt *opt;
 
-//ItclShowArgs("Itk_ArchOptIgnoreCmd", objc, objv);
+    ItclShowArgs(2, "Itk_ArchOptIgnoreCmd", objc, objv);
     if (objc < 2) {
         Tcl_WrongNumArgs(interp, 1, objv, "option ?option...?");
         return TCL_ERROR;
@@ -986,7 +948,7 @@ Itk_ArchOptRenameCmd(clientData, interp, objc, objv)
     ArchOptionPart *optPart;
     ConfigCmdline *cmdlinePtr;
 
-//ItclShowArgs("Itk_ArchOptRenameCmd", objc, objv);
+    ItclShowArgs(2, "Itk_ArchOptRenameCmd", objc, objv);
     if (objc != 5) {
         Tcl_WrongNumArgs(interp, 1, objv,
             "oldSwitch newSwitch resourceName resourceClass");
@@ -1112,7 +1074,7 @@ Itk_ArchOptUsualCmd(clientData, interp, objc, objv)
     Tcl_HashEntry *entry;
     Tcl_Obj *codePtr;
 
-//ItclShowArgs("Itk_ArchOptUsualCmd", objc, objv);
+    ItclShowArgs(2, "Itk_ArchOptUsualCmd", objc, objv);
     if (objc > 2) {
         Tcl_WrongNumArgs(interp, 1, objv, "?tag?");
         return TCL_ERROR;
@@ -1143,7 +1105,6 @@ Itk_ArchOptUsualCmd(clientData, interp, objc, objv)
         tag = Tk_Class(mergeInfo->archComp->tkwin);
     }
 
-//fprintf(stderr, "USU!%s!%p!%s!\n", tag, mergeInfo, Tcl_GetCurrentNamespace(interp)->fullName);
     /*
      *  Look for some code associated with the tag and evaluate
      *  it in the current context.
@@ -1199,7 +1160,7 @@ Itk_UsualCmd(clientData, interp, objc, objv)
     Tcl_HashSearch place;
     Tcl_Obj *codePtr;
 
-//ItclShowArgs("Itk_UsualCmd", objc, objv);
+    ItclShowArgs(2, "Itk_UsualCmd", objc, objv);
     if (objc > 3) {
         Tcl_WrongNumArgs(interp, 1, objv, "?tag? ?commands?");
         return TCL_ERROR;
@@ -1227,7 +1188,6 @@ Itk_UsualCmd(clientData, interp, objc, objv)
             token = Tcl_GetStringFromObj(objv[1], (int*)NULL);
             entry = Tcl_CreateHashEntry(&mergeInfo->usualCode, token,
 	            &newEntry);
-//fprintf(stderr, "SAVEUSU!%s!%p!%p!\n", token, &mergeInfo->usualCode, entry);
             if (!newEntry) {
                 codePtr = (Tcl_Obj*)Tcl_GetHashValue(entry);
                 Tcl_DecrRefCount(codePtr);
@@ -1302,11 +1262,10 @@ Itk_ArchOptionAddCmd(
     Tcl_HashEntry *entry;
     Tcl_DString buffer;
 
-//ItclShowArgs("Itk_ArchOptionAddCmd", objc, objv);
+    ItclShowArgs(2, "Itk_ArchOptionAddCmd", objc, objv);
     /*
      *  Get the Archetype info associated with this widget.
      */
-//fprintf(stderr, "Itk_ArchOptionAddCmd\n");
     contextClass = NULL;
     if (Itcl_GetContext(interp, &contextClass, &contextObj) != TCL_OK ||
         !contextObj) {
@@ -1318,7 +1277,6 @@ Itk_ArchOptionAddCmd(
         return TCL_ERROR;
     }
 
-//fprintf(stderr, "Itk_GetArchInfo 4\n");
     if (Itk_GetArchInfo(interp, contextObj, &info) != TCL_OK) {
         return TCL_ERROR;
     }
@@ -1489,11 +1447,10 @@ Itk_ArchOptionRemoveCmd(dummy, interp, objc, objv)
     Tcl_HashEntry *entry;
     Tcl_DString buffer;
 
-//ItclShowArgs("Itk_ArchOptionRemoveCmd", objc, objv);
+    ItclShowArgs(2, "Itk_ArchOptionRemoveCmd", objc, objv);
     /*
      *  Get the Archetype info associated with this widget.
      */
-//fprintf(stderr, "Itk_ArchOptionRemoveCmd\n");
     contextClass = NULL;
     if (Itcl_GetContext(interp, &contextClass, &contextObj) != TCL_OK ||
         !contextObj) {
@@ -1505,7 +1462,6 @@ Itk_ArchOptionRemoveCmd(dummy, interp, objc, objv)
         return TCL_ERROR;
     }
 
-//fprintf(stderr, "Itk_GetArchInfo 5\n");
     if (Itk_GetArchInfo(interp, contextObj, &info) != TCL_OK) {
         return TCL_ERROR;
     }
@@ -1676,7 +1632,6 @@ Itk_PropagatePublicVar(
 	 * Casting away CONST of newval only to satisfy Tcl 8.3 and
 	 * earlier headers.
 	 */
-//fprintf(stderr, "SET VAR 1!%s!%s!\n", Tcl_GetString(ivPtr->fullNamePtr), Tcl_GetCurrentNamespace(interp)->fullName);
         val = Tcl_SetVar2(interp, Tcl_GetString(ivPtr->fullNamePtr), (char *) NULL,
             (char *) newval, TCL_LEAVE_ERR_MSG);
 
@@ -1702,12 +1657,9 @@ Itk_PropagatePublicVar(
     mcode = ivPtr->codePtr;
     if (mcode && mcode->bodyPtr) {
 
-//fprintf(stderr, "RESOLVE!%s!%p!%p!%p!\n", ivPtr->iclsPtr->namesp->fullName, ivPtr->iclsPtr->resolvePtr, ivPtr->iclsPtr->resolvePtr->varProcPtr, ivPtr->iclsPtr->resolvePtr->cmdProcPtr);
         Itcl_SetCallFrameResolver(interp, ivPtr->iclsPtr->resolvePtr);
-//fprintf(stderr, "MCNS!%s!\n", cfInfo.nsPtr->fullName);
         Tcl_Namespace *saveNsPtr = Tcl_GetCurrentNamespace(interp);
         Itcl_SetCallFrameNamespace(interp, ivPtr->iclsPtr->namesp);
-//fprintf(stderr, "EXE!%s!\n", Tcl_GetString(mcode->bodyPtr));
         result = Tcl_EvalObjEx(interp, mcode->bodyPtr, 0);
         Itcl_SetCallFrameNamespace(interp, saveNsPtr);
 
@@ -1765,10 +1717,8 @@ Itk_ArchSetOption(
     }
     archOpt = (ArchOption*)Tcl_GetHashValue(entry);
 
-//fprintf(stderr, "SET OPTION 1!%s!%s!\n", archOpt->switchName, Tcl_GetCurrentNamespace(interp)->fullName);
     if (!Tcl_SetVar2(interp, "itk_option", archOpt->switchName,
 	    (CONST84 char *)value, 0)) {
-//fprintf(stderr, "Itk_ArchOptAccessError 5\n");
         Itk_ArchOptAccessError(interp, info, archOpt);
         return TCL_ERROR;
     }
@@ -1812,7 +1762,6 @@ Itk_ArchConfigOption(
     ArchOptionPart *optPart;
     Itcl_InterpState istate;
 
-//fprintf(stderr, "Itk_ArchConfigOption!%s!%s!%p!\n", name, value, info);
     /*
      *  Query the "itk_option" array to get the current setting.
      */
@@ -1841,9 +1790,7 @@ Itk_ArchConfigOption(
     /*
      *  Update the "itk_option" array with the new setting.
      */
-//fprintf(stderr, "SET OPTION 2!%s!%s!\n", archOpt->switchName, Tcl_GetCurrentNamespace(interp)->fullName);
     if (!Tcl_SetVar2(interp, "itk_option", archOpt->switchName, value, 0)) {
-//fprintf(stderr, "Itk_ArchOptAccessError 6\n");
         Itk_ArchOptAccessError(interp, info, archOpt);
         result = TCL_ERROR;
         goto configDone;
@@ -1875,7 +1822,6 @@ Itk_ArchConfigOption(
     if (result == TCL_ERROR) {
         istate = Itcl_SaveInterpState(interp, result);
 
-//fprintf(stderr, "SET OPTION 3!%s!%s!\n", archOpt->switchName, Tcl_GetCurrentNamespace(interp)->fullName);
         Tcl_SetVar2(interp, "itk_option", archOpt->switchName, lastval, 0);
 
         part = Itcl_FirstListElem(&archOpt->parts);
@@ -1932,8 +1878,6 @@ Itk_CreateArchComponent(
      *  Save this component in the itk_component() array.
      */
     wname = Tcl_GetCommandName(interp, accessCmd);
-//fprintf(stderr, "§§Itk_CreateArchComponent!%s!%s!%s!%s!\n", name, wname, Tcl_GetCurrentNamespace(interp)->fullName, iclsPtr->namesp->fullName);
-//fprintf(stderr, "SET OPTION 4!%s!%s!\n", name, Tcl_GetCurrentNamespace(interp)->fullName);
     Tcl_SetVar2(interp, "itk_component", name, (char *)wname, 0);
 
     /*
@@ -1975,7 +1919,6 @@ Itk_CreateArchComponent(
                 archOpt->init = (char*)ckalloc((unsigned)(strlen(init)+1));
                 strcpy(archOpt->init, init);
 
-//fprintf(stderr, "Itk_ArchSetOption!%s!%s!\n", archOpt->switchName, init);
                 if (Itk_ArchSetOption(interp, info,
                         archOpt->switchName, init) != TCL_OK) {
                     return NULL;
@@ -1990,7 +1933,6 @@ Itk_CreateArchComponent(
      */
     archComp = (ArchComponent*)ckalloc(sizeof(ArchComponent));
 
-//fprintf(stderr, "ARCHCOMP!%s!%s!%p\n", iclsPtr->namesp->fullName, Tcl_GetCommandName(interp, accessCmd), accessCmd);
     memset(archComp, 0, sizeof(ArchComponent));
     archComp->namePtr = Tcl_NewStringObj(name, -1);
     Tcl_IncrRefCount(archComp->namePtr);
@@ -2001,7 +1943,6 @@ Itk_CreateArchComponent(
     archComp->pathName   = (char *) ckalloc((unsigned)(strlen(wname)+1));
     strcpy(archComp->pathName, wname);
 
-//fprintf(stderr, "Itk_CreateArchComponent END\n");
     return archComp;
 }
 
@@ -2018,13 +1959,11 @@ static void
 Itk_DelArchComponent(
     ArchComponent *archComp)  /* pointer to component data */
 {
-//fprintf(stderr, "Itk_DelArchComponent 61 %s\n", archComp->pathName);
 #ifdef NOTDEF
     ckfree((char*)archComp->member);
 #endif
     ckfree((char*)archComp->pathName);
     ckfree((char*)archComp);
-//fprintf(stderr, "Itk_DelArchComponent 62\n");
 }
 
 
@@ -2244,7 +2183,6 @@ Itk_InitArchOption(
 	 * Casting away CONST of ival only to satisfy Tcl 8.3 and
 	 * earlier headers.
 	 */
-//fprintf(stderr, "SET OPTION 5!%s!%s!%s!\n", archOpt->switchName, Tcl_GetCurrentNamespace(interp)->fullName, info->itclObj->iclsPtr->namesp->fullName);
         Tcl_SetVar2(interp, "itk_option", archOpt->switchName,
             (char *)((ival) ? ival : ""), 0);
     Tcl_PopCallFrame(interp);

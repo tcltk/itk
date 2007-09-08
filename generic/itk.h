@@ -38,7 +38,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk.h,v 1.18.2.1 2007/09/08 12:03:22 wiede Exp $
+ *     RCS:  $Id: itk.h,v 1.18.2.2 2007/09/08 12:32:42 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -85,7 +85,7 @@
 
 #ifndef RC_INVOKED
 
-#include "../tkhead/generic/tk.h"
+#include <tk.h>
 
 #undef TCL_STORAGE_CLASS
 #ifdef BUILD_itk

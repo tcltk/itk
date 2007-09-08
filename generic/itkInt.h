@@ -14,7 +14,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkInt.h,v 1.1.2.1 2007/09/08 12:03:22 wiede Exp $
+ *     RCS:  $Id: itkInt.h,v 1.1.2.2 2007/09/08 12:32:42 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -22,7 +22,7 @@
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  */
 
-#include "../itcloo/generic/itclInt.h"
+#include <itclInt.h>
 #include "itk.h"
 
 /*
