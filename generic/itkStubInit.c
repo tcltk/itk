@@ -8,10 +8,10 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: $Id: itkStubInit.c,v 1.3 2001/06/22 04:38:54 davygrvy Exp $
+ * RCS: $Id: itkStubInit.c,v 1.3.2.1 2007/09/08 12:03:23 wiede Exp $
  */
 
-#include "itk.h"
+#include "itkInt.h"
 
 /*
  * Remove macros that will interfere with the definitions below.
@@ -25,11 +25,13 @@
 
 /* !BEGIN!: Do not edit below this line. */
 
-ItkStubs itkStubs = {
+ItkIntStubs itkIntStubs = {
     TCL_STUB_MAGIC,
-    NULL,
-    Itk_Init, /* 0 */
-    Itk_SafeInit, /* 1 */
+    ITKINT_STUBS_EPOCH,
+    ITKINT_STUBS_REVISION,
+    0,
+    0, /* 0 */
+    0, /* 1 */
     Itk_ConfigBodyCmd, /* 2 */
     Itk_UsualCmd, /* 3 */
     Itk_ClassOptionDefineCmd, /* 4 */
@@ -37,15 +39,45 @@ ItkStubs itkStubs = {
     Itk_ConfigClassOption, /* 6 */
     Itk_CreateClassOptTable, /* 7 */
     Itk_FindClassOptTable, /* 8 */
-    NULL, /* 9 */
+    0, /* 9 */
     Itk_CreateClassOption, /* 10 */
     Itk_FindClassOption, /* 11 */
     Itk_DelClassOption, /* 12 */
-    Itk_ArchetypeInit, /* 13 */
+    0, /* 13 */
     Itk_OptListInit, /* 14 */
     Itk_OptListFree, /* 15 */
     Itk_OptListAdd, /* 16 */
     Itk_OptListRemove, /* 17 */
 };
 
+static ItkStubHooks itkStubHooks = {
+    &itkIntStubs
+};
+
+ItkStubs itkStubs = {
+    TCL_STUB_MAGIC,
+    ITK_STUBS_EPOCH,
+    ITK_STUBS_REVISION,
+    &itkStubHooks,
+    Itk_Init, /* 0 */
+    Itk_SafeInit, /* 1 */
+    0, /* 2 */
+    0, /* 3 */
+    0, /* 4 */
+    0, /* 5 */
+    0, /* 6 */
+    0, /* 7 */
+    0, /* 8 */
+    0, /* 9 */
+    0, /* 10 */
+    0, /* 11 */
+    0, /* 12 */
+    Itk_ArchetypeInit, /* 13 */
+};
+
 /* !END!: Do not edit above this line. */
+
+struct ItkStubAPI itkStubAPI = {
+    &itkStubs,
+    &itkIntStubs
+};

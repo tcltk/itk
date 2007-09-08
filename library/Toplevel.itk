@@ -24,7 +24,7 @@
 #            mmclennan@lucent.com
 #            http://www.tcltk.com/itcl
 #
-#      RCS:  $Id: Toplevel.itk,v 1.4 2007/05/24 23:29:30 hobbs Exp $
+#      RCS:  $Id: Toplevel.itk,v 1.4.2.1 2007/09/08 12:06:41 wiede Exp $
 # ----------------------------------------------------------------------
 #            Copyright (c) 1993-1998  Lucent Technologies, Inc.
 # ======================================================================
@@ -44,9 +44,9 @@ itcl::class itk::Toplevel {
         itk_component add hull {
             toplevel $itk_hull -class [namespace tail [info class]]
         } {
-            keep -menu -background -cursor -takefocus
+            keep -background -cursor -takefocus
         }
-        bind itk-delete-$itk_hull <Destroy> [list itcl::delete object $this]
+        bind itk-delete-$itk_hull <Destroy> "itcl::delete object $this"
 
         set tags [bindtags $itk_hull]
         bindtags $itk_hull [linsert $tags 0 itk-delete-$itk_hull]
