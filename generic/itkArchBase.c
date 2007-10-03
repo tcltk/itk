@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkArchBase.c,v 1.1.2.2 2007/09/08 12:32:42 wiede Exp $
+ *     RCS:  $Id: itkArchBase.c,v 1.1.2.3 2007/10/03 16:56:40 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -1625,7 +1625,8 @@ Itk_PropagatePublicVar(
      *  is the most-specific class, so that the public variable can
      *  be found.
      */
-    result = Tcl_PushCallFrame(interp, &frame, contextObj->iclsPtr->namesp, /*isProcCallFrame*/0);
+    result = Tcl_PushCallFrame(interp, &frame, contextObj->iclsPtr->namesp,
+            /*isProcCallFrame*/0);
 
     if (result == TCL_OK) {
 	/*
