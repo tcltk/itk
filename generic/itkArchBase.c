@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkArchBase.c,v 1.1.2.3 2007/10/03 16:56:40 wiede Exp $
+ *     RCS:  $Id: itkArchBase.c,v 1.1.2.4 2007/10/03 17:01:27 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -1303,7 +1303,7 @@ Itk_ArchOptionAddCmd(
             if (!opt) {
                 Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
                     "option \"", tail, "\" not defined in class \"",
-                    Tcl_GetString(iclsPtr->fullname), "\"",
+                    Tcl_GetString(iclsPtr->fullNamePtr), "\"",
                     (char*)NULL);
                 Tcl_DStringFree(&buffer);
                 return TCL_ERROR;
@@ -1488,7 +1488,7 @@ Itk_ArchOptionRemoveCmd(dummy, interp, objc, objv)
             if (!opt) {
                 Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
                     "option \"", tail, "\" not defined in class \"",
-                    Tcl_GetString(iclsPtr->fullname), "\"",
+                    Tcl_GetString(iclsPtr->fullNamePtr), "\"",
                     (char*)NULL);
                 Tcl_DStringFree(&buffer);
                 return TCL_ERROR;
@@ -1625,7 +1625,7 @@ Itk_PropagatePublicVar(
      *  is the most-specific class, so that the public variable can
      *  be found.
      */
-    result = Tcl_PushCallFrame(interp, &frame, contextObj->iclsPtr->namesp,
+    result = Tcl_PushCallFrame(interp, &frame, contextObj->iclsPtr->nsPtr,
             /*isProcCallFrame*/0);
 
     if (result == TCL_OK) {
@@ -1660,7 +1660,7 @@ Itk_PropagatePublicVar(
 
         Itcl_SetCallFrameResolver(interp, ivPtr->iclsPtr->resolvePtr);
         Tcl_Namespace *saveNsPtr = Tcl_GetCurrentNamespace(interp);
-        Itcl_SetCallFrameNamespace(interp, ivPtr->iclsPtr->namesp);
+        Itcl_SetCallFrameNamespace(interp, ivPtr->iclsPtr->nsPtr);
         result = Tcl_EvalObjEx(interp, mcode->bodyPtr, 0);
         Itcl_SetCallFrameNamespace(interp, saveNsPtr);
 
@@ -2177,7 +2177,7 @@ Itk_InitArchOption(
      *  Since this might be called from the itk::option-parser
      *  namespace, reinstall the object context.
      */
-    result = Tcl_PushCallFrame(interp, &frame, info->itclObj->iclsPtr->namesp, /*isProcCallFrame*/0);
+    result = Tcl_PushCallFrame(interp, &frame, info->itclObj->iclsPtr->nsPtr, /*isProcCallFrame*/0);
 
     if (result == TCL_OK) {
 	/*
@@ -2335,7 +2335,7 @@ Itk_AddOptionPart(
 
     if ((archOpt->flags & ITK_ARCHOPT_INIT) != 0) {
 
-        result = Tcl_PushCallFrame(interp, &frame, info->itclObj->iclsPtr->namesp, /*isProcCallFrame*/0);
+        result = Tcl_PushCallFrame(interp, &frame, info->itclObj->iclsPtr->nsPtr, /*isProcCallFrame*/0);
 
         if (result == TCL_OK) {
             init = Tcl_GetVar2(interp, "itk_option", archOpt->switchName, 0);
