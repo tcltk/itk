@@ -16,9 +16,9 @@ bind $dotF <Enter> {focus $dotF}
 
 rename . _old_toplevel_
 
-set top [ntk window . 500 500]
+set top [ntk window . -width 500 -height 500]
 set topObj [$top obj]
-set path [ntk frame .w2 -width 200 -height 200]
+set path [ntk frame .w2 -width 100 -height 100]
 set w2Obj [$path obj]
 puts stderr "OBJS!$topObj!$w2Obj!"
 $w2Obj setall [list 255 0 255 120]

@@ -82,7 +82,7 @@
 	}
     }
 
-    constructor {fwidth fheight} {
+    constructor {args} {
 	incr cntWindows
 	set path [string trimleft $this :]
         if {[info exists windows($path)]} {
@@ -91,8 +91,11 @@
 #puts stderr "window constructor!$this!$path!"
         set windows($path) $path
 	set parent [parent $path]
-	set width $fwidth
-	set height $fheight
+	eval configure $args
+puts stderr "ARGS!$args!$options(-width)"
+        set width $options(-width)
+        set height $options(-height)
+puts stderr "WIDTH!$width!$height!"
         set obj [megaimage-blank $width $height]
 	#
 	# Append the child to the parent's window list

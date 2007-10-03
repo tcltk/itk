@@ -32,7 +32,7 @@ puts stderr "RENDER!$path!"
     }
   
     constructor {args} {
-    ::ntk::classes::window::constructor 1 1
+        eval ::ntk::classes::window::constructor $args
     } {
         incr cntWindows
 	if {$frameNs eq ""} {
@@ -42,7 +42,23 @@ puts stderr "RENDER!$path!"
 	configure -tile {}
 	configure -bg [defaultBackgroundColor]
 	appendRedrawHandler [list [::itcl::code $this draw]]
-        eval $this configure $args
+
+	set myTile [cget -tile]
+puts stderr "myTile!$myTile!"
+        set myObj [cget -obj]
+        if {($myTile ne "") && ($myTile ne "<undefined>")} {
+	    $myObj tile $myTile
+	} else {
+	    set myColor [cget -bg]
+	    if {[llength $myColor] == 1} {
+puts stderr " DRAW OBJ: $myObj setall $colors($myColor)"
+	        $myObj setall $colors($myColor)
+	    } else {
+	        $myObj setall $myColor
+	    }
+	}
+puts stderr "RENDER!$path!"
+        render $path
     }
 }
 
