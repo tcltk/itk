@@ -34,7 +34,6 @@ proc ::ntk::focus {args} {
 }
     
 proc ::ntk::frame {args} {
-#    puts stderr "::ntk::frame called !$args!"
     return [uplevel 1 ::ntk::classes::frame {*}$args]
 }
     
@@ -67,12 +66,10 @@ proc ::ntk::theme {args} {
 }
     
 proc ::ntk::toplevel {args} {
-    puts stderr "::ntk::toplevel called !$args!"
-    return [uplevel 1 ::ntk::classes::window {*}$args]
+    return [uplevel 1 ::ntk::classes::toplevel {*}$args]
 }
     
 proc ::ntk::window {args} {
-#    puts stderr "::ntk::window called !$args!"
     return [uplevel 1 ::ntk::classes::window {*}$args]
 }
     

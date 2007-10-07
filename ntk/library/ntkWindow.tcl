@@ -4,27 +4,28 @@
     protected common cntWindows 0
     protected common windows
 
-    public variable parent [list]
-    public variable children [list]
-    public variable manager [list]
-    public variable redraw [list]
-    public variable destroy [list]
-    public variable update 1
-    public variable toplevel 0
-    public variable removeFromManager [list]
-    public variable renderTreeData [list]
-    public variable bg [list]
-    public variable obj [list]
-    public variable path [list]
+    private variable parent [list]
+    private variable children [list]
+    private variable manager [list]
+    private variable redraw [list]
+    private variable destroy [list]
+    private variable update 1
+    private variable toplevel 0
+    private variable removeFromManager [list]
+    private variable renderTreeData [list]
+    private variable bg [list]
+    private variable obj [list]
+    private variable path [list]
 
+
+    public option -x -default 0 -configuremethod config
+    public option -y -default 0 -configuremethod config
+    public option -width -default 0 -configuremethod config
+    public option -height -default 0 -configuremethod config
+    public option -rotate -default 0 -configuremethod config
 
     public option -reqwidth 0
     public option -reqheight 0
-    public option -width 0
-    public option -height 0
-    public option -x 0
-    public option -y 0
-    public option -rotate 0
 
     public option -buttonpress [list]
     public option -buttonrelease [list]
@@ -32,49 +33,40 @@
     public option -keyrelease [list]
     public option -motion [list]
     
-    private variable varOptions [list parent children manager redraw destroy update toplevel removeFromManager renderTreeData bg obj path]
-
-    filter checkIsVarOption
-
-    public method checkIsVarOption {args} {
-	foreach {className methodName} [self target] break
-	if {$methodName eq "unknown"} {
-	    set what [lindex $args 0]
-	    set value [lrange $args 1 1]
-#puts stderr "checkIsVarOption called![join $args !]![self target]!"
-	    if {[lsearch $varOptions $what]} {
-	        if {[llength $value] == 0} {
-	            return [set $what]
-	        } else {
-		   set $what $value
-		   return $value
-		}
-	   }
-	   return -code error "unknown method $methodName"
-        } else {
-	    set cmd "$methodName $args"
-            return [uplevel 0 $cmd]
-        }
+    public method config {option value} {
+#puts stderr "config![namespace current]!$option!$value!"
+        set itcl_options($option) $value
+        if {$renderTreeData ne ""} {
+	    $renderTreeData [path]
+	}
     }
 
-    public proc parent {path} {
-#puts stderr "path!$path!"
+    public proc windowParent {path} {
         set parent [string range $path 0 [expr {[string last . $path] - 1}]]
 	if {$parent eq ""} {
 	    return .
 	}
 	return $parent
     }
-    public proc toplevel {path} {
-        set i [string first $path 1]
+
+    public proc windowToplevel {path} {
+        set i [string first . $path 1]
 	if {$i < 0} {
 	    return $path
 	}
 	incr i -1
 	return [string range $path 0 $i]
     }
+
+    public method parent {{value {}}} {
+	if {$value eq ""} {
+            return $parent
+	} else {
+	    set parent $value
+	}
+    }
+
     public method children {{value {}}} {
-#puts stderr "children!$this!$value!"
 	if {$value eq ""} {
             return $children
 	} else {
@@ -82,20 +74,98 @@
 	}
     }
 
+    public method manager {{value {}}} {
+	if {$value eq ""} {
+            return $manager
+	} else {
+	    set manager $value
+	}
+    }
+
+    public method redraw {{value {}}} {
+	if {$value eq ""} {
+            return $redraw
+	} else {
+	    set redraw $value
+	}
+    }
+
+    public method destroy {{value {}}} {
+	if {$value eq ""} {
+            return $destroy
+	} else {
+	    set destroy $value
+	}
+    }
+
+    public method update {{value {}}} {
+	if {$value eq ""} {
+            return $update
+	} else {
+	    set update $value
+	}
+    }
+
+    public method toplevel {{value {}}} {
+	if {$value eq ""} {
+            return $toplevel
+	} else {
+	    set toplevel $value
+	}
+    }
+
+    public method removeFromManager {{value {}}} {
+	if {$value eq ""} {
+            return $removeFromManager
+	} else {
+	    set removeFromManager $value
+	}
+    }
+
+    public method renderTreeData {{value {}}} {
+	if {$value eq ""} {
+            return $renderTreeData
+	} else {
+	    set renderTreeData $value
+	}
+    }
+
+    public method bg {{value {}}} {
+	if {$value eq ""} {
+            return $bg
+	} else {
+	    set bg $value
+	}
+    }
+
+    public method obj {{value {}}} {
+	if {$value eq ""} {
+            return $obj
+	} else {
+	    set obj $value
+	}
+    }
+
+    public method path {{value {}}} {
+	if {$value eq ""} {
+            return $path
+	} else {
+	    set path $value
+	}
+    }
+
     constructor {args} {
+#puts stderr "constructor OPTIONS![info exists itcl_options]!"
 	incr cntWindows
 	set path [string trimleft $this :]
         if {[info exists windows($path)]} {
 	    return -code error "window $this already exists"
 	}
-#puts stderr "window constructor!$this!$path!"
         set windows($path) $path
-	set parent [parent $path]
+	set parent [windowParent $path]
 	eval configure $args
-puts stderr "ARGS!$args!$options(-width)"
-        set width $options(-width)
-        set height $options(-height)
-puts stderr "WIDTH!$width!$height!"
+        set width [cget -width]
+        set height [cget -height]
         set obj [megaimage-blank $width $height]
 	#
 	# Append the child to the parent's window list
@@ -105,12 +175,107 @@ puts stderr "WIDTH!$width!$height!"
 	    lappend pchildren $path
 	    $parent children $pchildren
 	}
+	set destroy [list destroyWindow $path]
         return $path
     }
+
     public method appendRedrawHandler {cmd} {
-        set l [cget -redraw]
+        set l [redraw]
 	lappend l $cmd
-	configure -redraw $l
+	redraw $l
+    }
+    
+    public method appendDestroyHandler {path cmd} {
+        set l [$path destroy]
+	lappend l $cmd
+	$path destroy $l
+    }
+    
+    public method destroyWindow {path} {
+         if {![info exists windows($path)]} {
+	     #NO ERROR
+	     return
+	 }
+         # Destroy this window's children.
+         foreach c [$path children] {
+             destroyWindow $c 
+         }  
+
+         # Invoke destroy handlers.
+         foreach cmd [$path destroy] {
+             uplevel #0 $cmd
+         }
+
+         set myParent [windowParent $path]
+
+         # Remove $path from the parent's list of children.
+         set pchildren [$parent children]
+         set i [lsearch -exact $pchildren $path]
+         set pchildren [lreplace $pchildren $i $i]
+         $parent children $pchildren
+ 
+         if {[$path removeFromManager] ne ""} {
+             [$path removeFromManager] $path
+         }
+
+         # If this window was a parent for managed children then free the manager.
+#       set m [$path manager]
+#       if {$m ne ""} {
+#          [$m free] $m
+#       }
+
+        inputDestroy $path
+
+        rename [$path obj] {}
+        if {[$path renderTreeData] ne ""} {
+            rename [$path renderTreeData] {}
+        }
+
+        unset windows($path)
+    }
+
+    public method dispatchRedraw {path} {
+        #puts stderr REDRAW:$path
+        foreach cmd [$path redraw] {
+            uplevel #0 $cmd
+        }
+    }
+
+    public method raise {path} {
+        if {$path eq "."} {
+	    return
+	}
+	if {![info exists windows($path)]} {
+	    return -code error "invalid window: $path"
+        }
+	set lparent [windowParent $path]
+	set c [$parent children]
+	set i [lsearch -exact $c $path]
+	$parent children [linsert [lreplace $c $i $i] end $path]
+    }
+
+    public method redrawWindow {path} {
+        [$path obj] setsize [$path width] [$path height]
+    }
+
+    public method remanageWindow {path} {
+        set p [$path parent]
+	set myManager [$p manager]
+	if {$myManager eq ""} {
+	    $path width [$path reqwidth] height [$path reqheight]
+	    set w [$path width]
+	    set h [$path height]
+	    if {$w <= 0} {set w 1}
+	    if {$h <= 0} {set h 1}
+	    [$path obj] setsize $w $h
+	    dispatchRedraw $path
+	    return
+	}
+        $myManager remanage] $p
+    }
+
+    public method requestSize {path width height} {
+        $path configure -reqwidth $width -reqheight $height
+	remanageWindow $path
     }
 }
-

@@ -2,63 +2,46 @@ itcl::eclass ::ntk::classes::frame {
     inherit ::ntk::classes::window 
 
     private variable frameNs ""
+    private variable frameDraw [list]
 
-    option -bg -default {} -validatemethod verifyColor -configuremethod config
-    option -tile -default ""
+    option -bg -default {} -validatemethod verifyColor -configuremethod frameConfig
+    option -tile -default "" -configuremethod frameConfig
 
-    public method config {option value} {
-puts stderr "config!$option!$value!"
-        set options($option) $value
-#puts stderr "calling draw!"
-	draw
+    private method frameConfig {option value} {
+        set itcl_options($option) $value
+        if {$frameDraw ne ""} {
+            $frameDraw [path]
+        }
     }
-    public method draw {} {
-	set myTile [cget -tile]
-puts stderr "myTile!$myTile!"
-        set myObj [cget -obj]
-        if {($myTile ne "") && ($myTile ne "<undefined>")} {
-	    $myObj tile $myTile
-	} else {
-	    set myColor [cget -bg]
-	    if {[llength $myColor] == 1} {
-puts stderr " DRAW OBJ: $myObj setall $colors($myColor)"
-	        $myObj setall $colors($myColor)
-	    } else {
-	        $myObj setall $myColor
-	    }
-	}
-puts stderr "RENDER!$path!"
-        render $path
-    }
-  
+
     constructor {args} {
         eval ::ntk::classes::window::constructor $args
     } {
-        incr cntWindows
-	if {$frameNs eq ""} {
-	    set frameNs ::ntk::frames
-	    namespace eval $frameNs {}
-	}
-	configure -tile {}
+#	configure -tile {}
 	configure -bg [defaultBackgroundColor]
-	appendRedrawHandler [list [::itcl::code $this draw]]
+	set path [path]
+	appendRedrawHandler [list $path frameDraw $path]
 
+	set frameDraw frameDraw
+	frameDraw $path
+        return $path
+    }
+
+    public method frameDraw {path} {
+#puts stderr "frameDraw!$path!"
 	set myTile [cget -tile]
-puts stderr "myTile!$myTile!"
-        set myObj [cget -obj]
+        set myObj [obj]
         if {($myTile ne "") && ($myTile ne "<undefined>")} {
 	    $myObj tile $myTile
 	} else {
-	    set myColor [cget -bg]
+	    set myColor [$path cget -bg]
 	    if {[llength $myColor] == 1} {
-puts stderr " DRAW OBJ: $myObj setall $colors($myColor)"
 	        $myObj setall $colors($myColor)
 	    } else {
 	        $myObj setall $myColor
 	    }
 	}
-puts stderr "RENDER!$path!"
-        render $path
+        $path render $path
     }
 }
 

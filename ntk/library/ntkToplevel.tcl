@@ -1,32 +1,43 @@
-itcl::nwidget ::ntk::classes::toplevel {
-    private common cntToplevels 0
-    private common toplevels
-    component base
-    delegate option -reqwidth to base
-    delegate option -reqheight to base
-    delegate option -width to base
-    delegate option -height to base
-    delegate option -x to base
-    delegate option -y to base
-    delegate option -rotate to base
-    delegate option -buttonpress to base
-    delegate option -buttonrelease to base
-    delegate option -keypress to base
-    delegate option -keyrelease to base
-    delegate method getValue to base
-    delegate method setValue to base
-    delegate method obj to base as [list getValue obj]
+itcl::eclass ::ntk::classes::toplevel {
+    inherit ::ntk::classes::window
 
-    constructor {width height} {
-	incr cntToplevels
-	set path [string trimleft $this :]
-        if {[info exists toplevels($path)]} {
-	    return -code error "window $this already exists"
+    private variable id
+    private variable toplevel
+    private variable toplevelDraw [list]
+
+    public option -bg -default [list 16 33 65 255] -validatemethod verifyColor -configuremethod toplevelConfig
+
+    private method toplevelConfig {option value} {
+        set itcl_options($option) $value
+        if {$toplevelDraw ne ""} {
+            $toplevelDraw $path
 	}
-        set toplevels($path) $path
-        set obj [megaimage-blank $width $height]
-        set base [::ntk::classes::base ::ntk::classes::_win$cntToplevels $path $width $height $obj $parent 0 0 0 [list 16 33 65 255]]
-        return $path
     }
+
+    constructor {args} {
+        eval ::ntk::classes::window::constructor $args
+    } {
+        set id ""
+        set toplevel 1
+        return [path]
+    }
+    
+    public method toplevelDraw {path} {
+#puts stderr "ftoplevelDraw!$path!"
+       set myTile [cget -tile]
+        set myObj [obj]
+        if {($myTile ne "") && ($myTile ne "<undefined>")} {
+            $myObj tile $myTile
+        } else {
+            set myColor [$path cget -bg]
+            if {[llength $myColor] == 1} {
+                $myObj setall $colors($myColor)
+            } else {
+                $myObj setall $myColor
+            }
+        }
+        $path render $path
+    }
+
 }
 

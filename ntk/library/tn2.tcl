@@ -7,6 +7,7 @@ source ntkHelpers.tcl
 source ntkRender.tcl
 source ntkGridBase.tcl
 source ntkWindow.tcl
+source ntkToplevel.tcl
 source ntkFrame.tcl
 
 set dotF [megaimage.frame .f persist]
@@ -16,18 +17,22 @@ bind $dotF <Enter> {focus $dotF}
 
 rename . _old_toplevel_
 
-set top [ntk window . -width 500 -height 500]
+puts stderr "TOP"
+set top [ntk toplevel . -width 500 -height 500]
 set topObj [$top obj]
-set path [ntk frame .w2 -width 100 -height 100]
-set w2Obj [$path obj]
-puts stderr "OBJS!$topObj!$w2Obj!"
-$w2Obj setall [list 255 0 255 120]
-puts stderr "CALLING CFG RED"
-$path configure -bg red
-$w2Obj setall [list 255 0 0 255]
-puts stderr "CFG![$path configure -bg]!"
+
+set w2Path [ntk frame .w2 -width 100 -height 100]
 update idletask
-$path render $path 
-. objsetimage [. obj]
+after 2000
+$w2Path configure -bg [list 155 0 0 255]
+#. objsetimage [. obj]
+
+set w3Path [ntk frame .w3 -width 200 -height 200]
+$w3Path configure -bg [list 255 150 150 255] -x 180 -y 150
+#. objsetimage [. obj]
+update idletask
+
+after 2000
+$w2Path configure -bg [list 255 0 0 255]
 update idletask
 puts stderr "END !!!"

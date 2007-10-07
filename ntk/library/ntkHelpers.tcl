@@ -34,7 +34,7 @@
             # The color is valid, so set it.
             #
 puts stderr "COL!$colors($lcvalue)!"
-            set options($option) $colors($lcvalue)
+            set itcl_options($option) $colors($lcvalue)
             return 0
           }
          
