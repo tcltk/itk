@@ -36,9 +36,7 @@
     public method config {option value} {
 #puts stderr "config![namespace current]!$option!$value!"
         set itcl_options($option) $value
-        if {$renderTreeData ne ""} {
-	    $renderTreeData [path]
-	}
+        windowDraw [path]
     }
 
     public proc windowParent {path} {
@@ -277,5 +275,19 @@
     public method requestSize {path width height} {
         $path configure -reqwidth $width -reqheight $height
 	remanageWindow $path
+    }
+
+    public method windowDraw {path} {
+#puts stderr "windowDraw!$path!$obj!"
+	if {$obj eq ""} {
+	    return
+        }
+        set myColor [$path cget -bg]
+        if {[llength $myColor] == 1} {
+            $obj setall $colors($myColor)
+        } else {
+            $obj setall $myColor
+        }
+        $path render $path
     }
 }

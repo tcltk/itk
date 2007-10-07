@@ -23,10 +23,10 @@ itcl::eclass ::ntk::classes::toplevel {
     }
     
     public method toplevelDraw {path} {
-#puts stderr "ftoplevelDraw!$path!"
+#puts stderr "toplevelDraw!$path!"
        set myTile [cget -tile]
         set myObj [obj]
-        if {($myTile ne "") && ($myTile ne "<undefined>")} {
+        if {$myTile ne ""} {
             $myObj tile $myTile
         } else {
             set myColor [$path cget -bg]
