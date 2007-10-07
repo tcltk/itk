@@ -16,15 +16,15 @@
 	set rendering 1
 	after idle [::itcl::code $this renderNow]
     }
+
     protected method renderNow {} {
 	set myObj [. obj]
         $myObj setall [. cget -bg]
         renderTree $myObj .
 #puts stderr "NOW!.f objsetimage $myObj!"
-#	resizeImage [. id] [. cget -width] [. cget -height]
-#	putImage [. id] $myObj
+	ntk-resize-image [. id] [. cget -width] [. cget -height]
+	ntk-put-image  [. id] $myObj
 	set rendering 0
-	.f objsetimage $myObj
     }
 
     protected method changeInTree {win} {

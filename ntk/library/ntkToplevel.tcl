@@ -14,6 +14,22 @@ itcl::eclass ::ntk::classes::toplevel {
 	}
     }
 
+    public method id {{value {}}} {
+	if {$value eq ""} {
+            return $id
+	} else {
+	    set id $value
+	}
+    }
+
+    public method toplevel {{value {}}} {
+	if {$value eq ""} {
+            return $toplevel
+	} else {
+	    set toplevel $value
+	}
+    }
+
     constructor {args} {
         eval ::ntk::classes::window::constructor $args
     } {
