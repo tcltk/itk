@@ -1,3 +1,22 @@
+#---------------------------------------------------------------------------
+# ntkWidget ntkButton.tcl --
+#
+# This file contains a ntkWidget button command implementation
+#
+# ntkWidget is derived from the NexTk implementation written by
+# George Peter Staplin
+#
+# ntkWidget is a reimplementation of Tk based on megapkg, ntk and freetypeext
+# written by George Peter Staplin
+#
+# Copyright (c) 2007 by Arnulf P. Wiedemann and George Peter Staplin
+#
+# See the file "license.terms" for information on usage and redistribution of
+# this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.2 2007/10/08 19:57:12 wiede Exp $
+#--------------------------------------------------------------------------
+
 itcl::eclass ::ntk::classes::button {
     inherit ::ntk::classes::theme 
 

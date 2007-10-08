@@ -1,3 +1,22 @@
+#---------------------------------------------------------------------------
+# ntkWidget ntkEntry.tcl --
+#
+# This file contains a ntkWidget entry command implementation
+#
+# ntkWidget is derived from the NexTk implementation written by
+# George Peter Staplin
+#
+# ntkWidget is a reimplementation of Tk based on megapkg, ntk and freetypeext
+# written by George Peter Staplin
+#
+# Copyright (c) 2007 by Arnulf P. Wiedemann and George Peter Staplin
+#
+# See the file "license.terms" for information on usage and redistribution of
+# this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.2 2007/10/08 19:57:13 wiede Exp $
+#--------------------------------------------------------------------------
+
 itcl::eclass ::ntk::classes::entry {
     inherit ::ntk::classes::window 
 
@@ -14,7 +33,7 @@ itcl::eclass ::ntk::classes::entry {
     public option -fontsize -default {} -configuremethod entryConfig
     public option -text -default {} -configuremethod entryConfig
     public option -textcolor -default {} -validatemethod verifyColor -configuremethod entryConfig
-    public option -cursorcolor -default [list 0 0 255 255] -configuremethod entryConfig
+    public option -cursorcolor -default [list [list 0 0 255 255]] -configuremethod entryConfig
     public option -bg -default {} -validatemethod verifyColor -configuremethod entryConfig
 
     private method entryConfig {option value} {

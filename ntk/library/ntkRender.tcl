@@ -1,3 +1,22 @@
+#---------------------------------------------------------------------------
+# ntkWidget ntkRender.tcl --
+#
+# This file contains a ntkWidget render command implementation
+#
+# ntkWidget is derived from the NexTk implementation written by
+# George Peter Staplin
+#
+# ntkWidget is a reimplementation of Tk based on megapkg, ntk and freetypeext
+# written by George Peter Staplin
+#
+# Copyright (c) 2007 by Arnulf P. Wiedemann and George Peter Staplin
+#
+# See the file "license.terms" for information on usage and redistribution of
+# this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.4 2007/10/08 19:57:13 wiede Exp $
+#--------------------------------------------------------------------------
+
 ::itcl::eclass ::ntk::classes::render {
 
     private common backgroundColor [list 16 33 65 255]

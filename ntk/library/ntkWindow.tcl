@@ -1,3 +1,22 @@
+#---------------------------------------------------------------------------
+# ntkWidget ntkWindow.tcl --
+#
+# This file contains a ntkWidget window command implementation
+#
+# ntkWidget is derived from the NexTk implementation written by
+# George Peter Staplin
+#
+# ntkWidget is a reimplementation of Tk based on megapkg, ntk and freetypeext
+# written by George Peter Staplin
+#
+# Copyright (c) 2007 by Arnulf P. Wiedemann and George Peter Staplin
+#
+# See the file "license.terms" for information on usage and redistribution of
+# this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.5 2007/10/08 19:57:13 wiede Exp $
+#--------------------------------------------------------------------------
+
 ::itcl::eclass ::ntk::classes::window {
     inherit ::ntk::classes::helpers ::ntk::classes::render
 
@@ -283,6 +302,7 @@
 	    return
         }
         set myColor [$path cget -bg]
+puts stderr "myColor!$myColor!"
         if {[llength $myColor] == 1} {
             $obj setall $colors($myColor)
         } else {

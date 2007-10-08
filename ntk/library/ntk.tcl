@@ -1,3 +1,21 @@
+#---------------------------------------------------------------------------
+# ntkWidget ntk.tcl --
+#
+# This file contains a namespace ensemble for the subcommands of ntkWidget
+# ntkWidget is derived from the NexTk implementation written by
+# George Peter Staplin
+#
+# ntkWidget is a reimplementation of Tk based on megapkg, ntk and freetypeext
+# written by George Peter Staplin
+#
+# Copyright (c) 2007 by Arnulf P. Wiedemann and George Peter Staplin
+#
+# See the file "license.terms" for information on usage and redistribution of
+# this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.5 2007/10/08 19:57:12 wiede Exp $
+#--------------------------------------------------------------------------
+
 namespace eval ::ntk {
     namespace ensemble create -map [list \
         button ::ntk::button \
@@ -26,15 +44,15 @@ source [file join $myDir ntkWindow.tcl]
 source [file join $myDir ntkTheme.tcl]
 source [file join $myDir ntkScrollbar.tcl]
 source [file join $myDir ntkButton.tcl]
-#source [file join $myDir ntkClock.tcl]
 source [file join $myDir ntkEntry.tcl]
 source [file join $myDir ntkFrame.tcl]
-#source [file join $myDir ntkGrid.tcl]
-#source [file join $myDir ntkInput.tcl]
 source [file join $myDir ntkLabel.tcl]
-#source [file join $myDir ntkListbox.tcl]
-#source [file join $myDir ntkText.tcl]
+source [file join $myDir ntkListbox.tcl]
 source [file join $myDir ntkToplevel.tcl]
+#source [file join $myDir ntkGrid.tcl]
+#source [file join $myDir ntkClock.tcl]
+#source [file join $myDir ntkText.tcl]
+#source [file join $myDir ntkInput.tcl]
 
 proc ::ntk::button {args} {
     puts stderr "::ntk::button called !$args!"

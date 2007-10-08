@@ -92,13 +92,13 @@ puts stderr "w3Path!$w3Path!"
 
 set w4Path [ntk button .w4 -width 100 -height 20 -text button1 -x 0 -y 50 -bg [list [list 123 234 0 255]]]
 puts stderr "w4Path!$w4Path!"
-.w4 configure -bg [list 123 234 150 255] -x 300 -y 50
+.w4 configure -bg [list 123 234 150 255] -x 300 -y 50 -width 100 -height 80
 
-set w5Path [ntk label .w5 -width 50 -height 20 -text label1 -textcolor [list [list 255 0 0 255]]]
+set w5Path [ntk label .w5 -width 100 -height 100 -text label1 -textcolor [list [list 255 0 0 255]]]
 puts stderr "w5Path!$w5Path!"
 .w5 configure -bg [list 123 234 150 255] -x 300 -y 100
 
-if {0} {
+if {1} {
 set w6Path [ntk entry .w6 -width 50 -height 20 -text entry1 -textcolor [list [list 255 0 0 255]]]
 puts stderr "w6Path!$w6Path!"
 .w6 configure -bg [list 123 234 150 255] -x 300 -y 100
