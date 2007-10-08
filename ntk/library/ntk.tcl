@@ -23,18 +23,17 @@ source [file join $myDir ntkHelpers.tcl]
 source [file join $myDir ntkRender.tcl]
 source [file join $myDir ntkGridBase.tcl]
 source [file join $myDir ntkWindow.tcl]
-#source [file join $myDir ntkButton.tcl]
+source [file join $myDir ntkTheme.tcl]
+source [file join $myDir ntkScrollbar.tcl]
+source [file join $myDir ntkButton.tcl]
 #source [file join $myDir ntkClock.tcl]
-#source [file join $myDir ntkEntry.tcl]
-#source [file join $myDir ntkFocus.tcl]
+source [file join $myDir ntkEntry.tcl]
 source [file join $myDir ntkFrame.tcl]
 #source [file join $myDir ntkGrid.tcl]
 #source [file join $myDir ntkInput.tcl]
-#source [file join $myDir ntkLabel.tcl]
+source [file join $myDir ntkLabel.tcl]
 #source [file join $myDir ntkListbox.tcl]
-#source [file join $myDir ntkScrollbar.tcl]
 #source [file join $myDir ntkText.tcl]
-#source [file join $myDir ntkTheme.tcl]
 source [file join $myDir ntkToplevel.tcl]
 
 proc ::ntk::button {args} {
@@ -48,10 +47,12 @@ proc ::ntk::clock {args} {
     
 proc ::ntk::entry {args} {
     puts stderr "::ntk::entry called !$args!"
+    return [uplevel 1 ::ntk::classes::entry {*}$args]
 }
     
 proc ::ntk::focus {args} {
     puts stderr "::ntk::focus called !$args!"
+    return [uplevel 1 ::ntk::classes::focus {*}$args]
 }
     
 proc ::ntk::frame {args} {
@@ -68,6 +69,7 @@ proc ::ntk::input {args} {
     
 proc ::ntk::label {args} {
     puts stderr "::ntk::label called !$args!"
+    return [uplevel 1 ::ntk::classes::label {*}$args]
 }
     
 proc ::ntk::listbox {args} {

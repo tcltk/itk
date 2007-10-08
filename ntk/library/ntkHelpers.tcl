@@ -3,6 +3,11 @@
 
     private common rendering 0
     private common backgroundColor [list 16 33 65 255]
+    private common focusList [list]
+    protected common defaultFont /usr/X11R6/lib/X11/fonts/truetype/Vera.ttf
+    protected common defaultFontSize 12
+    protected common defaultTextColor [list 10 10 10 10]
+    protected common defaultBackgoundColor [list 16 33 65 255]
 
     constructor {args} {
         array set colors {
@@ -54,4 +59,26 @@ puts stderr "COL!$colors($lcvalue)!"
     protected proc defaultBackgroundColor {} {
         return $colors(grey)
     }
+
+    protected proc verifyBorder {option value} {
+        if {$value < 0} {
+	    return -code error "invalid border value: $value"
+	}
+        if {![string is integer -strict $value]} {
+	    return -code error "invalid border value: $value"
+	}
+        return 1
+    }
+    public proc focus {path} {
+        set focusList [list $path]
+    }
+
+    public proc focusAppend {path} {
+        lappend focusList $path
+    }
+
+    public proc getFocus {} {
+        return $focusList
+    }
+    
 }
