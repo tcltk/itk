@@ -14,53 +14,44 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkFrame.tcl,v 1.1.2.4 2007/10/08 19:57:13 wiede Exp $
+# RCS: @(#) $Id: ntkFrame.tcl,v 1.1.2.5 2007/10/12 21:09:56 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::eclass ::ntk::classes::frame {
     inherit ::ntk::classes::window 
 
-    private variable frameNs ""
-    private variable frameDraw [list]
-
-    option -bg -default {} -validatemethod verifyColor -configuremethod frameConfig
-    option -tile -default "" -configuremethod frameConfig
+    option -bg -default {} -validatemethod verifyColor \
+            -configuremethod frameConfig
+    option -tile -default {} -configuremethod frameConfig
 
     private method frameConfig {option value} {
         set itcl_options($option) $value
-        if {$frameDraw ne ""} {
-            $frameDraw [path]
-        }
+        frameDraw $wpath
     }
 
     constructor {args} {
         eval ::ntk::classes::window::constructor $args
     } {
-#	configure -tile {}
 	configure -bg [defaultBackgroundColor]
-	set path [path]
-	appendRedrawHandler [list $path frameDraw $path]
-
-	set frameDraw frameDraw
-	frameDraw $path
-        return $path
+	appendRedrawHandler [list $wpath frameDraw $wpath]
+	frameDraw $wpath
+        return $wpath
     }
 
     public method frameDraw {path} {
 #puts stderr "frameDraw!$path!"
-	set myTile [cget -tile]
-        set myObj [obj]
-        if {($myTile ne "") && ($myTile ne "<undefined>")} {
-	    $myObj tile $myTile
+	set myTile $itcl_options(-tile)
+        if {$myTile ne ""} {
+	    $obj tile $myTile
 	} else {
-	    set myColor [$path cget -bg]
+	    set myColor $itcl_options(-bg)
 	    if {[llength $myColor] == 1} {
-	        $myObj setall $colors($myColor)
+	        $obj setall $colors($myColor)
 	    } else {
-	        $myObj setall $myColor
+	        $obj setall $myColor
 	    }
 	}
-        $path render $path
+        render $path
     }
 }
 

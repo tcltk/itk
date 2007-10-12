@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.4 2007/10/08 19:57:13 wiede Exp $
+# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.5 2007/10/12 21:09:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::eclass ::ntk::classes::helpers {
@@ -99,5 +99,24 @@ puts stderr "COL!$colors($lcvalue)!"
     public proc getFocus {} {
         return $focusList
     }
-    
 }
+
+proc dumpMegaimage {obj} {
+    lassign [$obj getsize] width height
+puts stderr "height!$height!"
+    for {set y 0} {$y < $height} {incr y} {
+        puts stderr "row!$y![$obj getrow $y]!"
+    }
+}
+
+proc dumpMegaimage2 {obj} {
+    lassign [$obj getsize] width height
+    for {set y 0} {$y < $height} {incr y} {
+        puts -nonewline stderr "$y!"
+        foreach {r g b a} [$obj getrow $y] {
+            puts -nonewline stderr "[format {%x %x %x %x  } $r $g $b $a] "
+        }
+        puts stderr ""
+    }
+}
+    

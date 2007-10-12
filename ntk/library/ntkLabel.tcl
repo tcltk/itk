@@ -14,13 +14,13 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.2 2007/10/08 19:57:13 wiede Exp $
+# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.3 2007/10/12 21:09:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::eclass ::ntk::classes::label {
     inherit ::ntk::classes::theme 
 
-    private variable labelDraw [list]
+    private variable constructing 1
 
     public option -font -default {} -configuremethod labelConfig
     public option -fontsize -default {} -configuremethod labelConfig
@@ -31,9 +31,7 @@ itcl::eclass ::ntk::classes::label {
 
     private method labelConfig {option value} {
         set itcl_options($option) $value
-        if {$labelDraw ne ""} {
-            $labelDraw [path]
-        }
+        labelDraw $wpath
     }
 
     constructor {args} {
@@ -42,28 +40,29 @@ itcl::eclass ::ntk::classes::label {
 	set itcl_options(-font) $defaultFont
 	set itcl_options(-fontsize) 12
 	set itcl_options(-bg) [defaultBackgroundColor]
-	set path [path]
 	eval configure $args
-	appendRedrawHandler [list $path labelDraw $path]
-
-	set labelDraw labelDraw
-	labelDraw $path
-        return $path
+puts stderr "TC!$itcl_options(-textcolor)!"
+	appendRedrawHandler [list $wpath labelDraw $wpath]
+	set constructing 0
+	labelDraw $wpath
+        return $wpath
     }
 
     public method labelDraw {path} {
-        set myObj [obj]
+	if {$constructing} {
+	    return
+	}
         set myColor [$path cget -bg]
         if {[llength $myColor] == 1} {
-            $myObj setall $colors($myColor)
+            $obj setall $colors($myColor)
         } else {
-            $myObj setall $myColor
+            $obj setall $myColor
         }
         if {[$path cget -bd] > 0} {
             themeLabelDrawBorder $path
         }
         if {[string length [$path cget -text]]} {
-#puts stderr "PAR! [$path cget -font] [$path cget -fontsize] \
+puts stderr "PAR! [$path cget -font] [$path cget -fontsize] \
 	            [$path cget -text] [$path cget -textcolor] !"
             set rgba [freetype [$path cget -font] [$path cget -fontsize] \
 	            [$path cget -text] [$path cget -textcolor] \
@@ -75,7 +74,7 @@ itcl::eclass ::ntk::classes::label {
             [$path obj] blendobj $x $y $tmp
             rename $tmp {}
         }
-        $path render $path
+        render $path
     }
 
     public method labelRequestSize {path} {

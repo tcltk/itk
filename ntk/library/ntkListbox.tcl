@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.1 2007/10/08 19:57:13 wiede Exp $
+# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.2 2007/10/12 21:09:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::eclass ::ntk::classes::listbox {
@@ -166,15 +166,15 @@
         } else {
             listboxUpdateView $path [$path cget -yscrollcommand] 0.0 1.0
         }
-        $path render $path
-        $path configure -pending_afterid ""
+        render $path
+        configure -pending_afterid ""
     }
 
     public method listboxIdleDraw {path} {
         if {[$path cget -pending_afterid] ne ""} {
 	    return
         }
-        $path configure -pending_afterid [after idle [list listboxDraw $path]]
+        configure -pending_afterid [after idle [list listboxDraw $path]]
     }
 
     public method listboxInsert {path offset args} {

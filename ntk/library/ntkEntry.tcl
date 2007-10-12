@@ -14,33 +14,43 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.2 2007/10/08 19:57:13 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.3 2007/10/12 21:09:56 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::eclass ::ntk::classes::entry {
-    inherit ::ntk::classes::window 
+    inherit ::ntk::classes::theme 
 
-    private variable buttonDraw [list]
+    private variable constructing 1
     private variable textobj [list]
-    private variable destroy [list]
     private variable cursoroffset 0
     private variable xslide 0
     private variable offsetmap [list]
 
-    public option -keypress -default {}
-    public option -buttonpress -default {}
     public option -font -default {} -configuremethod entryConfig
     public option -fontsize -default {} -configuremethod entryConfig
     public option -text -default {} -configuremethod entryConfig
-    public option -textcolor -default {} -validatemethod verifyColor -configuremethod entryConfig
-    public option -cursorcolor -default [list [list 0 0 255 255]] -configuremethod entryConfig
-    public option -bg -default {} -validatemethod verifyColor -configuremethod entryConfig
+    public option -textcolor -default {} -validatemethod verifyColor \
+            -configuremethod entryConfig
+    public option -cursorcolor -default [list 255 0 0 255] \
+            -configuremethod entryConfig
+    public option -bg -default {} -validatemethod verifyColor \
+            -configuremethod entryConfig
+    public option -bd -default 1 -validatemethod verifyBorder \
+            -configuremethod entryConfig
+    public option -keypress -default {} -configuremethod entryConfig
+    public option -buttonpress -default {} -configuremethod entryConfig
 
     private method entryConfig {option value} {
+puts stderr "entryConfig!$option!$value!"
         set itcl_options($option) $value
-        if {$entryDraw ne ""} {
-            $entryDraw [path]
-        }
+	switch -- $option {
+	-text {
+	    entryTrace $wpath
+	  }
+	default {
+            entryDraw $wpath
+	  }
+	}
     }
 
     public method textobj {{value {}}} {
@@ -48,14 +58,6 @@ itcl::eclass ::ntk::classes::entry {
             return $textobj
 	} else {
 	    set textobj $value
-	}
-    }
-
-    public method destroy {{value {}}} {
-	if {$value eq ""} {
-            return $destroy
-	} else {
-	    set destroy $value
 	}
     }
 
@@ -84,25 +86,25 @@ itcl::eclass ::ntk::classes::entry {
     }
 
     constructor {args} {
-        eval ::ntk::classes::window::constructor -width 160 -height 1
+#        freetype $defaultFont $defaultFontSize "_^" [list 0 0 0 255] myWidth myHeight
+#        eval ::ntk::classes::window::constructor -width 160 -height $myHeight
+        eval ::ntk::classes::window::constructor -width 60 -height 20 
     } {
-        freetype $defaultFont 12 "_^" [list 0 0 0 255] width height
-	configure -height $height
+puts stderr "CONST!$constructing!"
 	set itcl_options(-font) $defaultFont
-	set itcl_options(-fontsize) 12
+	set itcl_options(-fontsize) $defaultFontSize
 	set itcl_options(-textcolor) $defaultTextColor
 	set itcl_options(-bg) [list 255 255 255 255]
 	set itcl_options(-keypress) entryKeypress
 	set itcl_options(-buttonpress) entryButtonpress
 	set textobj [megaimage-blank 1 1]
 	set destroy entryDestroy
-	set path [path]
+puts stderr "OPT!BG!$itcl_options(-bg)!$itcl_options(-width)!"
 	eval configure $args
-	appendRedrawHandler [list $path entryDraw $path]
-
-	set entryDraw entryDraw
-	entryDraw $path
-        return $path
+	appendRedrawHandler [list $wpath entryDraw $wpath]
+	set constructing 0
+	entryDraw $wpath
+        return $wpath
     }
 
     public method entryButtonpress {path button x y globalx globaly} {
@@ -165,11 +167,13 @@ itcl::eclass ::ntk::classes::entry {
     }
 
     public method entryDraw {path} {
-        set myObj [$path obj]
+	if {$constructing} {
+	    return
+	}
         set myOffsetmap [$path offsetmap]
         set cx 0
-        if {[llength $offsetmap]} {
-            set cx [lindex $offsetmap [$path cursoroffset]]
+        if {[llength $myOffsetmap]} {
+            set cx [lindex $myOffsetmap [$path cursoroffset]]
         }
         if {$cx eq ""} {
             set cx 0
@@ -179,15 +183,18 @@ itcl::eclass ::ntk::classes::entry {
             incr cx -1
         }
         $path xslide 1
-        if {$cx >= [$path width]} {
-            $path xslide [expr {[$path cget -width] - $cx}]
+	set myWidth [$path cget -width]
+        if {$cx >= $myWidth} {
+            $path xslide [expr {$myWidth - $cx}]
         } 
-        $myObj setall [$path cget -bg]
-        $myObj blendobj [$path xslide] 0 [$path textobj]
-        $myObj line $cx 0 $cx $objh [$path cget -cursorcolor]
+puts stderr "BG![$path cget -bg]!"
+        $obj setall [$path cget -bg]
+        $obj blendobj [$path xslide] 0 [$path textobj]
+	set myCursorColor [$path cget -cursorcolor]
+        $obj line $cx 0 $cx $objh $myCursorColor
         set cx [expr {$cx + 1}]
-        $myObj line $cx 0 $cx $objh [$path cget -cursorcolor]
-        $path render $path
+        $obj line $cx 0 $cx $objh $myCursorColor
+        render $path
     }
 
     public method entryKeypress {path value keysym keycode} {
@@ -231,4 +238,15 @@ itcl::eclass ::ntk::classes::entry {
         requestSize $path [expr {$width + 2}] [expr {$height + 2}]
         return 1
     }
+
+    public method entryTrace {path} {
+puts stderr "entryTrace!$path!$constructing!"
+        if {$constructing} {
+	    return
+	}
+        entryTextCallback $path [$path cget -text]
+	entryDraw $path
+    }
+
 }
+

@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.5 2007/10/08 19:57:13 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.6 2007/10/12 21:09:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::eclass ::ntk::classes::window {
@@ -27,35 +27,33 @@
     private variable children [list]
     private variable manager [list]
     private variable redraw [list]
-    private variable destroy [list]
     private variable update 1
-    private variable toplevel 0
     private variable removeFromManager [list]
     private variable renderTreeData [list]
-    private variable bg [list]
-    private variable obj [list]
-    private variable path [list]
+
+    protected variable destroy [list]
+    protected variable toplevel 0
+    protected variable obj [list]
+    protected variable wpath [list]
 
 
-    public option -x -default 0 -configuremethod config
-    public option -y -default 0 -configuremethod config
-    public option -width -default 0 -configuremethod config
-    public option -height -default 0 -configuremethod config
-    public option -rotate -default 0 -configuremethod config
-
-    public option -reqwidth 0
-    public option -reqheight 0
-
-    public option -buttonpress [list]
-    public option -buttonrelease [list]
-    public option -keypress [list]
-    public option -keyrelease [list]
-    public option -motion [list]
+    public option -x -default 0 -configuremethod windowConfig
+    public option -y -default 0 -configuremethod windowConfig
+    public option -width -default 0 -configuremethod windowConfig
+    public option -height -default 0 -configuremethod windowConfig
+    public option -rotate -default 0 -configuremethod windowConfig
+    public option -reqwidth -default 0 -configuremethod windowConfig
+    public option -reqheight -default 0 -configuremethod windowConfig
+    public option -buttonpress -default [list] -configuremethod windowConfig
+    public option -buttonrelease -default [list] -configuremethod windowConfig
+    public option -keypress -default [list] -configuremethod windowConfig
+    public option -keyrelease -default [list] -configuremethod windowConfig
+    public option -motion -default [list] -configuremethod windowConfig
     
-    public method config {option value} {
-#puts stderr "config![namespace current]!$option!$value!"
+    public method windowConfig {option value} {
+#puts stderr "windowConfig![namespace current]!$option!$value!"
         set itcl_options($option) $value
-        windowDraw [path]
+        windowDraw $wpath
     }
 
     public proc windowParent {path} {
@@ -66,7 +64,7 @@
 	return $parent
     }
 
-    public proc windowToplevel {path} {
+    public proc toplevelPath {path} {
         set i [string first . $path 1]
 	if {$i < 0} {
 	    return $path
@@ -147,14 +145,6 @@
 	}
     }
 
-    public method bg {{value {}}} {
-	if {$value eq ""} {
-            return $bg
-	} else {
-	    set bg $value
-	}
-    }
-
     public method obj {{value {}}} {
 	if {$value eq ""} {
             return $obj
@@ -163,49 +153,43 @@
 	}
     }
 
-    public method path {{value {}}} {
+    public method wpath {{value {}}} {
 	if {$value eq ""} {
-            return $path
+            return $wpath
 	} else {
-	    set path $value
+	    set wpath $value
 	}
     }
 
     constructor {args} {
 #puts stderr "constructor OPTIONS![info exists itcl_options]!"
 	incr cntWindows
-	set path [string trimleft $this :]
-        if {[info exists windows($path)]} {
+	set wpath [string trimleft $this :]
+        if {[info exists windows($wpath)]} {
 	    return -code error "window $this already exists"
 	}
-        set windows($path) $path
-	set parent [windowParent $path]
+        set windows($wpath) $wpath
+	set parent [windowParent $wpath]
 	eval configure $args
-        set width [cget -width]
-        set height [cget -height]
-        set obj [megaimage-blank $width $height]
+        set obj [megaimage-blank $itcl_options(-width) $itcl_options(-height)]
 	#
 	# Append the child to the parent's window list
 	#
-	if {$path ne "."} {
+	if {$wpath ne "."} {
 	    set pchildren [$parent children]
-	    lappend pchildren $path
+	    lappend pchildren $wpath
 	    $parent children $pchildren
 	}
-	set destroy [list destroyWindow $path]
-        return $path
+	set destroy [list destroyWindow $wpath]
+        return $wpath
     }
 
     public method appendRedrawHandler {cmd} {
-        set l [redraw]
-	lappend l $cmd
-	redraw $l
+        lappend redraw $cmd
     }
     
-    public method appendDestroyHandler {path cmd} {
-        set l [$path destroy]
-	lappend l $cmd
-	$path destroy $l
+    public method appendDestroyHandler {cmd} {
+	lappend destroy $cmd
     }
     
     public method destroyWindow {path} {
@@ -234,25 +218,22 @@
          if {[$path removeFromManager] ne ""} {
              [$path removeFromManager] $path
          }
-
          # If this window was a parent for managed children then free the manager.
-#       set m [$path manager]
+#       set m $manager
 #       if {$m ne ""} {
 #          [$m free] $m
 #       }
-
         inputDestroy $path
 
         rename [$path obj] {}
         if {[$path renderTreeData] ne ""} {
             rename [$path renderTreeData] {}
         }
-
         unset windows($path)
     }
 
     public method dispatchRedraw {path} {
-        #puts stderr REDRAW:$path
+puts stderr "REDRAW:$path![$path redraw]!"
         foreach cmd [$path redraw] {
             uplevel #0 $cmd
         }
@@ -272,16 +253,16 @@
     }
 
     public method redrawWindow {path} {
-        [$path obj] setsize [$path width] [$path height]
+        [$path obj] setsize [$path cget -width] [$path cget -height]
     }
 
     public method remanageWindow {path} {
         set p [$path parent]
 	set myManager [$p manager]
 	if {$myManager eq ""} {
-	    $path width [$path reqwidth] height [$path reqheight]
-	    set w [$path width]
-	    set h [$path height]
+	    $path configure -width [$path cget -reqwidth] -height [$path cget -reqheight]
+	    set w [$path cget -width]
+	    set h [$path cget -height]
 	    if {$w <= 0} {set w 1}
 	    if {$h <= 0} {set h 1}
 	    [$path obj] setsize $w $h
@@ -308,6 +289,6 @@ puts stderr "myColor!$myColor!"
         } else {
             $obj setall $myColor
         }
-        $path render $path
+        render $path
     }
 }

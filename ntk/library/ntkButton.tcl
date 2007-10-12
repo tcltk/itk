@@ -14,34 +14,46 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.2 2007/10/08 19:57:12 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.3 2007/10/12 21:09:56 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::eclass ::ntk::classes::button {
     inherit ::ntk::classes::theme 
 
-    private variable buttonDraw [list]
     private variable textobj [list]
-    private variable destroy [list]
 
     public option -font -default {} -configuremethod buttonConfig
     public option -fontsize -default {} -configuremethod buttonConfig
     public option -text -default {} -configuremethod buttonConfig
-    public option -textcolor -default {} -configuremethod textCallback
+    public option -textcolor -default {} -configuremethod buttonConfig
     public option -textwidth -default 0 -configuremethod buttonConfig
     public option -textheight -default 0 -configuremethod buttonConfig
-    public option -bg -default {} -validatemethod verifyColor -configuremethod buttonConfig
-    public option -bd -default 1 -validatemethod verifyBorder -configuremethod buttonConfig
+    public option -bg -default {} -validatemethod verifyColor \
+            -configuremethod buttonConfig
+    public option -bd -default 1 -validatemethod verifyBorder \
+            -configuremethod buttonConfig
     public option -command -default {} -configuremethod buttonConfig
     public option -buttonpress -default {} -configuremethod buttonConfig
     public option -buttonrelease -default {} -configuremethod buttonConfig
     public option -state -default released -configuremethod stateCallback
 
     private method buttonConfig {option value} {
+puts stderr "buttonConfig!$option!$value!"
         set itcl_options($option) $value
-        if {$buttonDraw ne ""} {
-            $buttonDraw [path]
-        }
+        switch -- $option {
+	-font -
+	-fontsize -
+	-bg -
+	-bd -
+	-textcolor -
+	-state -
+	-text {
+	    buttonTrace $wpath
+	  }
+	default {
+             buttonDraw $wpath
+	  }
+	}
     }
 
     public method textobj {{value {}}} {
@@ -52,19 +64,9 @@ itcl::eclass ::ntk::classes::button {
 	}
     }
 
-    public method destroy {{value {}}} {
-	if {$value eq ""} {
-            return $destroy
-	} else {
-	    set destroy $value
-	}
-    }
-
     constructor {args} {
-        eval ::ntk::classes::window::constructor -width 1 -height 1
+        eval ::ntk::classes::window::constructor -width 60 -height 20
     } {
-	set itcl_options(-width) 20
-	set itcl_options(-height) 20
 	set itcl_options(-font) $defaultFont
 	set itcl_options(-fontsize) $defaultFontSize
 	set itcl_options(-textcolor) $defaultTextColor
@@ -74,27 +76,11 @@ itcl::eclass ::ntk::classes::button {
 	set itcl_options(-buttonrelease) buttonRelease
 	set textobj [megaimage-blank 20 20]
 	set destroy buttonDestroy
-	set path [path]
+puts stderr "ARGS!$args!"
 	eval configure $args
-	appendRedrawHandler [list $path buttonRedraw $path]
-
-	set buttonDraw buttonDraw
-	buttonDraw $path
-        return $path
-    }
-
-    public method buttonDraw {path} {
-puts stderr "buttonDraw!$path!"
-        set myObj [obj]
-	set myColor [$path cget -bg]
-	if {[llength $myColor] == 1} {
-	    $myObj setall $colors($myColor)
-	} else {
-	    $myObj setall $myColor
-	}
-        themeButtonDrawBorder $path
-        buttonDrawText $path
-        $path render $path
+	appendRedrawHandler [list $wpath buttonRedraw $wpath]
+	buttonDraw $wpath
+        return $wpath
     }
 
     public method buttonPress {path button x y globalx globaly} {
@@ -109,8 +95,11 @@ puts stderr "buttonDraw!$path!"
 	        ($y >= [$path cget -height])} {
             return
         }
-        if {($button == 1) && ([$path cget -command] ne "")} {
-            uplevel #0 [$path cget -command]
+        if {$button == 1} {
+	    set cmd [$path cget -command]
+	    if {$cmd ne ""} {
+                uplevel #0 $cmd
+	    }
         }
     }
 
@@ -118,30 +107,48 @@ puts stderr "buttonDraw!$path!"
         rename [$path textobj] {}
     }
 
-    public method buttonDrawPressed {path} {
-	set myObj [$path obj]
+    public method buttonDraw {path} {
+puts stderr "buttonDraw!$path!"
 	set myColor [$path cget -bg]
 	if {[llength $myColor] == 1} {
-	    $myObj setall $colors($myColor)
+	    $obj setall $colors($myColor)
 	} else {
-	    $myObj setall $myColor
+	    $obj setall $myColor
+	}
+        themeButtonDrawBorder $path
+puts stderr "after themeButtonDrawBorder"
+        buttonDrawText $path
+puts stderr "after buttonDrawText!$path!"
+        render $path
+    }
+
+    public method buttonDrawPressed {path} {
+	set myColor [$path cget -bg]
+	if {[llength $myColor] == 1} {
+	    $obj setall $colors($myColor)
+	} else {
+	    $obj setall $myColor
 	}
         themeButtonDrawPressedBorder $path
         buttonDrawText $path
-        $path render $path
+        render $path
     }
 
     public method buttonDrawText {path} {
-        set myObj [$path obj]
-        lassign [$myObj getsize] winwidth winheight
+        lassign [$obj getsize] winwidth winheight
         lassign [[$path textobj] getsize] textwidth textheight
+puts stderr "buttonDrawText!$path!$wpath!$winwidth!$winheight!$textwidth!$textheight!"
         set x [expr {($winwidth / 2) - ($textwidth / 2)}]
         set y [expr {($winheight / 2) - ($textheight / 2)}]
-        $myObj blendobj $x $y [$path textobj]
+        set myTextObj [$path textobj]
+puts stderr "BLEND!$obj!$x $y $myTextObj!"
+        [$path obj] blendobj $x $y $myTextObj
+puts stderr "after blendobj"
     }
 
     public method buttonRedraw {path} {
-        if {[$path -state] eq "released"} {
+puts stderr "buttonRedraw!$path!"
+        if {[$path cget -state] eq "released"} {
             buttonDraw $path
             return
         }
@@ -156,19 +163,25 @@ puts stderr "buttonDraw!$path!"
     }
 
     public method buttonTextCallback {path value} {
-        set rgbadata [freetype [$path cget -font] \
-                [$path cget -fontsize] $value [$path cget -textcolor]
-		width height offsetmap]
+puts stderr "buttonTextCallback!$path!$value!"
+        set rgbadata [freetype $itcl_options(-font) \
+                $itcl_options(-fontsize) $value $itcl_options(-textcolor) \
+		myWidth myHeight offsetmap]
+puts stderr "rgbadata!"
         set textobj [$path textobj]
-        $path configure -textwidth $width -textheight $height
+puts stderr "textobj!$textobj!$myWidth!$myHeight!"
+        $path configure -textwidth $myWidth -textheight $myHeight
         $textobj setdata $rgbadata
-        set width [expr {$width + 2 + ([$path cget -bd] * 2)}]
-        set height [expr {$height + 2 + ([$path cget -bd] * 2)}]
-        requestSize $path $width $height
+	set myBd [$path cget -bd]
+        set myWidth [expr {$myWidth + 2 + ($myBd * 2)}]
+        set myHeight [expr {$myHeight + 2 + ($myBd * 2)}]
+puts stderr "requestSize!$path!$myWidth!$myHeight!"
+        requestSize $path $myWidth $myHeight
         return 1
    }
 
     public method buttonTrace {path} {
+puts stderr "buttonTrace!$path!"
         buttonTextCallback $path [$path cget -text]
         buttonRedraw $path
     }

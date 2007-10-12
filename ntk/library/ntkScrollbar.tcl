@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.2 2007/10/08 19:57:13 wiede Exp $
+# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.3 2007/10/12 21:09:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::eclass ::ntk::classes::scrollbar {
@@ -123,7 +123,7 @@ itcl::eclass ::ntk::classes::scrollbar {
         requestSize $path.a $h $h
         requestSize $path.b $h $h
         requestSize $path.trough 1 $h
-        $path render $path $path.a $path.trough $path.b
+        render $path $path.a $path.trough $path.b
     }
 
     public method scrollbarDrawScale {path} {
@@ -155,7 +155,7 @@ itcl::eclass ::ntk::classes::scrollbar {
         requestSize $path.a $w $w
         requestSize $path.b $w $w
         requestSize $path.trough $w 1
-        $path render $path $path.a $path.trough $path.b
+        render $path $path.a $path.trough $path.b
     }
 
     public method scrollbarOrientCallback {path arg} {
