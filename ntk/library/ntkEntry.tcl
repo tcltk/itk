@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.3 2007/10/12 21:09:56 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.4 2007/10/13 17:56:43 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::eclass ::ntk::classes::entry {
@@ -41,7 +41,7 @@ itcl::eclass ::ntk::classes::entry {
     public option -buttonpress -default {} -configuremethod entryConfig
 
     private method entryConfig {option value} {
-puts stderr "entryConfig!$option!$value!"
+#puts stderr "entryConfig!$option!$value!"
         set itcl_options($option) $value
 	switch -- $option {
 	-text {
@@ -86,11 +86,10 @@ puts stderr "entryConfig!$option!$value!"
     }
 
     constructor {args} {
-#        freetype $defaultFont $defaultFontSize "_^" [list 0 0 0 255] myWidth myHeight
-#        eval ::ntk::classes::window::constructor -width 160 -height $myHeight
-        eval ::ntk::classes::window::constructor -width 60 -height 20 
+        freetype $defaultFont $defaultFontSize "_^" [list 0 0 0 255] \
+	        myWidth myHeight
+        eval ::ntk::classes::window::constructor -width 160 -height $myHeight
     } {
-puts stderr "CONST!$constructing!"
 	set itcl_options(-font) $defaultFont
 	set itcl_options(-fontsize) $defaultFontSize
 	set itcl_options(-textcolor) $defaultTextColor
@@ -99,11 +98,10 @@ puts stderr "CONST!$constructing!"
 	set itcl_options(-buttonpress) entryButtonpress
 	set textobj [megaimage-blank 1 1]
 	set destroy entryDestroy
-puts stderr "OPT!BG!$itcl_options(-bg)!$itcl_options(-width)!"
 	eval configure $args
 	appendRedrawHandler [list $wpath entryDraw $wpath]
 	set constructing 0
-	entryDraw $wpath
+	entryTrace $wpath
         return $wpath
     }
 
@@ -145,7 +143,8 @@ puts stderr "OPT!BG!$itcl_options(-bg)!$itcl_options(-width)!"
                 lappend cursormap $lasti $width
                 continue
             }
-            lappend cursormap $lasti [set lasti [expr {$cur + (($next - $cur) / 2)}]]
+	    set myLasti [expr {$cur + (($next - $cur) / 2)}]
+            lappend cursormap $lasti $myLasti
         }
 
         #
@@ -187,7 +186,6 @@ puts stderr "OPT!BG!$itcl_options(-bg)!$itcl_options(-width)!"
         if {$cx >= $myWidth} {
             $path xslide [expr {$myWidth - $cx}]
         } 
-puts stderr "BG![$path cget -bg]!"
         $obj setall [$path cget -bg]
         $obj blendobj [$path xslide] 0 [$path textobj]
 	set myCursorColor [$path cget -cursorcolor]
@@ -208,7 +206,9 @@ puts stderr "BG![$path cget -bg]!"
         backspace {
             set co [$path cursoroffset]
             incr co -1
-            $path configure -text [string range $myText 0 [expr {$co - 1}]][string range $myText [expr {$co + 1}] end]
+            $path configure -text [string range $myText 0 \
+	            [expr {$co - 1}]][string range $myText [expr {$co + 1}] \
+		    end]
             entryCursorIncrOffset $path -1
           }
         left {
@@ -219,7 +219,9 @@ puts stderr "BG![$path cget -bg]!"
           }
         delete {
             set co [$path cursoroffset]
-            $path configure -text [string range $myText 0 [expr {$co - 1}]][string range $myText [expr {$co + 1}] end]
+            $path configure -text [string range $myText 0 \
+	            [expr {$co - 1}]][string range $myText [expr {$co + 1}] \
+		    end]
           }
         return {
 	    return
@@ -229,21 +231,22 @@ puts stderr "BG![$path cget -bg]!"
     }
 
     public method entryTextCallback {path value} {
+#puts stderr "entryTextCallback!$path!$value!"
+	if {$constructing} {
+	    return
+	}
         set rgbadata [freetype [$path cget -font] \
                 [$path cget -fontsize] $value [$path cget -textcolor] \
-		width height offsetmap]
-        $path offsetmap $offsetmap
+		myWidth myHeight myOffsetmap]
+        $path offsetmap $myOffsetmap
         set textobj [$path textobj]
         $textobj setdata $rgbadata
-        requestSize $path [expr {$width + 2}] [expr {$height + 2}]
+        requestSize $path [expr {$myWidth + 2}] [expr {$myHeight + 2}]
         return 1
     }
 
     public method entryTrace {path} {
-puts stderr "entryTrace!$path!$constructing!"
-        if {$constructing} {
-	    return
-	}
+#puts stderr "entryTrace!$path!"
         entryTextCallback $path [$path cget -text]
 	entryDraw $path
     }
