@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.5 2007/10/08 19:57:12 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.6 2007/10/13 19:21:21 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
@@ -39,6 +39,7 @@ namespace eval ::ntk {
 set myDir [file dirname [::info script]]
 source [file join $myDir ntkHelpers.tcl]
 source [file join $myDir ntkRender.tcl]
+source [file join $myDir ntkInput.tcl]
 source [file join $myDir ntkGridBase.tcl]
 source [file join $myDir ntkWindow.tcl]
 source [file join $myDir ntkTheme.tcl]
@@ -52,7 +53,6 @@ source [file join $myDir ntkToplevel.tcl]
 #source [file join $myDir ntkGrid.tcl]
 #source [file join $myDir ntkClock.tcl]
 #source [file join $myDir ntkText.tcl]
-#source [file join $myDir ntkInput.tcl]
 
 proc ::ntk::button {args} {
     puts stderr "::ntk::button called !$args!"
