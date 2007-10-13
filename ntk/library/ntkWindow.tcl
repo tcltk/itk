@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.7 2007/10/13 20:08:25 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.8 2007/10/13 21:38:37 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::eclass ::ntk::classes::window {
@@ -233,13 +233,9 @@
     }
 
     public method dispatchRedraw {path} {
-puts stderr "dispatchRedraw:$path![$path redraw]!"
         foreach cmd [$path redraw] {
-puts stderr "calling!$cmd!"
             uplevel #0 $cmd
-puts stderr "calling END!$cmd!"
         }
-puts stderr "dispatchRedraw END"
     }
 
     public method raise {path} {
@@ -260,7 +256,6 @@ puts stderr "dispatchRedraw END"
     }
 
     public method remanageWindow {path} {
-puts stderr "remanageWindow start $path"
         set p [$path parent]
 	set myManager [$p manager]
 	if {$myManager eq ""} {
@@ -271,18 +266,14 @@ puts stderr "remanageWindow start $path"
 	    if {$h <= 0} {set h 1}
 	    [$path obj] setsize $w $h
 	    dispatchRedraw $path
-puts stderr "remanageWindow END 1 $path"
 	    return
 	}
         $myManager remanage] $p
-puts stderr "remanageWindow END 2 $path"
     }
 
     public method requestSize {path width height} {
-puts stderr "requestSize!$path!$width!$height!"
         $path configure -reqwidth $width -reqheight $height
 	remanageWindow $path
-puts stderr "requestSize END!$path!$width!$height!"
     }
 
     public method windowDraw {path} {

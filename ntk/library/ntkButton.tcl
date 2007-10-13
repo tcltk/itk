@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.5 2007/10/13 20:08:24 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.6 2007/10/13 21:38:36 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::eclass ::ntk::classes::button {
@@ -88,7 +88,7 @@ puts stderr "button!buttonPress called $x $y"
         if {$button == 1} {
             $path configure -state pressed
         }
-puts stderr "button!buttonPress END"
+#puts stderr "button!buttonPress END"
     }
 
     public method buttonRelease {path button x y globalx globaly} {
@@ -169,7 +169,7 @@ puts stderr "CMD!$cmd!"
     }
 
     public method buttonTextCallback {path value} {
-puts stderr "buttonTextCallback!$path!$value!"
+#puts stderr "buttonTextCallback!$path!$value!"
         set rgbadata [freetype $itcl_options(-font) \
                 $itcl_options(-fontsize) $value $itcl_options(-textcolor) \
 		myWidth myHeight offsetmap]
@@ -180,14 +180,14 @@ puts stderr "buttonTextCallback!$path!$value!"
         set myWidth [expr {$myWidth + 2 + ($myBd * 2)}]
         set myHeight [expr {$myHeight + 2 + ($myBd * 2)}]
         requestSize $path $myWidth $myHeight
-puts stderr "buttonTextCallback END!$path!$value!"
+#puts stderr "buttonTextCallback END!$path!$value!"
         return 1
    }
 
     public method buttonTrace {path} {
-puts stderr "buttonTrace!$path!"
+#puts stderr "buttonTrace!$path!"
         buttonTextCallback $path [$path cget -text]
         buttonRedraw $path
-puts stderr "buttonTrace END!$path!"
+#puts stderr "buttonTrace END!$path!"
     }
 }

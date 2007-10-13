@@ -13,6 +13,13 @@ proc eval_stdin {} {
     flush stdout
 }
 
+if {0} {
+proc ::callback {args} {
+puts stderr "callback!$args!"
+}
+foreach c [info commands] { trace add execution $c enter [list ::callback $c] }
+}
+
 set width 800
 set height 600
 set configure_pending 0
@@ -44,31 +51,6 @@ proc configureNow {winid} {
     set configure_pending 0
 }
 
-proc ntkInputKeyPress {args} {
-#    puts stderr "ntkInputKeyPress called!$args!"
-    ::ntk::classes::input::inputKeyPress {*}$args
-}
-
-proc ntkInputKeyRelease {args} {
-#    puts stderr "ntkInputKeyRelease called!$args!"
-    ::ntk::classes::input::inputKeyRelease {*}$args
-}
-
-proc ntkInputMousePress {args} {
-#    puts stderr "ntkInputMousePress called!$args!"
-    ::ntk::classes::input::inputMousePress {*}$args
-}
-
-proc ntkInputMouseRelease {args} {
-#    puts stderr "ntkInputMouseRelease called!$args!"
-    ::ntk::classes::input::inputMouseRelease {*}$args
-}
-
-proc ntkInputMotion {args} {
-    puts stderr "ntkInputMotion called!$args!"
-    ::ntk::classes::input::inputMotion {*}$args
-}
-
 set id [ntk-create-sys-window $width $height]
 ntk-set-title $id "ntkWidget Demo"
 
@@ -76,9 +58,9 @@ puts stderr "TOP"
 set top [ntk toplevel . -width $width -height $height]
 . id $id
 
-ntk-create-event-handler $id [list ntkInputKeyPress .] \
-       [list ntkInputKeyRelease .] [list ntkInputMotion .] \
-       [list ntkInputMousePress .] [list ntkInputMouseRelease .] \
+ntk-create-event-handler $id [list ntk keyPress .] \
+       [list ntk keyRelease .] [list ntk motion .] \
+       [list ntk mousePress .] [list ntk mouseRelease .] \
        [list dotConfigure .]
 
 ntk-move-sys-window $id 200 200

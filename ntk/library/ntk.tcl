@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.6 2007/10/13 19:21:21 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.7 2007/10/13 21:38:36 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
@@ -33,6 +33,11 @@ namespace eval ::ntk {
         theme ::ntk::theme \
         toplevel ::ntk::toplevel \
         window ::ntk::window \
+        keyPress ::ntk::inputKeyPress \
+        keyRelease ::ntk::inputKeyRelease \
+        mousePress ::ntk::inputMousePress \
+        mouseRelease ::ntk::inputMouseRelease \
+        motion ::ntk::inputMotion \
     ]
 }
 
@@ -117,6 +122,27 @@ proc ::ntk::toplevel {args} {
 proc ::ntk::window {args} {
     return [uplevel 1 ::ntk::classes::window {*}$args]
 }
+
+proc ::ntk::inputKeyPress {args} {
+    ::ntk::classes::input::inputKeyPress {*}$args
+}
+
+proc ::ntk::inputKeyRelease {args} {
+    ::ntk::classes::input::inputKeyRelease {*}$args
+}
+
+proc ::ntk::inputMousePress {args} {
+    ::ntk::classes::input::inputMousePress {*}$args
+}
+
+proc ::ntk::inputMouseRelease {args} {
+    ::ntk::classes::input::inputMouseRelease {*}$args
+}
+
+proc ::ntk::inputMotion {args} {
+    ::ntk::classes::input::inputMotion {*}$args
+}
+
     
 package provide ntkWidget 0.1
 
