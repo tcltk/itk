@@ -45,22 +45,22 @@ proc configureNow {winid} {
 }
 
 proc ntkInputKeyPress {args} {
-    puts stderr "ntkInputKeyPress called!$args!"
+#    puts stderr "ntkInputKeyPress called!$args!"
     ::ntk::classes::input::inputKeyPress {*}$args
 }
 
 proc ntkInputKeyRelease {args} {
-    puts stderr "ntkInputKeyRelease called!$args!"
+#    puts stderr "ntkInputKeyRelease called!$args!"
     ::ntk::classes::input::inputKeyRelease {*}$args
 }
 
 proc ntkInputMousePress {args} {
-    puts stderr "ntkInputMousePress called!$args!"
+#    puts stderr "ntkInputMousePress called!$args!"
     ::ntk::classes::input::inputMousePress {*}$args
 }
 
 proc ntkInputMouseRelease {args} {
-    puts stderr "ntkInputMouseRelease called!$args!"
+#    puts stderr "ntkInputMouseRelease called!$args!"
     ::ntk::classes::input::inputMouseRelease {*}$args
 }
 
@@ -100,8 +100,11 @@ puts stderr "w3Path!$w3Path!"
 .w3 configure -bg [list 255 150 150 255] -x 180 -y 150
 }
 
+proc bucmd {args} {
+puts stderr "bucmd called!$args!"
+}
 if {1} {
-set w4Path [ntk button .w4 -width 100 -height 20 -x 300 -y 50 -text button1 -textcolor [list [list 255 0 0 255]] -bg [list [list 199 234 0 255]] -bd 2]
+set w4Path [ntk button .w4 -width 100 -height 20 -x 0 -y 350 -text button1 -textcolor [list [list 255 0 0 255]] -bg [list [list 199 234 0 255]] -bd 2 -command bucmd]
 puts stderr "w4Path!$w4Path!"
 }
 

@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.5 2007/10/12 21:09:57 wiede Exp $
+# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.6 2007/10/13 20:08:25 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::eclass ::ntk::classes::render {
@@ -41,10 +41,11 @@
         $myObj setall [. cget -bg]
         renderTree $myObj .
         set myWinId [. id]
-puts stderr "NOW!ntk-put-image  $myWinId $myObj!"
+puts stderr "renderNow!ntk-put-image $myWinId $myObj!"
 	ntk-resize-image $myWinId [. cget -width] [. cget -height]
 	ntk-put-image  $myWinId $myObj
 	set rendering 0
+puts stderr "renderNow END"
     }
 
     protected method changeInTree {win} {
@@ -89,13 +90,13 @@ puts stderr "NOW!ntk-put-image  $myWinId $myObj!"
     public method renderTree {baseobj win} {
 puts stderr "renderTree!WIN!$win![$win children]!"
         foreach child [$win children] {
-puts stderr CHILD:$child
+#puts stderr CHILD:$child
             if {[$child renderTreeData] eq ""} {
                 $child renderTreeData [megaimage-blank 1 1]
             } 
             set back [$child renderTreeData]
             if {[changeInTree $child]} {
-puts stderr changeInChild:CHILD:$child
+#puts stderr changeInChild:CHILD:$child
                 $back setdata [[$child obj] getdata]
                 renderRecurse $back $child 0 0
                 if {[set r [$child cget -rotate]]} {
@@ -103,9 +104,9 @@ puts stderr changeInChild:CHILD:$child
                 }
                 $child update 0
            }
-puts stderr "BASE3!$baseobj!$back!"
            $baseobj blendobj [$child cget -x] [$child cget -y] $back
         }
+puts stderr "renderTree END!WIN!$win![$win children]!"
     }
 }
 

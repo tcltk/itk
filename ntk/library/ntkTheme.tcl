@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.3 2007/10/12 21:09:57 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.4 2007/10/13 20:08:25 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::eclass ::ntk::classes::theme {
@@ -34,17 +34,14 @@
 
     public proc themeDrawBorder {obj x y width height low high bd} {
         incr bd -1
-puts stderr "themeDrawBorder!$obj!$x!$y!$width!$height!$low!$high!$bd!"
-#set high [list 255 0 0 255]
-#set low [list 155 0 0 155]
-#set obj megaimageinst4
+#puts stderr "themeDrawBorder!$obj!$x!$y!$width!$height!$low!$high!$bd!"
         while {$bd >= 0} {
             set x1 [expr {$x + $bd}]
             set y1 [expr {$y + $bd}]
             set x2 [expr {($x + $width) - $bd - 1}]
             set y2 [expr {($y + $height) - $bd - 1}]
             #top line
-puts stderr "top!$obj!$x1!$y1!$x2!$y1!$high!$low!"
+#puts stderr "top!$obj!$x1!$y1!$x2!$y1!$high!$low!"
             $obj line $x1 $y1 $x2 $y1 $high
             #right line
             $obj line $x2 $y1 $x2 $y2 $low

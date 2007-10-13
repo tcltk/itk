@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.1 2007/10/13 19:21:21 wiede Exp $
+# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.2 2007/10/13 20:08:25 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::eclass ::ntk::classes::input {
@@ -69,7 +69,7 @@
 
     public proc inputMotion {win x y} {
         foreach path $input(activewindows) {
-            lassign [inputTranslateXyFromRoot $w $x $y] px py
+            lassign [inputTranslateXyFromRoot $path $x $y] px py
             set callback [$path cget -motion]
             if {$callback ne ""} {
                 uplevel #0 $callback $px $py $x $y
@@ -143,7 +143,7 @@
         set callback [$path cget -buttonpress]
 puts stderr "PRESS DISPATCH $path"
         if {$callback ne ""} {
-            lappend input(activewindows) $w
+            lappend input(activewindows) $path
             uplevel #0 $callback $button $x $y $globalx $globaly
         }
     }
@@ -203,8 +203,8 @@ puts stderr "PRESS DISPATCH $path"
 
     public proc inputMouseRelease {win button x y} {
         foreach path $input(activewindows) {
-            lassign [inputTranslateXyFromRoot $w $x $y] px py
-puts stderr "RELEASE $w $px $py"
+            lassign [inputTranslateXyFromRoot $path $x $y] px py
+puts stderr "RELEASE $path $px $py"
             set callback [$path cget -buttonrelease]
             if {$callback ne ""} {
                 uplevel #0 $callback $button $px $py $x $y

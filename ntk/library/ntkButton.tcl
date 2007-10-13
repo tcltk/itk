@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.4 2007/10/13 17:56:43 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.5 2007/10/13 20:08:24 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::eclass ::ntk::classes::button {
@@ -34,9 +34,7 @@ itcl::eclass ::ntk::classes::button {
     public option -bd -default 1 -validatemethod verifyBorder \
             -configuremethod buttonConfig
     public option -command -default {} -configuremethod buttonConfig
-    public option -buttonpress -default {} -configuremethod buttonConfig
-    public option -buttonrelease -default {} -configuremethod buttonConfig
-    public option -state -default released -configuremethod stateCallback
+    public option -state -default released -configuremethod buttonConfig
 
     private method buttonConfig {option value} {
 #puts stderr "buttonConfig!$option!$value!"
@@ -73,8 +71,9 @@ itcl::eclass ::ntk::classes::button {
 	set itcl_options(-textcolor) $defaultTextColor
 	set itcl_options(-bg) [defaultBackgroundColor]
 	set itcl_options(-bd) 1
-	set itcl_options(-buttonpress) buttonPress
-	set itcl_options(-buttonrelease) buttonRelease
+	set itcl_options(-buttonpress) [list $wpath buttonPress $wpath]
+puts stderr "itcl_options(-buttonpress)!$itcl_options(-buttonpress)!"
+	set itcl_options(-buttonrelease) [list $wpath buttonRelease $wpath]
 	set textobj [megaimage-blank 20 20]
 	set destroy buttonDestroy
 	eval configure $args
@@ -85,12 +84,15 @@ itcl::eclass ::ntk::classes::button {
     }
 
     public method buttonPress {path button x y globalx globaly} {
+puts stderr "button!buttonPress called $x $y"
         if {$button == 1} {
             $path configure -state pressed
         }
+puts stderr "button!buttonPress END"
     }
 
     public method buttonRelease {path button x y globalx globaly} {
+puts stderr "button!buttonRelease called $button $x $y"
         $path configure -state released
         if {($x < 0) || ($y < 0) || ($x >= [$path cget -width]) ||
 	        ($y >= [$path cget -height])} {
@@ -98,6 +100,7 @@ itcl::eclass ::ntk::classes::button {
         }
         if {$button == 1} {
 	    set cmd [$path cget -command]
+puts stderr "CMD!$cmd!"
 	    if {$cmd ne ""} {
                 uplevel #0 $cmd
 	    }
@@ -166,7 +169,7 @@ itcl::eclass ::ntk::classes::button {
     }
 
     public method buttonTextCallback {path value} {
-#puts stderr "buttonTextCallback!$path!$value!"
+puts stderr "buttonTextCallback!$path!$value!"
         set rgbadata [freetype $itcl_options(-font) \
                 $itcl_options(-fontsize) $value $itcl_options(-textcolor) \
 		myWidth myHeight offsetmap]
@@ -177,12 +180,14 @@ itcl::eclass ::ntk::classes::button {
         set myWidth [expr {$myWidth + 2 + ($myBd * 2)}]
         set myHeight [expr {$myHeight + 2 + ($myBd * 2)}]
         requestSize $path $myWidth $myHeight
+puts stderr "buttonTextCallback END!$path!$value!"
         return 1
    }
 
     public method buttonTrace {path} {
-#puts stderr "buttonTrace!$path!"
+puts stderr "buttonTrace!$path!"
         buttonTextCallback $path [$path cget -text]
         buttonRedraw $path
+puts stderr "buttonTrace END!$path!"
     }
 }
