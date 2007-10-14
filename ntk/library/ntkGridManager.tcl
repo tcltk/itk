@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGridManager.tcl,v 1.1.2.1 2007/10/14 18:45:19 wiede Exp $
+# RCS: @(#) $Id: ntkGridManager.tcl,v 1.1.2.2 2007/10/14 18:49:54 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::eclass ::ntk::classes::gridManager {
@@ -50,7 +50,7 @@
             -configuremethod geometryManagerConfig
 
     public method gridManagerConfig {option value} {
-puts stderr "gridManagerConfig!$option!$value!"
+#puts stderr "gridManagerConfig!$option!$value!"
         set itcl_options($option) $value
         if {!$constructing} {
 	    uplevel 1 $remanage
@@ -58,7 +58,6 @@ puts stderr "gridManagerConfig!$option!$value!"
     }
 
     public method setGet {what {value {}}} {
-puts stderr "SETGET!$what!"
 	if {$value eq ""} {
             return [set $what]
 	} else {
@@ -67,7 +66,6 @@ puts stderr "SETGET!$what!"
     }
 
     constructor {path args} {
-puts stderr "this!$this!"
 	set mySelf $this
 
 	::itcl::setcomponent $path geometryManager $this
