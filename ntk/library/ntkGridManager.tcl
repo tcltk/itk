@@ -14,19 +14,18 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGridManager.tcl,v 1.1.2.2 2007/10/14 18:49:54 wiede Exp $
+# RCS: @(#) $Id: ntkGridManager.tcl,v 1.1.2.3 2007/10/14 23:42:56 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::eclass ::ntk::classes::gridManager {
-    inherit ::ntk::classes::helpers ::ntk::classes::render 
-#    ::ntk::classes::grid
+    inherit ::ntk::classes::helpers ::ntk::classes::render ::ntk::classes::grid
 
     public component mySelf
 
     private variable constructing 1
 
     protected variable grid [list]
-    protected variable remanage gridLayout
+    protected variable remanage layout
     protected variable peakrow 0
     protected variable peakcolumn 0
     protected variable free gridFree
@@ -39,21 +38,21 @@
 
     public option -sticky -default {} -configuremethod gridManagerConfig
     public option -columnspan -default 1 \
-            -configuremethod geometryManagerConfig
+            -configuremethod gridManagerConfig
     public option -rowspan -default 1 \
-            -configuremethod geometryManagerConfig
+            -configuremethod gridManagerConfig
     public option -columnratio -default 0 \
-            -configuremethod geometryManagerConfig
+            -configuremethod gridManagerConfig
     public option -rowratio -default 0 \
-            -configuremethod geometryManagerConfig
+            -configuremethod gridManagerConfig
     public option -slot -default [list 0 0] \
-            -configuremethod geometryManagerConfig
+            -configuremethod gridManagerConfig
 
     public method gridManagerConfig {option value} {
 #puts stderr "gridManagerConfig!$option!$value!"
         set itcl_options($option) $value
         if {!$constructing} {
-	    uplevel 1 $remanage
+#	    uplevel 1 $remanage
         }
     }
 
@@ -69,15 +68,25 @@
 	set mySelf $this
 
 	::itcl::setcomponent $path geometryManager $this
-	::itcl::adddelegatedoption $path delegate option -sticky to geometryManager
-	::itcl::adddelegatedoption $path delegate option -columnspan to geometryManager
-	::itcl::adddelegatedoption $path delegate option -rowspan to geometryManager
-	::itcl::adddelegatedoption $path delegate option -columnratio to geometryManager
-	::itcl::adddelegatedoption $path delegate option -rowratio to geometryManager
-	::itcl::adddelegatedoption $path delegate option -slot to geometryManager
-	::itcl::adddelegatedmethod $path delegate method peakcolumn to geometryManager
+	::itcl::adddelegatedoption $path delegate option -sticky \
+	        to geometryManager
+	::itcl::adddelegatedoption $path delegate option -columnspan \
+	        to geometryManager
+	::itcl::adddelegatedoption $path delegate option -rowspan \
+	        to geometryManager
+	::itcl::adddelegatedoption $path delegate option -columnratio \
+	        to geometryManager
+	::itcl::adddelegatedoption $path delegate option -rowratio \
+	        to geometryManager
+	::itcl::adddelegatedoption $path delegate option -slot \
+	        to geometryManager
+	::itcl::adddelegatedmethod $path delegate method peakcolumn \
+	        to geometryManager
+	::itcl::adddelegatedmethod $path delegate method peakrow \
+	        to geometryManager
         set constructing 0
-#        $remanage
+#       $remanage
+        return $this
     }
 }
 

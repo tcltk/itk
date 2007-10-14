@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.8 2007/10/14 18:45:15 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.9 2007/10/14 23:42:56 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
@@ -44,9 +44,10 @@ namespace eval ::ntk {
 set myDir [file dirname [::info script]]
 source [file join $myDir ntkHelpers.tcl]
 source [file join $myDir ntkRender.tcl]
+source [file join $myDir ntkGrid.tcl]
 source [file join $myDir ntkGridManager.tcl]
 source [file join $myDir ntkInput.tcl]
-source [file join $myDir ntkGridBase.tcl]
+#source [file join $myDir ntkGridBase.tcl]
 source [file join $myDir ntkWindow.tcl]
 source [file join $myDir ntkTheme.tcl]
 source [file join $myDir ntkScrollbar.tcl]
@@ -56,7 +57,6 @@ source [file join $myDir ntkFrame.tcl]
 source [file join $myDir ntkLabel.tcl]
 source [file join $myDir ntkListbox.tcl]
 source [file join $myDir ntkToplevel.tcl]
-#source [file join $myDir ntkGrid.tcl]
 #source [file join $myDir ntkClock.tcl]
 #source [file join $myDir ntkText.tcl]
 
@@ -84,7 +84,7 @@ proc ::ntk::frame {args} {
 }
     
 proc ::ntk::grid {args} {
-    return [uplevel 1 ::ntk::classes::grid {*}$args]
+    return [uplevel 1 ::ntk::classes::grid::grid {*}$args]
 }
     
 proc ::ntk::input {args} {

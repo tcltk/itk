@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkToplevel.tcl,v 1.1.2.6 2007/10/12 21:09:57 wiede Exp $
+# RCS: @(#) $Id: ntkToplevel.tcl,v 1.1.2.7 2007/10/14 23:42:56 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::eclass ::ntk::classes::toplevel {
@@ -25,7 +25,7 @@ itcl::eclass ::ntk::classes::toplevel {
     public option -bg -default [list 16 33 65 255] \
             -validatemethod verifyColor -configuremethod toplevelConfig
 
-    private method toplevelConfig {option value} {
+    public method toplevelConfig {option value} {
         set itcl_options($option) $value
     }
 

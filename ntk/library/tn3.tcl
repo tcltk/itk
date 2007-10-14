@@ -13,18 +13,18 @@ proc eval_stdin {} {
     flush stdout
 }
 
-set width 800
-set height 600
+set wdth 800
+set hght 600
 set configure_pending 0
 
 proc topConfigure {winid x y width height} {
 puts stderr "global configure called"
-    global configure configure_pending
+    global cfg configure_pending
 
     if {$width == [. cget -width] && $height == [. cget -height]} {
         return
     }
-    set configure [list $width $height]
+    set cfg [list $width $height]
     if {$configure_pending} {
         return
     }
@@ -34,25 +34,26 @@ puts stderr "global configure called"
 
 proc configureNow {winid} {
 puts stderr "global configureNow called"
-    global configure configure_pending
+    global cfg configure_pending
 
-    lassign $configure width height
+    lassign $cfg w h
     set obj [. obj]
-    $obj setsize $width $height
-    . configure -width $width -height $height
+    $obj setsize $w $h
+    . configure -width $w -height $h
     set rat [expr {$width / 7.0}]
-    ntk_request-size .left [expr {int($rat)}] $height
-    ntk_request-size .right [expr {round($rat * 6)}] $height
+    ntk_request-size .left [expr {int($rat)}] $h
+    ntk_request-size .right [expr {round($rat * 6)}] $h
     set configure_pending 0
 }
 
-set id [ntk-create-sys-window $width $height]
+set id [ntk-create-sys-window $wdth $hght]
 ntk-set-title $id "ntkWidget Demo"
 
 puts stderr "TOP"
-set top [ntk toplevel .  -width $width -height $height -bg [list [list 255 255 255 0]]]
+set top [ntk toplevel .  -width $wdth -height $hght -bg [list [list 255 255 255 0]]]
 . id $id
 
+puts stderr "TOP DONE"
 ntk-create-event-handler $id [list ntk keyPress .] \
        [list ntk keyRelease .] [list ntk motion .] \
        [list ntk mousePress .] [list ntk mouseRelease .] \
@@ -71,20 +72,14 @@ geo geo1
 
 set w2Path [ntk button .w2 -width 100 -height 100 -x 50 -y 50 -text arnulf -textcolor [list [list 0 0 0 255]] -bd 2 -bg [list [list 255 255 255 255]]]
 puts stderr "w2Path!$w2Path![$w2Path obj]!"
+if {0} {
 set xx [::ntk::classes::gridManager gd1 $w2Path]
 puts stderr "XX!$xx!"
-if {0} {
-::itcl::setcomponent $w2Path geometryManager geo1
-set compInfo [$w2Path info component geometryManager]
-set compClass [namespace qualifiers [lindex $compInfo 0]]
-puts stderr "compClass!$compClass!"
-::itcl::adddelegatedoption $w2Path delegate option -sticky to geometryManager
-}
+puts stderr "COLUMNSPAN![$w2Path configure -columnspan 2]!"
 puts stderr "COLUMNSPAN![$w2Path cget -columnspan]!"
 puts stderr "PEAKCOLUMN![$w2Path peakcolumn]!"
-#[$w2Path obj] line 5 5 80 5 [list 255 0 0 255]
-#[$w2Path obj] line 5 6 80 6 [list 0 0 0 0]
-#$w2Path render $w2Path
+}
+ntk grid $w2Path
 
 puts stderr "setting eval-stdin"
 fileevent stdin readable eval_stdin
