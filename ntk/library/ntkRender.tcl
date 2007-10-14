@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.7 2007/10/13 21:38:37 wiede Exp $
+# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.8 2007/10/14 18:45:20 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::eclass ::ntk::classes::render {
@@ -48,12 +48,15 @@
 #puts stderr "renderNow END"
     }
 
-    protected method changeInTree {win} {
-#puts stderr "changeInTree!$win![$win update]![$win children]!"
-        if {[$win update]} {
+    protected method changeInTree {path} {
+#puts stderr "changeInTree!$win![$path update]![$path children]!"
+	if {![$path cget -visible]} {
+	    return 0
+	}
+        if {[$path update]} {
             return 1
         }
-        foreach child [$win children] {
+        foreach child [$path children] {
             if {[changeInTree $child]} {
                 return 1
             }
@@ -61,9 +64,12 @@
         return 0
     }
 
-    protected method renderRecurse {baseobj win x y} {
-#puts stderr "renderRecurse!$baseobj!$win!$x!$y![$win children]!"
-        foreach child [$win children] {
+    protected method renderRecurse {baseobj path x y} {
+#puts stderr "renderRecurse!$baseobj!$path!$x!$y![$path children]!"
+        foreach child [$path children] {
+	    if {![$child cget -visible]} {
+	        continue
+	    }
             set cx [expr {$x + [$child cget -x]}]
             set cy [expr {$y + [$child cget -y]}]
             set r [$child cget -rotate]
@@ -87,10 +93,13 @@
         } 
     }
 
-    public method renderTree {baseobj win} {
-#puts stderr "renderTree!WIN!$win![$win children]!"
-        foreach child [$win children] {
+    public method renderTree {baseobj path} {
+#puts stderr "renderTree!WIN!$path![$path children]!"
+        foreach child [$path children] {
 #puts stderr CHILD:$child
+	    if {![$child cget -visible]} {
+	        continue
+	    }
             if {[$child renderTreeData] eq ""} {
                 $child renderTreeData [megaimage-blank 1 1]
             } 
@@ -106,7 +115,7 @@
            }
            $baseobj blendobj [$child cget -x] [$child cget -y] $back
         }
-#puts stderr "renderTree END!WIN!$win![$win children]!"
+#puts stderr "renderTree END!WIN!$win![$path children]!"
     }
 }
 

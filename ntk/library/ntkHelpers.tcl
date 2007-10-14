@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.5 2007/10/12 21:09:57 wiede Exp $
+# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.6 2007/10/14 18:45:19 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::eclass ::ntk::classes::helpers {
@@ -88,6 +88,17 @@ puts stderr "COL!$colors($lcvalue)!"
 	}
         return 1
     }
+
+    protected proc verifyBoolean {option value} {
+        if {$value < 0} {
+	    return -code error "invalid boolean value: $value"
+	}
+        if {![string is boolean -strict $value]} {
+	    return -code error "invalid boolean value: $value"
+	}
+        return 1
+    }
+
     public proc focus {path} {
         set focusList [list $path]
     }

@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.3 2007/10/13 21:38:36 wiede Exp $
+# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.4 2007/10/14 18:45:20 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::eclass ::ntk::classes::input {
@@ -50,6 +50,7 @@
     }
 
     public proc inputKeyPress {win key keysym keycode} {
+puts stderr "inputKeyPress!$win!$key!$keysym!$keycode!$focusList!"
         foreach path $focusList {
             set callback [$path cget -keypress]
             if {$callback ne ""} {
@@ -104,8 +105,8 @@
                 set px [expr {$px - $xmod}]
                 set py [expr {$py - $ymod}]
                 inputRotatePoint $px $py $myRotate pxx pyy
-                set px [expr {$pxx + $x1 + ($myWidth] / 2)}]
-                set py [expr {$pyy + $y1 + ($myHeight] / 2)}]
+                set px [expr {$pxx + $x1 + ($myWidth / 2)}]
+                set py [expr {$pyy + $y1 + ($myHeight / 2)}]
             }
             if {$px >= $x1 && $px < $x2 && $py >= $y1 && $py < $y2} {
                 set localx [expr {$px - $x1}]
@@ -280,7 +281,7 @@
 	    set myHeight [$c cget -height]
 	    set myRotate [$c cget -rotate]
             if {$myRotate} {
-                inputRotationSize [expr {3.14159 * $myRotate] / 180}] \
+                inputRotationSize [expr {3.14159 * $myRotate / 180}] \
                         $myWidth $myHeight newwidth newheight
                 set xmod [expr {$x1 + $newwidth / 2}]
                 set ymod [expr {$y1 + $newheight / 2}]

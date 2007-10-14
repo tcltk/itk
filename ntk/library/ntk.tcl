@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.7 2007/10/13 21:38:36 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.8 2007/10/14 18:45:15 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
@@ -44,6 +44,7 @@ namespace eval ::ntk {
 set myDir [file dirname [::info script]]
 source [file join $myDir ntkHelpers.tcl]
 source [file join $myDir ntkRender.tcl]
+source [file join $myDir ntkGridManager.tcl]
 source [file join $myDir ntkInput.tcl]
 source [file join $myDir ntkGridBase.tcl]
 source [file join $myDir ntkWindow.tcl]

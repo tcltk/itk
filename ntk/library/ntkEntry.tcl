@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.4 2007/10/13 17:56:43 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.5 2007/10/14 18:45:16 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::eclass ::ntk::classes::entry {
@@ -94,8 +94,8 @@ itcl::eclass ::ntk::classes::entry {
 	set itcl_options(-fontsize) $defaultFontSize
 	set itcl_options(-textcolor) $defaultTextColor
 	set itcl_options(-bg) [list 255 255 255 255]
-	set itcl_options(-keypress) entryKeypress
-	set itcl_options(-buttonpress) entryButtonpress
+	set itcl_options(-keypress) [list $wpath entryKeypress $wpath]
+	set itcl_options(-buttonpress) [list $wpath entryButtonpress $wpath]
 	set textobj [megaimage-blank 1 1]
 	set destroy entryDestroy
 	eval configure $args
@@ -106,6 +106,7 @@ itcl::eclass ::ntk::classes::entry {
     }
 
     public method entryButtonpress {path button x y globalx globaly} {
+puts stderr "entryButtonpress"
         foreach w [getFocus] {
             if {$w eq $path} {
                 entryCursorSet $path [expr {$x - [$path xslide]}]
@@ -116,6 +117,7 @@ itcl::eclass ::ntk::classes::entry {
     }
 
     public method entryCursorIncrOffset {path i} {
+puts stderr "entryCursorIncrOffset"
         set co [$path cursoroffset]
         if {(($i < 0) && ($co > 0)) || (($i > 0) && 
                (($co < [string length [$path cget -text]]))} {
@@ -196,6 +198,7 @@ itcl::eclass ::ntk::classes::entry {
     }
 
     public method entryKeypress {path value keysym keycode} {
+puts stderr "entryKeypress!$path!$value!$keysym!$keycode!"
         set myText [$path cget -text]
         switch -- $keysym {
         normal {

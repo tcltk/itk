@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.8 2007/10/13 21:38:37 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.9 2007/10/14 18:45:20 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::eclass ::ntk::classes::window {
@@ -36,6 +36,9 @@
     protected variable obj [list]
     protected variable wpath [list]
 
+    public component geometryManager
+    public component verticalScrollbar
+    public component horizontalScrollbar
 
     public option -x -default 0 -configuremethod windowConfig
     public option -y -default 0 -configuremethod windowConfig
@@ -49,6 +52,8 @@
     public option -keypress -default [list] -configuremethod windowConfig
     public option -keyrelease -default [list] -configuremethod windowConfig
     public option -motion -default [list] -configuremethod windowConfig
+    public option -visible -default 1 -validatemethod verifyBoolean \
+            -configuremethod windowConfig
     
     public method windowConfig {option value} {
 #puts stderr "windowConfig![namespace current]!$option!$value!"
@@ -181,6 +186,9 @@
 	    $parent children $pchildren
 	}
 	set destroy [list destroyWindow $wpath]
+	set geometryManager [list]
+	set verticalScrollbar [list]
+	set horizontalScrollbar [list]
         return $wpath
     }
 
@@ -288,5 +296,9 @@
             $obj setall $myColor
         }
         render $path
+    }
+
+    public method setGeometryManager {manager} {
+        set geometryManager $manager
     }
 }

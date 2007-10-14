@@ -82,11 +82,14 @@ puts stderr "w3Path!$w3Path!"
 .w3 configure -bg [list 255 150 150 255] -x 180 -y 150
 }
 
+set ::numbucalls 0
 proc bucmd {args} {
-puts stderr "bucmd called!$args!"
+    incr ::numbucalls
+puts stderr "bucmd called!$args!$::numbucalls"
+    .w4 configure -text buttonpress$::numbucalls
 }
 if {1} {
-set w4Path [ntk button .w4 -width 100 -height 20 -x 0 -y 350 -text button1 -textcolor [list [list 255 0 0 255]] -bg [list [list 199 234 0 255]] -bd 2 -command bucmd]
+set w4Path [ntk button .w4 -rotate 30 -width 100 -height 20 -x 0 -y 350 -text buttonpress0 -textcolor [list [list 255 0 0 255]] -bg [list [list 199 234 0 255]] -bd 2 -command bucmd]
 puts stderr "w4Path!$w4Path!"
 }
 

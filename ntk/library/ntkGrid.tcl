@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.2 2007/10/08 19:57:13 wiede Exp $
+# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.3 2007/10/14 18:45:16 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::nwidget ::ntk::classes::grid {
@@ -114,8 +114,8 @@ itcl::nwidget ::ntk::classes::grid {
     protected method layout {parent} {
         set m [$parent configure -manager]
         set grid [$m getGridValue grid]
-        set pwidth [$parent configure -width]
-        set pheight [$parent configure -height]
+        set pwidth [$parent cget -width]
+        set pheight [$parent cget -height]
         if {$pwidth <= 0 || $pheight <= 0} {
 	    return
         }
@@ -124,7 +124,7 @@ itcl::nwidget ::ntk::classes::grid {
             set col [list]
             for {set r 0} {$r < [$m peakrow]} {incr r} {
                 set cells [lindex $grid $r $c]
-                if {![llength $cells]} {
+                if {[llength $cells] == 0} {
 	            continue
 	        }
                 lappend col {*}$cells
@@ -140,7 +140,7 @@ itcl::nwidget ::ntk::classes::grid {
         foreach row $grid {
              set rbuf [list]
              foreach cells $row {
-                 if {![llength $cells]} {
+                 if {[llength $cells] == 0} {
 	             continue
 	         }
                  lappend rbuf {*}$cells
@@ -170,9 +170,9 @@ dumpSizes
                 if {[$w $spankey] > 1} {
 	            continue
                 }
-                set s [lindex [$w configure -slot] $slotoffset]
-                set ratio [expr {[$w configure $reqdim] * 100 / $psize}]
-                if {[lsearch -exact [$w -sticky] $wdir] >= 0} {
+                set s [lindex [$w cget -slot] $slotoffset]
+                set ratio [expr {[$w cget $reqdim] * 100 / $psize}]
+                if {[lsearch -exact [$w cget -sticky] $wdir] >= 0} {
                     set sticky($s) 1
                 }
                 if {![info exists ratios($s)] || $ratio > $ratios($s)} {
@@ -184,15 +184,15 @@ dumpSizes
         # Now handle the multiple span windows.
         foreach dim $worklist {
             foreach w $dim {
-                if {1 == [$w $spankey]} {
+                if {[$w $spankey] == 1} {
 		    continue
 	        }
-                set s [lindex [$w configure -slot] $slotoffset]
+                set s [lindex [$w cget -slot] $slotoffset]
                 set es [expr {$s + [$w $spankey]}]
-                set st [expr {[lsearch -exact [$w configure -sticky] $wdir] >= 0}]
+                set st [expr {[lsearch -exact [$w cget -sticky] $wdir] >= 0}]
                 for {set i $s} {$i < $es} {incr i} {
                     if {![info exists ratios($i)]} {
-                        set wratio [expr {[$w configure $reqdim] * 100 / $psize}]
+                        set wratio [expr {[$w cget $reqdim] * 100 / $psize}]
                         for {set subi $s} {$subi < $es} {incr subi} {
                             if {[info exists ratios($subi)]} {
                                 set wratio [expr {$wratio - $ratios($subi)}]
@@ -247,8 +247,8 @@ dumpSizes
         #Set the size for this dimension of the widget.
         foreach dim $worklist {
             foreach w $dim {
-                set s [lindex [$w configure -slot] $slotoffset]
-                set es [expr {$s + [$w configure $spankey]}]
+                set s [lindex [$w cget -slot] $slotoffset]
+                set es [expr {$s + [$w cget $spankey]}]
                 set totalsize 0
                 for {set i $s} {$i < $es} {incr i} {
                     incr totalsize $sizes($i)
@@ -262,8 +262,8 @@ dumpSizes
     }
 
     protected method layoutXy {xsizesvar ysizesvar} {
- upvar $xsizesvar xsizes
- upvar $ysizesvar ysizes
+        upvar $xsizesvar xsizes
+        upvar $ysizesvar ysizes
 
         foreach row $grid {
             foreach cells $row {
@@ -271,7 +271,7 @@ dumpSizes
                     if {$w eq ""} {
 		        continue
                     }
-                    lassign [$w configure-slot] xslot yslot
+                    lassign [$w cget -slot] xslot yslot
                     set x 0
 		    set y 0
                     for {set xi 0} {$xi < $xslot} {incr xi} {
@@ -291,7 +291,7 @@ dumpSizes
     }
 
     protected method listSet {list_var i value} {
- upvar $list_var list
+        upvar $list_var list
 
         if {[llength $list] >= $i} {
             lappend list $value
@@ -305,7 +305,7 @@ dumpSizes
             foreach cells $row {
                 foreach w $cells {
                     #Resize the backing megaimage obj.
-                    [$w obj] setsize [$w configure -width] [$w configure -height]
+                    [$w obj] setsize [$w cget -width] [$w cget -height]
                     #Trigger a redraw of the widget.
                     redraw $w
                 }
@@ -318,15 +318,16 @@ dumpSizes
     }
 
     protected method remove {w} {
-        set m [[$w configure -parent] configure -manager]
+        set m [[$w cget -parent] cget -manager]
         set grid [$m getGridValue grid]
         removeWidget grid $w
-        layout [$w configure -parent]
+        layout [$w cget -parent]
     }
 
     protected method removeWidget {gridvar w} {
- upvar $gridvar grid
-        lassign [$w configure -slot] c r
+        upvar $gridvar grid
+
+        lassign [$w cget -slot] c r
         set row [lindex $grid $r]
         set cells [lindex $row $c]
         set i [lsearch -exact $cells $w]
@@ -349,7 +350,7 @@ dumpSizes
     }
 
     protected method setPeak {m peaktype peak} {
-        if {$peak > [$m configire -$peaktype]} {
+        if {$peak > [$m cget -$peaktype]} {
             $m $peaktype $peak
         }
     }
@@ -365,13 +366,13 @@ dumpSizes
         if {![string is integer -strict $r]} {
             return -code error "invalid row for slot (not an integer): $r"
         }
-        set p [$w configure -parent]
-        set grid [[$p configure -manager] getGridValue grid]
+        set p [$w cget -parent]
+        set grid [[$p cget -manager] getGridValue grid]
 
         removeWidget grid $w
         insertWidget grid $w $c $r
  
-        [$p configure -manager] grid $grid
+        [$p cget -manager] grid $grid
  
         #
         # There is a -slot trace, so when this completes successfully,
@@ -400,11 +401,12 @@ dumpSizes
     }
 
     protected method isSticky {w arg} {
-        return [expr {[lsearch -exact [$w configure -sticky] $arg] >= 0}]
+        return [expr {[lsearch -exact [$w cget -sticky] $arg] >= 0}]
     }
 
     protected method sumRatios {arname} {
- upvar $arname ar
+        upvar $arname ar
+
         set s 0
         foreach {key value} [array get ar] {
             incr s $value
@@ -415,8 +417,8 @@ dumpSizes
     protected method grid {w args} {
         # See if the parent has a manager object already.
         # Create a new grid manager object if there isn't one already.
-        set p [$w configure -parent]
-        if {[$p configure -manager] eq ""} {
+        set p [$w cget -parent]
+        if {[$p cget -manager] eq ""} {
          set m [structure]
          $m \
            grid [list] \
@@ -425,7 +427,7 @@ dumpSizes
            peakcolumn 0 \
            free NS__grid-free
        
-         $p _manager $m 
+            $p manager $m 
         }
         # Unlock and initialize the grid data for the window.
  $w \
@@ -446,10 +448,10 @@ dumpSizes
         }
 
         # Get the manager and set the peaks.
-        set m [[$w configure -parent] configure -manager]
-        lassign [$w configure -slot] c r
-        setPeak $m peakrow [expr {$r + [$w configure -rowspan]}]
-        setPeak $m peakcolumn [expr {$c + [$w configure -columnspan]}]
+        set m [[$w cget -parent] cget -manager]
+        lassign [$w cget -slot] c r
+        setPeak $m peakrow [expr {$r + [$w cget -rowspan]}]
+        setPeak $m peakcolumn [expr {$c + [$w cget -columnspan]}]
         # Get the grid prior to insertion from the parent.
         set grid [$m getGridValue grid]
         insertWidget grid $w $c $r
