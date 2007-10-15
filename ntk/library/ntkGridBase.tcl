@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGridBase.tcl,v 1.1.2.2 2007/10/08 19:57:13 wiede Exp $
+# RCS: @(#) $Id: ntkGridBase.tcl,v 1.1.2.3 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
-::itcl::eclass ::ntk::classes::gridBase {
+::itcl::extendedclass ::ntk::classes::gridBase {
     inherit ::ntk::classes::render
 
     public variable grid [list]

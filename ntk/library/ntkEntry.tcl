@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.5 2007/10/14 18:45:16 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.6 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
-itcl::eclass ::ntk::classes::entry {
+itcl::extendedclass ::ntk::classes::entry {
     inherit ::ntk::classes::theme 
 
     private variable constructing 1

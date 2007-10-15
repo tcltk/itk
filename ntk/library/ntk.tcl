@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.9 2007/10/14 23:42:56 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.10 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
@@ -62,7 +62,7 @@ source [file join $myDir ntkToplevel.tcl]
 
 proc ::ntk::button {args} {
     puts stderr "::ntk::button called !$args!"
-    return [uplevel 1 ::ntk::classes::button {*}$args]
+    return [uplevel 1 ::ntk::classes::button $args]
 }
     
 proc ::ntk::clock {args} {
@@ -71,20 +71,20 @@ proc ::ntk::clock {args} {
     
 proc ::ntk::entry {args} {
     puts stderr "::ntk::entry called !$args!"
-    return [uplevel 1 ::ntk::classes::entry {*}$args]
+    return [uplevel 1 ::ntk::classes::entry $args]
 }
     
 proc ::ntk::focus {args} {
     puts stderr "::ntk::focus called !$args!"
-    return [uplevel 1 ::ntk::classes::focus {*}$args]
+    return [uplevel 1 ::ntk::classes::focus $args]
 }
     
 proc ::ntk::frame {args} {
-    return [uplevel 1 ::ntk::classes::frame {*}$args]
+    return [uplevel 1 ::ntk::classes::frame $args]
 }
     
 proc ::ntk::grid {args} {
-    return [uplevel 1 ::ntk::classes::grid::grid {*}$args]
+    return [uplevel 1 ::ntk::classes::grid::grid $args]
 }
     
 proc ::ntk::input {args} {
@@ -93,11 +93,12 @@ proc ::ntk::input {args} {
     
 proc ::ntk::label {args} {
     puts stderr "::ntk::label called !$args!"
-    return [uplevel 1 ::ntk::classes::label {*}$args]
+    return [uplevel 1 ::ntk::classes::label $args]
 }
     
 proc ::ntk::listbox {args} {
     puts stderr "::ntk::listbox called !$args!"
+    return [uplevel 1 ::ntk::classes::listbox $args]
 }
     
 proc ::ntk::render {args} {
@@ -106,6 +107,7 @@ proc ::ntk::render {args} {
     
 proc ::ntk::scrollbar {args} {
     puts stderr "::ntk::scrollbar called !$args!"
+    return [uplevel 1 ::ntk::classes::scrollbar $args]
 }
     
 proc ::ntk::text {args} {
@@ -117,31 +119,31 @@ proc ::ntk::theme {args} {
 }
     
 proc ::ntk::toplevel {args} {
-    return [uplevel 1 ::ntk::classes::toplevel {*}$args]
+    return [uplevel 1 ::ntk::classes::toplevel $args]
 }
     
 proc ::ntk::window {args} {
-    return [uplevel 1 ::ntk::classes::window {*}$args]
+    return [uplevel 1 ::ntk::classes::window $args]
 }
 
 proc ::ntk::inputKeyPress {args} {
-    ::ntk::classes::input::inputKeyPress {*}$args
+    return [uplevel 1 ::ntk::classes::input::inputKeyPress $args]
 }
 
 proc ::ntk::inputKeyRelease {args} {
-    ::ntk::classes::input::inputKeyRelease {*}$args
+    return [uplevel 1 ::ntk::classes::input::inputKeyRelease $args]
 }
 
 proc ::ntk::inputMousePress {args} {
-    ::ntk::classes::input::inputMousePress {*}$args
+    return [uplevel 1 ::ntk::classes::input::inputMousePress $args]
 }
 
 proc ::ntk::inputMouseRelease {args} {
-    ::ntk::classes::input::inputMouseRelease {*}$args
+    return [uplevel 1 ::ntk::classes::input::inputMouseRelease $args]
 }
 
 proc ::ntk::inputMotion {args} {
-    ::ntk::classes::input::inputMotion {*}$args
+    return [uplevel 1 ::ntk::classes::input::inputMotion $args]
 }
 
     

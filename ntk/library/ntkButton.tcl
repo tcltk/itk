@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.6 2007/10/13 21:38:36 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.7 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
-itcl::eclass ::ntk::classes::button {
+itcl::extendedclass ::ntk::classes::button {
     inherit ::ntk::classes::theme 
 
     private variable constructing 1
@@ -76,7 +76,9 @@ puts stderr "itcl_options(-buttonpress)!$itcl_options(-buttonpress)!"
 	set itcl_options(-buttonrelease) [list $wpath buttonRelease $wpath]
 	set textobj [megaimage-blank 20 20]
 	set destroy buttonDestroy
-	eval configure $args
+puts stderr "BARGS![join $args !]!"
+#	eval configure $args
+	configure {*}$args
 	appendRedrawHandler [list $wpath buttonRedraw $wpath]
 	set constructing 0
 	buttonDraw $wpath

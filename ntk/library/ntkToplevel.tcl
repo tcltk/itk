@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkToplevel.tcl,v 1.1.2.7 2007/10/14 23:42:56 wiede Exp $
+# RCS: @(#) $Id: ntkToplevel.tcl,v 1.1.2.8 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
-itcl::eclass ::ntk::classes::toplevel {
+itcl::extendedclass ::ntk::classes::toplevel {
     inherit ::ntk::classes::window
 
     private variable id

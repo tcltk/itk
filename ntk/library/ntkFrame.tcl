@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkFrame.tcl,v 1.1.2.5 2007/10/12 21:09:56 wiede Exp $
+# RCS: @(#) $Id: ntkFrame.tcl,v 1.1.2.6 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
-itcl::eclass ::ntk::classes::frame {
+itcl::extendedclass ::ntk::classes::frame {
     inherit ::ntk::classes::window 
 
     option -bg -default {} -validatemethod verifyColor \

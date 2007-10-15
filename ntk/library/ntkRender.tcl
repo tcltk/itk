@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.8 2007/10/14 18:45:20 wiede Exp $
+# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.9 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
-::itcl::eclass ::ntk::classes::render {
+::itcl::extendedclass ::ntk::classes::render {
 
     private common backgroundColor [list 16 33 65 255]
     private variable rendering 0

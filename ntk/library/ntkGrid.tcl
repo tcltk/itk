@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.4 2007/10/14 23:42:56 wiede Exp $
+# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.5 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
-itcl::nwidget ::ntk::classes::grid {
+itcl::extendedclass ::ntk::classes::grid {
     protected proc dump {grid} {
         puts stderr "BEGIN DUMP"
 	set i 0

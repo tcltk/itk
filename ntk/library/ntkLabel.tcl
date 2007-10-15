@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.4 2007/10/13 17:56:44 wiede Exp $
+# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.5 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
-itcl::eclass ::ntk::classes::label {
+itcl::extendedclass ::ntk::classes::label {
     inherit ::ntk::classes::theme 
 
     private variable constructing 1

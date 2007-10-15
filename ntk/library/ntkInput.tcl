@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.4 2007/10/14 18:45:20 wiede Exp $
+# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.5 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
-::itcl::eclass ::ntk::classes::input {
+::itcl::extendedclass ::ntk::classes::input {
     private common input
     private common focusList [list]
 

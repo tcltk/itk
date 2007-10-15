@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.4 2007/10/13 20:08:25 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.5 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
-::itcl::eclass ::ntk::classes::theme {
+::itcl::extendedclass ::ntk::classes::theme {
     inherit ::ntk::classes::window
 
     public proc themeButtonDrawBorder {path} {

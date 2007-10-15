@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.6 2007/10/14 18:45:19 wiede Exp $
+# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.7 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
-::itcl::eclass ::ntk::classes::helpers {
+::itcl::extendedclass ::ntk::classes::helpers {
     protected common colors
 
     private common rendering 0

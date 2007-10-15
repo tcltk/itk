@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.9 2007/10/14 18:45:20 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.10 2007/10/15 09:24:52 wiede Exp $
 #--------------------------------------------------------------------------
 
-::itcl::eclass ::ntk::classes::window {
+::itcl::extendedclass ::ntk::classes::window {
     inherit ::ntk::classes::helpers ::ntk::classes::render
 
     protected common cntWindows 0
@@ -175,6 +175,7 @@
 	}
         set windows($wpath) $wpath
 	set parent [windowParent $wpath]
+puts stderr "ARGS![join $args !]!"
 	eval configure $args
         set obj [megaimage-blank $itcl_options(-width) $itcl_options(-height)]
 	#

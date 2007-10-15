@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.2 2007/10/12 21:09:57 wiede Exp $
+# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.3 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
-::itcl::eclass ::ntk::classes::listbox {
+::itcl::extendedclass ::ntk::classes::listbox {
     inherit ::ntk::classes::window 
 
     private variable listboxDraw [list]

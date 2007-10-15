@@ -14,10 +14,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.3 2007/10/12 21:09:57 wiede Exp $
+# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.4 2007/10/15 09:24:51 wiede Exp $
 #--------------------------------------------------------------------------
 
-itcl::eclass ::ntk::classes::scrollbar {
+itcl::extendedclass ::ntk::classes::scrollbar {
     inherit ::ntk::classes::theme 
 
     private variable scrollbarDraw [list]
