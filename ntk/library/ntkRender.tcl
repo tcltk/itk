@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.9 2007/10/15 09:24:51 wiede Exp $
+# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.10 2007/10/15 23:32:18 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::render {
@@ -70,8 +70,8 @@
 	    if {![$child cget -visible]} {
 	        continue
 	    }
-            set cx [expr {$x + [$child cget -x]}]
-            set cy [expr {$y + [$child cget -y]}]
+            set cx [expr {$x + [$child x]}]
+            set cy [expr {$y + [$child y]}]
             set r [$child cget -rotate]
             if {$r} {
 		set childObj [$child obj]
@@ -96,7 +96,7 @@
     public method renderTree {baseobj path} {
 #puts stderr "renderTree!WIN!$path![$path children]!"
         foreach child [$path children] {
-#puts stderr CHILD:$child
+#puts stderr "CHILD:$child![$child x]![$child y]!"
 	    if {![$child cget -visible]} {
 	        continue
 	    }
@@ -113,7 +113,8 @@
                 }
                 $child update 0
            }
-           $baseobj blendobj [$child cget -x] [$child cget -y] $back
+#puts stderr "BLEND!$child![$child x]![$child y]!"
+           $baseobj blendobj [$child x] [$child y] $back
         }
 #puts stderr "renderTree END!WIN!$win![$path children]!"
     }

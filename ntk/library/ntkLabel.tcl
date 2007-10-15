@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.5 2007/10/15 09:24:51 wiede Exp $
+# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.6 2007/10/15 23:32:18 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::label {
@@ -87,10 +87,10 @@ itcl::extendedclass ::ntk::classes::label {
         lassign [$obj getsize] winwidth winheight
         lassign [[$path textobj] getsize] textwidth textheight
 #puts stderr "labelDrawText!$path!$wpath!$winwidth!$winheight!$textwidth!$textheight!"
-        set x [expr {($winwidth / 2) - ($textwidth / 2)}]
-        set y [expr {($winheight / 2) - ($textheight / 2)}]
+        set myX [expr {($winwidth / 2) - ($textwidth / 2)}]
+        set myY [expr {($winheight / 2) - ($textheight / 2)}]
         set myTextObj [$path textobj]
-        [$path obj] blendobj $x $y $myTextObj
+        [$path obj] blendobj $myX $myY $myTextObj
     }
 
     public method labelRequestSize {path} {

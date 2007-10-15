@@ -14,14 +14,12 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkFrame.tcl,v 1.1.2.6 2007/10/15 09:24:51 wiede Exp $
+# RCS: @(#) $Id: ntkFrame.tcl,v 1.1.2.7 2007/10/15 23:32:18 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::frame {
     inherit ::ntk::classes::window 
 
-    option -bg -default {} -validatemethod verifyColor \
-            -configuremethod frameConfig
     option -tile -default {} -configuremethod frameConfig
 
     private method frameConfig {option value} {
@@ -32,7 +30,7 @@ itcl::extendedclass ::ntk::classes::frame {
     constructor {args} {
         eval ::ntk::classes::window::constructor $args
     } {
-	configure -bg [defaultBackgroundColor]
+	set $itcl_options(-bg) [defaultBackgroundColor]
 	appendRedrawHandler [list $wpath frameDraw $wpath]
 	frameDraw $wpath
         return $wpath

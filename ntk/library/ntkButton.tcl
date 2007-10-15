@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.7 2007/10/15 09:24:51 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.8 2007/10/15 23:32:18 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::button {
@@ -29,8 +29,8 @@ itcl::extendedclass ::ntk::classes::button {
     public option -textcolor -default {} -configuremethod buttonConfig
     public option -textwidth -default 0 -configuremethod buttonConfig
     public option -textheight -default 0 -configuremethod buttonConfig
-    public option -bg -default {} -validatemethod verifyColor \
-            -configuremethod buttonConfig
+#    public option -bg -default {} -validatemethod verifyColor \
+#            -configuremethod buttonConfig
     public option -bd -default 1 -validatemethod verifyBorder \
             -configuremethod buttonConfig
     public option -command -default {} -configuremethod buttonConfig
@@ -72,13 +72,12 @@ itcl::extendedclass ::ntk::classes::button {
 	set itcl_options(-bg) [defaultBackgroundColor]
 	set itcl_options(-bd) 1
 	set itcl_options(-buttonpress) [list $wpath buttonPress $wpath]
-puts stderr "itcl_options(-buttonpress)!$itcl_options(-buttonpress)!"
 	set itcl_options(-buttonrelease) [list $wpath buttonRelease $wpath]
 	set textobj [megaimage-blank 20 20]
 	set destroy buttonDestroy
 puts stderr "BARGS![join $args !]!"
-#	eval configure $args
 	configure {*}$args
+puts stderr "X!$x!$y!"
 	appendRedrawHandler [list $wpath buttonRedraw $wpath]
 	set constructing 0
 	buttonDraw $wpath
@@ -145,10 +144,10 @@ puts stderr "CMD!$cmd!"
         lassign [$obj getsize] winwidth winheight
         lassign [[$path textobj] getsize] textwidth textheight
 #puts stderr "buttonDrawText!$path!$wpath!$winwidth!$winheight!$textwidth!$textheight!"
-        set x [expr {($winwidth / 2) - ($textwidth / 2)}]
-        set y [expr {($winheight / 2) - ($textheight / 2)}]
+        set myX [expr {($winwidth / 2) - ($textwidth / 2)}]
+        set myY [expr {($winheight / 2) - ($textheight / 2)}]
         set myTextObj [$path textobj]
-        [$path obj] blendobj $x $y $myTextObj
+        [$path obj] blendobj $myX $myY $myTextObj
     }
 
     public method buttonRedraw {path} {

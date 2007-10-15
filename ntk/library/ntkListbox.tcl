@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.3 2007/10/15 09:24:51 wiede Exp $
+# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.4 2007/10/15 23:32:18 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::listbox {
@@ -28,7 +28,7 @@
     public option -textcolor -default {} -validatemethod verifyColor -configuremethod listboxConfig
     public option -bg -default {} -validatemethod verifyColor -configuremethod listboxConfig
     public option -bd -default 0 -validatemethod verifyBorder -configuremethod listboxConfig
-    public option -selectionbordecolor -default {} -configuremethod listboxConfig
+    public option -selectioncolor -default {} -configuremethod listboxConfig
     public option -selectioncallback -default [list] -configuremethod listboxConfig
     public option -xscrollcommand -default [list] -configuremethod listboxConfig
     public option -yscrollcommand -default [list] -configuremethod listboxConfig

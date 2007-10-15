@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.6 2007/10/15 09:24:51 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.7 2007/10/15 23:32:18 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
@@ -33,8 +33,8 @@ itcl::extendedclass ::ntk::classes::entry {
             -configuremethod entryConfig
     public option -cursorcolor -default [list 255 0 0 255] \
             -configuremethod entryConfig
-    public option -bg -default {} -validatemethod verifyColor \
-            -configuremethod entryConfig
+#    public option -bg -default {} -validatemethod verifyColor \
+#            -configuremethod entryConfig
     public option -bd -default 1 -validatemethod verifyBorder \
             -configuremethod entryConfig
     public option -keypress -default {} -configuremethod entryConfig

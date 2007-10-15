@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.4 2007/10/15 09:24:51 wiede Exp $
+# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.5 2007/10/15 23:32:18 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::scrollbar {
@@ -22,7 +22,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
 
     private variable scrollbarDraw [list]
     private variable scale [list 0.0 1.0] 
-    private variable button_afterid "" 
+    private variable buttonAfterId "" 
 
     public option -clickx -default 0 -configuremethod scrollbarConfig
     public option -clicky -default 0 -configuremethod scrollbarConfig
@@ -51,11 +51,11 @@ itcl::extendedclass ::ntk::classes::scrollbar {
 	}
     }
 
-    public method button_afterid {{value {}}} {
+    public method buttonAfterId {{value {}}} {
 	if {$value eq ""} {
-            return $button_afterid
+            return $buttonAfterId
 	} else {
-	    set button_afterid $value
+	    set buttonAfterId $value
 	}
     }
 
@@ -91,7 +91,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
 
     public method scrollbarButtonRepeat {path delay cmd} {
         uplevel #0 $cmd
-        $path button_afterid [after $delay [list scrollbarButtonRepeat $path $delay $cmd]]
+        $path buttonAfterId [after $delay [list scrollbarButtonRepeat $path $delay $cmd]]
     }
 
     public method scrollbarButtonpress {buttonpath path unit button x y globalx globaly} {
@@ -104,8 +104,8 @@ itcl::extendedclass ::ntk::classes::scrollbar {
 
     public method scrollbarButtonrelease {buttonpath path button x y globalx globaly} {
         $buttonpath pressed 0
-        after cancel [$path button_afterid]
-        $path button_afterid ""
+        after cancel [$path buttonAfterId]
+        $path buttonAfterId ""
     }
 
     public method scrollbarDraw {path} {

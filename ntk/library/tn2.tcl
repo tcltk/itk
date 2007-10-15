@@ -89,17 +89,26 @@ puts stderr "bucmd called!$args!$::numbucalls"
     .w4 configure -text buttonpress$::numbucalls
 }
 if {1} {
-set w4Path [ntk button .w4 -rotate 30 -width 100 -height 20 -x 0 -y 350 -text buttonpress0 -textcolor [list 255 0 0 255] -bg [list 199 234 0 255] -bd 2 -command bucmd]
-puts stderr "w4Path!$w4Path!"
+set w4Path [ntk button .w4 -rotate 30 -width 100 -height 20 -text buttonpress0 -textcolor [list 255 0 0 255] -bg [list 199 234 0 255] -bd 2 -command bucmd]
+$w4Path x 0
+$w4Path y 350
+$w4Path render $w4Path
+puts stderr "w4Path!$w4Path!x![$w4Path x]![$w4Path y]!"
 }
 
 if {1} {
 set w5Path [ntk label .w5 -width 100 -height 100 -x 470 -y 50 -text label1 -textcolor [list 255 0 0 255] -bg [list 123 234 150 255] -bd 2]
+#$w5Path x 470
+#$w5Path y 50
+#$w5Path render $w5Path
 puts stderr "w5Path!$w5Path!"
 }
 
 if {1} {
 set w6Path [ntk entry .w6 -width 150 -height 40 -x 600 -y 50 -text entry1 -textcolor [list 255 0 0 255] -bg [list 199 234 0 255] -bd 4]
+#$w6Path x 600
+#$w6Path y 50
+#$w6Path render $w6Path
 puts stderr "w6Path!$w6Path!"
 }
 
