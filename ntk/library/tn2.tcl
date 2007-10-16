@@ -112,7 +112,15 @@ set w6Path [ntk entry .w6 -width 150 -height 40 -x 600 -y 50 -text entry1 -textc
 puts stderr "w6Path!$w6Path!"
 }
 
-
+if {1} {
+set w7Path [ntk text .w7 -width 300 -height 150 -x 60 -y 200 -textcolor [list 255 0 0 255] -bg [list 199 234 0 255] -bd 4]
+$w7Path configure -insert [list 1.0 0 "hello world\nHello Arnulf\nThird line is a bit longer"]
+#$w7Path x 600
+#$w7Path y 50
+#$w7Path configure -width 250
+#$w7Path render $w7Path
+puts stderr "w7Path!$w7Path!"
+}
 
 puts stderr "setting eval-stdin"
 fileevent stdin readable eval_stdin

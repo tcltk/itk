@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.11 2007/10/15 23:32:18 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.12 2007/10/16 20:21:20 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::window {
@@ -58,8 +58,22 @@
             -configuremethod windowConfig
     
     public method windowConfig {option value} {
-#puts stderr "windowConfig![namespace current]!$option!$value!"
+#puts stderr "windowConfig!$wpath!$option!$value!"
         set itcl_options($option) $value
+	switch -- $option {
+	-height {
+	    if {$obj ne ""} {
+	        $obj setsize $itcl_options(-width) $value
+	        dispatchRedraw $wpath
+	    }
+	  }
+	-width {
+	    if {$obj ne ""} {
+	        $obj setsize $value $itcl_options(-height)
+	        dispatchRedraw $wpath
+	    }
+	  }
+	}
         windowDraw $wpath
     }
 
@@ -93,7 +107,7 @@
 	}
         set windows($wpath) $wpath
 	set parent [windowParent $wpath]
-puts stderr "ARGS![join $args !]!"
+#puts stderr "ARGS![join $args !]!"
 	eval configure $args
         set obj [megaimage-blank [cget -width] [cget -height]]
 	#
@@ -189,13 +203,17 @@ puts stderr "ARGS![join $args !]!"
 	    $path configure -width [$path reqwidth] -height [$path reqheight]
 	    set w [$path cget -width]
 	    set h [$path cget -height]
-	    if {$w <= 0} {set w 1}
-	    if {$h <= 0} {set h 1}
+	    if {$w <= 0} {
+	        set w 1
+	    }
+	    if {$h <= 0} {
+	        set h 1
+	    }
 	    [$path obj] setsize $w $h
 	    dispatchRedraw $path
 	    return
 	}
-        $myManager remanage] $p
+        $myManager remanage $p
     }
 
     public method requestSize {path width height} {

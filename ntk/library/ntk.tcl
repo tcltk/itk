@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.10 2007/10/15 09:24:51 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.11 2007/10/16 20:21:16 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
@@ -47,7 +47,6 @@ source [file join $myDir ntkRender.tcl]
 source [file join $myDir ntkGrid.tcl]
 source [file join $myDir ntkGridManager.tcl]
 source [file join $myDir ntkInput.tcl]
-#source [file join $myDir ntkGridBase.tcl]
 source [file join $myDir ntkWindow.tcl]
 source [file join $myDir ntkTheme.tcl]
 source [file join $myDir ntkScrollbar.tcl]
@@ -55,10 +54,10 @@ source [file join $myDir ntkButton.tcl]
 source [file join $myDir ntkEntry.tcl]
 source [file join $myDir ntkFrame.tcl]
 source [file join $myDir ntkLabel.tcl]
+source [file join $myDir ntkText.tcl]
 source [file join $myDir ntkListbox.tcl]
 source [file join $myDir ntkToplevel.tcl]
 #source [file join $myDir ntkClock.tcl]
-#source [file join $myDir ntkText.tcl]
 
 proc ::ntk::button {args} {
     puts stderr "::ntk::button called !$args!"
@@ -112,6 +111,7 @@ proc ::ntk::scrollbar {args} {
     
 proc ::ntk::text {args} {
     puts stderr "::ntk::text called !$args!"
+    return [uplevel 1 ::ntk::classes::text $args]
 }
     
 proc ::ntk::theme {args} {

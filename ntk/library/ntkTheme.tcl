@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.6 2007/10/16 10:01:43 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.7 2007/10/16 20:21:18 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
@@ -34,7 +34,7 @@
             -configuremethodvar themeConfig
 
     constructor {args} {
-        eval ::ntk::classes::window::constructor -width 60 -height 20
+        eval ::ntk::classes::window::constructor -width 100 -height 100
     } {
         freetype $defaultFont $defaultFontSize "_^" [list 0 0 0 255] \
 	        myWidth myHeight
@@ -44,7 +44,7 @@
 	set itcl_options(-fontsize) $defaultFontSize
 	set itcl_options(-textcolor) $defaultTextColor
 	set itcl_options(-bg) [defaultBackgroundColor]
-	set textobj [megaimage-blank 20 20]
+	set textobj [megaimage-blank 100 40]
     }
 
     public proc themeButtonDrawBorder {path} {
@@ -82,7 +82,7 @@
 
     public proc themeDrawTextBackground {path} {
         # TODO add tile call with nice metallic background.
-        [$path obj] setall [$path -bg]
+        [$path obj] setall [$path cget -bg]
     }
 
     public proc themeGetText {} {
@@ -109,7 +109,7 @@
         set high [list 200 200 200 255]
         set w [$path width]
         set h [$path height]
-        [$path obj] setall [[$path _parent] -bg]
+        [$path obj] setall [[$path _parent] cget -bg]
 
         if {![$path pressed]} {
             themeDrawDorder [$path obj] 0 0 $w $h $low $high 1

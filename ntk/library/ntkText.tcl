@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.3 2007/10/16 16:24:41 wiede Exp $
+# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.4 2007/10/16 20:21:17 wiede Exp $
 #--------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------
@@ -59,10 +59,10 @@ itcl::extendedclass ::ntk::classes::text {
     }
 
     constructor {args} {
-	set itcl_options(-width) 200
-	set itcl_options(-height) 300
+	requestSize $wpath 200 300
 	set itcl_options(-bg) [list 255 255 255 255]
-	set contexts [list [list $defaultFont $defaultFontSize [list 0 0 0 255]]]
+	set contexts [list [list $defaultFont $defaultFontSize \
+	        [list 0 0 0 255]]]
 	set themeConfig textConfig
 	set destroy entryDestroy
         if {[llength $args]} {
@@ -82,33 +82,38 @@ itcl::extendedclass ::ntk::classes::text {
     }
 
     public method textDraw {path} {
-#puts stderr "textDraw!$path!"
+#puts stderr "textDraw!$path!w![cget -width]!h![cget -height]!"
         themeDrawTextBackground $path
         set linemap [list]
-        set myTextobj [megaimage-blank 100 100]
+        set textobj [megaimage-blank 1 1]
         set myY 0
 	set myContexts [$path contexts]
         foreach line [$path text] {
-puts stderr "LINE1!$line!"
             set linegeom [lindex $line 0]
             lassign $linegeom linewidth lineheight
-puts stderr "linegeom!$linegeom!"
             set lineoffsetmap [list]
             set myX 0
-puts stderr "LINE!$line!$linewidth!$lineheight!"
-#set linewidth 100
-#set lineheight 10
-            foreach seg [lrange $line 1 end] {
-puts stderr "seg!$seg!$myContexts!"
+            set linewidth 0
+            set lineheight 0
+	    lassign $line w h
+            foreach seg [lrange $line 2 end] {
                 set context [lindex $myContexts [lindex $seg 0]]
-puts stderr "context!$context!"
                 lassign $context font size color
-                set textdata [freetype $font $size [lindex $seg 1] $color myWidth myHeight offsetmap]
-                $myTextobj setdata $textdata
-puts stderr "BLEND!$myX!$myY![$path obj]!$myTextobj!"
-                [$path obj] blendobj $myX $myY $myTextobj
+                set txt [lindex $seg 1]
+                if {[string length $txt] == 0} {
+                    set txt " "
+                }
+                set textdata [freetype $font $size $txt $color myWidth myHeight offsetmap]
+                if {$myHeight > $lineheight} {
+		    set lineheight $myHeight
+		}
+                $textobj setdata $textdata
+                [$path obj] blendobj $myX $myY $textobj
                 incr myX $myWidth
                 lappend lineoffsetmap $offsetmap
+                if {$myWidth > $linewidth} {
+		    set linewidth $myWidth
+		}
             }
             incr myY $lineheight
             lappend linemap $lineoffsetmap 
@@ -120,42 +125,31 @@ puts stderr "BLEND!$myX!$myY![$path obj]!$myTextobj!"
         lassign [split $pos .] myY myX
         incr myY -1 ; #compensate for the y starting at 1
         set myText [$path text]
-puts stderr "INSERTLIST!$insert!"
         set insertlist [split $insert \n] 
         set ylimit [expr {$myY + [llength $insertlist]}]
-puts stderr "myX!$myX!$myY![llength $myText]!"
         while {$myY >= [llength $myText]} {
             lappend myText [list [list width height] [list 0 ""]]
-#            lappend myText [list [list 0 0] [list 0 ""]]
         }
         set line [lindex $myText $myY]
-puts stderr "myText!$myText!$myY!$line!"
         set newlinelist [textTrimEmpty [textInsertSegments $myX $line $newcontext $insertlist]]
-puts stderr "newlinelist!$newlinelist!"
-puts stderr "TEXT1!$myText!$myY!"
         set myText [lreplace $myText $myY $myY]
         set myText [linsert $myText $myY {*}$newlinelist]
-puts stderr "TEXT2!$myText!"
         $path text $myText
         return 0
     }
 
     public proc textInsertSegments {myX line newcontext newtextlist} {
-puts stderr "textInsertSegments!myX!$myX!line!$line!newcontext!$newcontext!newtextlist!$newtextlist!"
+#puts stderr "textInsertSegments!myX!$myX!line!$line!newcontext!$newcontext!newtextlist!$newtextlist!"
         set ox 0
         set newtextlistoffset 0
         set result [list]
         set resultline [lindex $line 0]
-puts stderr "RESL!$resultline!"
         set found 0
 
         foreach seg [lrange $line 1 end] {
-puts stderr "textInsertSegments!seg!$seg!"
             lassign $seg context txt
-puts stderr "t2!$context!$txt!"
             set textchars ""
             foreach c [split $txt ""] {
-puts stderr "ox!$ox!$myX!$c!$textchars!"
                 if {$ox == $myX} {
                     set found 1
                     textInsertSegments2 result resultline $newcontext \
@@ -173,7 +167,6 @@ puts stderr "ox!$ox!$myX!$c!$textchars!"
             textInsertSegments2 result resultline $newcontext $newtextlist \
 	            $context ""
         }
-puts stderr "textInsertSegments!result!$result!"
         return $result
     }
 
@@ -182,9 +175,7 @@ puts stderr "textInsertSegments!result!$result!"
         upvar $resultlinevar resultline
  
         # See if we can continue this line with the same context.
-puts stderr "textInsertSegments2!$context!$newcontext!$resultvar!$resultlinevar!$textchars!"
         if {$context == $newcontext} {
-puts stderr "newtextlist!$newtextlist!"
             append textchars [lindex $newtextlist 0]
             lappend resultline [list $context $textchars]
             lappend result $resultline
@@ -200,7 +191,6 @@ puts stderr "newtextlist!$newtextlist!"
             lappend resultline [list $newcontext $newline]
             lappend result $resultline
         }
-puts stderr "resultline!$resultline!$result!"
     }
 
     public method textTrimEmpty {textlist} {
