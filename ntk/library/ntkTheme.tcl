@@ -14,11 +14,38 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.5 2007/10/15 09:24:51 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.6 2007/10/16 10:01:43 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
     inherit ::ntk::classes::window
+
+    private variable constructing 1
+    protected variable themeConfig
+
+    public methodvariable textobj -default [list]
+
+    public option -font -default {} -configuremethodvar themeConfig
+    public option -fontsize -default {} -configuremethodvar themeConfig
+    public option -text -default {} -configuremethodvar themeConfig
+    public option -textcolor -default {} -validatemethodvar verifyColor \
+            -configuremethodvar themeConfig
+    public option -bd -default 0 -validatemethod verifyBorder \
+            -configuremethodvar themeConfig
+
+    constructor {args} {
+        eval ::ntk::classes::window::constructor -width 60 -height 20
+    } {
+        freetype $defaultFont $defaultFontSize "_^" [list 0 0 0 255] \
+	        myWidth myHeight
+	set itcl_options(-width) 60
+	set itcl_options(-height) $myHeight
+	set itcl_options(-font) $defaultFont
+	set itcl_options(-fontsize) $defaultFontSize
+	set itcl_options(-textcolor) $defaultTextColor
+	set itcl_options(-bg) [defaultBackgroundColor]
+	set textobj [megaimage-blank 20 20]
+    }
 
     public proc themeButtonDrawBorder {path} {
         set low [list 20 20 20 255]

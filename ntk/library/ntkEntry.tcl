@@ -14,31 +14,19 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.7 2007/10/15 23:32:18 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.8 2007/10/16 10:01:43 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
     inherit ::ntk::classes::theme 
 
     private variable constructing 1
-    private variable textobj [list]
-    private variable cursoroffset 0
-    private variable xslide 0
-    private variable offsetmap [list]
+    public methodvariable cursoroffset -default 0
+    public methodvariable xslide -default 0
+    public methodvariable offsetmap -default [list]
 
-    public option -font -default {} -configuremethod entryConfig
-    public option -fontsize -default {} -configuremethod entryConfig
-    public option -text -default {} -configuremethod entryConfig
-    public option -textcolor -default {} -validatemethod verifyColor \
-            -configuremethod entryConfig
     public option -cursorcolor -default [list 255 0 0 255] \
             -configuremethod entryConfig
-#    public option -bg -default {} -validatemethod verifyColor \
-#            -configuremethod entryConfig
-    public option -bd -default 1 -validatemethod verifyBorder \
-            -configuremethod entryConfig
-    public option -keypress -default {} -configuremethod entryConfig
-    public option -buttonpress -default {} -configuremethod entryConfig
 
     private method entryConfig {option value} {
 #puts stderr "entryConfig!$option!$value!"
@@ -53,50 +41,11 @@ itcl::extendedclass ::ntk::classes::entry {
 	}
     }
 
-    public method textobj {{value {}}} {
-	if {$value eq ""} {
-            return $textobj
-	} else {
-	    set textobj $value
-	}
-    }
-
-    public method cursoroffset {{value {}}} {
-	if {$value eq ""} {
-            return $cursoroffset
-	} else {
-	    set cursoroffset $value
-	}
-    }
-
-    public method xslide {{value {}}} {
-	if {$value eq ""} {
-            return $xslide
-	} else {
-	    set xslide $value
-	}
-    }
-
-    public method offsetmap {{value {}}} {
-	if {$value eq ""} {
-            return $offsetmap
-	} else {
-	    set offsetmap $value
-	}
-    }
-
     constructor {args} {
-        freetype $defaultFont $defaultFontSize "_^" [list 0 0 0 255] \
-	        myWidth myHeight
-        eval ::ntk::classes::window::constructor -width 160 -height $myHeight
-    } {
-	set itcl_options(-font) $defaultFont
-	set itcl_options(-fontsize) $defaultFontSize
-	set itcl_options(-textcolor) $defaultTextColor
 	set itcl_options(-bg) [list 255 255 255 255]
 	set itcl_options(-keypress) [list $wpath entryKeypress $wpath]
 	set itcl_options(-buttonpress) [list $wpath entryButtonpress $wpath]
-	set textobj [megaimage-blank 1 1]
+	set themeConfig entryConfig
 	set destroy entryDestroy
 	eval configure $args
 	appendRedrawHandler [list $wpath entryDraw $wpath]

@@ -14,25 +14,16 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.8 2007/10/15 23:32:18 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.9 2007/10/16 10:01:42 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::button {
     inherit ::ntk::classes::theme 
 
     private variable constructing 1
-    private variable textobj [list]
 
-    public option -font -default {} -configuremethod buttonConfig
-    public option -fontsize -default {} -configuremethod buttonConfig
-    public option -text -default {} -configuremethod buttonConfig
-    public option -textcolor -default {} -configuremethod buttonConfig
     public option -textwidth -default 0 -configuremethod buttonConfig
     public option -textheight -default 0 -configuremethod buttonConfig
-#    public option -bg -default {} -validatemethod verifyColor \
-#            -configuremethod buttonConfig
-    public option -bd -default 1 -validatemethod verifyBorder \
-            -configuremethod buttonConfig
     public option -command -default {} -configuremethod buttonConfig
     public option -state -default released -configuremethod buttonConfig
 
@@ -55,29 +46,12 @@ itcl::extendedclass ::ntk::classes::button {
 	}
     }
 
-    public method textobj {{value {}}} {
-	if {$value eq ""} {
-            return $textobj
-	} else {
-	    set textobj $value
-	}
-    }
-
     constructor {args} {
-        eval ::ntk::classes::window::constructor -width 60 -height 20
-    } {
-	set itcl_options(-font) $defaultFont
-	set itcl_options(-fontsize) $defaultFontSize
-	set itcl_options(-textcolor) $defaultTextColor
-	set itcl_options(-bg) [defaultBackgroundColor]
-	set itcl_options(-bd) 1
 	set itcl_options(-buttonpress) [list $wpath buttonPress $wpath]
 	set itcl_options(-buttonrelease) [list $wpath buttonRelease $wpath]
-	set textobj [megaimage-blank 20 20]
+	set themeConfig buttonConfig
 	set destroy buttonDestroy
-puts stderr "BARGS![join $args !]!"
 	configure {*}$args
-puts stderr "X!$x!$y!"
 	appendRedrawHandler [list $wpath buttonRedraw $wpath]
 	set constructing 0
 	buttonDraw $wpath

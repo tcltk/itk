@@ -14,24 +14,14 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.6 2007/10/15 23:32:18 wiede Exp $
+# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.7 2007/10/16 10:01:43 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::label {
     inherit ::ntk::classes::theme 
 
     private variable constructing 1
-    private variable textobj [list]
 
-    public option -font -default {} -configuremethod labelConfig
-    public option -fontsize -default {} -configuremethod labelConfig
-    public option -text -default {} -configuremethod labelConfig
-    public option -textcolor -default {} -validatemethod verifyColor \
-            -configuremethod labelConfig
-    public option -bg -default {} -validatemethod verifyColor \
-            -configuremethod labelConfig
-    public option -bd -default 0 -validatemethod verifyBorder \
-            -configuremethod labelConfig
 
     private method labelConfig {option value} {
         set itcl_options($option) $value
@@ -45,22 +35,9 @@ itcl::extendedclass ::ntk::classes::label {
 	}
     }
 
-    public method textobj {{value {}}} {
-	if {$value eq ""} {
-            return $textobj
-	} else {
-	    set textobj $value
-	}
-    }
-
     constructor {args} {
-        eval ::ntk::classes::window::constructor -width 10 -height 10
-    } {
-	set itcl_options(-font) $defaultFont
-	set itcl_options(-fontsize) $defaultFontSize
-	set itcl_options(-bg) [defaultBackgroundColor]
+	set themeConfig labelConfig
 	eval configure $args
-	set textobj [megaimage-blank 20 20]
 	appendRedrawHandler [list $wpath labelDraw $wpath]
 	set constructing 0
 	labelTrace $wpath
