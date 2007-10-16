@@ -14,7 +14,15 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.2 2007/10/16 14:18:47 wiede Exp $
+# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.3 2007/10/16 16:24:41 wiede Exp $
+#--------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------
+# Internal layout of a line:
+# [list [list width height] [list contextIdx1 text1] [list contextIdx1 text2]
+#       [list contextIdx2 text3] ... [list contextIdxn textn]]
+# a contextIdx is the index into methodvariable contexts
+# a context consists of [list font fontsize textcolor]
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::text {
@@ -22,8 +30,7 @@ itcl::extendedclass ::ntk::classes::text {
 
     private variable constructing 1
 
-    public methodvariable contexts -default [list  \
-            [list Vera.ttf 12 [list 0 0 0 255]]]
+    public methodvariable contexts -default [list]
     public methodvariable text -default [list]
 
     public option -fg -default [list 125 125 0 255] \
@@ -41,8 +48,9 @@ itcl::extendedclass ::ntk::classes::text {
 #puts stderr "textConfig!$option!$value!"
         set itcl_options($option) $value
 	switch -- $option {
-	-text {
+	-insert {
 	    textInsert $wpath $value
+            textDraw $wpath
 	  }
 	default {
             textDraw $wpath
@@ -54,6 +62,7 @@ itcl::extendedclass ::ntk::classes::text {
 	set itcl_options(-width) 200
 	set itcl_options(-height) 300
 	set itcl_options(-bg) [list 255 255 255 255]
+	set contexts [list [list $defaultFont $defaultFontSize [list 0 0 0 255]]]
 	set themeConfig textConfig
 	set destroy entryDestroy
         if {[llength $args]} {
@@ -64,10 +73,7 @@ itcl::extendedclass ::ntk::classes::text {
         }
 	appendRedrawHandler [list $wpath textDraw $wpath]
 	set constructing 0
-parray itcl_options
-puts stderr "wpath!$wpath!"
 	set textArgs [themeGetText]
-puts stderr "textArgs!$textArgs!"
 	if {[llength $textArgs] > 0} {
 	    $wpath configure {*}$textArgs
 	}   
@@ -76,26 +82,35 @@ puts stderr "textArgs!$textArgs!"
     }
 
     public method textDraw {path} {
-puts stderr "textDraw!$path!"
+#puts stderr "textDraw!$path!"
         themeDrawTextBackground $path
         set linemap [list]
-        set textobj [megaimage-blank 1 1]
-        set y 0
+        set myTextobj [megaimage-blank 100 100]
+        set myY 0
+	set myContexts [$path contexts]
         foreach line [$path text] {
+puts stderr "LINE1!$line!"
             set linegeom [lindex $line 0]
             lassign $linegeom linewidth lineheight
+puts stderr "linegeom!$linegeom!"
             set lineoffsetmap [list]
-            set x 0
+            set myX 0
+puts stderr "LINE!$line!$linewidth!$lineheight!"
+#set linewidth 100
+#set lineheight 10
             foreach seg [lrange $line 1 end] {
-                set context [lindex [$path contexts] [lindex $seg 0]]
+puts stderr "seg!$seg!$myContexts!"
+                set context [lindex $myContexts [lindex $seg 0]]
+puts stderr "context!$context!"
                 lassign $context font size color
-                set textdata [freetype $font $size $color myWidth myHeight offsetmap]
-                 $textobj setdata $textdata
-                 [$path obj] blendobj $x $y $textobj
-                 incr x $myWidth
-                 lappend lineoffsetmap $offsetmap
+                set textdata [freetype $font $size [lindex $seg 1] $color myWidth myHeight offsetmap]
+                $myTextobj setdata $textdata
+puts stderr "BLEND!$myX!$myY![$path obj]!$myTextobj!"
+                [$path obj] blendobj $myX $myY $myTextobj
+                incr myX $myWidth
+                lappend lineoffsetmap $offsetmap
             }
-            incr y $lineheight
+            incr myY $lineheight
             lappend linemap $lineoffsetmap 
         }
     }
@@ -104,34 +119,46 @@ puts stderr "textDraw!$path!"
         lassign $arglist pos newcontext insert
         lassign [split $pos .] myY myX
         incr myY -1 ; #compensate for the y starting at 1
-        set text [$path text]
+        set myText [$path text]
+puts stderr "INSERTLIST!$insert!"
         set insertlist [split $insert \n] 
         set ylimit [expr {$myY + [llength $insertlist]}]
-        while {$myY >= [llength $text]} {
-            lappend text [list [list width height] [list 0 ""]]
+puts stderr "myX!$myX!$myY![llength $myText]!"
+        while {$myY >= [llength $myText]} {
+            lappend myText [list [list width height] [list 0 ""]]
+#            lappend myText [list [list 0 0] [list 0 ""]]
         }
-        set line [lindex $text $myY]
+        set line [lindex $myText $myY]
+puts stderr "myText!$myText!$myY!$line!"
         set newlinelist [textTrimEmpty [textInsertSegments $myX $line $newcontext $insertlist]]
-        set text [lreplace $text $myY $myY]
-        set text [linsert $text $myY {*}$newlinelist]
-        $path text $text
+puts stderr "newlinelist!$newlinelist!"
+puts stderr "TEXT1!$myText!$myY!"
+        set myText [lreplace $myText $myY $myY]
+        set myText [linsert $myText $myY {*}$newlinelist]
+puts stderr "TEXT2!$myText!"
+        $path text $myText
         return 0
     }
 
-    public proc textInsertSegments {x line newcontext newtextlist} {
+    public proc textInsertSegments {myX line newcontext newtextlist} {
+puts stderr "textInsertSegments!myX!$myX!line!$line!newcontext!$newcontext!newtextlist!$newtextlist!"
         set ox 0
         set newtextlistoffset 0
         set result [list]
         set resultline [lindex $line 0]
+puts stderr "RESL!$resultline!"
         set found 0
 
         foreach seg [lrange $line 1 end] {
+puts stderr "textInsertSegments!seg!$seg!"
             lassign $seg context txt
+puts stderr "t2!$context!$txt!"
             set textchars ""
             foreach c [split $txt ""] {
-                if {$ox == $x} {
+puts stderr "ox!$ox!$myX!$c!$textchars!"
+                if {$ox == $myX} {
                     set found 1
-                    textInsertSegments-2 result resultline $newcontext \
+                    textInsertSegments2 result resultline $newcontext \
 		            $newtextlist $context $textchars
                     set textchars ""
                 } else {
@@ -143,18 +170,21 @@ puts stderr "textDraw!$path!"
         }
 
         if {!$found} {
-            textInsertSegments-2 result resultline $newcontext $newtextlist \
+            textInsertSegments2 result resultline $newcontext $newtextlist \
 	            $context ""
         }
+puts stderr "textInsertSegments!result!$result!"
         return $result
     }
 
-    public method textInsertegments-2 {resultvar resultlinevar newcontext newtextlist context textchars} {
+    public method textInsertSegments2 {resultvar resultlinevar newcontext newtextlist context textchars} {
         upvar $resultvar result
         upvar $resultlinevar resultline
  
         # See if we can continue this line with the same context.
+puts stderr "textInsertSegments2!$context!$newcontext!$resultvar!$resultlinevar!$textchars!"
         if {$context == $newcontext} {
+puts stderr "newtextlist!$newtextlist!"
             append textchars [lindex $newtextlist 0]
             lappend resultline [list $context $textchars]
             lappend result $resultline
@@ -170,6 +200,7 @@ puts stderr "textDraw!$path!"
             lappend resultline [list $newcontext $newline]
             lappend result $resultline
         }
+puts stderr "resultline!$resultline!$result!"
     }
 
     public method textTrimEmpty {textlist} {
