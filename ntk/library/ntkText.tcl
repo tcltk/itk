@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.1 2007/10/16 13:25:34 wiede Exp $
+# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.2 2007/10/16 14:18:47 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::text {
@@ -76,6 +76,7 @@ puts stderr "textArgs!$textArgs!"
     }
 
     public method textDraw {path} {
+puts stderr "textDraw!$path!"
         themeDrawTextBackground $path
         set linemap [list]
         set textobj [megaimage-blank 1 1]
