@@ -14,31 +14,34 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.4 2007/10/15 23:32:18 wiede Exp $
+# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.5 2007/10/18 21:42:28 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::listbox {
-    inherit ::ntk::classes::window 
+    inherit ::ntk::classes::theme 
 
     private variable listboxDraw [list]
     private variable destroy listboxDestroy
 
-    public option -font -default {} -configuremethod listboxlabelConfig
-    public option -fontsize -default {} -configuremethod listboxConfig
-    public option -textcolor -default {} -validatemethod verifyColor -configuremethod listboxConfig
-    public option -bg -default {} -validatemethod verifyColor -configuremethod listboxConfig
-    public option -bd -default 0 -validatemethod verifyBorder -configuremethod listboxConfig
     public option -selectioncolor -default {} -configuremethod listboxConfig
-    public option -selectioncallback -default [list] -configuremethod listboxConfig
+    public option -selectioncallback -default [list] \
+            -configuremethod listboxConfig
     public option -xscrollcommand -default [list] -configuremethod listboxConfig
     public option -yscrollcommand -default [list] -configuremethod listboxConfig
-    public option -xoffset -default 0 -configuremethod listboxConfig
-    public option -yoffset -default 0 -configuremethod listboxConfig
-    public option -yoffsetmap -default [list] -configuremethod listboxConfig
-    public option -selected -default 0 -configuremethod listboxConfig
-    public option -pending_afterid -default "" -configuremethod listboxConfig
-    public option -peakwidth -default 1 -configuremethod listboxConfig
-    public option -data -default [list] -configuremethod listboxConfig
+
+    public methodvariable contexts -default [list]
+    public methodvariable data -default [list]
+    public methodvariable contextdata -default [list]
+    public methodvariable sizedata -default [list]
+    public methodvariable xoffset -default 0
+    public methodvariable yoffset -default 0
+    public methodvariable selected -default 0
+    public methodvariable pendingAfterid -default ""
+    public methodvariable peakwidth -default 1
+    public methodvariable peaklineheight -default 0
+    public methodvariable peaklinewidth -default 0
+    public methodvariable totalheight -default 0
+    public methodvariable starty -default 0
 
     private method listboxConfig {option value} {
         set itcl_options($option) $value
@@ -48,20 +51,16 @@
     }
 
     constructor {args} {
-        eval ::ntk::classes::window::constructor -width 200 -height 200
+        eval ::ntk::classes::window::constructor -width 200 -height 260
     } {
-	set itcl_options(-font) $defaultFont
-	set itcl_options(-fontsize) 12
-	set itcl_options(-bg) [defaultBackgroundColor]
-	set itcl_options(-textcolor) [defaultTextColor]
-	set itcl_options(-selectionbordercolor) [list 0 0 0 255]
-	set path [path]
-	eval configure $args
-	appendRedrawHandler [list $path listboxRedraw $path]
-# $path -buttonpress [list listboxButtonPress $path]
+        set themeConfig listboxConfig
+	configure {*}$args
+	appendRedrawHandler [list $wpath listboxRedraw $wpath]
+	appendDestroyHandler [list $wpath listboxDestroy $wpath]
+# $path -buttonpress [list listboxButtonPress $wpath]
 
 	set listboxDraw listboxDraw
-        return $path
+        return $wpath
     }
 
     public method listboxButtonPress {path button x y globalx globaly} {
@@ -71,43 +70,85 @@
         if {($x < 0) || ($x >= [$path cget -width])} {
             return
         }
-        set map [$path cegt -yoffsetmap]
-        set i [$path cget -yoffset]
-        set selected [list]
-        foreach {start end} $map {
-            if {($y >= $start) && ($y < $end)} {
-                lappend selected $i
-   #puts "SEL:$selected [lindex [$path cget -data] $i]"
-                if {[$path cget -selectioncallback] ne ""} {
-                    uplevel #0 [linsert [$path cget -selectioncallback] end $i [lindex [$path cget -data] $i]]
-                }
-                break
-            }
-            incr i
-        } 
-        $path configure -selected $selected
+	set mySelected [list]
+	set ly 1
+	set i 0
+	foreach d [$path data] sizeset [$path sizedata] {
+	    lassign $sizeset _ myHeight
+	    set testy [expr {$ly - [$path yoffset]}]
+            if {($y >= $testy) && ($y < ($testy + $myHeight))} {
+		if {[$path cget -selectioncallback] ne ""} {
+	            uplevel #0 [linsert [$path cget -selectioncallback] end $i \
+		            [lindex $path data] $i]
+	        }
+	        lappend mySelected $i
+	        break
+	    }
+	    incr i
+	    incr ly $myHeight
+	    incr ly
+        }
+        $path configure selected $mySelected
         $path listboxDraw
     }
 
+    public method listboxCollectContexts {path} {
+        set myContextdata [$path contextdata]
+        set myContexts [$path contexts]
+        array set used {}
+        foreach i $myContextdata {
+            set used([expr {$i - 1}]) 1
+        }
+        set newcontexts [list]
+        foreach i [array names used] {
+             lappend newcontexts [lindex $myContexts $i]
+        }
+        $path contexts $newcontexts
+    }
+
+
+
     public method listboxDeleteMethod {path args} {
+	set mySelected [$path selected]
         switch -- [llength $args] {
         1 {
-           set i [lindex $args 0]
-           set data [$path cget -data]
-           $path configure -data [lreplace $data $i $i]
+            set i [lindex $args 0]
+	    #Deselect any previously selected item.
+	    if {[set sel [lsearch -exact $mySelected $i]] >= 0} {
+	        set mySelected [lreplace $mySelected $sel $sel]
+	        $path selected $mySelected
+            }
+            $path data [lreplace [$path data] $i $i]
+	    $path contextdata [lreplace [$path contextdata] $i $i]
+	    $path sizedata [lreplace [$path sizedata] $i $i]
+	    listboxMeasureLines $path 0 0
           }
         2 {
-           lassign $args s e
-           set data [$path cget -data]
-           $path configre -data [lreplace $data $s $e]
+            lassign $args s e
+	    if {$e eq "end"} {
+	        set e [llength [$path data]]
+	    }
+	    # Deselect the deleted items (if they were selected)
+	    for {set i $s} {$i < $e} {incr i} {
+	         if {[set sel [lsearch -exact $mySelected $i]] >= 0} {
+	             set mySelected [lreplace $mySelected $sel $sel]
+		     $path selected $mySelected
+	         }
+	    }
+	    $path data [lreplace [$path data] $s $e]
+	    $path contextdata [lreplace [$path contextdata] $s $e]
+	    $path sizedata [lreplace [$path sizedata] $s $e]
+	    listboxMeasureLines $path 0 0
           } 
         default {
-           return -code error "invalid number of arguments: $args"
+            return -code error "invalid number of arguments: $args\
+should be: $path delete index ?end-index?"
           } 
-         }
-         if {[$path cget -yoffset] > [llength [$path cget -data]]} {
+        }
+        if {[$path cget -yoffset] > [llength [$path cget -data]]} {
              $path configure -yoffset [llength [$path cget -data]]
          }
+	 $path listboxCollectContexts $path
          $path listboxDraw $path
     }
 
@@ -117,77 +158,180 @@
 
     public method listboxDraw {path} {
         set obj [$path obj]
-        set data [$path cget -data]
         $obj setall [$path cget -bg]
         set tmp [megaimage-blank]
-        set x 4
-        set y 4
-        set selected [$path cget -selected]
-        set yoffsetmap [list]
-        set peakwidth 1
-        for {set i [$path cget -yoffset]} {$i < [llength $data]} {incr i} {  
-            set line [lindex $data $i]
-            set buf [freetype [$path cget -font] [$path cget -fontsize] $line [$path cget -textcolor] width height]
-            if {$width > $peakwidth} {
-                set peakwidth $width
+        set myX [expr {[$path xoffset] + [$path cget -bd] + 1}]
+        set myY 0
+        set mySelected [$path cget -selected]
+	set myData [$path data]
+	set datalen [llength $data]
+	set sizes [$path sizedata]
+        if {[$path totalheight] > [$path cget -height]} {
+            set ylimit [expr {[$path totalheight] - [$path cget -height]}]
+            if {[$path yoffset] > $ylimit} {
+                $path yoffset $ylimit
             }
+        }
+        # Find which i to start with
+        set yoff 0
+        for {set i 0} {$i < $datalen} {incr i} {
+            set myHeight [lindex $sizes $i 1]
+            if {$yoff >= [$path yoffset] && [$path yoffset] < \
+                    ($yoff + $height)} {
+                set myY [expr {$yoff - [$path yoffset]}]
+                break
+            }
+            incr yoff $myHeight
+            incr yoff
+        }
+
+        # Iterate and draw the range of the text that is visible.
+        foreach d [lrange [$path data] $i end] \
+                myContext [lrange [$path contextdata] $i end] \
+                sizeset [lrange [$path sizedata] $i end] {
+            lassign $sizeset myWidth myHeight
+            lassign [listboxLookupContext $path $myContext] font fontsize \
+                    textcolor
+            set buf [freetype $font $fontsize $d $textcolor _ _]
             $tmp setdata $buf
-            $obj blendobj $x $y $tmp
-            configure -ystart $y
-            lappend yoffsetmap $y
-            incr y $height
-            lappend yoffsetmap $y
-            set yend $y
-            if {[lsearch -exact $selected $i] >= 0} {
-                set y [expr {$ystart - 1}]
-                $obj line 1 $y $width $y [$path cget -selectionbordercolor]
-                set y [expr {$yend + 1}]
-                $obj line 1 $y $width $y [$path cget -selectionbordercolor]
+            if {[lsearch -exact $mySelected $i] >= 0} {
+                set tmp2 [megaimage-blank $myWidth $myHeight]
+                $tmp2 setall [$path cget -selectioncolor]
+                $tmp2 blendobj 0 0 $tmp
+                $obj blendobj $myX $myY $tmp2
+                rename $tmp2 {}
+            } else {
+                $obj blendobj $myX $myY $tmp
             }
-            incr y 2
-            if {$y >= [$path cget -height]} {
+            incr i
+            incr myY $myHeight
+            incr myY
+            if {$myY >= [$path cget -height]} {
                 break
             }
         }
-        $path configure -yoffsetmap $yoffsetmap
-        $path configure -peakwidth $peakwidth
         rename $tmp {}
-        #set xrat [expr {1.0 / $peakwidth}]
-        #set xscrollstart [expr {[$path cget -xoffset] * $xrat}]
-        #set yscrollend [expr {}]
-        if {[info exists height]} {
-            set rat [expr {1.0 / [llength $data]}]
-            set yscrollstart [expr {[$path yoffset] * $rat}] 
-            set yscrollend [expr {$i  * $rat}]
-            if {$yscrollend > 1.0} {
-	        set yscrollend 1.0 
-	    }
-            listboxUpdateView $path [$path cget -yscrollcommand] $yscrollstart $yscrollend
-        } else {
-            listboxUpdateView $path [$path cget -yscrollcommand] 0.0 1.0
-        }
+        themeListboxDrawBorder $path
+        listboxUpdateViews $path
+        $path pendingAfterid ""
         render $path
-        configure -pending_afterid ""
     }
 
     public method listboxIdleDraw {path} {
-        if {[$path cget -pending_afterid] ne ""} {
+        if {[$path pendingAfterid] ne ""} {
 	    return
         }
-        configure -pending_afterid [after idle [list listboxDraw $path]]
-    }
-
-    public method listboxInsert {path offset args} {
-        set data [$path cget -data]
-        set data [linsert $data $offset {*}$args]
-        $path configure -data $data
-        listboxDraw $path
+        pendingAfterid [after idle [list listboxDraw $path]]
     }
 
     public method listboxInsertMethod {path offset args} {
-        set data [$path cget -data]
-        $path configure -data [linsert $data $offset {*}$args]
+        set cons [list]
+        set sizes [list]
+        foreach i $args {
+            lappend cons 0
+            lappend sizes [list 0 0]
+        }
+        if {$myOffset eq "end"} {
+            set myOffset [llength [$path data]]
+        }
+        $path data [linsert [$path data] $myOffset {*}$args]
+        $path contextdata [linsert [$path contextdata] $myOffset {*}$cons]
+        $path sizedata [linsert [$path sizedata] $myOffset {*}$sizes]
+        listboxMeasureLines $path $myOffset [expr {$myOffset + [llength $args]}]
         listboxDraw $path
+    }
+
+    public method listboxItemconfigure {path index args} {
+        array set myOptions $args
+        array set conar [list -font [$path cget -font] \
+                -fontsize [$path cget -fontsize] \
+                -textcolor [$path cget -textcolor]]
+        foreach {key value} [array get myOptions] {
+            if {![info exists conar($key)]} {
+                return -code error "invalid option: $key"
+            }
+            set conar($key) $value
+        }
+        # $conar(-textcolor) may be a symbolic color, so substitute it if needed.
+        set key [string tolower $conar(-textcolor)]
+        if {[info exists colors($key)]} {
+            set conar(-textcolor) $colors($key)
+        }
+        set myContexts [$path contexts]
+        lappend myContexts [list $conar(-font) $conar(-fontsize) $conar(-textcolor)]
+        $path contexts $myContexts
+        set myContextdata [$path contextdata]
+        lset myContextdata $index [llength $myContexts]
+        $path contextdata $myContextdata
+        listboxMeasureLines $path $index [expr {$index + 1}]
+        listboxIdleDraw $path
+    }
+
+    public method listboxLookupContext {path context} {
+        set cons [$path contexts]
+        if {$context == 0} {
+            return [list [$path cget -font] [$path cget -fontsize] [$path cget -textcolor]]
+        }
+        incr context -1 ;# context zero is a virtual context that refers to the $path options
+        return [lindex $cons $context]
+    }
+
+    public method listboxMeasureContents {path} {
+        set myTotalheight 0
+        set myPeakwidth 0
+        set myPeakheight 0
+        foreach line [$path data] {
+            freetype-measure [$path cget -font] [$path cget -fontsize] $line myWidth myHeight
+            if {$myHeight > $myPeakheight} {
+                set myPeakheight $myHeight
+            }
+            if {$myWidth > $myPeakwidth} {
+                set myPeakwidth $myWidth
+            }
+            incr myTotalheight $myHeight
+            incr myTotalheight 2 ;#XXX from NS_listbox-draw
+        }
+        $path peaklineheight $myPeakheight
+        $path peaklinewidth $myPeakwidth
+        $path totalheight $myTotalheight
+    }
+
+    public method listboxMeasureLines {path start end} {
+        set mySizes [$path sizedata]
+        set myData [$path data]
+        set myContexts [$path contexts]
+        set myContextdata [$path contextdata]
+        for {set i $start} {$i <= $end} {incr i} {
+            if {$i >= [llength $data]} {
+                break
+            }
+            set line [lindex $myData $i]
+            if {[string length $line] == 0} {
+                set line " "
+            }
+            set con [lindex $myContextdata $i]
+            lassign [listboxLookupContext $path $con] myFont myFontsize _
+            freetype-measure $myFont $myFontsize $line myWidth myHeight
+            lset mySizes $i [list $myWidth $myHeight]
+        }
+        $path sizedata $mySsizes
+        listboxMeasureTotal $path
+    }
+
+    public method listboxMeasureTotal {path} {
+        set myPeakwidth 0
+        set myTotalheight 0
+
+        foreach sizeset [$path sizedata] {
+            lassign $sizeset myWidth myHeight
+            if {$myWidth > $myPeakwidth} {
+                set myPeakwidth $myWidth
+            }
+            incr myTotalheight $myHeight
+            incr myTotalheight
+        }
+        $path peaklinewidth $myPeakwidth
+        $path totalheight $myTotalheight
     }
 
     public method listboxRedraw {path} {
@@ -198,11 +342,41 @@
         listboxDraw $path
     }
 
-   public method listboxUpdateView {path basecmd ystart yend} {
-       if {$basecmd ne ""} {
-           uplevel #0 $basecmd [list $ystart] [list $yend]
-       }
-   }
+    public method listboxUpdateView {path basecmd ystart yend} {
+        if {$basecmd ne ""} {
+            uplevel #0 $basecmd [list $ystart] [list $yend]
+        }
+    }
+
+    public method listboxUpdateViews {path} {
+        if {[$path peaklinewidth] > [$path cget -width]} {
+         set delta [expr {[$path peaklinewidth] - [$path cget -width] + \
+                 [$path xoffset]}]
+         set rat [expr {1.0 / [$path peaklinewidth]}]
+         set xscrollstart [expr {-[$path xoffset] * $rat}]
+         set xscrollend [expr {((-[$path xoffset]) + \
+                 [$path cget -width]) * $rat}]
+        } else {
+            set xscrollstart 0.0
+            set xscrollend 1.0
+        }
+
+        if {[$path totalheight] > [$path cget -height]} {
+            set rat [expr {1.0 / [$path totalheight]}]
+            set yscrollstart [expr {[$path yoffset] * $rat}]
+            set yscrollend [expr {([$path yoffset] + \
+                    [$path cget -height]) * $rat}]
+        } else {
+            set yscrollstart 0.0
+            set yscrollend 1.0
+        }
+
+        listboxUpdateView $path [$path cget -xscrollcommand] \
+                $xscrollstart $xscrollend
+        listboxUpdateView $path [$path cget -yscrollcommand] \
+                $yscrollstart $yscrollend
+    }
+
 
     public method listboxXviewMethod {path args} {
         if {([llength $args] != 2) && ([llength $args] != 3)} {
@@ -211,6 +385,41 @@
         switch -- [lindex $args 0] {
         scroll {
             lassign $args type incr incrtype
+            if {$incrtype eq "units"} {
+                set i [$path xoffset]
+                incr i [expr {- ($incr * 4)}]
+                if {$i > 0} {
+                    set i 0
+                }
+                if {[$path peaklinewidth] > [$path cget -width]} {
+                    set peakx [expr {[$path peaklinewidth] - \
+                            [$path cget -width]}]
+                    if {abs($i) > $peakx} {
+                        set i [expr {-$peakx}]
+                    }
+                    $path xoffset $i
+                } else {
+                    $path xoffset 0
+                }
+                listboxIdleDraw $path
+            }
+          }
+        moveto {
+            lassign $args type incr
+            if {[$path peaklinewidth] > [$path cget -width]} {
+                set lowoff [expr {[$path cget -width] - [$path peaklinewidth]}]
+                set newoff [expr {-int([$path peaklinewidth] * $incr)}]
+                if {$newoff < $lowoff} {
+                    set newoff $lowoff
+                }
+                if {$newoff > 0} {
+                    set newoff 0
+                }
+                $path xoffset $newoff
+            } else {
+                $path xoffset 0
+            }
+            listboxIdleDraw $path
           }
         }
     }
@@ -224,23 +433,34 @@
             lassign $args type incr incrtype
             if {$incrtype eq "units"} {
                 set i [$path yoffset]
-                incr i $incr
-                if {($i >= 0) && ($i < [llength [$path cget -data]])} {
-                    $path configure -yoffset $i
-                    listboxIdleDraw $path
+                incr i [expr {$incr * 4}]
+                set limit [expr {[$path totalheight] - [$path cget -height]}]
+                if {$i < 0} {
+                    set i 0
                 }
+                if {$i > $limit} {
+                    set i $limit
+                }
+                if {[$path cget -height] > [$path totalheight]} {
+                    set i 0
+                }
+                $path yoffset $i
+                listboxIdleDraw $path
             }
           }
         moveto {
             lassign $args type incr
-            set newoff [expr {int(floor([llength [$path cget data]] * $incr))}]
+            if {$incr > 1.0} {
+                set incr 1.0
+            }
+            set newoff [expr {int(floor([$path totalheight] * $incr))}]
             if {$newoff < 0} {
                 set newoff 0
             } else { 
-	        if {$newoff >= [llength [$path cget -data]]} {
-                    set newoff [expr {[llength [$path cget -data]] - 1}]
+                if {[$path cget -height] > [$path totalheight]} {
+                    set newoff 0
                 }
-                $path configure -yoffset $newoff
+                $path yoffset $newoff
                 listboxIdleDraw $path
             }
           }
