@@ -14,15 +14,21 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.5 2007/10/15 09:24:51 wiede Exp $
+# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.6 2007/10/18 21:43:27 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::grid {
+    private common gridLock
+    private common xsizes
+    private common ysizes
+#    private common ratios
+#    private common sticky
+
     protected proc dump {grid} {
         puts stderr "BEGIN DUMP"
 	set i 0
 	foreach row $grid {
-	    puts stderr "$i -> $row"
+	    puts stderr "  row: $i -> $row"
 	    incr i
 	}
 	puts stderr "END DUMP"
@@ -50,15 +56,15 @@ itcl::extendedclass ::ntk::classes::grid {
 	set r 0
 	foreach row [grid] {
 	    set c 0
-	    foreach w $row {
-	        if {$w eq ""} {
+	    foreach path $row {
+	        if {$path eq ""} {
 		    incr c
 		    continue
 		}
-		for {set i 0} {$i < [$w cget -columnspan]} {incr i} {
+		for {set i 0} {$i < [$path cget -columnspan]} {incr i} {
 		    lappend columns [expr {$c + $i}]
 		}
-		for {set i 0} {$i < [$w cget -rowspan]} {incr i} {
+		for {set i 0} {$i < [$path cget -rowspan]} {incr i} {
 		    lappend rows [expr {$r + $i}]
 		}
                 incr c
@@ -67,34 +73,36 @@ itcl::extendedclass ::ntk::classes::grid {
 	}
     }
 
-    protected proc insertWidget {gridVar w c r} {
+    protected proc insertWidget {gridVar path column row} {
 	upvar $gridVar grid
 
-        if {[llength $grid] <= ($r + 1)} {
+	set numRows [llength $grid]
+        if {$numRows <= ($row + 1)} {
             #
             # The grid row doesn't exist, so insert it.
             #
-            for {set i [expr {[llength $grid] - 1}]} {$i < $r} {incr i} {
+            for {set i [expr {$numRows - 1}]} {$i < $row} {incr i} {
                 lappend grid [list]
             }
        } 
-       set row [lindex $grid $r]
-       if {[llength $row] <= ($c + 1)} {
+       set myRow [lindex $grid $row]
+       set numColumns [llength $row]
+       if {$numColumns <= ($column + 1)} {
            #
            # The grid column doesn't exist in the row, so insert it.
            #
-           for {set i [expr {[llength $row] - 1}]} {$i < $c} {incr i} {
-               lappend row {}
+           for {set i [expr {$numColumns - 1}]} {$i <= $column} {incr i} {
+               lappend myRow [list]
            }
        }
-       set cells [lindex $row $c]
-       if {![llength $cells]} {
-           set cells [list $w]
+       set cells [lindex $myRow $column]
+       if {[llength $cells] == 0} {
+           set cells [list $path]
        } else {
-           lappend cells $w
+           lappend cells $path
        }
-       lset row $c $cells
-       lset grid $r $row
+       lset myRow $column $cells
+       lset grid $row $myRow
     }
 
     protected proc integerCallback {w arg} {
@@ -105,18 +113,26 @@ itcl::extendedclass ::ntk::classes::grid {
     }
 
     public proc layout {parent} {
+	if {[::info exists gridLock($parent)]} {
+puts stderr "gridLock $parent exists"
+	    return
+	}
+	set gridLock($parent) $parent
         set m [$parent manager]
-        set grid [$m grid]
+        set myGrid [$m grid]
         set pwidth [$parent cget -width]
         set pheight [$parent cget -height]
         if {$pwidth <= 0 || $pheight <= 0} {
+	    unset gridLock($parent)
 	    return
         }
         set cwork [list]
-        for {set c 0} {$c < [$m peakcolumn]} {incr c} {
+	set myPeakcolumn [$m peakcolumn]
+	set myPeakrow [$m peakrow]
+        for {set c 0} {$c < $myPeakcolumn} {incr c} {
             set col [list]
-            for {set r 0} {$r < [$m peakrow]} {incr r} {
-                set cells [lindex $grid $r $c]
+            for {set r 0} {$r < $myPeakrow} {incr r} {
+                set cells [lindex $myGrid $r $c]
                 if {[llength $cells] == 0} {
 	            continue
 	        }
@@ -128,9 +144,8 @@ itcl::extendedclass ::ntk::classes::grid {
         }
 
         layoutDirection $cwork -columnspan reqwidth width $pwidth 0 xsizes
-
         set rwork [list]
-        foreach row $grid {
+        foreach row $myGrid {
              set rbuf [list]
              foreach cells $row {
                  if {[llength $cells] == 0} {
@@ -142,13 +157,10 @@ itcl::extendedclass ::ntk::classes::grid {
                  lappend rwork $rbuf
              }
         }
-
         layoutDirection $rwork -rowspan reqheight height $pheight 1 ysizes
-        layoutXy $grid xsizes ysizes
-
-puts stderr "parent $pwidth $pheight"
-dumpSizes $grid
-        redraw $grid
+        layoutXy $myGrid
+	unset gridLock($parent)
+        redraw $myGrid
     }
 
     protected proc layoutDirection {worklist spankey reqdim wdir psize slotoffset sizesvar} {
@@ -158,16 +170,16 @@ dumpSizes $grid
 
         # Set ratios for the windows that span 1 column/row.
         foreach dim $worklist {
-            foreach w $dim {
-                if {[$w cget $spankey] > 1} {
+            foreach path $dim {
+                if {[$path cget $spankey] > 1} {
 	            continue
                 }
-                set s [lindex [$w cget -slot] $slotoffset]
-                set ratio [expr {[$w cget -$reqdim] * 100 / $psize}]
-                if {[lsearch -exact [$w cget -sticky] $wdir] >= 0} {
+                set s [lindex [$path cget -slot] $slotoffset]
+                set ratio [expr {[$path cget -$reqdim] * 100 / $psize}]
+                if {[lsearch -exact [$path cget -sticky] $wdir] >= 0} {
                     set sticky($s) 1
                 }
-                if {![info exists ratios($s)] || $ratio > $ratios($s)} {
+                if {![::info exists ratios($s)] || $ratio > $ratios($s)} {
                     set ratios($s) $ratio 
                 }
             }
@@ -175,16 +187,16 @@ dumpSizes $grid
 
         # Now handle the multiple span windows.
         foreach dim $worklist {
-            foreach w $dim {
-                if {[$w cget $spankey] == 1} {
+            foreach path $dim {
+                if {[$path cget $spankey] == 1} {
 		    continue
 	        }
-                set s [lindex [$w cget -slot] $slotoffset]
-                set es [expr {$s + [$w cget $spankey]}]
-                set st [expr {[lsearch -exact [$w cget -sticky] $wdir] >= 0}]
+                set s [lindex [$path cget -slot] $slotoffset]
+                set es [expr {$s + [$path cget $spankey]}]
+                set st [expr {[lsearch -exact [$path cget -sticky] $wdir] >= 0}]
                 for {set i $s} {$i < $es} {incr i} {
                     if {![info exists ratios($i)]} {
-                        set wratio [expr {[$w cget $reqdim] * 100 / $psize}]
+                        set wratio [expr {[$path cget $reqdim] * 100 / $psize}]
                         for {set subi $s} {$subi < $es} {incr subi} {
                             if {[info exists ratios($subi)]} {
                                 set wratio [expr {$wratio - $ratios($subi)}]
@@ -238,9 +250,9 @@ dumpSizes $grid
 
         #Set the size for this dimension of the widget.
         foreach dim $worklist {
-            foreach w $dim {
-                set s [lindex [$w cget -slot] $slotoffset]
-                set es [expr {$s + [$w cget $spankey]}]
+            foreach path $dim {
+                set s [lindex [$path cget -slot] $slotoffset]
+                set es [expr {$s + [$path cget $spankey]}]
                 set totalsize 0
                 for {set i $s} {$i < $es} {incr i} {
                     incr totalsize $sizes($i)
@@ -248,35 +260,32 @@ dumpSizes $grid
                 if {$totalsize <= 0} {
                     set totalsize 1
                 }
-                $w configure -$wdir $totalsize
+                $path configure -$wdir $totalsize
             }
         }
     }
 
-    protected proc layoutXy {grid xsizesvar ysizesvar} {
-        upvar $xsizesvar xsizes
-        upvar $ysizesvar ysizes
-
+    private proc layoutXy {grid} {
         foreach row $grid {
             foreach cells $row {
-                foreach w $cells {
-                    if {$w eq ""} {
+                foreach path $cells {
+                    if {$path eq ""} {
 		        continue
                     }
-                    lassign [$w cget -slot] xslot yslot
+                    lassign [$path cget -slot] xslot yslot
                     set x 0
 		    set y 0
                     for {set xi 0} {$xi < $xslot} {incr xi} {
-                        if {[info exists xsizes($xi)]} {
+                        if {[::info exists xsizes($xi)]} {
 			    incr x $xsizes($xi)
 			}
                     }
                     for {set yi 0} {$yi < $yslot} {incr yi} {
-                        if {[info exists ysizes($yi)]} {
+                        if {[::info exists ysizes($yi)]} {
 			    incr y $ysizes($yi)
 			}
                     }
-                    $w configure -x $x -y $y
+                    $path configure -x $x -y $y
                 }
             }   
         }
@@ -293,20 +302,24 @@ dumpSizes $grid
     }
 
     protected proc redraw {grid} {
+#puts stderr "GRID!redraw!$grid!"
         foreach row $grid {
             foreach cells $row {
-                foreach w $cells {
+                foreach path $cells {
                     #Resize the backing megaimage obj.
-                    [$w obj] setsize [$w cget -width] [$w cget -height]
+                    [$path obj] setsize [$path cget -width] [$path cget -height]
                     #Trigger a redraw of the widget.
-                    $w dispatchRedraw $w
+#puts stderr "[$path obj] setsize [$path cget -width] [$path cget -height]"
+#puts stderr "$path dispatchRedraw $path!"
+                    $path dispatchRedraw $path
                 }
             }
         }
     }
 
-    protected proc relayoutTrace {w} {
-        layout [$w parent]
+    public proc relayoutTrace {path} {
+#puts stderr "relayoutTrace!$path!"
+        layout [$path parent]
     }
 
     protected proc remove {w} {
@@ -316,13 +329,23 @@ dumpSizes $grid
         layout [$w parent]
     }
 
-    protected proc removeWidget {gridvar w} {
+    protected proc removeWidget {gridvar path} {
         upvar $gridvar grid
 
-        lassign [$w cget -slot] c r
+	if {[llength $grid] == 0} {
+	    # grid call in progress
+	    return
+	}
+        lassign [$path cget -slot] c r
+#puts stderr "removeWidget!$grid!$path!$c!$r!"
         set row [lindex $grid $r]
         set cells [lindex $row $c]
-        set i [lsearch -exact $cells $w]
+#puts stderr "ROW!$row!$cells!"
+	if {[llength $cells] == 0} {
+	    # grid call in progress
+	    return
+	}
+        set i [lsearch -exact $cells $path]
         if {$i >= 0} {
             set cells [lreplace $cells $i $i]
         }
@@ -347,7 +370,7 @@ dumpSizes $grid
         }
     }
 
-    protected proc slotCallback {w arg} {
+    protected proc slotCallback {path arg} {
         if {[llength $arg] != 2} {
             return -code error "invalid list length (should be 2): $arg"
         }
@@ -358,11 +381,11 @@ dumpSizes $grid
         if {![string is integer -strict $r]} {
             return -code error "invalid row for slot (not an integer): $r"
         }
-        set p [$w parent]
-        set grid [[$p manager] getGridValue grid]
+        set p [$path parent]
+        set grid [[$p manager] grid]
 
-        removeWidget grid $w
-        insertWidget grid $w $c $r
+        removeWidget grid $path
+        insertWidget grid $path $c $r
  
         [$p manager] grid $grid
  
@@ -386,7 +409,8 @@ dumpSizes $grid
     protected proc stickyCallback {w arg} {
         foreach i $arg {
             if {"width" ne $i && "height" ne $i} {
-                return -code error "invalid -sticky list item (should be width or height): $i"
+                return -code error \
+		    "invalid -sticky list item (should be width or height): $i"
             }
         }
         return 1
@@ -409,51 +433,35 @@ dumpSizes $grid
     public proc grid {path args} {
         # See if the parent has a manager object already.
         # Create a new grid manager object if there isn't one already.
-        set p [$path parent]
-        if {[$p manager] eq ""} {
-	    set m [::ntk::classes::gridManager m$p $p]
-            $p manager $m 
+        set myParent [$path parent]
+        if {[$myParent manager] eq ""} {
+	    set m [::ntk::classes::gridManager ${myParent}.__manager $myParent]
+	    $m remanage layout
+	    $m free gridFree
+            $myParent manager $m 
+	    $myParent appendRedrawHandler [list $myParent layout $myParent]
         }
-        # Unlock and initialize the grid data for the window.
-	set m2 [::ntk::classes::gridManager m$path $path]
-        $path configure -sticky [list] -columnspan 1 -rowspan 1 \
-                 -slot [list 0 0] -columnratio 0 -rowratio 0 
+        # initialize the grid data for the window.
+	set m2 [::ntk::classes::gridData ${path}.__data $path]
+        if {[llength $args] > 0} {
+	    $path configure {*}$args
+	}
+	$m2 wpath $path
         $path removeFromManager gridRemove
 
-        #XXX we should relayout even if the {*} and eval fail.
-        if {[llength $args]} {
-            if {[catch {$w {*}$args} err]} {
-                 destroyWindow $w
-                 return -code error $err
-            }
-        }
-
         # Get the manager and set the peaks.
-        set m [[$path parent] manager]
+        set m [$myParent manager]
         lassign [$path cget -slot] c r
         setPeak $m peakrow [expr {$r + [$path cget -rowspan]}]
         setPeak $m peakcolumn [expr {$c + [$path cget -columnspan]}]
         # Get the grid prior to insertion from the parent.
-        set grid [$m grid]
-        insertWidget grid $path $c $r
-
+        set myGrid [$m grid]
+        insertWidget myGrid $path $c $r
         # Set the new grid list.
-        $m grid $grid
+        $m grid $myGrid
         layout [$path parent]
-
-        # Create the callbacks, now that the widget members have been initialized.
-if {0} {
-        structure-key-callback $path -sticky [list NS__grid-sticky-callback $path]
-        structure-key-callback $path -columnspan [list NS__grid-span-callback $path]
-        structure-key-callback $path -rowspan [list NS__grid-span-callback $path]
-        structure-key-callback $path -slot [list NS__grid-slot-callback $path]
-
-        foreach key [list -sticky -columnspan -rowspan -slot] {
-             structure-trace-key $path $key [list NS__grid-relayout-trace $path]
-        }
-}
-dump $grid
-dumpSizes $grid
+#dump $myGrid
+#dumpSizes $myGrid
         return $path
     }
 }
