@@ -14,16 +14,16 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.5 2007/10/18 21:42:28 wiede Exp $
+# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.6 2007/10/18 23:01:44 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::listbox {
     inherit ::ntk::classes::theme 
 
-    private variable listboxDraw [list]
     private variable destroy listboxDestroy
 
-    public option -selectioncolor -default {} -configuremethod listboxConfig
+    public option -selectioncolor -default [list 200 100 200 255] \
+            -configuremethod listboxConfig
     public option -selectioncallback -default [list] \
             -configuremethod listboxConfig
     public option -xscrollcommand -default [list] -configuremethod listboxConfig
@@ -36,7 +36,7 @@
     public methodvariable xoffset -default 0
     public methodvariable yoffset -default 0
     public methodvariable selected -default 0
-    public methodvariable pendingAfterid -default ""
+    public methodvariable pendingAfterId -default ""
     public methodvariable peakwidth -default 1
     public methodvariable peaklineheight -default 0
     public methodvariable peaklinewidth -default 0
@@ -45,25 +45,24 @@
 
     private method listboxConfig {option value} {
         set itcl_options($option) $value
-        if {$listboxDraw ne ""} {
-            $listboxDraw [path]
-        }
+        listboxDraw $wpath
     }
 
     constructor {args} {
-        eval ::ntk::classes::window::constructor -width 200 -height 260
-    } {
         set themeConfig listboxConfig
-	configure {*}$args
+	set itcl_options(-width) 200
+	set itcl_options(-height) 260
+	if {[llength $args] > 0} {
+	    configure {*}$args
+	}
 	appendRedrawHandler [list $wpath listboxRedraw $wpath]
 	appendDestroyHandler [list $wpath listboxDestroy $wpath]
-# $path -buttonpress [list listboxButtonPress $wpath]
-
-	set listboxDraw listboxDraw
+        set itcl_options(-buttonpress) [list $wpath listboxButtonPress $wpath]
         return $wpath
     }
 
     public method listboxButtonPress {path button x y globalx globaly} {
+puts stderr "listboxButtonPress!$path!$button!"
         if {$button != 1} {
             return
         }
@@ -88,8 +87,8 @@
 	    incr ly $myHeight
 	    incr ly
         }
-        $path configure selected $mySelected
-        $path listboxDraw
+        $path selected $mySelected
+        $path listboxDraw $path
     }
 
     public method listboxCollectContexts {path} {
@@ -108,7 +107,7 @@
 
 
 
-    public method listboxDeleteMethod {path args} {
+    public method delete {path args} {
 	set mySelected [$path selected]
         switch -- [llength $args] {
         1 {
@@ -177,7 +176,7 @@ should be: $path delete index ?end-index?"
         for {set i 0} {$i < $datalen} {incr i} {
             set myHeight [lindex $sizes $i 1]
             if {$yoff >= [$path yoffset] && [$path yoffset] < \
-                    ($yoff + $height)} {
+                    ($yoff + $myHeight)} {
                 set myY [expr {$yoff - [$path yoffset]}]
                 break
             }
@@ -213,18 +212,18 @@ should be: $path delete index ?end-index?"
         rename $tmp {}
         themeListboxDrawBorder $path
         listboxUpdateViews $path
-        $path pendingAfterid ""
+        $path pendingAfterId ""
         render $path
     }
 
     public method listboxIdleDraw {path} {
-        if {[$path pendingAfterid] ne ""} {
+        if {[$path pendingAfterId] ne ""} {
 	    return
         }
-        pendingAfterid [after idle [list listboxDraw $path]]
+        pendingAfterId [after idle [list listboxDraw $path]]
     }
 
-    public method listboxInsertMethod {path offset args} {
+    public method insert {myOffset args} {
         set cons [list]
         set sizes [list]
         foreach i $args {
@@ -232,16 +231,16 @@ should be: $path delete index ?end-index?"
             lappend sizes [list 0 0]
         }
         if {$myOffset eq "end"} {
-            set myOffset [llength [$path data]]
+            set myOffset [llength [$wpath data]]
         }
-        $path data [linsert [$path data] $myOffset {*}$args]
-        $path contextdata [linsert [$path contextdata] $myOffset {*}$cons]
-        $path sizedata [linsert [$path sizedata] $myOffset {*}$sizes]
-        listboxMeasureLines $path $myOffset [expr {$myOffset + [llength $args]}]
-        listboxDraw $path
+        $wpath data [linsert [$wpath data] $myOffset {*}$args]
+        $wpath contextdata [linsert [$wpath contextdata] $myOffset {*}$cons]
+        $wpath sizedata [linsert [$wpath sizedata] $myOffset {*}$sizes]
+        listboxMeasureLines $wpath $myOffset [expr {$myOffset + [llength $args]}]
+        listboxDraw $wpath
     }
 
-    public method listboxItemconfigure {path index args} {
+    public method itemconfigure {path index args} {
         array set myOptions $args
         array set conar [list -font [$path cget -font] \
                 -fontsize [$path cget -fontsize] \
@@ -314,7 +313,7 @@ should be: $path delete index ?end-index?"
             freetype-measure $myFont $myFontsize $line myWidth myHeight
             lset mySizes $i [list $myWidth $myHeight]
         }
-        $path sizedata $mySsizes
+        $path sizedata $mySizes
         listboxMeasureTotal $path
     }
 
@@ -378,7 +377,7 @@ should be: $path delete index ?end-index?"
     }
 
 
-    public method listboxXviewMethod {path args} {
+    public method xview {path args} {
         if {([llength $args] != 2) && ([llength $args] != 3)} {
             return -code error "invalid number of arguments to xview"
         }
@@ -424,7 +423,7 @@ should be: $path delete index ?end-index?"
         }
     }
 
-    public method listboxYviewMethod {path args} {
+    public method yview {path args} {
         if {([llength $args] != 2) && ([llength $args] != 3)} {
             return -code error "invalid number of arguments to yview"
         }

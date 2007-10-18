@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.6 2007/10/18 21:42:27 wiede Exp $
+# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.7 2007/10/18 23:01:44 wiede Exp $
 #--------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------
@@ -101,6 +101,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
     }
 
     public method scrollbarButtonpress {buttonpath path unit button x y globalx globaly} {
+puts stderr "scrollbarButtonpress!$buttonpath!$unit!$button!"
         $buttonpath pressed 1
         if {([$path cget -command] ne "") && ([$path button_afterid] eq "") && \
                 ([$path idle_afterid] eq "")} {
@@ -110,6 +111,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
     }
 
     public method scrollbarButtonrelease {buttonpath path button x y globalx globaly} {
+puts stderr "scrollbarButtonrelease!$buttonpath!$button!"
         $buttonpath pressed 0
         after cancel [$path buttonAfterId]
         $path buttonAfterId ""
@@ -148,7 +150,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
                     [$path cget -slidercolor]
             themeDrawBorder [$path.trough obj] 0 $myY $myWidth $rectheight \
                     $low $high 1
-            $path y1 myY$
+            $path y1 $myY
             $path y2 [expr {$myY + $rectheight}]
         } else {
             set myX [expr {round($rstart * $myWidth)}]
@@ -205,29 +207,34 @@ itcl::extendedclass ::ntk::classes::scrollbar {
     }
 
     public method scrollbarScaleButtonpress {path button x y globalx globaly} {
+puts stderr "scrollbarScaleButtonpress!$path!$button!"
         lassign [$path scale] start end
         if {[$path cget -orient] eq "vertical"} {
-            if {($y >= [$path y1]) && ($y < [$path y2])} {
+puts stderr "Y!$y!$y1![$path y1]!$y2![$path y2]!"
+            if {($y >= $y1) && ($y < $y2)} {
                 $path clickx $x
                 $path clicky $y
                 $path dragging 1
-                $path scaleoffset [$path y1]
+                $path scaleoffset $y1
             }
         } else {
-            if {($x >= [$path x1]) && ($x < [$path x2])} {
+            if {($x >= $x1) && ($x < $x2)} {
                 $path clickx $x
                 $path clicky $y
                 $path dragging 1
-                $path scaleoffset [$path x1]
+                $path scaleoffset $x1
             }
         }
+puts stderr "dragging!$dragging!"
     }
 
     public method scrollbarScaleButtonrelease {path button x y globalx globaly} {
+puts stderr "scrollbarScaleButtonrelease!$path!$button!"
         $path dragging 0
     }
 
     public method scrollbarScaleMotion {path x y globalx globaly} {
+puts stderr "scrollbarScaleMotion!$path!$dragging!"
        if {[$path dragging] == 0} {
            return
 	}
@@ -242,15 +249,16 @@ itcl::extendedclass ::ntk::classes::scrollbar {
 	    }
             set rat [expr {1.0 / $myHeight}]
             set moveto [expr {($yd + [$path scaleoffset]) * $rat}]
-            set cmd [$path cget -command]
-            uplevel #0 $cmd moveto [list $moveto]
         } else {
             if {$xd == 0} {
 	        return
 	    }
             set rat [expr {1.0 / $myWidth}]
             set moveto [expr {($xd + [$path scaleoffset]) * $rat}]
-            set cmd [$path cget -command]
+        }
+        set cmd [$path cget -command]
+puts stderr "cmd!$cmd!$moveto!$x!$y!$globalx!$globaly!$clickx!$clicky!"
+	if {$cmd ne ""} {
             uplevel #0 $cmd moveto [list $moveto]
         }
     }
