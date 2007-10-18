@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.9 2007/10/16 10:01:42 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.10 2007/10/18 21:52:39 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::button {
@@ -41,7 +41,7 @@ itcl::extendedclass ::ntk::classes::button {
 	    buttonTrace $wpath
 	  }
 	default {
-             buttonDraw $wpath
+            buttonDraw $wpath
 	  }
 	}
     }
@@ -51,7 +51,9 @@ itcl::extendedclass ::ntk::classes::button {
 	set itcl_options(-buttonrelease) [list $wpath buttonRelease $wpath]
 	set themeConfig buttonConfig
 	set destroy buttonDestroy
-	configure {*}$args
+	if {[llength $args] > 0} {
+	    configure {*}$args
+	}
 	appendRedrawHandler [list $wpath buttonRedraw $wpath]
 	set constructing 0
 	buttonDraw $wpath
@@ -75,7 +77,7 @@ puts stderr "button!buttonRelease called $button $x $y"
         }
         if {$button == 1} {
 	    set cmd [$path cget -command]
-puts stderr "CMD!$cmd!"
+#puts stderr "CMD!$cmd!"
 	    if {$cmd ne ""} {
                 uplevel #0 $cmd
 	    }
@@ -103,6 +105,7 @@ puts stderr "CMD!$cmd!"
     }
 
     public method buttonDrawPressed {path} {
+#puts stderr "buttonDrawPressed!$path!"
 	set myColor [$path cget -bg]
 	if {[llength $myColor] == 1} {
 	    $obj setall $colors($myColor)

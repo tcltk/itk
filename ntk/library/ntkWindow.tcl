@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.12 2007/10/16 20:21:20 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.13 2007/10/18 21:52:39 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::window {
@@ -99,7 +99,7 @@
     }
 
     constructor {args} {
-#puts stderr "constructor OPTIONS![info exists itcl_options]!"
+#puts stderr "WINDDOW constructor ARGS!$args!"
 	incr cntWindows
 	set wpath [string trimleft $this :]
         if {[info exists windows($wpath)]} {
@@ -108,7 +108,9 @@
         set windows($wpath) $wpath
 	set parent [windowParent $wpath]
 #puts stderr "ARGS![join $args !]!"
-	eval configure $args
+	if {[llength $args] > 0} {
+	    eval configure $args
+	}
         set obj [megaimage-blank [cget -width] [cget -height]]
 	#
 	# Append the child to the parent's window list
@@ -175,6 +177,7 @@
 
     public method dispatchRedraw {path} {
         foreach cmd [$path redraw] {
+#puts stderr "dispatchRedraw!$path!$cmd!"
             uplevel #0 $cmd
         }
     }
@@ -193,6 +196,7 @@
     }
 
     public method redrawWindow {path} {
+#puts stderr "redrawWindow![$path obj] setsize [$path cget -width] [$path cget -height]!x![$path x]!y![$path y]!"
         [$path obj] setsize [$path cget -width] [$path cget -height]
     }
 

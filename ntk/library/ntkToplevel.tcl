@@ -14,20 +14,13 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkToplevel.tcl,v 1.1.2.9 2007/10/15 23:32:18 wiede Exp $
+# RCS: @(#) $Id: ntkToplevel.tcl,v 1.1.2.10 2007/10/18 21:52:39 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::toplevel {
     inherit ::ntk::classes::window
 
     public methodvariable id -default [list]
-
-    public option -bg -default [list 16 33 65 255] \
-            -validatemethod verifyColor -configuremethod toplevelConfig
-
-    public method toplevelConfig {option value} {
-        set itcl_options($option) $value
-    }
 
     constructor {args} {
         eval ::ntk::classes::window::constructor $args

@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.7 2007/10/16 20:21:18 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.8 2007/10/18 21:52:39 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
@@ -86,33 +86,41 @@
     }
 
     public proc themeGetText {} {
-        list -bg [list 255 255 255 255] -fg [list 0 0 0 255] -theme default -themeclass text
+        list -bg [list 255 255 255 255] -fg [list 0 0 0 255] \
+	        -theme default -themeclass text
     }
 
     public proc themeLabelDrawBorder {path} {
         set low [list 20 20 20 255]
         set high [list 200 200 200 255]
-        themeDrawBorder [$path obj] 0 0 [$path cget -width] [$path cget -height] $low $high [$path cget -bd]
+        themeDrawBorder [$path obj] 0 0 [$path cget -width] \
+	        [$path cget -height] $low $high [$path cget -bd]
+    }
+
+    public method themeListboxDrawBorder {path} {
+         set low [list 20 20 20 255]
+         set high [list 200 200 200 255]
+         themeDrawBorder [$path obj] 0 0 [$path cget -width] \
+	         [$path cget -height] $high $low [$path cget -bd]
     }
 
     public proc themeScrollbarButton {path} {
-#        NS_window $path 20 20
-        $path pressed 0 direction up
-        appendRedrawHandler $path [list themeScrollbarButtonDraw $path]
+        uplevel #0 ntk::classes::scrollbarbutton $path -width 20 -height 20
+        $path appendRedrawHandler [list $path themeScrollbarButtonDraw $path]
         foreach key [list pressed direction] {
-#             structure-trace-key $path $key [list themeScrollbarButtonDraw $path]
+#             structure-trace-key $path $key [list $path themeScrollbarButtonDraw $path]
         }
     }
 
     public proc themeScrollbarButtonDraw {path} {
         set low [list 20 20 20 255]
         set high [list 200 200 200 255]
-        set w [$path width]
-        set h [$path height]
-        [$path obj] setall [[$path _parent] cget -bg]
+        set w [$path cget -width]
+        set h [$path cget -height]
+        [$path obj] setall [[$path parent] cget -bg]
 
         if {![$path pressed]} {
-            themeDrawDorder [$path obj] 0 0 $w $h $low $high 1
+            themeDrawBorder [$path obj] 0 0 $w $h $low $high 1
         } else {
             themeDrawBorder [$path obj] 0 0 $w $h $high $low 1
         }
@@ -141,12 +149,13 @@
     }
 
     public proc themeScrollbarTrough {path} {
-#        NS_window $path 20 20
-        appendRedrawHandler $path [list themeScrollbarTroughDraw $path]
+        uplevel #0 ntk::classes::scrollbarbutton $path -width 20 -height 20
+        $path appendRedrawHandler [list $path themeScrollbarButtonDraw $path]
     }
 
     public proc themeScrollbarTroughDraw {path} {
         [$path obj] setall [list 127 127 127 255]
         render $path
     }
+
 }

@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.10 2007/10/15 23:32:18 wiede Exp $
+# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.11 2007/10/18 21:52:39 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::render {
@@ -73,8 +73,8 @@
             set cx [expr {$x + [$child x]}]
             set cy [expr {$y + [$child y]}]
             set r [$child cget -rotate]
+	    set childObj [$child obj]
             if {$r} {
-		set childObj [$child obj]
 		set myRenderTreeData
                 if {$myRenderTreeData] eq ""} {
                     $child renderTreeData [megaimage-blank 1 1]
