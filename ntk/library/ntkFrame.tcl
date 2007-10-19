@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkFrame.tcl,v 1.1.2.7 2007/10/15 23:32:18 wiede Exp $
+# RCS: @(#) $Id: ntkFrame.tcl,v 1.1.2.8 2007/10/19 10:11:58 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::frame {
@@ -24,20 +24,20 @@ itcl::extendedclass ::ntk::classes::frame {
 
     private method frameConfig {option value} {
         set itcl_options($option) $value
-        frameDraw $wpath
+        frameDraw
     }
 
     constructor {args} {
         eval ::ntk::classes::window::constructor $args
     } {
 	set $itcl_options(-bg) [defaultBackgroundColor]
-	appendRedrawHandler [list $wpath frameDraw $wpath]
-	frameDraw $wpath
+	appendRedrawHandler [list $wpath frameDraw]
+	frameDraw
         return $wpath
     }
 
-    public method frameDraw {path} {
-#puts stderr "frameDraw!$path!"
+    public method frameDraw {} {
+#puts stderr "frameDraw!"
 	set myTile $itcl_options(-tile)
         if {$myTile ne ""} {
 	    $obj tile $myTile
@@ -49,7 +49,7 @@ itcl::extendedclass ::ntk::classes::frame {
 	        $obj setall $myColor
 	    }
 	}
-        render $path
+        render $wpath
     }
 }
 

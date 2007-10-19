@@ -65,12 +65,12 @@ ntk-map-sys-window $id
 
 set topObj [$top obj]
 
-if {0} {
+if {1} {
 set w8Path [ntk listbox .w8 -width 100 -height 100 -x 50 -y 50 -textcolor [list 0 0 0 255] -bd 2 -bg [list 255 255 255 255]]
 puts stderr "w8Path!$w8Path![$w8Path obj]!"
 $w8Path insert 0 hallo arnulf apple orange
 }
-if {0} {
+if {1} {
 set w9Path [ntk scrollbar .w9 -width 100 -height 100 -x 250 -y 50 -textcolor [list 0 0 0 255] -bd 2 -bg [list 255 255 255 255]]
 puts stderr "w9Path!$w9Path![$w9Path obj]!"
 }

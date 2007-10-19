@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.6 2007/10/18 21:43:27 wiede Exp $
+# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.7 2007/10/19 10:11:58 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::grid {
@@ -310,8 +310,8 @@ puts stderr "gridLock $parent exists"
                     [$path obj] setsize [$path cget -width] [$path cget -height]
                     #Trigger a redraw of the widget.
 #puts stderr "[$path obj] setsize [$path cget -width] [$path cget -height]"
-#puts stderr "$path dispatchRedraw $path!"
-                    $path dispatchRedraw $path
+#puts stderr "$path dispatchRedraw!"
+                    $path dispatchRedraw
                 }
             }
         }

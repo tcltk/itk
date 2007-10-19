@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.8 2007/10/16 10:01:43 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.9 2007/10/19 10:11:58 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
@@ -33,55 +33,55 @@ itcl::extendedclass ::ntk::classes::entry {
         set itcl_options($option) $value
 	switch -- $option {
 	-text {
-	    entryTrace $wpath
+	    entryTrace
 	  }
 	default {
-            entryDraw $wpath
+            entryDraw
 	  }
 	}
     }
 
     constructor {args} {
 	set itcl_options(-bg) [list 255 255 255 255]
-	set itcl_options(-keypress) [list $wpath entryKeypress $wpath]
-	set itcl_options(-buttonpress) [list $wpath entryButtonpress $wpath]
+	set itcl_options(-keypress) [list $wpath entryKeypress]
+	set itcl_options(-buttonpress) [list $wpath entryButtonpress]
 	set themeConfig entryConfig
 	set destroy entryDestroy
 	eval configure $args
-	appendRedrawHandler [list $wpath entryDraw $wpath]
+	appendRedrawHandler [list $wpath entryDraw]
 	set constructing 0
-	entryTrace $wpath
+	entryTrace
         return $wpath
     }
 
-    public method entryButtonpress {path button x y globalx globaly} {
+    public method entryButtonpress {button x y globalx globaly} {
 puts stderr "entryButtonpress"
-        foreach w [getFocus] {
-            if {$w eq $path} {
-                entryCursorSet $path [expr {$x - [$path xslide]}]
+        foreach path [getFocus] {
+            if {$path eq $wpath} {
+                entryCursorSet [expr {$x - $xslide}]
                 return
             }
         }
-        focus $path
+        focus $wpath
     }
 
-    public method entryCursorIncrOffset {path i} {
+    public method entryCursorIncrOffset {i} {
 puts stderr "entryCursorIncrOffset"
-        set co [$path cursoroffset]
+        set co [$wpath cursoroffset]
         if {(($i < 0) && ($co > 0)) || (($i > 0) && 
-               (($co < [string length [$path cget -text]]))} {
+               (($co < [string length $itcl_options(-text)]))} {
            incr co $i
-           $path cursoroffset $co
-           entryDraw $path
+           $wpath cursoroffset $co
+           entryDraw
         }
     }
 
-    public method entryCursorSet {path x} {
+    public method entryCursorSet {x} {
         set lasti 0
         set cursoroffset 0
         set cursormap [list]
-        set map [$path offsetmap]
-        lassign [[$path textobj] getsize] width height
+        set map [$wpath offsetmap]
+        lassign [$textobj getsize] myWidth myHeight
 
         #
         # Build a map of low and high ranges for each cursor position.
@@ -91,39 +91,38 @@ puts stderr "entryCursorIncrOffset"
             set next [lindex $map [expr {$i + 1}]]
 
             if {$next eq ""} {
-                lappend cursormap $lasti $width
+                lappend cursormap $lasti $myWidth
                 continue
             }
 	    set myLasti [expr {$cur + (($next - $cur) / 2)}]
             lappend cursormap $lasti $myLasti
         }
-
         #
         # Find the cursor offset using the map.
         #
         set i 0
         foreach {x1 x2} $cursormap {
             if {$x >= $x1 && $x < $x2} {
-                $path cursoroffset $i
-                entryDraw $path
+                $wpath cursoroffset $i
+                entryDraw
                 return
             }
             incr i
         }
     }
 
-    public method entryDestroy {path} {
-        rename [$path textobj] {}
+    public method entryDestroy {} {
+        rename $textobj {}
     }
 
-    public method entryDraw {path} {
+    public method entryDraw {} {
 	if {$constructing} {
 	    return
 	}
-        set myOffsetmap [$path offsetmap]
+        set myOffsetmap $offsetmap
         set cx 0
         if {[llength $myOffsetmap]} {
-            set cx [lindex $myOffsetmap [$path cursoroffset]]
+            set cx [lindex $myOffsetmap $cursoroffset]
         }
         if {$cx eq ""} {
             set cx 0
@@ -132,46 +131,45 @@ puts stderr "entryCursorIncrOffset"
         if {$cx > 0} {
             incr cx -1
         }
-        $path xslide 1
-	set myWidth [$path cget -width]
-        if {$cx >= $myWidth} {
-            $path xslide [expr {$myWidth - $cx}]
+        set $xslide 1
+        if {$cx >= $itcl_options(-width)} {
+            $wpath xslide [expr {$itcl_options(-width) - $cx}]
         } 
-        $obj setall [$path cget -bg]
-        $obj blendobj [$path xslide] 0 [$path textobj]
-	set myCursorColor [$path cget -cursorcolor]
+        $obj setall $itcl_options(-bg)
+        $obj blendobj $xslide 0 $textobj
+	set myCursorColor $itcl_options(-cursorcolor)
         $obj line $cx 0 $cx $objh $myCursorColor
         set cx [expr {$cx + 1}]
         $obj line $cx 0 $cx $objh $myCursorColor
-        render $path
+        render $wpath
     }
 
-    public method entryKeypress {path value keysym keycode} {
-puts stderr "entryKeypress!$path!$value!$keysym!$keycode!"
-        set myText [$path cget -text]
+    public method entryKeypress {value keysym keycode} {
+puts stderr "entryKeypress!$value!$keysym!$keycode!"
+        set myText $itcl_options(-text)
         switch -- $keysym {
         normal {
             append myText $value
-            $path configure -text $myText
-            entryCursorIncrOffset $path 1
+            set $itcl_options(-text) $myText
+            entryCursorIncrOffset 1
           } 
         backspace {
-            set co [$path cursoroffset]
+            set co $cursoroffset
             incr co -1
-            $path configure -text [string range $myText 0 \
+            set $itcl_options(-text) [string range $myText 0 \
 	            [expr {$co - 1}]][string range $myText [expr {$co + 1}] \
 		    end]
-            entryCursorIncrOffset $path -1
+            entryCursorIncrOffset -1
           }
         left {
-            entryCursorIncrOffset $path -1
+            entryCursorIncrOffset -1
           }
         right {
-            entryCursorIncrOffset $path 1
+            entryCursorIncrOffset 1
           }
         delete {
-            set co [$path cursoroffset]
-            $path configure -text [string range $myText 0 \
+            set co $cursoroffset
+            set $itcl_options(-text) [string range $myText 0 \
 	            [expr {$co - 1}]][string range $myText [expr {$co + 1}] \
 		    end]
           }
@@ -179,28 +177,27 @@ puts stderr "entryKeypress!$path!$value!$keysym!$keycode!"
 	    return
 	  }
         }
-        entryDraw $path
+        entryDraw
     }
 
-    public method entryTextCallback {path value} {
-#puts stderr "entryTextCallback!$path!$value!"
+    public method entryTextCallback {value} {
+#puts stderr "entryTextCallback!$value!"
 	if {$constructing} {
 	    return
 	}
-        set rgbadata [freetype [$path cget -font] \
-                [$path cget -fontsize] $value [$path cget -textcolor] \
+        set rgbadata [freetype $itcl_options(-font) \
+                $itcl_options(-fontsize) $value $itcl_options(-textcolor) \
 		myWidth myHeight myOffsetmap]
-        $path offsetmap $myOffsetmap
-        set textobj [$path textobj]
+        offsetmap $myOffsetmap
         $textobj setdata $rgbadata
-        requestSize $path [expr {$myWidth + 2}] [expr {$myHeight + 2}]
+        requestSize [expr {$myWidth + 2}] [expr {$myHeight + 2}]
         return 1
     }
 
-    public method entryTrace {path} {
-#puts stderr "entryTrace!$path!"
-        entryTextCallback $path [$path cget -text]
-	entryDraw $path
+    public method entryTrace {} {
+#puts stderr "entryTrace!"
+        entryTextCallback $itcl_options(-text)
+	entryDraw
     }
 
 }

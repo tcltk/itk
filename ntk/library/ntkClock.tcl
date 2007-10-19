@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkClock.tcl,v 1.1.2.1 2007/10/19 08:37:52 wiede Exp $
+# RCS: @(#) $Id: ntkClock.tcl,v 1.1.2.2 2007/10/19 10:11:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::clock {
@@ -41,9 +41,7 @@ itcl::extendedclass ::ntk::classes::clock {
 	    clockRotateCallback
 	  }
 	default {
-	    set hour [clock format [clock seconds] -format %H]
-	    set minute [clock format [clock seconds] -format %M]
-            clockDraw $wpath $hour $minute
+            clockDraw
 	  }
 	}
     }
@@ -60,11 +58,11 @@ itcl::extendedclass ::ntk::classes::clock {
 	appendRedrawHandler [list $wpath clockRedraw $wpath]
 	set constructing 0
 	clockDraw $wpath
-	set afterId [after 1000 [list $wpath clockCycle $wpath]]
+	set afterId [after 1000 [list $wpath clockCycle]]
         return $wpath
     }
 
-    public method clockCycle {path} {
+    public method clockCycle {} {
         lassign [split [clock format [clock seconds] -format {%H %M}]] \
 	        hour minute
         if {$hour ne "0"} {
@@ -73,24 +71,24 @@ itcl::extendedclass ::ntk::classes::clock {
         if {$minute ne "0"} {
             set minute [string trim $minute 0]
         }
-        clockDraw $path $hour $minute
-        $path afterId [after 1000 [list $wpath clockCycle $path]]
+        clockDraw $hour $minute
+        $wpath afterId [after 1000 [list $wpath clockCycle]]
     }
 
-    public method clockDestroy {path} {
-        catch {after cancel [$path afterId]}
+    public method clockDestroy {} {
+        catch {after cancel [$wpath afterId]}
     }
 
-    public method clockDraw {path {hour {}} {minute {}}} {
+    public method clockDraw {{hour {}} {minute {}}} {
 	if {$hour eq ""} {
             lassign [split [clock format [clock seconds] -format {%H}]] hour
         }
 	if {$minute eq ""} {
             lassign [split [clock format [clock seconds] -format {%M}]] minute
         }
-+puts stderr "hour:$hour minute:$minute"
-        set w [$path cget -width]
-        set h [$path cget -height]
+#puts stderr "hour:$hour minute:$minute"
+        set w [$wpath cget -width]
+        set h [$wpath cget -height]
         if {$w < $h} {
             set min $w
         } else {
@@ -100,7 +98,7 @@ itcl::extendedclass ::ntk::classes::clock {
         # Draw the outside ring of the clock.
         #
         set radius [expr {($min - 6) / 2}]
-        set obj [$path obj]
+        set obj [$wpath obj]
         $obj setall [list 0 0 0 0]
         set offset [expr {$radius + 2}]
         for {set r 0} {$r < 4} {incr r} {
@@ -109,7 +107,7 @@ itcl::extendedclass ::ntk::classes::clock {
             for {set a 0} {$a < 7.28318530718} {set a [expr {$a + 0.17}]} {
                 set myX [expr {$offset + round(cos($a) * $radius)}]
                 set myY [expr {$offset + round(sin($a) * $radius)}]
-	        $obj line $lastx $lasty $myX $myY [$path cget -ringcolor]
+	        $obj line $lastx $lasty $myX $myY [$wpath cget -ringcolor]
                 set lastx $myX 
                 set lasty $myY
             }
@@ -125,28 +123,28 @@ itcl::extendedclass ::ntk::classes::clock {
         set theta [expr {$s * $twopi / 60.0 / 60.0 / 12.0}]
         set x2 [expr {round($offset + $radius * sin($theta))}]
         set y2 [expr {round($offset - $radius * cos($theta))}]
-        $obj line $half $half $x2 $y2 [$path cget -hourcolor]
-        $obj line $half $half [incr x2] [incr y2] [$path cget -hourcolor]
+        $obj line $half $half $x2 $y2 [$wpath cget -hourcolor]
+        $obj line $half $half [incr x2] [incr y2] [$wpath cget -hourcolor]
         # 
         # Draw the minute hand
         #
         set theta [expr {$s * $twopi / 60.0 / 60.0}]
         set x2 [expr {round($offset + $radius * sin($theta))}]
         set y2 [expr {round($offset - $radius * cos($theta))}]
-        $obj line $half $half $x2 $y2 [$path cget -minutecolor]
-        $obj line $half $half [incr x2] [incr y2] [$path cget -minutecolor]
+        $obj line $half $half $x2 $y2 [$wpath cget -minutecolor]
+        $obj line $half $half [incr x2] [incr y2] [$wpath cget -minutecolor]
         #
         # Draw the second hand
         #
         set theta [expr {$s * $twopi / 60.0}]
         set x2 [expr {round($offset + $radius * sin($theta))}]
         set y2 [expr {round($offset - $radius * cos($theta))}]
-        $obj line $half $half $x2 $y2 [$path cget -secondcolor]
-        $obj line $half $half [incr x2] [incr y2] [$path cget -secondcolor]
-        render $path
+        $obj line $half $half $x2 $y2 [$wpath cget -secondcolor]
+        $obj line $half $half [incr x2] [incr y2] [$wpath cget -secondcolor]
+        render $wpath
     }
 
-    public method clockRedraw {path} {
+    public method clockRedraw {} {
     }
 
     public method clockRotateCallback {value} {

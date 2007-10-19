@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.14 2007/10/19 08:39:20 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.15 2007/10/19 10:11:58 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::window {
@@ -64,17 +64,17 @@
 	-height {
 	    if {$obj ne ""} {
 	        $obj setsize $itcl_options(-width) $value
-	        dispatchRedraw $wpath
+	        dispatchRedraw
 	    }
 	  }
 	-width {
 	    if {$obj ne ""} {
 	        $obj setsize $value $itcl_options(-height)
-	        dispatchRedraw $wpath
+	        dispatchRedraw
 	    }
 	  }
 	}
-        windowDraw $wpath
+        windowDraw
     }
 
     public proc windowChildren {path} {
@@ -111,7 +111,7 @@
 	if {[llength $args] > 0} {
 	    eval configure $args
 	}
-        set obj [megaimage-blank [cget -width] [cget -height]]
+        set obj [megaimage-blank $itcl_options(-width) $itcl_options(-height)]
 	#
 	# Append the child to the parent's window list
 	#
@@ -120,7 +120,7 @@
 	    lappend pchildren $wpath
 	    $parent children $pchildren
 	}
-	set destroy [list destroyWindow $wpath]
+	set destroy [list destroyWindow]
 	set geometryManager [list]
 	set verticalScrollbar [list]
 	set horizontalScrollbar [list]
@@ -141,7 +141,7 @@
 	     return
 	 }
          # Destroy this window's children.
-         foreach c [$path children] {
+         foreach c [$pathchildren] {
              destroyWindow $c 
          }  
 
@@ -157,7 +157,6 @@
          set i [lsearch -exact $pchildren $path]
          set pchildren [lreplace $pchildren $i $i]
          $parent children $pchildren
- 
         if {[$path removeFromManager] ne ""} {
              [$path removeFromManager] $path
         }
@@ -167,7 +166,6 @@
              [$m free] $m
         }
         inputDestroy $path
-
         rename [$path obj] {}
         if {[$path renderTreeData] ne ""} {
             rename [$path renderTreeData] {}
@@ -175,9 +173,9 @@
         unset windows($path)
     }
 
-    public method dispatchRedraw {path} {
-        foreach cmd [$path redraw] {
-#puts stderr "dispatchRedraw!$path!$cmd!"
+    public method dispatchRedraw {} {
+        foreach cmd [redraw] {
+#puts stderr "dispatchRedraw!$cmd!"
             uplevel #0 $cmd
         }
     }
@@ -195,49 +193,49 @@
 	$parent children [linsert [lreplace $c $i $i] end $path]
     }
 
-    public method redrawWindow {path} {
-#puts stderr "redrawWindow![$path obj] setsize [$path cget -width] [$path cget -height]!x![$path x]!y![$path y]!"
-        [$path obj] setsize [$path cget -width] [$path cget -height]
+    public method redrawWindow {} {
+#puts stderr "redrawWindow![obj] setsize [cget -width] [cget -height]!x![x]!y![y]!"
+        [obj] setsize [cget -width] [cget -height]
     }
 
-    public method remanageWindow {path} {
-        set p [$path parent]
+    public method remanageWindow {} {
+        set p [parent]
 	set myManager [$p manager]
 	if {$myManager eq ""} {
-	    $path configure -width [$path reqwidth] -height [$path reqheight]
-	    set w [$path cget -width]
-	    set h [$path cget -height]
+	    configure -width [reqwidth] -height [reqheight]
+	    set w [cget -width]
+	    set h [cget -height]
 	    if {$w <= 0} {
 	        set w 1
 	    }
 	    if {$h <= 0} {
 	        set h 1
 	    }
-	    [$path obj] setsize $w $h
-	    dispatchRedraw $path
+	    [obj] setsize $w $h
+	    dispatchRedraw
 	    return
 	}
         $myManager remanage $p
     }
 
-    public method requestSize {path width height} {
-        $path reqwidth $width
-	$path reqheight $height
-	remanageWindow $path
+    public method requestSize {width height} {
+        reqwidth $width
+	reqheight $height
+	remanageWindow
     }
 
-    public method windowDraw {path} {
-#puts stderr "windowDraw!$path!$obj!"
+    public method windowDraw {} {
+#puts stderr "windowDraw!$obj!"
 	if {$obj eq ""} {
 	    return
         }
-        set myColor [$path cget -bg]
+        set myColor [cget -bg]
         if {[llength $myColor] == 1} {
             $obj setall $colors($myColor)
         } else {
             $obj setall $myColor
         }
-        render $path
+        render $wpath
     }
 
     public method setGeometryManager {manager} {

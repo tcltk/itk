@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.7 2007/10/16 10:01:43 wiede Exp $
+# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.8 2007/10/19 10:11:58 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::label {
@@ -27,10 +27,10 @@ itcl::extendedclass ::ntk::classes::label {
         set itcl_options($option) $value
 	switch -- $option {
 	-text {
-	    labelTrace $wpath
+	    labelTrace
 	  }
 	default {
-            labelDraw $wpath
+            labelDraw
 	  }
 	}
     }
@@ -38,67 +38,66 @@ itcl::extendedclass ::ntk::classes::label {
     constructor {args} {
 	set themeConfig labelConfig
 	eval configure $args
-	appendRedrawHandler [list $wpath labelDraw $wpath]
+	appendRedrawHandler [list $wpath labelDraw]
 	set constructing 0
-	labelTrace $wpath
+	labelTrace
         return $wpath
     }
 
-    public method labelDraw {path} {
-#puts stderr "labelDraw!$path!"
+    public method labelDraw {} {
+#puts stderr "labelDraw!"
 	if {$constructing} {
 	    return
 	}
-	set myColor [$path cget -bg]
+	set myColor $itcl_options(-bg)
 	if {[llength $myColor] == 1} {
 	    $obj setall $colors($myColor)
 	} else {
 	    $obj setall $myColor
 	}
-        themeLabelDrawBorder $path
-        labelDrawText $path
-        render $path
+        themeLabelDrawBorder $wpath
+        labelDrawText
+        render $wpath
     }
 
-    public method labelDrawText {path} {
+    public method labelDrawText {} {
         lassign [$obj getsize] winwidth winheight
-        lassign [[$path textobj] getsize] textwidth textheight
-#puts stderr "labelDrawText!$path!$wpath!$winwidth!$winheight!$textwidth!$textheight!"
+        lassign [$textobj getsize] textwidth textheight
+#puts stderr "labelDrawText!$wpath!$winwidth!$winheight!$textwidth!$textheight!"
         set myX [expr {($winwidth / 2) - ($textwidth / 2)}]
         set myY [expr {($winheight / 2) - ($textheight / 2)}]
-        set myTextObj [$path textobj]
-        [$path obj] blendobj $myX $myY $myTextObj
+        set myTextObj $textobj
+        $obj blendobj $myX $myY $myTextObj
     }
 
-    public method labelRequestSize {path} {
-        if {![string length [$path cget -text]]} {
+    public method labelRequestSize {} {
+        if {![string length $itcl_options(-text)]} {
 	    return
 	}
-        freetype-measure [$path cget -font] [$path cget -fontsize] \
-	        [$path cget -text] myWidth myHeight
-        set bdt [expr {[$path cget -bd] * 2}]
+        freetype-measure $itcl_options(-font) $itcl_options(-fontsize) \
+	        $itcl_options(-text) myWidth myHeight
+        set bdt [expr {$itcl_options(-bd) * 2}]
         set rwidth [expr {$myWidth + $bdt + 2}]
         set rheight [expr {$myHeight + $bdt + 2}]
-        requestSize $path $rwidth $rheight
+        requestSize $rwidth $rheight
     }
 
-    public method labelTextCallback {path value} {
-#puts stderr "labelTextCallback!$path!$value!"
+    public method labelTextCallback {value} {
+#puts stderr "labelTextCallback!$value!"
 	if {$constructing} {
 	    return
 	}
-        set rgbadata [freetype [$path cget -font] \
-                [$path cget -fontsize] $value [$path cget -textcolor] \
+        set rgbadata [freetype $itcl_options(-font) \
+                $itcl_options(-fontsize) $value $itcl_options(-textcolor) \
 		myWidth myHeight myOffsetmap]
-        set textobj [$path textobj]
         $textobj setdata $rgbadata
-        requestSize $path [expr {$myWidth + 2}] [expr {$myHeight + 2}]
+        requestSize [expr {$myWidth + 2}] [expr {$myHeight + 2}]
         return 1
     }
 
-    public method labelTrace {path} {
-#puts stderr "labelTrace!$path!"
-        labelTextCallback $path [$path cget -text]
-	labelDraw $path
+    public method labelTrace {} {
+#puts stderr "labelTrace!"
+        labelTextCallback $itcl_options(-text)
+	labelDraw
     }
 }

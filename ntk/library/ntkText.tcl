@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.4 2007/10/16 20:21:17 wiede Exp $
+# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.5 2007/10/19 10:11:58 wiede Exp $
 #--------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------
@@ -33,15 +33,15 @@ itcl::extendedclass ::ntk::classes::text {
     public methodvariable contexts -default [list]
     public methodvariable text -default [list]
 
+    public option -cursorcolor -default [list 200 200 200 255] \
+            -configuremethod textConfig
     public option -fg -default [list 125 125 0 255] \
             -configuremethod textConfig
     public option -theme -default [list] \
             -configuremethod textConfig
-    public option -themeclass -default [list] \
-            -configuremethod textConfig
-    public option -cursorcolor -default [list 200 200 200 255] \
-            -configuremethod textConfig
     public option -insert -default [list] \
+            -configuremethod textConfig
+    public option -themeclass -default [list] \
             -configuremethod textConfig
 
     private method textConfig {option value} {
@@ -49,17 +49,17 @@ itcl::extendedclass ::ntk::classes::text {
         set itcl_options($option) $value
 	switch -- $option {
 	-insert {
-	    textInsert $wpath $value
-            textDraw $wpath
+	    textInsert $value
+            textDraw
 	  }
 	default {
-            textDraw $wpath
+            textDraw
 	  }
 	}
     }
 
     constructor {args} {
-	requestSize $wpath 200 300
+	requestSize 200 300
 	set itcl_options(-bg) [list 255 255 255 255]
 	set contexts [list [list $defaultFont $defaultFontSize \
 	        [list 0 0 0 255]]]
@@ -67,28 +67,28 @@ itcl::extendedclass ::ntk::classes::text {
 	set destroy entryDestroy
         if {[llength $args]} {
             if {[catch {configure {*}$args} err]} {
-                destroyWindow $wpath
+                destroyWindow
                 return -code error $err
             }
         }
-	appendRedrawHandler [list $wpath textDraw $wpath]
+	appendRedrawHandler [list $wpath textDraw]
 	set constructing 0
 	set textArgs [themeGetText]
 	if {[llength $textArgs] > 0} {
 	    $wpath configure {*}$textArgs
 	}   
-	textDraw $wpath
+	textDraw
         return $wpath
     }
 
-    public method textDraw {path} {
-#puts stderr "textDraw!$path!w![cget -width]!h![cget -height]!"
-        themeDrawTextBackground $path
+    public method textDraw {} {
+#puts stderr "textDraw!w!$itcl_options(-width)!h!$itcl_options(-height)!"
+        themeDrawTextBackground $wpath
         set linemap [list]
         set textobj [megaimage-blank 1 1]
         set myY 0
-	set myContexts [$path contexts]
-        foreach line [$path text] {
+	set myContexts $contexts
+        foreach line $text {
             set linegeom [lindex $line 0]
             lassign $linegeom linewidth lineheight
             set lineoffsetmap [list]
@@ -103,12 +103,13 @@ itcl::extendedclass ::ntk::classes::text {
                 if {[string length $txt] == 0} {
                     set txt " "
                 }
-                set textdata [freetype $font $size $txt $color myWidth myHeight offsetmap]
+                set textdata [freetype $font $size $txt $color \
+		        myWidth myHeight offsetmap]
                 if {$myHeight > $lineheight} {
 		    set lineheight $myHeight
 		}
                 $textobj setdata $textdata
-                [$path obj] blendobj $myX $myY $textobj
+                $obj blendobj $myX $myY $textobj
                 incr myX $myWidth
                 lappend lineoffsetmap $offsetmap
                 if {$myWidth > $linewidth} {
@@ -120,21 +121,22 @@ itcl::extendedclass ::ntk::classes::text {
         }
     }
 
-    public proc textInsert {path arglist} {
+    public proc textInsert {arglist} {
         lassign $arglist pos newcontext insert
         lassign [split $pos .] myY myX
         incr myY -1 ; #compensate for the y starting at 1
-        set myText [$path text]
+        set myText $text
         set insertlist [split $insert \n] 
         set ylimit [expr {$myY + [llength $insertlist]}]
         while {$myY >= [llength $myText]} {
             lappend myText [list [list width height] [list 0 ""]]
         }
         set line [lindex $myText $myY]
-        set newlinelist [textTrimEmpty [textInsertSegments $myX $line $newcontext $insertlist]]
+        set newlinelist [textTrimEmpty \
+	        [textInsertSegments $myX $line $newcontext $insertlist]]
         set myText [lreplace $myText $myY $myY]
         set myText [linsert $myText $myY {*}$newlinelist]
-        $path text $myText
+        set text $myText
         return 0
     }
 
@@ -162,7 +164,6 @@ itcl::extendedclass ::ntk::classes::text {
             }
             lappend resultline [list $context $textchars]
         }
-
         if {!$found} {
             textInsertSegments2 result resultline $newcontext $newtextlist \
 	            $context ""

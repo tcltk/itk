@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkScrollbarButton.tcl,v 1.1.2.1 2007/10/18 21:41:06 wiede Exp $
+# RCS: @(#) $Id: ntkScrollbarButton.tcl,v 1.1.2.2 2007/10/19 10:11:58 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::scrollbarbutton {
@@ -22,8 +22,10 @@ itcl::extendedclass ::ntk::classes::scrollbarbutton {
 
     private variable constructing 1
 
-    public methodvariable pressed -default 0 -callback scrollbarButtonCallback
-    public methodvariable direction -default up -callback scrollbarButtonCallback
+    public methodvariable pressed -default 0 \
+            -callback scrollbarButtonCallback
+    public methodvariable direction -default up \
+            -callback scrollbarButtonCallback
 
     private method scrollbarButtonConfig {option value} {
 puts stderr "scrollbarButtonConfig!$option!$value!"
@@ -53,9 +55,9 @@ puts stderr "scrollbarButtonConfig!$option!$value!"
         if {[llength $args] > 0} {
 	    configure {*}$args
         }
-	appendRedrawHandler [list $wpath redrawWindow $wpath]
+	appendRedrawHandler [list $wpath redrawWindow]
 	set constructing 0
-	windowDraw $wpath
+	windowDraw
         return $wpath
     }
 }
