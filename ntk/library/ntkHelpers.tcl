@@ -14,18 +14,19 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.7 2007/10/15 09:24:51 wiede Exp $
+# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.8 2007/10/19 20:30:42 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::helpers {
     protected common colors
 
     private common rendering 0
-    private common backgroundColor [list 16 33 65 255]
+#    private common backgroundColor [list 16 33 65 255]
+    private common backgroundColor [list 255 255 255 0]
     private common focusList [list]
     protected common defaultFont /usr/X11R6/lib/X11/fonts/truetype/Vera.ttf
     protected common defaultFontSize 12
-    protected common defaultTextColor [list 10 10 10 10]
+    protected common defaultTextColor [list 10 10 10 255]
     protected common defaultBackgoundColor [list 16 33 65 255]
 
     constructor {args} {

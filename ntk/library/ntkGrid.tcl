@@ -14,17 +14,17 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.7 2007/10/19 10:11:58 wiede Exp $
+# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.8 2007/10/19 20:30:42 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::grid {
     private common gridLock
-    private common xsizes
-    private common ysizes
+#    private common xsizes
+#    private common ysizes
 #    private common ratios
 #    private common sticky
 
-    protected proc dump {grid} {
+    public proc dump {grid} {
         puts stderr "BEGIN DUMP"
 	set i 0
 	foreach row $grid {
@@ -34,7 +34,7 @@ itcl::extendedclass ::ntk::classes::grid {
 	puts stderr "END DUMP"
     }
 
-    protected proc dumpSizes {grid} {
+    public proc dumpSizes {grid} {
         foreach row $grid {
 	    foreach cells $row {
 	        foreach w $cells {
@@ -77,6 +77,7 @@ itcl::extendedclass ::ntk::classes::grid {
 	upvar $gridVar grid
 
 	set numRows [llength $grid]
+#puts stderr "INS!$column!$row!$numRows!"
         if {$numRows <= ($row + 1)} {
             #
             # The grid row doesn't exist, so insert it.
@@ -85,16 +86,19 @@ itcl::extendedclass ::ntk::classes::grid {
                 lappend grid [list]
             }
        } 
+#puts stderr "INS2!$grid!$row!"
        set myRow [lindex $grid $row]
-       set numColumns [llength $row]
+#puts stderr "INS2a!$myRow!$grid!$row!"
+       set numColumns [llength $myRow]
        if {$numColumns <= ($column + 1)} {
            #
            # The grid column doesn't exist in the row, so insert it.
            #
-           for {set i [expr {$numColumns - 1}]} {$i <= $column} {incr i} {
+           for {set i [expr {$numColumns - 1}]} {$i < $column} {incr i} {
                lappend myRow [list]
            }
        }
+#puts stderr "INS3!$myRow!"
        set cells [lindex $myRow $column]
        if {[llength $cells] == 0} {
            set cells [list $path]
@@ -113,8 +117,8 @@ itcl::extendedclass ::ntk::classes::grid {
     }
 
     public proc layout {parent} {
-	if {[::info exists gridLock($parent)]} {
-puts stderr "gridLock $parent exists"
+	if {[info exists gridLock($parent)]} {
+#puts stderr "gridLock $parent exists"
 	    return
 	}
 	set gridLock($parent) $parent
@@ -122,6 +126,7 @@ puts stderr "gridLock $parent exists"
         set myGrid [$m grid]
         set pwidth [$parent cget -width]
         set pheight [$parent cget -height]
+# puts stderr "  LAYOUT!P!$parent!$pwidth!$pheight!$myGrid!"
         if {$pwidth <= 0 || $pheight <= 0} {
 	    unset gridLock($parent)
 	    return
@@ -158,15 +163,16 @@ puts stderr "gridLock $parent exists"
              }
         }
         layoutDirection $rwork -rowspan reqheight height $pheight 1 ysizes
-        layoutXy $myGrid
+        layoutXy $myGrid xsizes ysizes
 	unset gridLock($parent)
-        redraw $myGrid
+        gridRedraw $myGrid
     }
 
     protected proc layoutDirection {worklist spankey reqdim wdir psize slotoffset sizesvar} {
         upvar $sizesvar sizes
         array set ratios {}
         array set sticky {}
+        set units 5000
 
         # Set ratios for the windows that span 1 column/row.
         foreach dim $worklist {
@@ -175,7 +181,8 @@ puts stderr "gridLock $parent exists"
 	            continue
                 }
                 set s [lindex [$path cget -slot] $slotoffset]
-                set ratio [expr {[$path cget -$reqdim] * 100 / $psize}]
+		set myReqDim [$path cget -$reqdim]
+                set ratio [expr {$myReqDim * $units / $psize}]
                 if {[lsearch -exact [$path cget -sticky] $wdir] >= 0} {
                     set sticky($s) 1
                 }
@@ -196,7 +203,7 @@ puts stderr "gridLock $parent exists"
                 set st [expr {[lsearch -exact [$path cget -sticky] $wdir] >= 0}]
                 for {set i $s} {$i < $es} {incr i} {
                     if {![info exists ratios($i)]} {
-                        set wratio [expr {[$path cget $reqdim] * 100 / $psize}]
+                        set wratio [expr {[$path cget $reqdim] * $units / $psize}]
                         for {set subi $s} {$subi < $es} {incr subi} {
                             if {[info exists ratios($subi)]} {
                                 set wratio [expr {$wratio - $ratios($subi)}]
@@ -217,26 +224,40 @@ puts stderr "gridLock $parent exists"
         }
         set totalratio [sumRatios ratios]
 
-        if {$totalratio > 100} {
+        if {$totalratio > $units} {
             # The widgets will all have to be bumped down in ratio.
-            # This means that sticky width/height has no effect.
-            set bump [expr {($totalratio - 100) / $totalcells}]
-            foreach key [array names ratios] {
-                set ratios($key) [expr {$ratios($key) - $bump}]
-            }
-        } else {
-            set nonstickyratio 0
-            set stickyratio 0
-            foreach {i value} [array get ratios] {
-                if {![info exists sticky($i)]} {
-                    incr nonstickyratio $value
-                } else {
-                    incr stickyratio $value
+            # Try to shrink sticky widgets more than others.
+	    set stickyratio 0
+	    set totalstickycells [llength [array names sticky]]
+            foreach key [array names sticky] {
+	        incr stickyratio $ratios($key)
+	    }
+	    if {$stickyratio > 0} {
+	        #Shrink the sticky cells.
+                set bump [expr {($totalratio - $units) / $totalstickycells}]
+                foreach key [array names sticky] {
+                    set ratios($key) [expr {$ratios($key) - $bump}]
                 }
-            }
+	    } else {
+	        set bump [expr {($totalratio - $units) / $totalcells}]
+		foreach key [array names ratios] {
+		    set ratios($key) [expr {$ratios($key) - $bump}]
+		}
+	    }
+        } else {
+	    # We can expand some of the widgets.
+	    set nonstickyratio 0
+	    set stickyratio 0
+	    foreach {i value} [array get ratios] {
+	        if {![info exists sticky($i)]} {
+	            incr nonstickyratio $value
+	        } else {
+		    incr stickyratio $value
+	        }
+	    }
             set fillcells [llength [array names sticky]]
             if {$fillcells > 0} {
-                set ratiodelta [expr {100 - $nonstickyratio - $stickyratio}]
+                set ratiodelta [expr {$units - $nonstickyratio - $stickyratio}]
                 set bump [expr {$ratiodelta / $fillcells}]
                 foreach i [array names sticky] {
                     set ratios($i) [expr {$ratios($i) + $bump}]
@@ -245,9 +266,8 @@ puts stderr "gridLock $parent exists"
         }
         # Now calculate the size for each cell.
         foreach i [array names ratios] {
-             set sizes($i) [expr {$ratios($i) * $psize / 100}]
+             set sizes($i) [expr {$ratios($i) * $psize / $units}]
         }
-
         #Set the size for this dimension of the widget.
         foreach dim $worklist {
             foreach path $dim {
@@ -260,12 +280,17 @@ puts stderr "gridLock $parent exists"
                 if {$totalsize <= 0} {
                     set totalsize 1
                 }
+                set gridLock($path) $path
                 $path configure -$wdir $totalsize
+                unset gridLock($path)
             }
         }
     }
 
-    private proc layoutXy {grid} {
+    private proc layoutXy {grid xsizesvar ysizesvar} {
+        upvar $xsizesvar xsizes
+	upvar $ysizesvar ysizes
+
         foreach row $grid {
             foreach cells $row {
                 foreach path $cells {
@@ -285,7 +310,9 @@ puts stderr "gridLock $parent exists"
 			    incr y $ysizes($yi)
 			}
                     }
+                    set gridLock($path) $path
                     $path configure -x $x -y $y
+                    unset gridLock($path)
                 }
             }   
         }
@@ -301,16 +328,13 @@ puts stderr "gridLock $parent exists"
         }
     }
 
-    protected proc redraw {grid} {
-#puts stderr "GRID!redraw!$grid!"
+    public proc gridRedraw {grid} {
         foreach row $grid {
             foreach cells $row {
                 foreach path $cells {
                     #Resize the backing megaimage obj.
                     [$path obj] setsize [$path cget -width] [$path cget -height]
                     #Trigger a redraw of the widget.
-#puts stderr "[$path obj] setsize [$path cget -width] [$path cget -height]"
-#puts stderr "$path dispatchRedraw!"
                     $path dispatchRedraw
                 }
             }
@@ -318,10 +342,21 @@ puts stderr "gridLock $parent exists"
     }
 
     public proc relayoutTrace {path} {
-#puts stderr "relayoutTrace!$path!"
+puts stderr "relayoutTrace!$path!"
         layout [$path parent]
     }
 
+    public method remanageChildren {path ignore depth} {
+        #puts "$path $ignore $depth"
+puts stderr "REMANAGE_CHILDREN!$path!"
+        foreach c [$path children] {
+            remanageChildren $c $ignore [expr {$depth + 1}]
+	    if {$depth > $ignore} {
+puts stderr REMANAGE:$c
+	        remanageWindow $c
+	    }
+	}
+    }
     protected proc remove {w} {
         set m [[$w parent] manager]
         set grid [$m grid]
@@ -363,6 +398,8 @@ puts stderr "gridLock $parent exists"
         }
         return $list
     }
+
+    # peakrow and peakcolumn are the maximum row number/column number used
 
     protected proc setPeak {m peaktype peak} {
         if {$peak > [$m $peaktype]} {
@@ -434,8 +471,9 @@ puts stderr "gridLock $parent exists"
         # See if the parent has a manager object already.
         # Create a new grid manager object if there isn't one already.
         set myParent [$path parent]
+#puts stderr "GRID!$path!$args!$myParent![$myParent manager]!"
         if {[$myParent manager] eq ""} {
-	    set m [::ntk::classes::gridManager ${myParent}.__manager $myParent]
+	    set m [uplevel #0 ::ntk::classes::gridManager ${myParent}.__manager $myParent]
 	    $m remanage layout
 	    $m free gridFree
             $myParent manager $m 
@@ -456,7 +494,9 @@ puts stderr "gridLock $parent exists"
         setPeak $m peakcolumn [expr {$c + [$path cget -columnspan]}]
         # Get the grid prior to insertion from the parent.
         set myGrid [$m grid]
+#puts stderr "myGrid1!$myGrid!"
         insertWidget myGrid $path $c $r
+#puts stderr "myGrid2!$myGrid!"
         # Set the new grid list.
         $m grid $myGrid
         layout [$path parent]

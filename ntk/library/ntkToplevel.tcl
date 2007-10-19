@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkToplevel.tcl,v 1.1.2.10 2007/10/18 21:52:39 wiede Exp $
+# RCS: @(#) $Id: ntkToplevel.tcl,v 1.1.2.11 2007/10/19 20:30:43 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::toplevel {
@@ -22,8 +22,19 @@ itcl::extendedclass ::ntk::classes::toplevel {
 
     public methodvariable id -default [list]
 
+    public methodvariable grid -default [list]
+    public methodvariable remanage -default layout
+    public methodvariable peakrow -default 0
+    public methodvariable peakcolumn -default 0
+    public methodvariable free -default gridFree
+
+    public method layout {} {
+puts stderr "toplevel layout called"
+        ::ntk::classes::grid::layout $wpath
+    }
+
     constructor {args} {
-        eval ::ntk::classes::window::constructor $args
+        ::ntk::classes::window::constructor {*}$args
     } {
         set toplevel 1
         return $wpath

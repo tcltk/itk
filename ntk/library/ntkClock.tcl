@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkClock.tcl,v 1.1.2.2 2007/10/19 10:11:57 wiede Exp $
+# RCS: @(#) $Id: ntkClock.tcl,v 1.1.2.3 2007/10/19 20:30:42 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::clock {
@@ -72,7 +72,7 @@ itcl::extendedclass ::ntk::classes::clock {
             set minute [string trim $minute 0]
         }
         clockDraw $hour $minute
-        $wpath afterId [after 1000 [list $wpath clockCycle]]
+        set $afterId [after 1000 [list $wpath clockCycle]]
     }
 
     public method clockDestroy {} {

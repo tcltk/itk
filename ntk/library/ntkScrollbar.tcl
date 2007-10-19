@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.8 2007/10/19 10:11:58 wiede Exp $
+# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.9 2007/10/19 20:30:43 wiede Exp $
 #--------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------
@@ -96,12 +96,12 @@ itcl::extendedclass ::ntk::classes::scrollbar {
 
     public method scrollbarButtonRepeat {delay cmd} {
         uplevel #0 $cmd
-        $path idleAfterId [after idle [list $path buttonAfterId \
-                [after $delay [list scrollbarButtonRepeat $delay $cmd]]]]
+        $wpath idleAfterId [after idle [list $wpath buttonAfterId \
+                [after $delay [list $wpath scrollbarButtonRepeat $delay $cmd]]]]
     }
 
     public method scrollbarButtonpress {buttonpath unit button x y globalx globaly} {
-puts stderr "scrollbarButtonpress!$buttonpath!$unit!$button!"
+#puts stderr "scrollbarButtonpress!$buttonpath!$unit!$button!"
         $buttonpath pressed 1
         if {($itcl_options(-command) ne "") && ($buttonAfterId eq "") && \
                 ($idleAfterId eq "")} {
@@ -111,7 +111,7 @@ puts stderr "scrollbarButtonpress!$buttonpath!$unit!$button!"
     }
 
     public method scrollbarButtonrelease {buttonpath button x y globalx globaly} {
-puts stderr "scrollbarButtonrelease!$buttonpath!$button!"
+#puts stderr "scrollbarButtonrelease!$buttonpath!$button!"
         $buttonpath pressed 0
         after cancel $buttonAfterId
         set buttonAfterId ""
@@ -159,7 +159,7 @@ puts stderr "scrollbarButtonrelease!$buttonpath!$button!"
             [$wpath.trough obj] setall $itcl_options(-bg)
             [$wpath.trough obj] rectangle $myX 0 $rectwidth $myHeight \
                     $itcl_options(-slidercolor)
-            themeDrawBorder [$path.trough obj] $myX 0 $rectwidth \
+            themeDrawBorder [$wpath.trough obj] $myX 0 $rectwidth \
                     $myHeight $low $high 1
             set x1 $myX
             set x2 [expr {$myX + $rectwidth}]
@@ -172,7 +172,7 @@ puts stderr "scrollbarButtonrelease!$buttonpath!$button!"
     }
 
     public method scrollbarOrientCallback {arg} {
-        if {[::info comm $wpath] eq ""} {
+        if {[::info comm $wpath.a] eq ""} {
             return
         }
         set sw $itcl_options(-scrollbarwidth)
@@ -207,10 +207,9 @@ puts stderr "scrollbarButtonrelease!$buttonpath!$button!"
     }
 
     public method scrollbarScaleButtonpress {button x y globalx globaly} {
-puts stderr "scrollbarScaleButtonpress!$button!"
+#puts stderr "scrollbarScaleButtonpress!$button!"
         lassign $scale start end
         if {$itcl_options(-orient) eq "vertical"} {
-puts stderr "Y!$y!$y1!$y2!"
             if {($y >= $y1) && ($y < $y2)} {
                 set clickx $x
                 set clicky $y
@@ -225,16 +224,15 @@ puts stderr "Y!$y!$y1!$y2!"
                 set scaleoffset $x1
             }
         }
-puts stderr "dragging!$dragging!"
     }
 
     public method scrollbarScaleButtonrelease {button x y globalx globaly} {
-puts stderr "scrollbarScaleButtonrelease!$button!"
+#puts stderr "scrollbarScaleButtonrelease!$button!"
         set dragging 0
     }
 
     public method scrollbarScaleMotion {x y globalx globaly} {
-puts stderr "scrollbarScaleMotion!$dragging!"
+#puts stderr "scrollbarScaleMotion!$dragging!"
        if {$dragging == 0} {
            return
 	}
@@ -257,15 +255,15 @@ puts stderr "scrollbarScaleMotion!$dragging!"
             set moveto [expr {($xd + $scaleoffset) * $rat}]
         }
         set cmd $itcl_options(-command)
-puts stderr "cmd!$cmd!$moveto!$x!$y!$globalx!$globaly!$clickx!$clicky!"
+#puts stderr "cmd!$cmd!$moveto!$x!$y!$globalx!$globaly!$clickx!$clicky!"
 	if {$cmd ne ""} {
             uplevel #0 $cmd moveto [list $moveto]
         }
     }
 
-    public method scrollbarSetMethod {rstart rend} {
+    public method setView {rstart rend} {
 #puts stderr "SCROLL:$rstart $rend"
-        #$path.trough
+        #$wpath.trough
         set scale [list $rstart $rend]
         scrollbarDrawScale
     }

@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.11 2007/10/18 21:52:39 wiede Exp $
+# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.12 2007/10/19 20:30:43 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::render {
@@ -105,7 +105,7 @@
             } 
             set back [$child renderTreeData]
             if {[changeInTree $child]} {
-#puts stderr changeInChild:CHILD:$child
+#puts stderr "changeInChild:CHILD:$child!$back![$child obj]!"
                 $back setdata [[$child obj] getdata]
                 renderRecurse $back $child 0 0
                 if {[set r [$child cget -rotate]]} {
@@ -113,10 +113,10 @@
                 }
                 $child update 0
            }
-#puts stderr "BLEND!$child![$child x]![$child y]!"
+#puts stderr "BLEND!$child![$child x]![$child y]![$back getsize]!"
            $baseobj blendobj [$child x] [$child y] $back
         }
-#puts stderr "renderTree END!WIN!$win![$path children]!"
+puts stderr "renderTree END!WIN!$path![$path children]!"
     }
 }
 

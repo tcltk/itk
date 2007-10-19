@@ -14,11 +14,11 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.15 2007/10/19 10:11:58 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.16 2007/10/19 20:30:43 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::window {
-    inherit ::ntk::classes::helpers ::ntk::classes::render
+    inherit ::ntk::classes::helpers ::ntk::classes::render ::ntk::classes::grid
 
     protected common cntWindows 0
     protected common windows
@@ -112,6 +112,8 @@
 	    eval configure $args
 	}
         set obj [megaimage-blank $itcl_options(-width) $itcl_options(-height)]
+	set reqwidth $itcl_options(-width)
+	set reqheight $itcl_options(-height)
 	#
 	# Append the child to the parent's window list
 	#
@@ -175,7 +177,6 @@
 
     public method dispatchRedraw {} {
         foreach cmd [redraw] {
-#puts stderr "dispatchRedraw!$cmd!"
             uplevel #0 $cmd
         }
     }
@@ -199,28 +200,30 @@
     }
 
     public method remanageWindow {} {
-        set p [parent]
+#puts stderr "remanageWindow!$wpath!$x!$y!"
+        set p $parent
 	set myManager [$p manager]
 	if {$myManager eq ""} {
-	    configure -width [reqwidth] -height [reqheight]
-	    set w [cget -width]
-	    set h [cget -height]
+	    configure -width $reqwidth -height $reqheight
+	    set w $itcl_options(-width)
+	    set h $itcl_options(-height)
 	    if {$w <= 0} {
 	        set w 1
 	    }
 	    if {$h <= 0} {
 	        set h 1
 	    }
-	    [obj] setsize $w $h
+	    $obj setsize $w $h
 	    dispatchRedraw
 	    return
 	}
-        $myManager remanage $p
+        [$myManager remanage] $p
     }
 
     public method requestSize {width height} {
-        reqwidth $width
-	reqheight $height
+#puts stderr "requestSize!$wpath!$width!$height!"
+        set reqwidth $width
+	set reqheight $height
 	remanageWindow
     }
 

@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.7 2007/10/19 10:11:58 wiede Exp $
+# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.8 2007/10/19 20:30:43 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::listbox {
@@ -77,8 +77,12 @@ puts stderr "listboxButtonPress!$button!"
 	    set testy [expr {$ly - $yoffset}]
             if {($y >= $testy) && ($y < ($testy + $myHeight))} {
 		if {$itcl_options(-selectioncallback) ne ""} {
-	            uplevel #0 [linsert $itcl_options(-selectioncallback) end $i \
-		            [lindex $wpath data] $i]
+		    set cmd [list $itcl_options(-selectioncallback) $wpath $i [lindex $data $i]]
+puts stderr "CMD!$cmd!"
+                    uplevel #0 $cmd
+#	            uplevel #0 [ \
+#		    linsert [$itcl_options(-selectioncallback)] end $i \
+#		            [lindex $data $i]]
 	        }
 	        lappend mySelected $i
 	        break
@@ -142,8 +146,8 @@ puts stderr "listboxButtonPress!$button!"
 should be: $wpath delete index ?end-index?"
           } 
         }
-        if {$itcl_options(-yoffset) > [llength $itcl_options(-data)]} {
-             set $itcl_options(-yoffset) [llength $itcl_options(-data)]
+        if {$yoffset > [llength $data]} {
+             set yoffset [llength $data]
          }
 	 listboxCollectContexts
          listboxDraw
@@ -181,7 +185,8 @@ should be: $wpath delete index ?end-index?"
         }
 
         # Iterate and draw the range of the text that is visible.
-        foreach d [lrange $data $i end] \
+        foreach \
+	        d [lrange $data $i end] \
                 myContext [lrange $contextdata $i end] \
                 sizeset [lrange $sizedata $i end] {
             lassign $sizeset myWidth myHeight
@@ -216,7 +221,7 @@ should be: $wpath delete index ?end-index?"
         if {$pendingAfterId ne ""} {
 	    return
         }
-        set pendingAfterId [after idle [list listboxDraw]]
+        set pendingAfterId [after idle [list $wpath listboxDraw]]
     }
 
     public method insert {myOffset args} {

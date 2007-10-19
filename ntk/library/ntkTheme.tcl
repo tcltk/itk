@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.8 2007/10/18 21:52:39 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.9 2007/10/19 20:30:43 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
@@ -61,7 +61,6 @@
 
     public proc themeDrawBorder {obj x y width height low high bd} {
         incr bd -1
-#puts stderr "themeDrawBorder!$obj!$x!$y!$width!$height!$low!$high!$bd!"
         while {$bd >= 0} {
             set x1 [expr {$x + $bd}]
             set y1 [expr {$y + $bd}]
@@ -119,7 +118,7 @@
         set h [$path cget -height]
         [$path obj] setall [[$path parent] cget -bg]
 
-        if {![$path pressed]} {
+        if {[$path pressed] == 0} {
             themeDrawBorder [$path obj] 0 0 $w $h $low $high 1
         } else {
             themeDrawBorder [$path obj] 0 0 $w $h $high $low 1
