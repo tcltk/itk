@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.8 2007/10/19 20:30:43 wiede Exp $
+# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.9 2007/10/19 22:30:56 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::listbox {
@@ -62,7 +62,7 @@
     }
 
     public method listboxButtonPress {button x y globalx globaly} {
-puts stderr "listboxButtonPress!$button!"
+#puts stderr "listboxButtonPress!$button!"
         if {$button != 1} {
             return
         }
@@ -77,12 +77,10 @@ puts stderr "listboxButtonPress!$button!"
 	    set testy [expr {$ly - $yoffset}]
             if {($y >= $testy) && ($y < ($testy + $myHeight))} {
 		if {$itcl_options(-selectioncallback) ne ""} {
-		    set cmd [list $itcl_options(-selectioncallback) $wpath $i [lindex $data $i]]
-puts stderr "CMD!$cmd!"
+		    set cmd [list $itcl_options(-selectioncallback) \
+		            $wpath $i [lindex $data $i]]
+#puts stderr "CMD!$cmd!"
                     uplevel #0 $cmd
-#	            uplevel #0 [ \
-#		    linsert [$itcl_options(-selectioncallback)] end $i \
-#		            [lindex $data $i]]
 	        }
 	        lappend mySelected $i
 	        break

@@ -51,7 +51,7 @@ proc configureNow {winid} {
 proc endImageDrag {path button x y globalx globaly} {
     global imagedrag
 
-puts stderr "endImageDrag"
+#puts stderr "endImageDrag!$button!$x!$y!"
     if {$button == 1} {
         unset imagedrag($path)
     }
@@ -60,7 +60,7 @@ puts stderr "endImageDrag"
 proc imageDrag {path x y globalx globaly} {
     global imagedrag
 
-puts stderr "imageDrag"
+#puts stderr "imageDrag"
     if {![info exists imagedrag($path)]} {
         return
     }
@@ -70,29 +70,35 @@ puts stderr "imageDrag"
     set newx [expr {[$path cget -x] + $xd}] 
     set newy [expr {[$path cget -y] + $yd}]
     lassign [[$path obj] getsize] width height
-    lassign [[[$path windowParent] obj] getsize] pwidth pheight
-    set minx [expr {-($width - $pwidth)}]
-    set miny [expr {-($height - $pheight)}]
-    if {$newx > 0} {
+    set obj [[$path windowParent $path] obj]
+    lassign [$obj getsize] pwidth pheight
+    set maxx [expr {-($width - $pwidth)}]
+    set maxy [expr {-($height - $pheight)}]
+#puts stderr "XY!x!$x!y!$y!xd!$xd!yd!$yd!newx!$newx!newy!$newy!maxx!$maxx!maxy!$maxy!width!$width!height!$height!pwidth!$pwidth!pheight!$pheight!"
+    if {$newx < 0} {
         set newx 0
     }
-    if {$newy > 0} {
+    if {$newy < 0} {
         set newy 0
     }
-    if {$newx < $minx} {
-        set newx $minx
+    if {$newx > $maxx} {
+        set newx $maxx
     }
-    if {$newy < $miny} {
-        set newy $miny
+    if {$newy > $maxy} {
+        set newy $maxy
     }
 
-    if {$pwidth > $width} {
+    if {$pwidth < $width} {
         set newx 0
     }
-    if {$pheight > $height} {
+    if {$pheight < $height} {
         set newy 0
     }
-    $path x $newx y $newy
+    set myobj [$path obj]
+    set mydata [$myobj getdata]
+    lassign [$myobj getsize] w h
+    $path configure -width $width -height $height -x $newx -y $newy
+    $myobj setdata $mydata
     ntk render $path
 }
 
@@ -100,7 +106,7 @@ array set imagedrag {}
 proc startImageDrag {path button x y globalx globaly} {
     global imagedrag
 
-puts stderr "startImageDrag"
+#puts stderr "startImageDrag $button!$x!$y!"
     if {$button == 1} {
         set imagedrag($path) [list $x $y]
     }
@@ -125,8 +131,7 @@ proc fillListbox {listbox} {
 }
 
 proc selectedImage {listbox i value} {
-puts stderr "selectedImage $listbox $i $value"
-
+#puts stderr "selectedImage $listbox $i $value"
    if {$value eq ".."} {
       cd ..
       fillListbox $listbox
@@ -152,8 +157,9 @@ puts stderr "selectedImage $listbox $i $value"
        }
        [.right.image obj] setdata $rgba
        lassign [[.right.image obj] getsize] w h
-puts stderr "image size: $w $h"
+#puts stderr "image size: $w $h"
        .right.image configure -width $w -height $h -x 0 -y 0
+       [.right.image obj] setdata $rgba
        ntk render .right.image
    }
 }

@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.13 2007/10/19 08:39:20 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.14 2007/10/19 22:30:56 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
@@ -100,7 +100,7 @@ proc ::ntk::listbox {args} {
 }
     
 proc ::ntk::render {args} {
-    puts stderr "::ntk::render called !$args!"
+    return [uplevel 1 ::ntk::classes::render::render $args]
 }
     
 proc ::ntk::scrollbar {args} {
@@ -108,7 +108,7 @@ proc ::ntk::scrollbar {args} {
 }
     
 proc ::ntk::text {args} {
-    puts stderr "::ntk::text called !$args!"
+#    puts stderr "::ntk::text called !$args!"
     return [uplevel 1 ::ntk::classes::text $args]
 }
     

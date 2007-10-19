@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.11 2007/10/19 10:11:57 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.12 2007/10/19 22:30:56 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::button {
@@ -61,7 +61,7 @@ itcl::extendedclass ::ntk::classes::button {
     }
 
     public method buttonPress {button x y globalx globaly} {
-puts stderr "button!buttonPress called $x $y"
+#puts stderr "button!buttonPress called $x $y"
         if {$button == 1} {
             configure -state pressed
         }
@@ -69,7 +69,7 @@ puts stderr "button!buttonPress called $x $y"
     }
 
     public method buttonRelease {button x y globalx globaly} {
-puts stderr "button!buttonRelease called $button $x $y"
+#puts stderr "button!buttonRelease called $button $x $y"
         configure -state released
         if {($x < 0) || ($y < 0) || ($x >= $itcl_options(-width)) ||
 	        ($y >= $itcl_options(-height))} {

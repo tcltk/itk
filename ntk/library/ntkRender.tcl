@@ -14,15 +14,15 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.12 2007/10/19 20:30:43 wiede Exp $
+# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.13 2007/10/19 22:30:56 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::render {
 
     private common backgroundColor [list 16 33 65 255]
-    private variable rendering 0
+    private common rendering 0
 
-    public method render {args} {
+    public proc render {args} {
         if {[llength $args] == 0} {
 	    return -code error "expected a window to render"
 	}
@@ -36,7 +36,7 @@
 	after idle [::itcl::code $this renderNow]
     }
 
-    protected method renderNow {} {
+    protected proc renderNow {} {
 	set myObj [. obj]
         $myObj setall [. cget -bg]
         renderTree $myObj .
@@ -48,7 +48,7 @@
 #puts stderr "renderNow END"
     }
 
-    protected method changeInTree {path} {
+    protected proc changeInTree {path} {
 #puts stderr "changeInTree!$win![$path update]![$path children]!"
 	if {![$path cget -visible]} {
 	    return 0
@@ -64,7 +64,7 @@
         return 0
     }
 
-    protected method renderRecurse {baseobj path x y} {
+    protected proc renderRecurse {baseobj path x y} {
 #puts stderr "renderRecurse!$baseobj!$path!$x!$y![$path children]!"
         foreach child [$path children] {
 	    if {![$child cget -visible]} {
@@ -93,7 +93,7 @@
         } 
     }
 
-    public method renderTree {baseobj path} {
+    public proc renderTree {baseobj path} {
 #puts stderr "renderTree!WIN!$path![$path children]!"
         foreach child [$path children] {
 #puts stderr "CHILD:$child![$child x]![$child y]!"
@@ -116,7 +116,7 @@
 #puts stderr "BLEND!$child![$child x]![$child y]![$back getsize]!"
            $baseobj blendobj [$child x] [$child y] $back
         }
-puts stderr "renderTree END!WIN!$path![$path children]!"
+#puts stderr "renderTree END!WIN!$path![$path children]!"
     }
 }
 

@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.6 2007/10/18 23:01:44 wiede Exp $
+# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.7 2007/10/19 22:30:56 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::input {
@@ -50,7 +50,7 @@
     }
 
     public proc inputKeyPress {win key keysym keycode} {
-puts stderr "inputKeyPress!$win!$key!$keysym!$keycode!$focusList!"
+#puts stderr "inputKeyPress!$win!$key!$keysym!$keycode!$focusList!"
         foreach path $focusList {
             set callback [$path cget -keypress]
             if {$callback ne ""} {
@@ -142,7 +142,7 @@ puts stderr "inputKeyPress!$win!$key!$keysym!$keycode!$focusList!"
 
     public proc inputMousePressDispatch {path button x y globalx globaly} {
         set callback [$path cget -buttonpress]
-puts stderr "PRESS DISPATCH $path!$button!$callback!"
+#puts stderr "PRESS DISPATCH $path!$button!$callback!"
         if {$callback ne ""} {
             lappend input(activewindows) $path
             uplevel #0 $callback $button $x $y $globalx $globaly
