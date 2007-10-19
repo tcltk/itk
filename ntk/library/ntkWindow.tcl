@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.13 2007/10/18 21:52:39 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.14 2007/10/19 08:39:20 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::window {
@@ -243,4 +243,13 @@
     public method setGeometryManager {manager} {
         set geometryManager $manager
     }
+}
+if {0} {
+/*
+ * Local Variables:
+ * mode: Tcl
+ * tcl-basic-offset: 4
+ * fill-column: 78
+ * End:
+ */
 }

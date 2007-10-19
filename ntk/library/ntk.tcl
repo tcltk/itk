@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.12 2007/10/18 21:52:39 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.13 2007/10/19 08:39:20 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
@@ -59,19 +59,18 @@ source [file join $myDir ntkLabel.tcl]
 source [file join $myDir ntkText.tcl]
 source [file join $myDir ntkListbox.tcl]
 source [file join $myDir ntkToplevel.tcl]
-#source [file join $myDir ntkClock.tcl]
+source [file join $myDir ntkClock.tcl]
 
 proc ::ntk::button {args} {
-    puts stderr "::ntk::button called !$args!"
     return [uplevel 1 ::ntk::classes::button $args]
 }
     
 proc ::ntk::clock {args} {
     puts stderr "::ntk::clock called !$args!"
+    return [uplevel 1 ::ntk::classes::clock $args]
 }
     
 proc ::ntk::entry {args} {
-    puts stderr "::ntk::entry called !$args!"
     return [uplevel 1 ::ntk::classes::entry $args]
 }
     
@@ -93,12 +92,10 @@ proc ::ntk::input {args} {
 }
     
 proc ::ntk::label {args} {
-    puts stderr "::ntk::label called !$args!"
     return [uplevel 1 ::ntk::classes::label $args]
 }
     
 proc ::ntk::listbox {args} {
-    puts stderr "::ntk::listbox called !$args!"
     return [uplevel 1 ::ntk::classes::listbox $args]
 }
     
@@ -107,7 +104,6 @@ proc ::ntk::render {args} {
 }
     
 proc ::ntk::scrollbar {args} {
-    puts stderr "::ntk::scrollbar called !$args!"
     return [uplevel 1 ::ntk::classes::scrollbar $args]
 }
     
@@ -148,6 +144,5 @@ proc ::ntk::inputMotion {args} {
     return [uplevel 1 ::ntk::classes::input::inputMotion $args]
 }
 
-    
 package provide ntkWidget 0.1
 
