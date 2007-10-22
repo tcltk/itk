@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.7 2007/10/19 22:30:56 wiede Exp $
+# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.8 2007/10/22 20:30:39 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::input {
@@ -115,7 +115,7 @@
 		        lassign [[$c obj] pixel $localx $localy] _ _ _ a
 		    } err]} {
                     #DEBUG
-                    puts stderr "invalid offset in $c"
+                    puts stderr "invalid offset in $c!$err!$localx!$localy!"
                     return 0
                 }
                 if {$a > 0} {
@@ -264,11 +264,11 @@
 
     public proc inputTranslateXyFromRoot {path x y} {
         set worklist [list $path]
-        set parent [$path parent]
-        while {[llength [$parent parent]]} {
-            set worklist [linsert $worklist 0 $parent]
-            set parent [$parent parent]
-	    if {$parent eq "."} {
+        set myParent [$path parent]
+        while {($myParent ne "") && [llength [$myParent parent]]} {
+            set worklist [linsert $worklist 0 $myParent]
+            set myParent [$myParent parent]
+	    if {$myParent eq "."} {
 	        break
 	    }
         }

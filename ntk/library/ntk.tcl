@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.14 2007/10/19 22:30:56 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.15 2007/10/22 20:30:39 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
@@ -60,13 +60,17 @@ source [file join $myDir ntkText.tcl]
 source [file join $myDir ntkListbox.tcl]
 source [file join $myDir ntkToplevel.tcl]
 source [file join $myDir ntkClock.tcl]
+source [file join $myDir ntkBox.tcl]
 
 proc ::ntk::button {args} {
     return [uplevel 1 ::ntk::classes::button $args]
 }
     
+proc ::ntk::box {args} {
+    return [uplevel 1 ::ntk::classes::box $args]
+}
+    
 proc ::ntk::clock {args} {
-    puts stderr "::ntk::clock called !$args!"
     return [uplevel 1 ::ntk::classes::clock $args]
 }
     

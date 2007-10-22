@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.9 2007/10/19 20:30:43 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.10 2007/10/22 20:32:53 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
@@ -34,17 +34,18 @@
             -configuremethodvar themeConfig
 
     constructor {args} {
-        eval ::ntk::classes::window::constructor -width 100 -height 100
+        eval ::ntk::classes::window::constructor -width 60 -height 100
     } {
         freetype $defaultFont $defaultFontSize "_^" [list 0 0 0 255] \
 	        myWidth myHeight
-	set itcl_options(-width) 60
 	set itcl_options(-height) $myHeight
+	set reqwidth $itcl_options(-width)
+	set reqheight $myHeight
 	set itcl_options(-font) $defaultFont
 	set itcl_options(-fontsize) $defaultFontSize
 	set itcl_options(-textcolor) $defaultTextColor
 	set itcl_options(-bg) [defaultBackgroundColor]
-	set textobj [megaimage-blank 100 40]
+	set textobj [megaimage-blank 20 20]
     }
 
     public proc themeButtonDrawBorder {path} {

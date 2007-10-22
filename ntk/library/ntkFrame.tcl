@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkFrame.tcl,v 1.1.2.8 2007/10/19 10:11:58 wiede Exp $
+# RCS: @(#) $Id: ntkFrame.tcl,v 1.1.2.9 2007/10/22 20:32:53 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::frame {
@@ -28,9 +28,12 @@ itcl::extendedclass ::ntk::classes::frame {
     }
 
     constructor {args} {
-        eval ::ntk::classes::window::constructor $args
+        ::ntk::classes::window::constructor
     } {
-	set $itcl_options(-bg) [defaultBackgroundColor]
+	set itcl_options(-bg) [defaultBackgroundColor]
+	if {[llength $args] > 0} {
+	    configure {*}$args
+	}
 	appendRedrawHandler [list $wpath frameDraw]
 	frameDraw
         return $wpath

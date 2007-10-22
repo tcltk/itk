@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.12 2007/10/19 22:30:56 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.13 2007/10/22 20:30:39 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::button {
@@ -49,6 +49,11 @@ itcl::extendedclass ::ntk::classes::button {
     constructor {args} {
 	set itcl_options(-buttonpress) [list $wpath buttonPress]
 	set itcl_options(-buttonrelease) [list $wpath buttonRelease]
+	set itcl_options(-width) 60
+	set itcl_options(-height) 30
+	set itcl_options(-bd) 1
+	set reqwidth 60
+	set reqheight 30
 	set themeConfig buttonConfig
 	set destroy buttonDestroy
 	if {[llength $args] > 0} {

@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.16 2007/10/19 20:30:43 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.17 2007/10/22 20:32:53 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::window {
@@ -109,7 +109,7 @@
 	set parent [windowParent $wpath]
 #puts stderr "ARGS![join $args !]!"
 	if {[llength $args] > 0} {
-	    eval configure $args
+	    configure {*}$args
 	}
         set obj [megaimage-blank $itcl_options(-width) $itcl_options(-height)]
 	set reqwidth $itcl_options(-width)
@@ -189,9 +189,9 @@
 	    return -code error "invalid window: $path"
         }
 	set lparent [windowParent $path]
-	set c [$parent children]
+	set c [$lparent children]
 	set i [lsearch -exact $c $path]
-	$parent children [linsert [lreplace $c $i $i] end $path]
+	$lparent children [linsert [lreplace $c $i $i] end $path]
     }
 
     public method redrawWindow {} {

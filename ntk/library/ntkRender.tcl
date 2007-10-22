@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.13 2007/10/19 22:30:56 wiede Exp $
+# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.14 2007/10/22 20:30:39 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::render {
@@ -33,10 +33,10 @@
 	    return
 	}
 	set rendering 1
-	after idle [::itcl::code $this renderNow]
+	after idle [list ::ntk::classes::render::renderNow]
     }
 
-    protected proc renderNow {} {
+    public proc renderNow {} {
 	set myObj [. obj]
         $myObj setall [. cget -bg]
         renderTree $myObj .
@@ -75,9 +75,10 @@
             set r [$child cget -rotate]
 	    set childObj [$child obj]
             if {$r} {
-		set myRenderTreeData
-                if {$myRenderTreeData] eq ""} {
-                    $child renderTreeData [megaimage-blank 1 1]
+		set myRenderTreeData [$child renderTreeData]
+                if {$myRenderTreeData eq ""} {
+                    $child renderTreeData [megaimage-blank]
+		    set myRenderTreeData [$child renderTreeData]
                 }
                 $myRenderTreeData setdata [$childObj getdata]
                 renderRecurse $myRenderTreeData] $child 0 0

@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.9 2007/10/19 10:11:58 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.10 2007/10/22 20:30:39 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
@@ -42,12 +42,17 @@ itcl::extendedclass ::ntk::classes::entry {
     }
 
     constructor {args} {
+	set itcl_options(-width) 160
+	set reqwidth 160
 	set itcl_options(-bg) [list 255 255 255 255]
 	set itcl_options(-keypress) [list $wpath entryKeypress]
 	set itcl_options(-buttonpress) [list $wpath entryButtonpress]
+puts stderr "HH!$itcl_options(-height)!"
 	set themeConfig entryConfig
 	set destroy entryDestroy
-	eval configure $args
+	if {[llength $args] > 0} {
+	    configure {*}$args
+	}
 	appendRedrawHandler [list $wpath entryDraw]
 	set constructing 0
 	entryTrace
@@ -185,6 +190,10 @@ puts stderr "entryKeypress!$value!$keysym!$keycode!"
 	if {$constructing} {
 	    return
 	}
+        if {$value eq ""} {
+	    return
+	}
+puts stderr "FONT!$itcl_options(-font)!$itcl_options(-fontsize)!$itcl_options(-textcolor)!$value!"
         set rgbadata [freetype $itcl_options(-font) \
                 $itcl_options(-fontsize) $value $itcl_options(-textcolor) \
 		myWidth myHeight myOffsetmap]
@@ -196,8 +205,10 @@ puts stderr "entryKeypress!$value!$keysym!$keycode!"
 
     public method entryTrace {} {
 #puts stderr "entryTrace!"
-        entryTextCallback $itcl_options(-text)
-	entryDraw
+	if {$itcl_options(-text) ne ""} {
+            entryTextCallback $itcl_options(-text)
+	    entryDraw
+        }
     }
 
 }

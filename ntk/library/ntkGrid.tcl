@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.8 2007/10/19 20:30:42 wiede Exp $
+# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.9 2007/10/22 20:32:53 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::grid {
@@ -148,7 +148,10 @@ itcl::extendedclass ::ntk::classes::grid {
             }
         }
 
+#puts stderr "    CWORK!$cwork!"
         layoutDirection $cwork -columnspan reqwidth width $pwidth 0 xsizes
+#puts stderr "    xsizes!"
+#parray xsizes
         set rwork [list]
         foreach row $myGrid {
              set rbuf [list]
@@ -162,7 +165,10 @@ itcl::extendedclass ::ntk::classes::grid {
                  lappend rwork $rbuf
              }
         }
+#puts stderr "    RWORK!$rwork!"
         layoutDirection $rwork -rowspan reqheight height $pheight 1 ysizes
+#puts stderr "    ysizes!"
+#parray ysizes
         layoutXy $myGrid xsizes ysizes
 	unset gridLock($parent)
         gridRedraw $myGrid
@@ -182,12 +188,15 @@ itcl::extendedclass ::ntk::classes::grid {
                 }
                 set s [lindex [$path cget -slot] $slotoffset]
 		set myReqDim [$path cget -$reqdim]
+#puts stderr "      set set myReqDim [$path cget -$reqdim]!$reqdim!$psize!$s!"
                 set ratio [expr {$myReqDim * $units / $psize}]
                 if {[lsearch -exact [$path cget -sticky] $wdir] >= 0} {
                     set sticky($s) 1
+#puts stderr "      set sticky($s) 1"
                 }
                 if {![::info exists ratios($s)] || $ratio > $ratios($s)} {
                     set ratios($s) $ratio 
+#puts stderr "      set ratios($s) $ratio"
                 }
             }
         }
@@ -203,7 +212,7 @@ itcl::extendedclass ::ntk::classes::grid {
                 set st [expr {[lsearch -exact [$path cget -sticky] $wdir] >= 0}]
                 for {set i $s} {$i < $es} {incr i} {
                     if {![info exists ratios($i)]} {
-                        set wratio [expr {[$path cget $reqdim] * $units / $psize}]
+                        set wratio [expr {[$path cget -$reqdim] * $units / $psize}]
                         for {set subi $s} {$subi < $es} {incr subi} {
                             if {[info exists ratios($subi)]} {
                                 set wratio [expr {$wratio - $ratios($subi)}]
@@ -224,6 +233,7 @@ itcl::extendedclass ::ntk::classes::grid {
         }
         set totalratio [sumRatios ratios]
 
+#puts stderr "      totalratio!$totalratio!"
         if {$totalratio > $units} {
             # The widgets will all have to be bumped down in ratio.
             # Try to shrink sticky widgets more than others.
@@ -237,11 +247,13 @@ itcl::extendedclass ::ntk::classes::grid {
                 set bump [expr {($totalratio - $units) / $totalstickycells}]
                 foreach key [array names sticky] {
                     set ratios($key) [expr {$ratios($key) - $bump}]
+#puts stderr "      2 set ratios($key) [expr {$ratios($key) - $bump}]"
                 }
 	    } else {
 	        set bump [expr {($totalratio - $units) / $totalcells}]
 		foreach key [array names ratios] {
 		    set ratios($key) [expr {$ratios($key) - $bump}]
+#puts stderr "      3 set ratios($key) [expr {$ratios($key) - $bump}]"
 		}
 	    }
         } else {
@@ -261,6 +273,7 @@ itcl::extendedclass ::ntk::classes::grid {
                 set bump [expr {$ratiodelta / $fillcells}]
                 foreach i [array names sticky] {
                     set ratios($i) [expr {$ratios($i) + $bump}]
+#puts stderr "      4 set ratios($i) [expr {$ratios($i) + $bump}]"
                 }
             }  
         }
@@ -282,6 +295,7 @@ itcl::extendedclass ::ntk::classes::grid {
                 }
                 set gridLock($path) $path
                 $path configure -$wdir $totalsize
+#puts stderr "      $path configure -$wdir $totalsize"
                 unset gridLock($path)
             }
         }
