@@ -1,5 +1,4 @@
-lappend auto_path . /home/arnulf/Desktop/TCL3D/tcl3dsh-Linux-0.3.2
-package require tcl3d
+lappend auto_path .
 package require TclGlfw
 
 ::ntk::glfw::Glfw openWindow 300 200
