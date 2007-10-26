@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGlfwMaps.c,v 1.1.2.1 2007/10/25 19:02:44 wiede Exp $
+ * RCS: @(#) $Id: tclGlfwMaps.c,v 1.1.2.2 2007/10/26 22:52:46 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -246,6 +246,7 @@ TclGlfwWindowHint2Define(
     }
     return -1;
 }
+
 int
 TclGlfwEnableParam2Define(
     const char *key)
@@ -260,4 +261,31 @@ TclGlfwEnableParam2Define(
         enableParam2DefinePtr++;
     }
     return -1;
+}
+
+Tcl_Obj *
+TclGlfwDefine2Key(
+    int value)
+{
+    define2Key *key2DefinePtr;
+    Tcl_Obj *objPtr;
+
+    if (value < GLFW_KEY_ESC) {
+	char buf[10];
+
+	sprintf(buf, "%c", value);
+        objPtr = Tcl_NewStringObj(buf, -1);
+        Tcl_IncrRefCount(objPtr);
+        return objPtr;
+    }
+    key2DefinePtr = keyMaps;
+    while (key2DefinePtr->keyName != NULL) {
+        if (key2DefinePtr->keyDefine == value) {
+            objPtr = Tcl_NewStringObj(key2DefinePtr->keyName, -1);
+            Tcl_IncrRefCount(objPtr);
+	    return objPtr;
+        }
+        key2DefinePtr++;
+    }
+    return NULL;
 }

@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGlfwBase.c,v 1.1.2.1 2007/10/25 19:02:43 wiede Exp $
+ * RCS: @(#) $Id: tclGlfwBase.c,v 1.1.2.2 2007/10/26 22:52:46 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -54,6 +54,8 @@ Initialize (
     infoPtr = (TclGlfwInfo*)ckalloc(sizeof(TclGlfwInfo));
     memset(infoPtr, 0, sizeof(TclGlfwInfo));
     infoPtr->version = TCL_GLFW_INFO_VERSION;
+    infoPtr->numWindows = 0;
+    Tcl_InitObjHashTable(&infoPtr->windowHandles);
 
     Tcl_SetAssocData(interp, TCL_GLFW_INTERP_DATA,
         (Tcl_InterpDeleteProc*)NULL, (ClientData)infoPtr);
