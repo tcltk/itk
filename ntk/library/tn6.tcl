@@ -18,6 +18,7 @@ package require freetypeext
 package require pngext2
 package require jpegext2
 package require ntk
+puts stderr "IC![::info comm ntk*]!"
 lappend auto_path .
 package require ntkWidget
 

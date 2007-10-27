@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.14 2007/10/22 20:30:39 wiede Exp $
+# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.15 2007/10/27 20:30:00 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::render {
@@ -42,8 +42,15 @@
         renderTree $myObj .
         set myWinId [. id]
 #puts stderr "renderNow!ntk-put-image $myWinId $myObj!"
-	ntk-resize-image $myWinId [. cget -width] [. cget -height]
-	ntk-put-image  $myWinId $myObj
+        if {[info exists ::useGLFW] && $::useGLFW} {
+                ::ntk::glfw::Glfw glClear GL_COLOR_BUFFER_BIT
+                set data [$myObj getdata]
+                ::ntk::glfw::Glfw drawMegaimage $data
+                ::ntk::glfw::Glfw swapBuffers
+        } else {
+#	    ntk-resize-image $myWinId [. cget -width] [. cget -height]
+	    ntk-put-image  $myWinId $myObj
+        }
 	set rendering 0
 #puts stderr "renderNow END"
     }

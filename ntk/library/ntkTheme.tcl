@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.10 2007/10/22 20:32:53 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.11 2007/10/27 20:30:00 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
@@ -51,13 +51,15 @@
     public proc themeButtonDrawBorder {path} {
         set low [list 20 20 20 255]
         set high [list 200 200 200 255]
-        themeDrawBorder [$path obj] 0 0 [$path cget -width] [$path cget -height] $low $high [$path cget -bd]
+        themeDrawBorder [$path obj] 0 0 [$path cget -width] \
+	        [$path cget -height] $low $high [$path cget -bd]
     }
 
     public proc themeButtonDrawPressedBorder {path} {
         set low [list 20 20 20 255]
         set high [list 200 200 200 255]
-        themeDrawBorder [$path obj] 0 0 [$path cget -width] [$path cget -height] $high $low [$path cget -bd]
+        themeDrawBorder [$path obj] 0 0 [$path cget -width] \
+	        [$path cget -height] $high $low [$path cget -bd]
     }
 
     public proc themeDrawBorder {obj x y width height low high bd} {
@@ -78,6 +80,12 @@
             $obj line $x1 $y1 $x1 $y2 $high
             incr bd -1
         }
+    }
+    public method themeDrawGenericBorder {path} {
+        set low [list 20 20 20 255]
+        set high [list 200 200 200 255]
+        themeDrawBorder [$path obj] 0 0 [$path cget -width] \
+                [$path cget -height] $high $low [$path cget -bd]
     }
 
     public proc themeDrawTextBackground {path} {
@@ -158,4 +166,49 @@
         render $path
     }
 
+    public method themeSpinboxButtonBgDraw {path} {
+        [$path obj] setall $default_background_color
+    }
+  
+    public method themeSpinboxButtonDownDraw {path} {
+        set w [$path cget -width]
+        set h [$path cget -height]
+        [$path obj] polygon [list 0 0 0 255] \
+                2 2       [expr {$w - 2}] 2 \
+                [expr {$w / 2}] [expr {$h - 2}]
+    }
+  
+    public method themeSpinboxButtonUpDraw {path} {
+        set w [$path width]
+        set h [$path height]
+  
+        [$path obj] polygon [list 0 0 0 255] \
+             [expr {$w / 2}] 2 \
+             2 [expr {$h - 2}]  [expr {$w - 2}] [expr {$h - 2}]
+        render $path
+    }
+  
+    public method themeSpinboxDrawTextareaBorder {path} {
+        set low [list 20 20 20 255]
+        set high [list 200 200 200 255]
+        themeDrawBorder [$path.textarea obj] 0 0 \
+                [expr {[$path.textarea cget -width] - 1}] \
+                [$path.textarea cget -height] $high $low [$path cget -bd]
+   }
+  
+   public method themeSpinboxMakeButtonImage {direction} {
+       set w 18
+       set h 12
+       set obj [megaimage-blank $w $h]
+       if {$direction eq "up"} {
+           $obj polygon [list 0 0 0 255] \
+                   [expr {$w / 2}] 2 \
+                   2 [expr {$h - 2}]  [expr {$w - 2}] [expr {$h - 2}]
+       } else {
+               $obj polygon [list 0 0 0 255] \
+                   2 2 [expr {$w - 2}] 2 \
+                   [expr {$w / 2}] [expr {$h - 2}]
+       }
+       return $obj
+    }
 }

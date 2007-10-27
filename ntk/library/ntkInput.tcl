@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.8 2007/10/22 20:30:39 wiede Exp $
+# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.9 2007/10/27 20:30:00 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::input {
@@ -188,10 +188,12 @@
                     return 0
                 }
                 if {$a > 0} {
-                    if {[inputMousePressRecurse $c $button $localx $localy $globalx $globaly]} {
+                    if {[inputMousePressRecurse $c $button $localx $localy \
+                            $globalx $globaly]} {
                         return 1
                     } else {
-                        inputMousePressDispatch $c $button $localx $localy $globalx $globaly
+                        inputMousePressDispatch $c $button $localx $localy \
+                            $globalx $globaly
                         return 1
                     }
                 }

@@ -40,8 +40,8 @@ SHLIB_LD=${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}
 SHLIB_LD_LIBS=${LIBS} /home/arnulf/SOURCES/tclOO/itcl-ng/itk/ntk/library/glfw/lib/x11/libglfw.a -L/home/arnulf/SOURCES/tclOO/head/unix -ltclstub8.5 \
 -L/usr/X11/lib -lGLU -lGL -lX11 -lXrandr -pthread -lm
 STLIB_LD=${AR} cr
-TCL_SRC_DIR=/home/arnulf/SOURCES/tclOO/head                                     TCL_BIN_DIR=/home/arnulf/SOURCES/tclOO/head/unix
-# Not actually used, but can help when tracing errors                           TCL_LIBS=${DL_LIBS} ${LIBS} ${MATH_LIBS}
+TCL_SRC_DIR=/home/arnulf/SOURCES/tclOO/head	                             TCL_BIN_DIR=/home/arnulf/SOURCES/tclOO/head/unix
+# Not actually used, but can help when tracing errors	                   TCL_LIBS=${DL_LIBS} ${LIBS} ${MATH_LIBS}
 TCLSH_PROGRAM=/home/arnulf/SOURCES/tclOO/head/unix/tclsh
 INCLUDES= -I. -I"./generic" -I"/home/arnulf/SOURCES/tclOO/head/generic" -I"/unix"
 EXTRA_CFLAGS=
@@ -107,13 +107,17 @@ PLATFORM:=$(shell echo 'package require platform;puts [platform::generic]' | $(T
 all: package libraries
 package: $(PKG_LIB_FILE) pkgIndex.tcl
 libraries: $(PKG_STUB_LIB_FILE)
-install: all install-package install-libraries install-headers install-doc
+install: all install-package # install-libraries install-headers install-doc
 kit: sdx_valid $(PKG_KIT)
 
 #========================================================================
 # Basic installation rules
 #========================================================================
 
+install-package:
+	@mkdir -p $(DESTDIR)$(pkglibdir)
+	$(INSTALL_PROGRAM) $(PKG_LIB_FILE) $(DESTDIR)$(pkglibdir)/$(PKG_LIB_FILE)
+	$(INSTALL_DATA) pkgIndex.tcl $(DESTDIR)$(pkglibdir)/pkgIndex.tcl
 
 
 #========================================================================

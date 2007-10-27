@@ -43,6 +43,12 @@ proc DispatchMouseWheel {where} {
 proc DispatchWindowSize {width height} {
     puts stderr "DispatchWindowSize!$width!$height!"
 }
+proc DispatchWindowRefresh {} {
+    puts stderr "DispatchWindowRefresh!"
+}
+proc DispatchWindowClose {} {
+    puts stderr "DispatchWindowClose!"
+}
 ::ntk::glfw::Glfw enable GLFW_STICKY_KEYS
 ::ntk::glfw::Glfw enable GLFW_KEY_REPEAT
 ::ntk::glfw::Glfw enable GLFW_MOUSE_CURSOR
@@ -51,6 +57,8 @@ proc DispatchWindowSize {width height} {
 ::ntk::glfw::Glfw setMouseButtonCallback $win DispatchMouseButton
 ::ntk::glfw::Glfw setMouseWheelCallback $win DispatchMouseWheel
 ::ntk::glfw::Glfw setWindowSizeCallback $win DispatchWindowSize
+::ntk::glfw::Glfw setWindowRefreshCallback $win DispatchWindowRefresh
+::ntk::glfw::Glfw setWindowCloseCallback $win DispatchWindowClose
 
 proc Draw {} {
     upvar lst lst

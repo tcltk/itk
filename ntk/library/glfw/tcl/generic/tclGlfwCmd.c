@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGlfwCmd.c,v 1.1.2.2 2007/10/26 22:52:46 wiede Exp $
+ * RCS: @(#) $Id: tclGlfwCmd.c,v 1.1.2.3 2007/10/27 20:30:04 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -34,12 +34,15 @@ Tcl_ObjCmdProc TclGlfw_SetMousePosCallbackCmd;
 Tcl_ObjCmdProc TclGlfw_SetMouseButtonCallbackCmd;
 Tcl_ObjCmdProc TclGlfw_SetMouseWheelCallbackCmd;
 Tcl_ObjCmdProc TclGlfw_SetWindowSizeCallbackCmd;
+Tcl_ObjCmdProc TclGlfw_SetWindowRefreshCallbackCmd;
+Tcl_ObjCmdProc TclGlfw_SetWindowCloseCallbackCmd;
 Tcl_ObjCmdProc TclGlfw_GetKeyCmd;
 Tcl_ObjCmdProc TclGlfw_EnableCmd;
 Tcl_ObjCmdProc TclGlfw_DisableCmd;
 Tcl_ObjCmdProc TclGlfw_DefaultCmd;
 Tcl_ObjCmdProc TclGlfw_UnknownCmd;
 Tcl_ObjCmdProc TclGlfw_glDrawPixelsCmd;
+Tcl_ObjCmdProc TclGlfw_DrawMegaimageCmd;
 Tcl_ObjCmdProc TclGlfw_glClearColorCmd;
 Tcl_ObjCmdProc TclGlfw_glClearCmd;
 Tcl_ObjCmdProc TclGlfw_glFlushCmd;
@@ -75,8 +78,13 @@ static GlfwMethod GlfwMethodList[] = {
             TclGlfw_SetMouseButtonCallbackCmd },
     { "setWindowSizeCallback", "functionName",
             TclGlfw_SetWindowSizeCallbackCmd },
+    { "setWindowRefreshCallback", "functionName",
+            TclGlfw_SetWindowRefreshCallbackCmd },
+    { "setWindowcloseCallback", "functionName",
+            TclGlfw_SetWindowCloseCallbackCmd },
     { "setMouseWheelCallback", "??", TclGlfw_SetMouseWheelCallbackCmd },
     { "glDrawPixels", "width height <pixel-list>", TclGlfw_glDrawPixelsCmd },
+    { "drawMegaimage", "width height <pixel-list>", TclGlfw_DrawMegaimageCmd },
     { "glClearColor", "redVal greenVal blueVal alphaVal",
             TclGlfw_glClearColorCmd },
     { "glClear", "", TclGlfw_glClearCmd },
@@ -122,8 +130,13 @@ static const struct NameProcMap glfwCmds2[] = {
             TclGlfw_SetMouseWheelCallbackCmd },
     { "::ntk::glfw::Glfw::setWindowSizeCallback",
             TclGlfw_SetWindowSizeCallbackCmd },
+    { "::ntk::glfw::Glfw::setWindowRefreshCallback",
+            TclGlfw_SetWindowRefreshCallbackCmd },
+    { "::ntk::glfw::Glfw::setWindowCloseCallback",
+            TclGlfw_SetWindowCloseCallbackCmd },
     { "::ntk::glfw::Glfw::unknown", TclGlfw_UnknownCmd },
     { "::ntk::glfw::Glfw::glDrawPixels", TclGlfw_glDrawPixelsCmd },
+    { "::ntk::glfw::Glfw::drawMegaimage", TclGlfw_DrawMegaimageCmd },
     { "::ntk::glfw::Glfw::glClearColor", TclGlfw_glClearColorCmd },
     { "::ntk::glfw::Glfw::glClear", TclGlfw_glClearCmd },
     { "::ntk::glfw::Glfw::glFlush", TclGlfw_glFlushCmd },
@@ -1046,6 +1059,53 @@ void DispatchWindowSize(
 
 /*
  * ------------------------------------------------------------------------
+ *  DispatchWindowRefresh()
+ *
+ *  Handles the GLFW dispatching of window refreshing
+ *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+void DispatchWindowRefresh(
+    void)
+{
+    Tcl_Obj *listPtr;
+    TclGlfwWindow *winPtr;
+    TclGlfwInfo *infoPtr;
+    int result;
+
+    infoPtr = Tcl_GetAssocData(_interp, TCL_GLFW_INTERP_DATA, NULL);
+    winPtr = infoPtr->currWindow;
+    listPtr = Tcl_NewListObj(0, NULL);
+    Tcl_ListObjAppendElement (_interp, listPtr, winPtr->windowRefreshCallback);
+    result = Tcl_GlobalEvalObj (_interp, listPtr);
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  DispatchWindowClose()
+ *
+ *  Handles the GLFW dispatching of window closing
+ *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+void DispatchWindowClose(
+    int width,
+    int height)
+{
+    Tcl_Obj *listPtr;
+    TclGlfwWindow *winPtr;
+    TclGlfwInfo *infoPtr;
+    int result;
+
+    infoPtr = Tcl_GetAssocData(_interp, TCL_GLFW_INTERP_DATA, NULL);
+    winPtr = infoPtr->currWindow;
+    listPtr = Tcl_NewListObj(0, NULL);
+    Tcl_ListObjAppendElement (_interp, listPtr, winPtr->windowCloseCallback);
+    result = Tcl_GlobalEvalObj (_interp, listPtr);
+}
+
+/*
+ * ------------------------------------------------------------------------
  *  TclGlfw_SetKeyCallbackCmd()
  *
  *  Handles the GLFW setKeyCallback command
@@ -1246,6 +1306,88 @@ TclGlfw_SetWindowSizeCallbackCmd(
     winPtr->windowSizeCallback = objv[2];
     Tcl_IncrRefCount(winPtr->windowSizeCallback);
     glfwSetWindowSizeCallback(DispatchWindowSize);
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  TclGlfw_SetWindowRefreshCallbackCmd()
+ *
+ *  Handles the GLFW setWindowRefreshCallback command
+ *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+TclGlfw_SetWindowRefreshCallbackCmd(
+    ClientData clientData, /* infoPtr */
+    Tcl_Interp *interp,    /* current interpreter */
+    int objc,              /* number of arguments */
+    Tcl_Obj *CONST objv[]) /* argument objects */
+{
+    Tcl_HashEntry *hPtr;
+    TclGlfwWindow *winPtr;
+    TclGlfwInfo *infoPtr;
+
+    infoPtr = (TclGlfwInfo *)clientData;
+    TclGlfwShowArgs(0, "TclGlfw_SetWindowRefreshCallbackCmd", objc, objv);
+    if (objc != 3) {
+	Tcl_AppendResult(interp,
+	        "wrong # args: should be \"ntk glfw setWindowRefreshCallback windowHandle function\"",
+	        NULL);
+        return TCL_ERROR;
+    }
+    hPtr = Tcl_FindHashEntry(&infoPtr->windowHandles, (char *)objv[1]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such window handle \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    winPtr = Tcl_GetHashValue(hPtr);
+    winPtr->windowRefreshCallback = objv[2];
+    Tcl_IncrRefCount(winPtr->windowRefreshCallback);
+    glfwSetWindowRefreshCallback(DispatchWindowRefresh);
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  TclGlfw_SetWindowCloseCallbackCmd()
+ *
+ *  Handles the GLFW setWindowCloseCallback command
+ *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+TclGlfw_SetWindowCloseCallbackCmd(
+    ClientData clientData, /* infoPtr */
+    Tcl_Interp *interp,    /* current interpreter */
+    int objc,              /* number of arguments */
+    Tcl_Obj *CONST objv[]) /* argument objects */
+{
+    Tcl_HashEntry *hPtr;
+    TclGlfwWindow *winPtr;
+    TclGlfwInfo *infoPtr;
+
+    infoPtr = (TclGlfwInfo *)clientData;
+    TclGlfwShowArgs(0, "TclGlfw_SetWindowCloseCallbackCmd", objc, objv);
+    if (objc != 3) {
+	Tcl_AppendResult(interp,
+	        "wrong # args: should be \"ntk glfw setWindowCloseCallback windowHandle function\"",
+	        NULL);
+        return TCL_ERROR;
+    }
+    hPtr = Tcl_FindHashEntry(&infoPtr->windowHandles, (char *)objv[1]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such window handle \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    winPtr = Tcl_GetHashValue(hPtr);
+    winPtr->windowCloseCallback = objv[2];
+    Tcl_IncrRefCount(winPtr->windowCloseCallback);
+    glfwSetWindowSizeCallback(DispatchWindowClose);
     return TCL_OK;
 }
 
@@ -1455,5 +1597,47 @@ TclGlfw_glFlushCmd(
         return TCL_ERROR;
     }
     glFlush();
+    return result;
+}
+
+#include "/home/arnulf/SOURCES/MEGAIMAGE/megapkg/csrc/megaimage/megaimage_shared.h"
+/*
+ * ------------------------------------------------------------------------
+ *  TclGlfw_DrawMegaimageCmd()
+ *
+ *  Handles drawing of a pixel area with rgba values
+ *
+ *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+TclGlfw_DrawMegaimageCmd(
+    ClientData clientData, /* infoPtr */
+    Tcl_Interp *interp,    /* current interpreter */
+    int objc,              /* number of arguments */
+    Tcl_Obj *CONST objv[]) /* argument objects */
+{
+    TclGlfwInfo *infoPtr;
+    struct megaimage_header megaimageHeader;
+    unsigned char *hdPtr;
+    unsigned char *data;
+    int lgth;
+    int result;
+
+    infoPtr = (TclGlfwInfo *)clientData;
+    result = TCL_OK;
+    TclGlfwShowArgs(1, "TclGlfw_DrawMegaimageCmd", objc, objv);
+    if (objc != 2) {
+	Tcl_AppendResult(interp,
+	        "wrong # args: should be \"ntk glfw drawMegaimage data\"",
+	        NULL);
+        return TCL_ERROR;
+    }
+    hdPtr = Tcl_GetByteArrayFromObj(objv[1], &lgth);
+    memcpy(&megaimageHeader, hdPtr, sizeof(struct megaimage_header));
+    data = hdPtr + sizeof(struct megaimage_header);
+    glDrawPixels(megaimageHeader.width, megaimageHeader.height,
+            GL_RGBA, GL_UNSIGNED_BYTE, data);
     return result;
 }

@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkMenu.tcl,v 1.1.2.1 2007/10/27 20:04:23 wiede Exp $
+# RCS: @(#) $Id: ntkMenu.tcl,v 1.1.2.2 2007/10/27 20:30:00 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::menu {
@@ -49,9 +49,6 @@ itcl::extendedclass ::ntk::classes::menu {
         return $wpath
     }
 
-    public method menuDraw {} {
-    }
-
     public method addentry {text callback} {
 	lappend items $text
 	lappend itemTypes entry
@@ -63,7 +60,7 @@ itcl::extendedclass ::ntk::classes::menu {
 
     }
 
-    proc menuDraw {} {
+    public method menuDraw {} {
 
     }
 }
