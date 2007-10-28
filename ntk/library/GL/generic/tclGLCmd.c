@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.1 2007/10/28 15:31:44 wiede Exp $
+ * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.2 2007/10/28 22:50:43 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -17,6 +17,8 @@
 
 Tcl_ObjCmdProc TclGL_DefaultCmd;
 Tcl_ObjCmdProc TclGL_UnknownCmd;
+Tcl_ObjCmdProc TclGL_Define2Str;
+Tcl_ObjCmdProc TclGL_Str2Define;
 #include "tclGLProcNames.c"
 
 typedef struct GLMethod {
@@ -27,6 +29,8 @@ typedef struct GLMethod {
 
 static GLMethod GLMethodList[] = {
 #include "tclGLMethodNames.c"
+    { "glDefine2Str", "<define value>", TclGL_Define2Str },
+    { "glStr2Define", "<define string>", TclGL_Str2Define },
     /*
      *  Add an error handler to support all of the usual inquiries
      *  for the "info" command in the global namespace.
@@ -44,6 +48,8 @@ struct NameProcMap { const char *name; Tcl_ObjCmdProc *proc; };
 static const struct NameProcMap glCmds2[] = {
 #include "tclGLCmdNames.c"
     { "::ntk::gl::GL::unknown", TclGL_UnknownCmd },
+    { "::ntk::gl::GL::glDefine2Str", TclGL_Define2Str },
+    { "::ntk::gl::GL::glStr2Define", TclGL_Str2Define },
     /*
      *  Add an error handler
      */
@@ -209,6 +215,84 @@ TclGL_UnknownCmd(
     TclGLGetUsage(interp, objPtr);
     Tcl_SetResult(interp, Tcl_GetString(objPtr), TCL_DYNAMIC);
     return TCL_ERROR;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  TclGL_Define2Str()
+ *
+ *  convert a GL_ define value to the corresponding string
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+TclGL_Define2Str(
+    ClientData clientData,   /* infoPtr */
+    Tcl_Interp *interp,      /* current interpreter */
+    int objc,                /* number of arguments */
+    Tcl_Obj *CONST objv[])   /* argument objects */
+{
+    Tcl_HashEntry *hPtr;
+    TclGLInfo *infoPtr;
+    int value;
+
+    infoPtr = (TclGLInfo *)clientData;
+    TclGLShowArgs(0, "TclGL_Define2Str", objc, objv);
+    if (objc != 2) {
+        Tcl_AppendResult(interp,
+                "wrong # args: should be \"ntk glDefine2Str value\"",
+                NULL);
+        return TCL_ERROR;
+    }
+    Tcl_GetIntFromObj(interp, objv[1], &value);
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefineStrings, (char *)value);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define value: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+	return TCL_ERROR;
+    }
+    Tcl_AppendResult(interp, Tcl_GetString(Tcl_GetHashValue(hPtr)), NULL);
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  TclGL_Str2Define()
+ *
+ *  convert a GL_ define string to the corresponding value
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+TclGL_Str2Define(
+    ClientData clientData,  /* infoPtr */
+    Tcl_Interp *interp,      /* current interpreter */
+    int objc,                /* number of arguments */
+    Tcl_Obj *CONST objv[])   /* argument objects */
+{
+    Tcl_HashEntry *hPtr;
+    TclGLInfo *infoPtr;
+
+    infoPtr = (TclGLInfo *)clientData;
+    TclGLShowArgs(0, "TclGL_Str2Define", objc, objv);
+    if (objc != 2) {
+        Tcl_AppendResult(interp,
+                "wrong # args: should be \"ntk glStr2Define value\"",
+                NULL);
+        return TCL_ERROR;
+    }
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define string: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+	return TCL_ERROR;
+    }
+    char buf[30];
+    Tcl_Obj *objPtr;
+    sprintf(buf, "0x%08x", (int)Tcl_GetHashValue(hPtr));
+    objPtr = Tcl_NewStringObj(buf, -1);
+    Tcl_AppendResult(interp, Tcl_GetString(objPtr), NULL);
+    return TCL_OK;;
 }
 
 static Tcl_Interp *_interp;

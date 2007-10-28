@@ -33,7 +33,7 @@ TclGL_glClearIndexCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glClearIndex GLfloat_c\"",
+                "wrong # args: should be \"ntk glClearIndex <(GLfloat) c>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -84,7 +84,7 @@ TclGL_glClearColorCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glClearColor GLclampf_red GLclampf_green GLclampf_blue GLclampf_alpha\"",
+                "wrong # args: should be \"ntk glClearColor <(GLclampf) red> <(GLclampf) green> <(GLclampf) blue> <(GLclampf) alpha>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -131,7 +131,7 @@ TclGL_glClearCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glClear GLbitfield_mask\"",
+                "wrong # args: should be \"ntk glClear <(GLbitfield) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -175,7 +175,7 @@ TclGL_glIndexMaskCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIndexMask GLuint_mask\"",
+                "wrong # args: should be \"ntk glIndexMask <(GLuint) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -226,7 +226,7 @@ TclGL_glColorMaskCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColorMask GLboolean_red GLboolean_green GLboolean_blue GLboolean_alpha\"",
+                "wrong # args: should be \"ntk glColorMask <(GLboolean) red> <(GLboolean) green> <(GLboolean) blue> <(GLboolean) alpha>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -273,7 +273,7 @@ TclGL_glAlphaFuncCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glAlphaFunc GLenum_func GLclampf_ref\"",
+                "wrong # args: should be \"ntk glAlphaFunc <(GLenum) func> <(GLclampf) ref>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -316,7 +316,7 @@ TclGL_glBlendFuncCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glBlendFunc GLenum_sfactor GLenum_dfactor\"",
+                "wrong # args: should be \"ntk glBlendFunc <(GLenum) sfactor> <(GLenum) dfactor>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -359,7 +359,7 @@ TclGL_glLogicOpCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLogicOp GLenum_opcode\"",
+                "wrong # args: should be \"ntk glLogicOp <(GLenum) opcode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -402,7 +402,7 @@ TclGL_glCullFaceCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glCullFace GLenum_mode\"",
+                "wrong # args: should be \"ntk glCullFace <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -445,7 +445,7 @@ TclGL_glFrontFaceCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glFrontFace GLenum_mode\"",
+                "wrong # args: should be \"ntk glFrontFace <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -489,7 +489,7 @@ TclGL_glPointSizeCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glPointSize GLfloat_size\"",
+                "wrong # args: should be \"ntk glPointSize <(GLfloat) size>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -534,7 +534,7 @@ TclGL_glLineWidthCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLineWidth GLfloat_width\"",
+                "wrong # args: should be \"ntk glLineWidth <(GLfloat) width>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -581,7 +581,7 @@ TclGL_glLineStippleCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLineStipple GLint_factor GLushort_pattern\"",
+                "wrong # args: should be \"ntk glLineStipple <(GLint) factor> <(GLushort) pattern>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -626,7 +626,7 @@ TclGL_glPolygonModeCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glPolygonMode GLenum_face GLenum_mode\"",
+                "wrong # args: should be \"ntk glPolygonMode <(GLenum) face> <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -672,7 +672,7 @@ TclGL_glPolygonOffsetCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glPolygonOffset GLfloat_factor GLfloat_units\"",
+                "wrong # args: should be \"ntk glPolygonOffset <(GLfloat) factor> <(GLfloat) units>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -717,7 +717,7 @@ TclGL_glPolygonStippleCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glPolygonStipple GLubyte_mask\"",
+                "wrong # args: should be \"ntk glPolygonStipple <(GLubyte) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -760,7 +760,7 @@ TclGL_glGetPolygonStippleCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetPolygonStipple GLubyte_mask\"",
+                "wrong # args: should be \"ntk glGetPolygonStipple <(GLubyte) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -804,7 +804,7 @@ TclGL_glEdgeFlagCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEdgeFlag GLboolean_flag\"",
+                "wrong # args: should be \"ntk glEdgeFlag <(GLboolean) flag>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -848,7 +848,7 @@ TclGL_glEdgeFlagvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEdgeFlagv GLboolean_flag\"",
+                "wrong # args: should be \"ntk glEdgeFlagv <(GLboolean) flag>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -898,7 +898,7 @@ TclGL_glScissorCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glScissor GLint_x GLint_y GLsizei_width GLsizei_height\"",
+                "wrong # args: should be \"ntk glScissor <(GLint) x> <(GLint) y> <(GLsizei) width> <(GLsizei) height>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -945,7 +945,7 @@ TclGL_glClipPlaneCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glClipPlane GLenum_plane GLdouble_equation\"",
+                "wrong # args: should be \"ntk glClipPlane <(GLenum) plane> <(GLdouble) equation>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -988,7 +988,7 @@ TclGL_glGetClipPlaneCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetClipPlane GLenum_plane GLdouble_equation\"",
+                "wrong # args: should be \"ntk glGetClipPlane <(GLenum) plane> <(GLdouble) equation>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1031,7 +1031,7 @@ TclGL_glDrawBufferCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glDrawBuffer GLenum_mode\"",
+                "wrong # args: should be \"ntk glDrawBuffer <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1074,7 +1074,7 @@ TclGL_glReadBufferCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glReadBuffer GLenum_mode\"",
+                "wrong # args: should be \"ntk glReadBuffer <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1117,7 +1117,7 @@ TclGL_glEnableCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEnable GLenum_cap\"",
+                "wrong # args: should be \"ntk glEnable <(GLenum) cap>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1160,7 +1160,7 @@ TclGL_glDisableCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glDisable GLenum_cap\"",
+                "wrong # args: should be \"ntk glDisable <(GLenum) cap>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1203,7 +1203,7 @@ TclGL_glIsEnabledCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIsEnabled GLenum_cap\"",
+                "wrong # args: should be \"ntk glIsEnabled <(GLenum) cap>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1246,7 +1246,7 @@ TclGL_glEnableClientStateCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEnableClientState GLenum_cap\"",
+                "wrong # args: should be \"ntk glEnableClientState <(GLenum) cap>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1289,7 +1289,7 @@ TclGL_glDisableClientStateCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glDisableClientState GLenum_cap\"",
+                "wrong # args: should be \"ntk glDisableClientState <(GLenum) cap>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1332,7 +1332,7 @@ TclGL_glGetBooleanvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetBooleanv GLenum_pname GLboolean_params\"",
+                "wrong # args: should be \"ntk glGetBooleanv <(GLenum) pname> <(GLboolean) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1375,7 +1375,7 @@ TclGL_glGetDoublevCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetDoublev GLenum_pname GLdouble_params\"",
+                "wrong # args: should be \"ntk glGetDoublev <(GLenum) pname> <(GLdouble) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1418,7 +1418,7 @@ TclGL_glGetFloatvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetFloatv GLenum_pname GLfloat_params\"",
+                "wrong # args: should be \"ntk glGetFloatv <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1461,7 +1461,7 @@ TclGL_glGetIntegervCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetIntegerv GLenum_pname GLint_params\"",
+                "wrong # args: should be \"ntk glGetIntegerv <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1504,7 +1504,7 @@ TclGL_glPushAttribCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glPushAttrib GLbitfield_mask\"",
+                "wrong # args: should be \"ntk glPushAttrib <(GLbitfield) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1545,7 +1545,7 @@ TclGL_glPopAttribCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glPopAttribCmd", objc, objv);
 
-    if (objc != 1) {
+    if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPopAttrib \"",
                 NULL);
@@ -1591,7 +1591,7 @@ TclGL_glPushClientAttribCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glPushClientAttrib GLbitfield_mask\"",
+                "wrong # args: should be \"ntk glPushClientAttrib <(GLbitfield) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1632,7 +1632,7 @@ TclGL_glPopClientAttribCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glPopClientAttribCmd", objc, objv);
 
-    if (objc != 1) {
+    if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPopClientAttrib \"",
                 NULL);
@@ -1678,7 +1678,7 @@ TclGL_glRenderModeCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRenderMode GLenum_mode\"",
+                "wrong # args: should be \"ntk glRenderMode <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1719,7 +1719,7 @@ TclGL_glGetErrorCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glGetErrorCmd", objc, objv);
 
-    if (objc != 1) {
+    if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetError \"",
                 NULL);
@@ -1763,7 +1763,7 @@ TclGL_glFinishCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glFinishCmd", objc, objv);
 
-    if (objc != 1) {
+    if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glFinish \"",
                 NULL);
@@ -1807,7 +1807,7 @@ TclGL_glFlushCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glFlushCmd", objc, objv);
 
-    if (objc != 1) {
+    if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glFlush \"",
                 NULL);
@@ -1853,7 +1853,7 @@ TclGL_glHintCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glHint GLenum_target GLenum_mode\"",
+                "wrong # args: should be \"ntk glHint <(GLenum) target> <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1897,7 +1897,7 @@ TclGL_glClearDepthCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glClearDepth GLclampd_depth\"",
+                "wrong # args: should be \"ntk glClearDepth <(GLclampd) depth>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1941,7 +1941,7 @@ TclGL_glDepthFuncCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glDepthFunc GLenum_func\"",
+                "wrong # args: should be \"ntk glDepthFunc <(GLenum) func>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -1985,7 +1985,7 @@ TclGL_glDepthMaskCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glDepthMask GLboolean_flag\"",
+                "wrong # args: should be \"ntk glDepthMask <(GLboolean) flag>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2032,7 +2032,7 @@ TclGL_glDepthRangeCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glDepthRange GLclampd_near_val GLclampd_far_val\"",
+                "wrong # args: should be \"ntk glDepthRange <(GLclampd) near_val> <(GLclampd) far_val>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2084,7 +2084,7 @@ TclGL_glClearAccumCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glClearAccum GLfloat_red GLfloat_green GLfloat_blue GLfloat_alpha\"",
+                "wrong # args: should be \"ntk glClearAccum <(GLfloat) red> <(GLfloat) green> <(GLfloat) blue> <(GLfloat) alpha>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2131,7 +2131,7 @@ TclGL_glAccumCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glAccum GLenum_op GLfloat_value\"",
+                "wrong # args: should be \"ntk glAccum <(GLenum) op> <(GLfloat) value>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2174,7 +2174,7 @@ TclGL_glMatrixModeCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMatrixMode GLenum_mode\"",
+                "wrong # args: should be \"ntk glMatrixMode <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2215,7 +2215,7 @@ TclGL_glPushMatrixCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glPushMatrixCmd", objc, objv);
 
-    if (objc != 1) {
+    if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPushMatrix \"",
                 NULL);
@@ -2259,7 +2259,7 @@ TclGL_glPopMatrixCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glPopMatrixCmd", objc, objv);
 
-    if (objc != 1) {
+    if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPopMatrix \"",
                 NULL);
@@ -2303,7 +2303,7 @@ TclGL_glLoadIdentityCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glLoadIdentityCmd", objc, objv);
 
-    if (objc != 1) {
+    if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLoadIdentity \"",
                 NULL);
@@ -2349,7 +2349,7 @@ TclGL_glLoadMatrixdCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLoadMatrixd GLdouble_m\"",
+                "wrong # args: should be \"ntk glLoadMatrixd <(GLdouble) m>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2392,7 +2392,7 @@ TclGL_glLoadMatrixfCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLoadMatrixf GLfloat_m\"",
+                "wrong # args: should be \"ntk glLoadMatrixf <(GLfloat) m>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2435,7 +2435,7 @@ TclGL_glMultMatrixdCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultMatrixd GLdouble_m\"",
+                "wrong # args: should be \"ntk glMultMatrixd <(GLdouble) m>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2478,7 +2478,7 @@ TclGL_glMultMatrixfCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultMatrixf GLfloat_m\"",
+                "wrong # args: should be \"ntk glMultMatrixf <(GLfloat) m>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2526,7 +2526,7 @@ TclGL_glScaledCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glScaled GLdouble_x GLdouble_y GLdouble_z\"",
+                "wrong # args: should be \"ntk glScaled <(GLdouble) x> <(GLdouble) y> <(GLdouble) z>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2577,7 +2577,7 @@ TclGL_glScalefCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glScalef GLfloat_x GLfloat_y GLfloat_z\"",
+                "wrong # args: should be \"ntk glScalef <(GLfloat) x> <(GLfloat) y> <(GLfloat) z>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2628,7 +2628,7 @@ TclGL_glTranslatedCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTranslated GLdouble_x GLdouble_y GLdouble_z\"",
+                "wrong # args: should be \"ntk glTranslated <(GLdouble) x> <(GLdouble) y> <(GLdouble) z>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2679,7 +2679,7 @@ TclGL_glTranslatefCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTranslatef GLfloat_x GLfloat_y GLfloat_z\"",
+                "wrong # args: should be \"ntk glTranslatef <(GLfloat) x> <(GLfloat) y> <(GLfloat) z>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2726,7 +2726,7 @@ TclGL_glIsListCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIsList GLuint_list\"",
+                "wrong # args: should be \"ntk glIsList <(GLuint) list>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2773,7 +2773,7 @@ TclGL_glDeleteListsCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glDeleteLists GLuint_list GLsizei_range\"",
+                "wrong # args: should be \"ntk glDeleteLists <(GLuint) list> <(GLsizei) range>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2819,7 +2819,7 @@ TclGL_glGenListsCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGenLists GLsizei_range\"",
+                "wrong # args: should be \"ntk glGenLists <(GLsizei) range>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2863,7 +2863,7 @@ TclGL_glNewListCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glNewList GLuint_list GLenum_mode\"",
+                "wrong # args: should be \"ntk glNewList <(GLuint) list> <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2904,7 +2904,7 @@ TclGL_glEndListCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glEndListCmd", objc, objv);
 
-    if (objc != 1) {
+    if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEndList \"",
                 NULL);
@@ -2951,7 +2951,7 @@ TclGL_glCallListCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glCallList GLuint_list\"",
+                "wrong # args: should be \"ntk glCallList <(GLuint) list>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -2996,7 +2996,7 @@ TclGL_glListBaseCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glListBase GLuint_base\"",
+                "wrong # args: should be \"ntk glListBase <(GLuint) base>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3040,7 +3040,7 @@ TclGL_glBeginCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glBegin GLenum_mode\"",
+                "wrong # args: should be \"ntk glBegin <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3081,7 +3081,7 @@ TclGL_glEndCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glEndCmd", objc, objv);
 
-    if (objc != 1) {
+    if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEnd \"",
                 NULL);
@@ -3130,7 +3130,7 @@ TclGL_glVertex2dCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex2d GLdouble_x GLdouble_y\"",
+                "wrong # args: should be \"ntk glVertex2d <(GLdouble) x> <(GLdouble) y>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3178,7 +3178,7 @@ TclGL_glVertex2fCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex2f GLfloat_x GLfloat_y\"",
+                "wrong # args: should be \"ntk glVertex2f <(GLfloat) x> <(GLfloat) y>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3226,7 +3226,7 @@ TclGL_glVertex2iCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex2i GLint_x GLint_y\"",
+                "wrong # args: should be \"ntk glVertex2i <(GLint) x> <(GLint) y>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3274,7 +3274,7 @@ TclGL_glVertex2sCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex2s GLshort_x GLshort_y\"",
+                "wrong # args: should be \"ntk glVertex2s <(GLshort) x> <(GLshort) y>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3324,7 +3324,7 @@ TclGL_glVertex3dCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex3d GLdouble_x GLdouble_y GLdouble_z\"",
+                "wrong # args: should be \"ntk glVertex3d <(GLdouble) x> <(GLdouble) y> <(GLdouble) z>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3375,7 +3375,7 @@ TclGL_glVertex3fCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex3f GLfloat_x GLfloat_y GLfloat_z\"",
+                "wrong # args: should be \"ntk glVertex3f <(GLfloat) x> <(GLfloat) y> <(GLfloat) z>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3426,7 +3426,7 @@ TclGL_glVertex3iCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex3i GLint_x GLint_y GLint_z\"",
+                "wrong # args: should be \"ntk glVertex3i <(GLint) x> <(GLint) y> <(GLint) z>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3477,7 +3477,7 @@ TclGL_glVertex3sCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex3s GLshort_x GLshort_y GLshort_z\"",
+                "wrong # args: should be \"ntk glVertex3s <(GLshort) x> <(GLshort) y> <(GLshort) z>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3530,7 +3530,7 @@ TclGL_glVertex4dCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex4d GLdouble_x GLdouble_y GLdouble_z GLdouble_w\"",
+                "wrong # args: should be \"ntk glVertex4d <(GLdouble) x> <(GLdouble) y> <(GLdouble) z> <(GLdouble) w>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3584,7 +3584,7 @@ TclGL_glVertex4fCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex4f GLfloat_x GLfloat_y GLfloat_z GLfloat_w\"",
+                "wrong # args: should be \"ntk glVertex4f <(GLfloat) x> <(GLfloat) y> <(GLfloat) z> <(GLfloat) w>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3638,7 +3638,7 @@ TclGL_glVertex4iCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex4i GLint_x GLint_y GLint_z GLint_w\"",
+                "wrong # args: should be \"ntk glVertex4i <(GLint) x> <(GLint) y> <(GLint) z> <(GLint) w>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3692,7 +3692,7 @@ TclGL_glVertex4sCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex4s GLshort_x GLshort_y GLshort_z GLshort_w\"",
+                "wrong # args: should be \"ntk glVertex4s <(GLshort) x> <(GLshort) y> <(GLshort) z> <(GLshort) w>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3739,7 +3739,7 @@ TclGL_glVertex2dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex2dv GLdouble_v\"",
+                "wrong # args: should be \"ntk glVertex2dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3782,7 +3782,7 @@ TclGL_glVertex2fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex2fv GLfloat_v\"",
+                "wrong # args: should be \"ntk glVertex2fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3825,7 +3825,7 @@ TclGL_glVertex2ivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex2iv GLint_v\"",
+                "wrong # args: should be \"ntk glVertex2iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3868,7 +3868,7 @@ TclGL_glVertex2svCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex2sv GLshort_v\"",
+                "wrong # args: should be \"ntk glVertex2sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3911,7 +3911,7 @@ TclGL_glVertex3dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex3dv GLdouble_v\"",
+                "wrong # args: should be \"ntk glVertex3dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3954,7 +3954,7 @@ TclGL_glVertex3fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex3fv GLfloat_v\"",
+                "wrong # args: should be \"ntk glVertex3fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -3997,7 +3997,7 @@ TclGL_glVertex3ivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex3iv GLint_v\"",
+                "wrong # args: should be \"ntk glVertex3iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4040,7 +4040,7 @@ TclGL_glVertex3svCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex3sv GLshort_v\"",
+                "wrong # args: should be \"ntk glVertex3sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4083,7 +4083,7 @@ TclGL_glVertex4dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex4dv GLdouble_v\"",
+                "wrong # args: should be \"ntk glVertex4dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4126,7 +4126,7 @@ TclGL_glVertex4fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex4fv GLfloat_v\"",
+                "wrong # args: should be \"ntk glVertex4fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4169,7 +4169,7 @@ TclGL_glVertex4ivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex4iv GLint_v\"",
+                "wrong # args: should be \"ntk glVertex4iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4212,7 +4212,7 @@ TclGL_glVertex4svCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glVertex4sv GLshort_v\"",
+                "wrong # args: should be \"ntk glVertex4sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4260,7 +4260,7 @@ TclGL_glNormal3bCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glNormal3b GLbyte_nx GLbyte_ny GLbyte_nz\"",
+                "wrong # args: should be \"ntk glNormal3b <(GLbyte) nx> <(GLbyte) ny> <(GLbyte) nz>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4311,7 +4311,7 @@ TclGL_glNormal3dCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glNormal3d GLdouble_nx GLdouble_ny GLdouble_nz\"",
+                "wrong # args: should be \"ntk glNormal3d <(GLdouble) nx> <(GLdouble) ny> <(GLdouble) nz>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4362,7 +4362,7 @@ TclGL_glNormal3fCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glNormal3f GLfloat_nx GLfloat_ny GLfloat_nz\"",
+                "wrong # args: should be \"ntk glNormal3f <(GLfloat) nx> <(GLfloat) ny> <(GLfloat) nz>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4413,7 +4413,7 @@ TclGL_glNormal3iCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glNormal3i GLint_nx GLint_ny GLint_nz\"",
+                "wrong # args: should be \"ntk glNormal3i <(GLint) nx> <(GLint) ny> <(GLint) nz>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4464,7 +4464,7 @@ TclGL_glNormal3sCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glNormal3s GLshort_nx GLshort_ny GLshort_nz\"",
+                "wrong # args: should be \"ntk glNormal3s <(GLshort) nx> <(GLshort) ny> <(GLshort) nz>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4510,7 +4510,7 @@ TclGL_glNormal3bvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glNormal3bv GLbyte_v\"",
+                "wrong # args: should be \"ntk glNormal3bv <(GLbyte) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4553,7 +4553,7 @@ TclGL_glNormal3dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glNormal3dv GLdouble_v\"",
+                "wrong # args: should be \"ntk glNormal3dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4596,7 +4596,7 @@ TclGL_glNormal3fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glNormal3fv GLfloat_v\"",
+                "wrong # args: should be \"ntk glNormal3fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4639,7 +4639,7 @@ TclGL_glNormal3ivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glNormal3iv GLint_v\"",
+                "wrong # args: should be \"ntk glNormal3iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4682,7 +4682,7 @@ TclGL_glNormal3svCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glNormal3sv GLshort_v\"",
+                "wrong # args: should be \"ntk glNormal3sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4726,7 +4726,7 @@ TclGL_glIndexdCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIndexd GLdouble_c\"",
+                "wrong # args: should be \"ntk glIndexd <(GLdouble) c>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4771,7 +4771,7 @@ TclGL_glIndexfCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIndexf GLfloat_c\"",
+                "wrong # args: should be \"ntk glIndexf <(GLfloat) c>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4816,7 +4816,7 @@ TclGL_glIndexiCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIndexi GLint_c\"",
+                "wrong # args: should be \"ntk glIndexi <(GLint) c>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4861,7 +4861,7 @@ TclGL_glIndexsCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIndexs GLshort_c\"",
+                "wrong # args: should be \"ntk glIndexs <(GLshort) c>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4906,7 +4906,7 @@ TclGL_glIndexubCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIndexub GLubyte_c\"",
+                "wrong # args: should be \"ntk glIndexub <(GLubyte) c>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4950,7 +4950,7 @@ TclGL_glIndexdvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIndexdv GLdouble_c\"",
+                "wrong # args: should be \"ntk glIndexdv <(GLdouble) c>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -4993,7 +4993,7 @@ TclGL_glIndexfvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIndexfv GLfloat_c\"",
+                "wrong # args: should be \"ntk glIndexfv <(GLfloat) c>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5036,7 +5036,7 @@ TclGL_glIndexivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIndexiv GLint_c\"",
+                "wrong # args: should be \"ntk glIndexiv <(GLint) c>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5079,7 +5079,7 @@ TclGL_glIndexsvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIndexsv GLshort_c\"",
+                "wrong # args: should be \"ntk glIndexsv <(GLshort) c>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5122,7 +5122,7 @@ TclGL_glIndexubvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIndexubv GLubyte_c\"",
+                "wrong # args: should be \"ntk glIndexubv <(GLubyte) c>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5170,7 +5170,7 @@ TclGL_glColor3bCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3b GLbyte_red GLbyte_green GLbyte_blue\"",
+                "wrong # args: should be \"ntk glColor3b <(GLbyte) red> <(GLbyte) green> <(GLbyte) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5221,7 +5221,7 @@ TclGL_glColor3dCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3d GLdouble_red GLdouble_green GLdouble_blue\"",
+                "wrong # args: should be \"ntk glColor3d <(GLdouble) red> <(GLdouble) green> <(GLdouble) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5272,7 +5272,7 @@ TclGL_glColor3fCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3f GLfloat_red GLfloat_green GLfloat_blue\"",
+                "wrong # args: should be \"ntk glColor3f <(GLfloat) red> <(GLfloat) green> <(GLfloat) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5323,7 +5323,7 @@ TclGL_glColor3iCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3i GLint_red GLint_green GLint_blue\"",
+                "wrong # args: should be \"ntk glColor3i <(GLint) red> <(GLint) green> <(GLint) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5374,7 +5374,7 @@ TclGL_glColor3sCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3s GLshort_red GLshort_green GLshort_blue\"",
+                "wrong # args: should be \"ntk glColor3s <(GLshort) red> <(GLshort) green> <(GLshort) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5425,7 +5425,7 @@ TclGL_glColor3ubCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3ub GLubyte_red GLubyte_green GLubyte_blue\"",
+                "wrong # args: should be \"ntk glColor3ub <(GLubyte) red> <(GLubyte) green> <(GLubyte) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5476,7 +5476,7 @@ TclGL_glColor3uiCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3ui GLuint_red GLuint_green GLuint_blue\"",
+                "wrong # args: should be \"ntk glColor3ui <(GLuint) red> <(GLuint) green> <(GLuint) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5527,7 +5527,7 @@ TclGL_glColor3usCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3us GLushort_red GLushort_green GLushort_blue\"",
+                "wrong # args: should be \"ntk glColor3us <(GLushort) red> <(GLushort) green> <(GLushort) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5573,7 +5573,7 @@ TclGL_glColor3bvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3bv GLbyte_v\"",
+                "wrong # args: should be \"ntk glColor3bv <(GLbyte) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5616,7 +5616,7 @@ TclGL_glColor3dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3dv GLdouble_v\"",
+                "wrong # args: should be \"ntk glColor3dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5659,7 +5659,7 @@ TclGL_glColor3fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3fv GLfloat_v\"",
+                "wrong # args: should be \"ntk glColor3fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5702,7 +5702,7 @@ TclGL_glColor3ivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3iv GLint_v\"",
+                "wrong # args: should be \"ntk glColor3iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5745,7 +5745,7 @@ TclGL_glColor3svCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3sv GLshort_v\"",
+                "wrong # args: should be \"ntk glColor3sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5788,7 +5788,7 @@ TclGL_glColor3ubvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3ubv GLubyte_v\"",
+                "wrong # args: should be \"ntk glColor3ubv <(GLubyte) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5831,7 +5831,7 @@ TclGL_glColor3uivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3uiv GLuint_v\"",
+                "wrong # args: should be \"ntk glColor3uiv <(GLuint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5874,7 +5874,7 @@ TclGL_glColor3usvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor3usv GLushort_v\"",
+                "wrong # args: should be \"ntk glColor3usv <(GLushort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5917,7 +5917,7 @@ TclGL_glColor4bvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor4bv GLbyte_v\"",
+                "wrong # args: should be \"ntk glColor4bv <(GLbyte) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -5960,7 +5960,7 @@ TclGL_glColor4dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor4dv GLdouble_v\"",
+                "wrong # args: should be \"ntk glColor4dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6003,7 +6003,7 @@ TclGL_glColor4fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor4fv GLfloat_v\"",
+                "wrong # args: should be \"ntk glColor4fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6046,7 +6046,7 @@ TclGL_glColor4ivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor4iv GLint_v\"",
+                "wrong # args: should be \"ntk glColor4iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6089,7 +6089,7 @@ TclGL_glColor4svCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor4sv GLshort_v\"",
+                "wrong # args: should be \"ntk glColor4sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6132,7 +6132,7 @@ TclGL_glColor4ubvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor4ubv GLubyte_v\"",
+                "wrong # args: should be \"ntk glColor4ubv <(GLubyte) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6175,7 +6175,7 @@ TclGL_glColor4uivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor4uiv GLuint_v\"",
+                "wrong # args: should be \"ntk glColor4uiv <(GLuint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6218,7 +6218,7 @@ TclGL_glColor4usvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColor4usv GLushort_v\"",
+                "wrong # args: should be \"ntk glColor4usv <(GLushort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6262,7 +6262,7 @@ TclGL_glTexCoord1dCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord1d GLdouble_s\"",
+                "wrong # args: should be \"ntk glTexCoord1d <(GLdouble) s>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6307,7 +6307,7 @@ TclGL_glTexCoord1fCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord1f GLfloat_s\"",
+                "wrong # args: should be \"ntk glTexCoord1f <(GLfloat) s>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6352,7 +6352,7 @@ TclGL_glTexCoord1iCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord1i GLint_s\"",
+                "wrong # args: should be \"ntk glTexCoord1i <(GLint) s>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6397,7 +6397,7 @@ TclGL_glTexCoord1sCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord1s GLshort_s\"",
+                "wrong # args: should be \"ntk glTexCoord1s <(GLshort) s>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6444,7 +6444,7 @@ TclGL_glTexCoord2dCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord2d GLdouble_s GLdouble_t\"",
+                "wrong # args: should be \"ntk glTexCoord2d <(GLdouble) s> <(GLdouble) t>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6492,7 +6492,7 @@ TclGL_glTexCoord2fCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord2f GLfloat_s GLfloat_t\"",
+                "wrong # args: should be \"ntk glTexCoord2f <(GLfloat) s> <(GLfloat) t>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6540,7 +6540,7 @@ TclGL_glTexCoord2iCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord2i GLint_s GLint_t\"",
+                "wrong # args: should be \"ntk glTexCoord2i <(GLint) s> <(GLint) t>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6588,7 +6588,7 @@ TclGL_glTexCoord2sCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord2s GLshort_s GLshort_t\"",
+                "wrong # args: should be \"ntk glTexCoord2s <(GLshort) s> <(GLshort) t>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6638,7 +6638,7 @@ TclGL_glTexCoord3dCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord3d GLdouble_s GLdouble_t GLdouble_r\"",
+                "wrong # args: should be \"ntk glTexCoord3d <(GLdouble) s> <(GLdouble) t> <(GLdouble) r>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6689,7 +6689,7 @@ TclGL_glTexCoord3fCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord3f GLfloat_s GLfloat_t GLfloat_r\"",
+                "wrong # args: should be \"ntk glTexCoord3f <(GLfloat) s> <(GLfloat) t> <(GLfloat) r>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6740,7 +6740,7 @@ TclGL_glTexCoord3iCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord3i GLint_s GLint_t GLint_r\"",
+                "wrong # args: should be \"ntk glTexCoord3i <(GLint) s> <(GLint) t> <(GLint) r>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6791,7 +6791,7 @@ TclGL_glTexCoord3sCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord3s GLshort_s GLshort_t GLshort_r\"",
+                "wrong # args: should be \"ntk glTexCoord3s <(GLshort) s> <(GLshort) t> <(GLshort) r>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6844,7 +6844,7 @@ TclGL_glTexCoord4dCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord4d GLdouble_s GLdouble_t GLdouble_r GLdouble_q\"",
+                "wrong # args: should be \"ntk glTexCoord4d <(GLdouble) s> <(GLdouble) t> <(GLdouble) r> <(GLdouble) q>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6898,7 +6898,7 @@ TclGL_glTexCoord4fCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord4f GLfloat_s GLfloat_t GLfloat_r GLfloat_q\"",
+                "wrong # args: should be \"ntk glTexCoord4f <(GLfloat) s> <(GLfloat) t> <(GLfloat) r> <(GLfloat) q>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -6952,7 +6952,7 @@ TclGL_glTexCoord4iCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord4i GLint_s GLint_t GLint_r GLint_q\"",
+                "wrong # args: should be \"ntk glTexCoord4i <(GLint) s> <(GLint) t> <(GLint) r> <(GLint) q>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7006,7 +7006,7 @@ TclGL_glTexCoord4sCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord4s GLshort_s GLshort_t GLshort_r GLshort_q\"",
+                "wrong # args: should be \"ntk glTexCoord4s <(GLshort) s> <(GLshort) t> <(GLshort) r> <(GLshort) q>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7053,7 +7053,7 @@ TclGL_glTexCoord1dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord1dv GLdouble_v\"",
+                "wrong # args: should be \"ntk glTexCoord1dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7096,7 +7096,7 @@ TclGL_glTexCoord1fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord1fv GLfloat_v\"",
+                "wrong # args: should be \"ntk glTexCoord1fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7139,7 +7139,7 @@ TclGL_glTexCoord1ivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord1iv GLint_v\"",
+                "wrong # args: should be \"ntk glTexCoord1iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7182,7 +7182,7 @@ TclGL_glTexCoord1svCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord1sv GLshort_v\"",
+                "wrong # args: should be \"ntk glTexCoord1sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7225,7 +7225,7 @@ TclGL_glTexCoord2dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord2dv GLdouble_v\"",
+                "wrong # args: should be \"ntk glTexCoord2dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7268,7 +7268,7 @@ TclGL_glTexCoord2fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord2fv GLfloat_v\"",
+                "wrong # args: should be \"ntk glTexCoord2fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7311,7 +7311,7 @@ TclGL_glTexCoord2ivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord2iv GLint_v\"",
+                "wrong # args: should be \"ntk glTexCoord2iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7354,7 +7354,7 @@ TclGL_glTexCoord2svCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord2sv GLshort_v\"",
+                "wrong # args: should be \"ntk glTexCoord2sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7397,7 +7397,7 @@ TclGL_glTexCoord3dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord3dv GLdouble_v\"",
+                "wrong # args: should be \"ntk glTexCoord3dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7440,7 +7440,7 @@ TclGL_glTexCoord3fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord3fv GLfloat_v\"",
+                "wrong # args: should be \"ntk glTexCoord3fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7483,7 +7483,7 @@ TclGL_glTexCoord3ivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord3iv GLint_v\"",
+                "wrong # args: should be \"ntk glTexCoord3iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7526,7 +7526,7 @@ TclGL_glTexCoord3svCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord3sv GLshort_v\"",
+                "wrong # args: should be \"ntk glTexCoord3sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7569,7 +7569,7 @@ TclGL_glTexCoord4dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord4dv GLdouble_v\"",
+                "wrong # args: should be \"ntk glTexCoord4dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7612,7 +7612,7 @@ TclGL_glTexCoord4fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord4fv GLfloat_v\"",
+                "wrong # args: should be \"ntk glTexCoord4fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7655,7 +7655,7 @@ TclGL_glTexCoord4ivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord4iv GLint_v\"",
+                "wrong # args: should be \"ntk glTexCoord4iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7698,7 +7698,7 @@ TclGL_glTexCoord4svCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexCoord4sv GLshort_v\"",
+                "wrong # args: should be \"ntk glTexCoord4sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7744,7 +7744,7 @@ TclGL_glRasterPos2dCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos2d GLdouble_x GLdouble_y\"",
+                "wrong # args: should be \"ntk glRasterPos2d <(GLdouble) x> <(GLdouble) y>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7792,7 +7792,7 @@ TclGL_glRasterPos2fCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos2f GLfloat_x GLfloat_y\"",
+                "wrong # args: should be \"ntk glRasterPos2f <(GLfloat) x> <(GLfloat) y>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7840,7 +7840,7 @@ TclGL_glRasterPos2iCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos2i GLint_x GLint_y\"",
+                "wrong # args: should be \"ntk glRasterPos2i <(GLint) x> <(GLint) y>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7888,7 +7888,7 @@ TclGL_glRasterPos2sCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos2s GLshort_x GLshort_y\"",
+                "wrong # args: should be \"ntk glRasterPos2s <(GLshort) x> <(GLshort) y>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7938,7 +7938,7 @@ TclGL_glRasterPos3dCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos3d GLdouble_x GLdouble_y GLdouble_z\"",
+                "wrong # args: should be \"ntk glRasterPos3d <(GLdouble) x> <(GLdouble) y> <(GLdouble) z>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -7989,7 +7989,7 @@ TclGL_glRasterPos3fCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos3f GLfloat_x GLfloat_y GLfloat_z\"",
+                "wrong # args: should be \"ntk glRasterPos3f <(GLfloat) x> <(GLfloat) y> <(GLfloat) z>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8040,7 +8040,7 @@ TclGL_glRasterPos3iCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos3i GLint_x GLint_y GLint_z\"",
+                "wrong # args: should be \"ntk glRasterPos3i <(GLint) x> <(GLint) y> <(GLint) z>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8091,7 +8091,7 @@ TclGL_glRasterPos3sCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos3s GLshort_x GLshort_y GLshort_z\"",
+                "wrong # args: should be \"ntk glRasterPos3s <(GLshort) x> <(GLshort) y> <(GLshort) z>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8144,7 +8144,7 @@ TclGL_glRasterPos4dCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos4d GLdouble_x GLdouble_y GLdouble_z GLdouble_w\"",
+                "wrong # args: should be \"ntk glRasterPos4d <(GLdouble) x> <(GLdouble) y> <(GLdouble) z> <(GLdouble) w>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8198,7 +8198,7 @@ TclGL_glRasterPos4fCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos4f GLfloat_x GLfloat_y GLfloat_z GLfloat_w\"",
+                "wrong # args: should be \"ntk glRasterPos4f <(GLfloat) x> <(GLfloat) y> <(GLfloat) z> <(GLfloat) w>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8252,7 +8252,7 @@ TclGL_glRasterPos4iCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos4i GLint_x GLint_y GLint_z GLint_w\"",
+                "wrong # args: should be \"ntk glRasterPos4i <(GLint) x> <(GLint) y> <(GLint) z> <(GLint) w>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8306,7 +8306,7 @@ TclGL_glRasterPos4sCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos4s GLshort_x GLshort_y GLshort_z GLshort_w\"",
+                "wrong # args: should be \"ntk glRasterPos4s <(GLshort) x> <(GLshort) y> <(GLshort) z> <(GLshort) w>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8353,7 +8353,7 @@ TclGL_glRasterPos2dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos2dv GLdouble_v\"",
+                "wrong # args: should be \"ntk glRasterPos2dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8396,7 +8396,7 @@ TclGL_glRasterPos2fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos2fv GLfloat_v\"",
+                "wrong # args: should be \"ntk glRasterPos2fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8439,7 +8439,7 @@ TclGL_glRasterPos2ivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos2iv GLint_v\"",
+                "wrong # args: should be \"ntk glRasterPos2iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8482,7 +8482,7 @@ TclGL_glRasterPos2svCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos2sv GLshort_v\"",
+                "wrong # args: should be \"ntk glRasterPos2sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8525,7 +8525,7 @@ TclGL_glRasterPos3dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos3dv GLdouble_v\"",
+                "wrong # args: should be \"ntk glRasterPos3dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8568,7 +8568,7 @@ TclGL_glRasterPos3fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos3fv GLfloat_v\"",
+                "wrong # args: should be \"ntk glRasterPos3fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8611,7 +8611,7 @@ TclGL_glRasterPos3ivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos3iv GLint_v\"",
+                "wrong # args: should be \"ntk glRasterPos3iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8654,7 +8654,7 @@ TclGL_glRasterPos3svCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos3sv GLshort_v\"",
+                "wrong # args: should be \"ntk glRasterPos3sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8697,7 +8697,7 @@ TclGL_glRasterPos4dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos4dv GLdouble_v\"",
+                "wrong # args: should be \"ntk glRasterPos4dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8740,7 +8740,7 @@ TclGL_glRasterPos4fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos4fv GLfloat_v\"",
+                "wrong # args: should be \"ntk glRasterPos4fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8783,7 +8783,7 @@ TclGL_glRasterPos4ivCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos4iv GLint_v\"",
+                "wrong # args: should be \"ntk glRasterPos4iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8826,7 +8826,7 @@ TclGL_glRasterPos4svCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRasterPos4sv GLshort_v\"",
+                "wrong # args: should be \"ntk glRasterPos4sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8876,7 +8876,7 @@ TclGL_glRectdCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRectd GLdouble_x1 GLdouble_y1 GLdouble_x2 GLdouble_y2\"",
+                "wrong # args: should be \"ntk glRectd <(GLdouble) x1> <(GLdouble) y1> <(GLdouble) x2> <(GLdouble) y2>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8930,7 +8930,7 @@ TclGL_glRectfCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRectf GLfloat_x1 GLfloat_y1 GLfloat_x2 GLfloat_y2\"",
+                "wrong # args: should be \"ntk glRectf <(GLfloat) x1> <(GLfloat) y1> <(GLfloat) x2> <(GLfloat) y2>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -8984,7 +8984,7 @@ TclGL_glRectiCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRecti GLint_x1 GLint_y1 GLint_x2 GLint_y2\"",
+                "wrong # args: should be \"ntk glRecti <(GLint) x1> <(GLint) y1> <(GLint) x2> <(GLint) y2>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9038,7 +9038,7 @@ TclGL_glRectsCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRects GLshort_x1 GLshort_y1 GLshort_x2 GLshort_y2\"",
+                "wrong # args: should be \"ntk glRects <(GLshort) x1> <(GLshort) y1> <(GLshort) x2> <(GLshort) y2>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9085,7 +9085,7 @@ TclGL_glRectdvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRectdv GLdouble_v1 GLdouble_v2\"",
+                "wrong # args: should be \"ntk glRectdv <(GLdouble) v1> <(GLdouble) v2>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9128,7 +9128,7 @@ TclGL_glRectfvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRectfv GLfloat_v1 GLfloat_v2\"",
+                "wrong # args: should be \"ntk glRectfv <(GLfloat) v1> <(GLfloat) v2>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9171,7 +9171,7 @@ TclGL_glRectivCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRectiv GLint_v1 GLint_v2\"",
+                "wrong # args: should be \"ntk glRectiv <(GLint) v1> <(GLint) v2>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9214,7 +9214,7 @@ TclGL_glRectsvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glRectsv GLshort_v1 GLshort_v2\"",
+                "wrong # args: should be \"ntk glRectsv <(GLshort) v1> <(GLshort) v2>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9257,7 +9257,7 @@ TclGL_glEdgeFlagPointerCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEdgeFlagPointer GLsizei_stride GLvoid_ptr\"",
+                "wrong # args: should be \"ntk glEdgeFlagPointer <(GLsizei) stride> <(GLvoid) ptr>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9300,7 +9300,7 @@ TclGL_glGetPointervCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetPointerv GLenum_pname GLvoid_*params\"",
+                "wrong # args: should be \"ntk glGetPointerv <(GLenum) pname> <(GLvoid) *params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9344,7 +9344,7 @@ TclGL_glArrayElementCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glArrayElement GLint_i\"",
+                "wrong # args: should be \"ntk glArrayElement <(GLint) i>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9388,7 +9388,7 @@ TclGL_glDrawArraysCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glDrawArrays GLenum_mode GLint_first GLsizei_count\"",
+                "wrong # args: should be \"ntk glDrawArrays <(GLenum) mode> <(GLint) first> <(GLsizei) count>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9431,7 +9431,7 @@ TclGL_glShadeModelCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glShadeModel GLenum_mode\"",
+                "wrong # args: should be \"ntk glShadeModel <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9474,7 +9474,7 @@ TclGL_glLightfCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLightf GLenum_light GLenum_pname GLfloat_param\"",
+                "wrong # args: should be \"ntk glLightf <(GLenum) light> <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9517,7 +9517,7 @@ TclGL_glLightiCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLighti GLenum_light GLenum_pname GLint_param\"",
+                "wrong # args: should be \"ntk glLighti <(GLenum) light> <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9560,7 +9560,7 @@ TclGL_glLightModelfCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLightModelf GLenum_pname GLfloat_param\"",
+                "wrong # args: should be \"ntk glLightModelf <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9603,7 +9603,7 @@ TclGL_glLightModeliCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLightModeli GLenum_pname GLint_param\"",
+                "wrong # args: should be \"ntk glLightModeli <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9646,7 +9646,7 @@ TclGL_glLightModelfvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLightModelfv GLenum_pname GLfloat_params\"",
+                "wrong # args: should be \"ntk glLightModelfv <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9689,7 +9689,7 @@ TclGL_glLightModelivCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLightModeliv GLenum_pname GLint_params\"",
+                "wrong # args: should be \"ntk glLightModeliv <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9732,7 +9732,7 @@ TclGL_glMaterialfCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMaterialf GLenum_face GLenum_pname GLfloat_param\"",
+                "wrong # args: should be \"ntk glMaterialf <(GLenum) face> <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9775,7 +9775,7 @@ TclGL_glMaterialiCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMateriali GLenum_face GLenum_pname GLint_param\"",
+                "wrong # args: should be \"ntk glMateriali <(GLenum) face> <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9818,7 +9818,7 @@ TclGL_glMaterialfvCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMaterialfv GLenum_face GLenum_pname GLfloat_params\"",
+                "wrong # args: should be \"ntk glMaterialfv <(GLenum) face> <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9861,7 +9861,7 @@ TclGL_glMaterialivCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMaterialiv GLenum_face GLenum_pname GLint_params\"",
+                "wrong # args: should be \"ntk glMaterialiv <(GLenum) face> <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9904,7 +9904,7 @@ TclGL_glGetMaterialfvCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetMaterialfv GLenum_face GLenum_pname GLfloat_params\"",
+                "wrong # args: should be \"ntk glGetMaterialfv <(GLenum) face> <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9947,7 +9947,7 @@ TclGL_glGetMaterialivCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetMaterialiv GLenum_face GLenum_pname GLint_params\"",
+                "wrong # args: should be \"ntk glGetMaterialiv <(GLenum) face> <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -9990,7 +9990,7 @@ TclGL_glColorMaterialCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glColorMaterial GLenum_face GLenum_mode\"",
+                "wrong # args: should be \"ntk glColorMaterial <(GLenum) face> <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10036,7 +10036,7 @@ TclGL_glPixelZoomCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glPixelZoom GLfloat_xfactor GLfloat_yfactor\"",
+                "wrong # args: should be \"ntk glPixelZoom <(GLfloat) xfactor> <(GLfloat) yfactor>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10081,7 +10081,7 @@ TclGL_glPixelStorefCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glPixelStoref GLenum_pname GLfloat_param\"",
+                "wrong # args: should be \"ntk glPixelStoref <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10124,7 +10124,7 @@ TclGL_glPixelStoreiCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glPixelStorei GLenum_pname GLint_param\"",
+                "wrong # args: should be \"ntk glPixelStorei <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10167,7 +10167,7 @@ TclGL_glPixelTransferfCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glPixelTransferf GLenum_pname GLfloat_param\"",
+                "wrong # args: should be \"ntk glPixelTransferf <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10210,7 +10210,7 @@ TclGL_glPixelTransferiCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glPixelTransferi GLenum_pname GLint_param\"",
+                "wrong # args: should be \"ntk glPixelTransferi <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10253,7 +10253,7 @@ TclGL_glGetPixelMapfvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetPixelMapfv GLenum_map GLfloat_values\"",
+                "wrong # args: should be \"ntk glGetPixelMapfv <(GLenum) map> <(GLfloat) values>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10296,7 +10296,7 @@ TclGL_glGetPixelMapuivCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetPixelMapuiv GLenum_map GLuint_values\"",
+                "wrong # args: should be \"ntk glGetPixelMapuiv <(GLenum) map> <(GLuint) values>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10339,7 +10339,7 @@ TclGL_glGetPixelMapusvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetPixelMapusv GLenum_map GLushort_values\"",
+                "wrong # args: should be \"ntk glGetPixelMapusv <(GLenum) map> <(GLushort) values>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10382,7 +10382,7 @@ TclGL_glStencilFuncCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glStencilFunc GLenum_func GLint_ref GLuint_mask\"",
+                "wrong # args: should be \"ntk glStencilFunc <(GLenum) func> <(GLint) ref> <(GLuint) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10426,7 +10426,7 @@ TclGL_glStencilMaskCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glStencilMask GLuint_mask\"",
+                "wrong # args: should be \"ntk glStencilMask <(GLuint) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10470,7 +10470,7 @@ TclGL_glStencilOpCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glStencilOp GLenum_fail GLenum_zfail GLenum_zpass\"",
+                "wrong # args: should be \"ntk glStencilOp <(GLenum) fail> <(GLenum) zfail> <(GLenum) zpass>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10514,7 +10514,7 @@ TclGL_glClearStencilCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glClearStencil GLint_s\"",
+                "wrong # args: should be \"ntk glClearStencil <(GLint) s>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10558,7 +10558,7 @@ TclGL_glTexGendCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexGend GLenum_coord GLenum_pname GLdouble_param\"",
+                "wrong # args: should be \"ntk glTexGend <(GLenum) coord> <(GLenum) pname> <(GLdouble) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10601,7 +10601,7 @@ TclGL_glTexGenfCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexGenf GLenum_coord GLenum_pname GLfloat_param\"",
+                "wrong # args: should be \"ntk glTexGenf <(GLenum) coord> <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10644,7 +10644,7 @@ TclGL_glTexGeniCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexGeni GLenum_coord GLenum_pname GLint_param\"",
+                "wrong # args: should be \"ntk glTexGeni <(GLenum) coord> <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10687,7 +10687,7 @@ TclGL_glTexGendvCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexGendv GLenum_coord GLenum_pname GLdouble_params\"",
+                "wrong # args: should be \"ntk glTexGendv <(GLenum) coord> <(GLenum) pname> <(GLdouble) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10730,7 +10730,7 @@ TclGL_glTexGenfvCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexGenfv GLenum_coord GLenum_pname GLfloat_params\"",
+                "wrong # args: should be \"ntk glTexGenfv <(GLenum) coord> <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10773,7 +10773,7 @@ TclGL_glTexGenivCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexGeniv GLenum_coord GLenum_pname GLint_params\"",
+                "wrong # args: should be \"ntk glTexGeniv <(GLenum) coord> <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10816,7 +10816,7 @@ TclGL_glGetTexGendvCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetTexGendv GLenum_coord GLenum_pname GLdouble_params\"",
+                "wrong # args: should be \"ntk glGetTexGendv <(GLenum) coord> <(GLenum) pname> <(GLdouble) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10859,7 +10859,7 @@ TclGL_glGetTexGenfvCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetTexGenfv GLenum_coord GLenum_pname GLfloat_params\"",
+                "wrong # args: should be \"ntk glGetTexGenfv <(GLenum) coord> <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10902,7 +10902,7 @@ TclGL_glGetTexGenivCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetTexGeniv GLenum_coord GLenum_pname GLint_params\"",
+                "wrong # args: should be \"ntk glGetTexGeniv <(GLenum) coord> <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10945,7 +10945,7 @@ TclGL_glTexEnvfCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexEnvf GLenum_target GLenum_pname GLfloat_param\"",
+                "wrong # args: should be \"ntk glTexEnvf <(GLenum) target> <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -10988,7 +10988,7 @@ TclGL_glTexEnviCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexEnvi GLenum_target GLenum_pname GLint_param\"",
+                "wrong # args: should be \"ntk glTexEnvi <(GLenum) target> <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11031,7 +11031,7 @@ TclGL_glTexEnvfvCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexEnvfv GLenum_target GLenum_pname GLfloat_params\"",
+                "wrong # args: should be \"ntk glTexEnvfv <(GLenum) target> <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11074,7 +11074,7 @@ TclGL_glTexEnvivCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexEnviv GLenum_target GLenum_pname GLint_params\"",
+                "wrong # args: should be \"ntk glTexEnviv <(GLenum) target> <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11117,7 +11117,7 @@ TclGL_glGetTexEnvfvCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetTexEnvfv GLenum_target GLenum_pname GLfloat_params\"",
+                "wrong # args: should be \"ntk glGetTexEnvfv <(GLenum) target> <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11160,7 +11160,7 @@ TclGL_glGetTexEnvivCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetTexEnviv GLenum_target GLenum_pname GLint_params\"",
+                "wrong # args: should be \"ntk glGetTexEnviv <(GLenum) target> <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11203,7 +11203,7 @@ TclGL_glTexParameterfCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexParameterf GLenum_target GLenum_pname GLfloat_param\"",
+                "wrong # args: should be \"ntk glTexParameterf <(GLenum) target> <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11246,7 +11246,7 @@ TclGL_glTexParameteriCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glTexParameteri GLenum_target GLenum_pname GLint_param\"",
+                "wrong # args: should be \"ntk glTexParameteri <(GLenum) target> <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11289,7 +11289,7 @@ TclGL_glGenTexturesCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGenTextures GLsizei_n GLuint_textures\"",
+                "wrong # args: should be \"ntk glGenTextures <(GLsizei) n> <(GLuint) textures>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11332,7 +11332,7 @@ TclGL_glDeleteTexturesCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glDeleteTextures GLsizei_n GLuint_textures\"",
+                "wrong # args: should be \"ntk glDeleteTextures <(GLsizei) n> <(GLuint) textures>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11375,7 +11375,7 @@ TclGL_glBindTextureCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glBindTexture GLenum_target GLuint_texture\"",
+                "wrong # args: should be \"ntk glBindTexture <(GLenum) target> <(GLuint) texture>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11419,7 +11419,7 @@ TclGL_glIsTextureCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glIsTexture GLuint_texture\"",
+                "wrong # args: should be \"ntk glIsTexture <(GLuint) texture>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11463,7 +11463,7 @@ TclGL_glGetMapdvCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetMapdv GLenum_target GLenum_query GLdouble_v\"",
+                "wrong # args: should be \"ntk glGetMapdv <(GLenum) target> <(GLenum) query> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11506,7 +11506,7 @@ TclGL_glGetMapfvCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetMapfv GLenum_target GLenum_query GLfloat_v\"",
+                "wrong # args: should be \"ntk glGetMapfv <(GLenum) target> <(GLenum) query> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11549,7 +11549,7 @@ TclGL_glGetMapivCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetMapiv GLenum_target GLenum_query GLint_v\"",
+                "wrong # args: should be \"ntk glGetMapiv <(GLenum) target> <(GLenum) query> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11593,7 +11593,7 @@ TclGL_glEvalCoord1dCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEvalCoord1d GLdouble_u\"",
+                "wrong # args: should be \"ntk glEvalCoord1d <(GLdouble) u>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11638,7 +11638,7 @@ TclGL_glEvalCoord1fCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEvalCoord1f GLfloat_u\"",
+                "wrong # args: should be \"ntk glEvalCoord1f <(GLfloat) u>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11682,7 +11682,7 @@ TclGL_glEvalCoord1dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEvalCoord1dv GLdouble_u\"",
+                "wrong # args: should be \"ntk glEvalCoord1dv <(GLdouble) u>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11725,7 +11725,7 @@ TclGL_glEvalCoord1fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEvalCoord1fv GLfloat_u\"",
+                "wrong # args: should be \"ntk glEvalCoord1fv <(GLfloat) u>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11771,7 +11771,7 @@ TclGL_glEvalCoord2dCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEvalCoord2d GLdouble_u GLdouble_v\"",
+                "wrong # args: should be \"ntk glEvalCoord2d <(GLdouble) u> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11819,7 +11819,7 @@ TclGL_glEvalCoord2fCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEvalCoord2f GLfloat_u GLfloat_v\"",
+                "wrong # args: should be \"ntk glEvalCoord2f <(GLfloat) u> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11864,7 +11864,7 @@ TclGL_glEvalCoord2dvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEvalCoord2dv GLdouble_u\"",
+                "wrong # args: should be \"ntk glEvalCoord2dv <(GLdouble) u>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11907,7 +11907,7 @@ TclGL_glEvalCoord2fvCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEvalCoord2fv GLfloat_u\"",
+                "wrong # args: should be \"ntk glEvalCoord2fv <(GLfloat) u>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -11955,7 +11955,7 @@ TclGL_glMapGrid1dCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMapGrid1d GLint_un GLdouble_u1 GLdouble_u2\"",
+                "wrong # args: should be \"ntk glMapGrid1d <(GLint) un> <(GLdouble) u1> <(GLdouble) u2>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12006,7 +12006,7 @@ TclGL_glMapGrid1fCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMapGrid1f GLint_un GLfloat_u1 GLfloat_u2\"",
+                "wrong # args: should be \"ntk glMapGrid1f <(GLint) un> <(GLfloat) u1> <(GLfloat) u2>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12053,7 +12053,7 @@ TclGL_glEvalPoint1Cmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEvalPoint1 GLint_i\"",
+                "wrong # args: should be \"ntk glEvalPoint1 <(GLint) i>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12100,7 +12100,7 @@ TclGL_glEvalPoint2Cmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEvalPoint2 GLint_i GLint_j\"",
+                "wrong # args: should be \"ntk glEvalPoint2 <(GLint) i> <(GLint) j>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12145,7 +12145,7 @@ TclGL_glEvalMesh1Cmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEvalMesh1 GLenum_mode GLint_i1 GLint_i2\"",
+                "wrong # args: should be \"ntk glEvalMesh1 <(GLenum) mode> <(GLint) i1> <(GLint) i2>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12188,7 +12188,7 @@ TclGL_glEvalMesh2Cmd(
 
     if (objc != 6) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glEvalMesh2 GLenum_mode GLint_i1 GLint_i2 GLint_j1 GLint_j2\"",
+                "wrong # args: should be \"ntk glEvalMesh2 <(GLenum) mode> <(GLint) i1> <(GLint) i2> <(GLint) j1> <(GLint) j2>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12231,7 +12231,7 @@ TclGL_glFogfCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glFogf GLenum_pname GLfloat_param\"",
+                "wrong # args: should be \"ntk glFogf <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12274,7 +12274,7 @@ TclGL_glFogiCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glFogi GLenum_pname GLint_param\"",
+                "wrong # args: should be \"ntk glFogi <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12317,7 +12317,7 @@ TclGL_glFogfvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glFogfv GLenum_pname GLfloat_params\"",
+                "wrong # args: should be \"ntk glFogfv <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12360,7 +12360,7 @@ TclGL_glFogivCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glFogiv GLenum_pname GLint_params\"",
+                "wrong # args: should be \"ntk glFogiv <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12403,7 +12403,7 @@ TclGL_glFeedbackBufferCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glFeedbackBuffer GLsizei_size GLenum_type GLfloat_buffer\"",
+                "wrong # args: should be \"ntk glFeedbackBuffer <(GLsizei) size> <(GLenum) type> <(GLfloat) buffer>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12447,7 +12447,7 @@ TclGL_glPassThroughCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glPassThrough GLfloat_token\"",
+                "wrong # args: should be \"ntk glPassThrough <(GLfloat) token>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12491,7 +12491,7 @@ TclGL_glSelectBufferCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glSelectBuffer GLsizei_size GLuint_buffer\"",
+                "wrong # args: should be \"ntk glSelectBuffer <(GLsizei) size> <(GLuint) buffer>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12532,7 +12532,7 @@ TclGL_glInitNamesCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glInitNamesCmd", objc, objv);
 
-    if (objc != 1) {
+    if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glInitNames \"",
                 NULL);
@@ -12579,7 +12579,7 @@ TclGL_glLoadNameCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLoadName GLuint_name\"",
+                "wrong # args: should be \"ntk glLoadName <(GLuint) name>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12624,7 +12624,7 @@ TclGL_glPushNameCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glPushName GLuint_name\"",
+                "wrong # args: should be \"ntk glPushName <(GLuint) name>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12666,7 +12666,7 @@ TclGL_glPopNameCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glPopNameCmd", objc, objv);
 
-    if (objc != 1) {
+    if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPopName \"",
                 NULL);
@@ -12712,7 +12712,7 @@ TclGL_glBlendEquationCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glBlendEquation GLenum_mode\"",
+                "wrong # args: should be \"ntk glBlendEquation <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12755,7 +12755,7 @@ TclGL_glResetHistogramCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glResetHistogram GLenum_target\"",
+                "wrong # args: should be \"ntk glResetHistogram <(GLenum) target>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12798,7 +12798,7 @@ TclGL_glResetMinmaxCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glResetMinmax GLenum_target\"",
+                "wrong # args: should be \"ntk glResetMinmax <(GLenum) target>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12841,7 +12841,7 @@ TclGL_glActiveTextureCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glActiveTexture GLenum_texture\"",
+                "wrong # args: should be \"ntk glActiveTexture <(GLenum) texture>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12884,7 +12884,7 @@ TclGL_glClientActiveTextureCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glClientActiveTexture GLenum_texture\"",
+                "wrong # args: should be \"ntk glClientActiveTexture <(GLenum) texture>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12927,7 +12927,7 @@ TclGL_glCompressedTexImage1DCmd(
 
     if (objc != 8) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glCompressedTexImage1D GLenum_target GLint_level GLenum_internalformat GLsizei_width GLint_border GLsizei_imageSize GLvoid_data\"",
+                "wrong # args: should be \"ntk glCompressedTexImage1D <(GLenum) target> <(GLint) level> <(GLenum) internalformat> <(GLsizei) width> <(GLint) border> <(GLsizei) imageSize> <(GLvoid) data>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -12970,7 +12970,7 @@ TclGL_glCompressedTexImage2DCmd(
 
     if (objc != 9) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glCompressedTexImage2D GLenum_target GLint_level GLenum_internalformat GLsizei_width GLsizei_height GLint_border GLsizei_imageSize GLvoid_data\"",
+                "wrong # args: should be \"ntk glCompressedTexImage2D <(GLenum) target> <(GLint) level> <(GLenum) internalformat> <(GLsizei) width> <(GLsizei) height> <(GLint) border> <(GLsizei) imageSize> <(GLvoid) data>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13013,7 +13013,7 @@ TclGL_glCompressedTexImage3DCmd(
 
     if (objc != 10) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glCompressedTexImage3D GLenum_target GLint_level GLenum_internalformat GLsizei_width GLsizei_height GLsizei_depth GLint_border GLsizei_imageSize GLvoid_data\"",
+                "wrong # args: should be \"ntk glCompressedTexImage3D <(GLenum) target> <(GLint) level> <(GLenum) internalformat> <(GLsizei) width> <(GLsizei) height> <(GLsizei) depth> <(GLint) border> <(GLsizei) imageSize> <(GLvoid) data>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13056,7 +13056,7 @@ TclGL_glCompressedTexSubImage1DCmd(
 
     if (objc != 8) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glCompressedTexSubImage1D GLenum_target GLint_level GLint_xoffset GLsizei_width GLenum_format GLsizei_imageSize GLvoid_data\"",
+                "wrong # args: should be \"ntk glCompressedTexSubImage1D <(GLenum) target> <(GLint) level> <(GLint) xoffset> <(GLsizei) width> <(GLenum) format> <(GLsizei) imageSize> <(GLvoid) data>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13099,7 +13099,7 @@ TclGL_glCompressedTexSubImage2DCmd(
 
     if (objc != 10) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glCompressedTexSubImage2D GLenum_target GLint_level GLint_xoffset GLint_yoffset GLsizei_width GLsizei_height GLenum_format GLsizei_imageSize GLvoid_data\"",
+                "wrong # args: should be \"ntk glCompressedTexSubImage2D <(GLenum) target> <(GLint) level> <(GLint) xoffset> <(GLint) yoffset> <(GLsizei) width> <(GLsizei) height> <(GLenum) format> <(GLsizei) imageSize> <(GLvoid) data>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13142,7 +13142,7 @@ TclGL_glCompressedTexSubImage3DCmd(
 
     if (objc != 12) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glCompressedTexSubImage3D GLenum_target GLint_level GLint_xoffset GLint_yoffset GLint_zoffset GLsizei_width GLsizei_height GLsizei_depth GLenum_format GLsizei_imageSize GLvoid_data\"",
+                "wrong # args: should be \"ntk glCompressedTexSubImage3D <(GLenum) target> <(GLint) level> <(GLint) xoffset> <(GLint) yoffset> <(GLint) zoffset> <(GLsizei) width> <(GLsizei) height> <(GLsizei) depth> <(GLenum) format> <(GLsizei) imageSize> <(GLvoid) data>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13185,7 +13185,7 @@ TclGL_glGetCompressedTexImageCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetCompressedTexImage GLenum_target GLint_lod GLvoid_img\"",
+                "wrong # args: should be \"ntk glGetCompressedTexImage <(GLenum) target> <(GLint) lod> <(GLvoid) img>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13228,7 +13228,7 @@ TclGL_glMultiTexCoord1dCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1d GLenum_target GLdouble_s\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1d <(GLenum) target> <(GLdouble) s>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13271,7 +13271,7 @@ TclGL_glMultiTexCoord1dvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1dv GLenum_target GLdouble_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1dv <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13314,7 +13314,7 @@ TclGL_glMultiTexCoord1fCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1f GLenum_target GLfloat_s\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1f <(GLenum) target> <(GLfloat) s>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13357,7 +13357,7 @@ TclGL_glMultiTexCoord1fvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1fv GLenum_target GLfloat_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1fv <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13400,7 +13400,7 @@ TclGL_glMultiTexCoord1iCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1i GLenum_target GLint_s\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1i <(GLenum) target> <(GLint) s>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13443,7 +13443,7 @@ TclGL_glMultiTexCoord1ivCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1iv GLenum_target GLint_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1iv <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13486,7 +13486,7 @@ TclGL_glMultiTexCoord1sCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1s GLenum_target GLshort_s\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1s <(GLenum) target> <(GLshort) s>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13529,7 +13529,7 @@ TclGL_glMultiTexCoord1svCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1sv GLenum_target GLshort_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1sv <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13572,7 +13572,7 @@ TclGL_glMultiTexCoord2dCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2d GLenum_target GLdouble_s GLdouble_t\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2d <(GLenum) target> <(GLdouble) s> <(GLdouble) t>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13615,7 +13615,7 @@ TclGL_glMultiTexCoord2dvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2dv GLenum_target GLdouble_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2dv <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13658,7 +13658,7 @@ TclGL_glMultiTexCoord2fCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2f GLenum_target GLfloat_s GLfloat_t\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2f <(GLenum) target> <(GLfloat) s> <(GLfloat) t>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13701,7 +13701,7 @@ TclGL_glMultiTexCoord2fvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2fv GLenum_target GLfloat_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2fv <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13744,7 +13744,7 @@ TclGL_glMultiTexCoord2iCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2i GLenum_target GLint_s GLint_t\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2i <(GLenum) target> <(GLint) s> <(GLint) t>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13787,7 +13787,7 @@ TclGL_glMultiTexCoord2ivCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2iv GLenum_target GLint_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2iv <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13830,7 +13830,7 @@ TclGL_glMultiTexCoord2sCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2s GLenum_target GLshort_s GLshort_t\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2s <(GLenum) target> <(GLshort) s> <(GLshort) t>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13873,7 +13873,7 @@ TclGL_glMultiTexCoord2svCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2sv GLenum_target GLshort_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2sv <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13916,7 +13916,7 @@ TclGL_glMultiTexCoord3dCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3d GLenum_target GLdouble_s GLdouble_t GLdouble_r\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3d <(GLenum) target> <(GLdouble) s> <(GLdouble) t> <(GLdouble) r>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -13959,7 +13959,7 @@ TclGL_glMultiTexCoord3dvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3dv GLenum_target GLdouble_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3dv <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14002,7 +14002,7 @@ TclGL_glMultiTexCoord3fCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3f GLenum_target GLfloat_s GLfloat_t GLfloat_r\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3f <(GLenum) target> <(GLfloat) s> <(GLfloat) t> <(GLfloat) r>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14045,7 +14045,7 @@ TclGL_glMultiTexCoord3fvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3fv GLenum_target GLfloat_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3fv <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14088,7 +14088,7 @@ TclGL_glMultiTexCoord3iCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3i GLenum_target GLint_s GLint_t GLint_r\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3i <(GLenum) target> <(GLint) s> <(GLint) t> <(GLint) r>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14131,7 +14131,7 @@ TclGL_glMultiTexCoord3ivCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3iv GLenum_target GLint_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3iv <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14174,7 +14174,7 @@ TclGL_glMultiTexCoord3sCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3s GLenum_target GLshort_s GLshort_t GLshort_r\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3s <(GLenum) target> <(GLshort) s> <(GLshort) t> <(GLshort) r>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14217,7 +14217,7 @@ TclGL_glMultiTexCoord3svCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3sv GLenum_target GLshort_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3sv <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14260,7 +14260,7 @@ TclGL_glMultiTexCoord4dCmd(
 
     if (objc != 6) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4d GLenum_target GLdouble_s GLdouble_t GLdouble_r GLdouble_q\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4d <(GLenum) target> <(GLdouble) s> <(GLdouble) t> <(GLdouble) r> <(GLdouble) q>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14303,7 +14303,7 @@ TclGL_glMultiTexCoord4dvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4dv GLenum_target GLdouble_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4dv <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14346,7 +14346,7 @@ TclGL_glMultiTexCoord4fCmd(
 
     if (objc != 6) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4f GLenum_target GLfloat_s GLfloat_t GLfloat_r GLfloat_q\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4f <(GLenum) target> <(GLfloat) s> <(GLfloat) t> <(GLfloat) r> <(GLfloat) q>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14389,7 +14389,7 @@ TclGL_glMultiTexCoord4fvCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4fv GLenum_target GLfloat_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4fv <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14432,7 +14432,7 @@ TclGL_glMultiTexCoord4iCmd(
 
     if (objc != 6) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4i GLenum_target GLint_s GLint_t GLint_r GLint_q\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4i <(GLenum) target> <(GLint) s> <(GLint) t> <(GLint) r> <(GLint) q>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14475,7 +14475,7 @@ TclGL_glMultiTexCoord4ivCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4iv GLenum_target GLint_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4iv <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14518,7 +14518,7 @@ TclGL_glMultiTexCoord4sCmd(
 
     if (objc != 6) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4s GLenum_target GLshort_s GLshort_t GLshort_r GLshort_q\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4s <(GLenum) target> <(GLshort) s> <(GLshort) t> <(GLshort) r> <(GLshort) q>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14561,7 +14561,7 @@ TclGL_glMultiTexCoord4svCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4sv GLenum_target GLshort_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4sv <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14604,7 +14604,7 @@ TclGL_glLoadTransposeMatrixdCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLoadTransposeMatrixd GLdouble_m[16]\"",
+                "wrong # args: should be \"ntk glLoadTransposeMatrixd <(GLdouble) m[16]>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14647,7 +14647,7 @@ TclGL_glLoadTransposeMatrixfCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glLoadTransposeMatrixf GLfloat_m[16]\"",
+                "wrong # args: should be \"ntk glLoadTransposeMatrixf <(GLfloat) m[16]>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14690,7 +14690,7 @@ TclGL_glMultTransposeMatrixdCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultTransposeMatrixd GLdouble_m[16]\"",
+                "wrong # args: should be \"ntk glMultTransposeMatrixd <(GLdouble) m[16]>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14733,7 +14733,7 @@ TclGL_glMultTransposeMatrixfCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultTransposeMatrixf GLfloat_m[16]\"",
+                "wrong # args: should be \"ntk glMultTransposeMatrixf <(GLfloat) m[16]>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14779,7 +14779,7 @@ TclGL_glSampleCoverageCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glSampleCoverage GLclampf_value GLboolean_invert\"",
+                "wrong # args: should be \"ntk glSampleCoverage <(GLclampf) value> <(GLboolean) invert>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14824,7 +14824,7 @@ TclGL_glActiveTextureARBCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glActiveTextureARB GLenum_texture\"",
+                "wrong # args: should be \"ntk glActiveTextureARB <(GLenum) texture>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14867,7 +14867,7 @@ TclGL_glClientActiveTextureARBCmd(
 
     if (objc != 2) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glClientActiveTextureARB GLenum_texture\"",
+                "wrong # args: should be \"ntk glClientActiveTextureARB <(GLenum) texture>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14910,7 +14910,7 @@ TclGL_glMultiTexCoord1dARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1dARB GLenum_target GLdouble_s\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1dARB <(GLenum) target> <(GLdouble) s>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14953,7 +14953,7 @@ TclGL_glMultiTexCoord1dvARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1dvARB GLenum_target GLdouble_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1dvARB <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -14996,7 +14996,7 @@ TclGL_glMultiTexCoord1fARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1fARB GLenum_target GLfloat_s\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1fARB <(GLenum) target> <(GLfloat) s>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15039,7 +15039,7 @@ TclGL_glMultiTexCoord1fvARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1fvARB GLenum_target GLfloat_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1fvARB <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15082,7 +15082,7 @@ TclGL_glMultiTexCoord1iARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1iARB GLenum_target GLint_s\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1iARB <(GLenum) target> <(GLint) s>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15125,7 +15125,7 @@ TclGL_glMultiTexCoord1ivARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1ivARB GLenum_target GLint_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1ivARB <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15168,7 +15168,7 @@ TclGL_glMultiTexCoord1sARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1sARB GLenum_target GLshort_s\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1sARB <(GLenum) target> <(GLshort) s>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15211,7 +15211,7 @@ TclGL_glMultiTexCoord1svARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord1svARB GLenum_target GLshort_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord1svARB <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15254,7 +15254,7 @@ TclGL_glMultiTexCoord2dARBCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2dARB GLenum_target GLdouble_s GLdouble_t\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2dARB <(GLenum) target> <(GLdouble) s> <(GLdouble) t>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15297,7 +15297,7 @@ TclGL_glMultiTexCoord2dvARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2dvARB GLenum_target GLdouble_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2dvARB <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15340,7 +15340,7 @@ TclGL_glMultiTexCoord2fARBCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2fARB GLenum_target GLfloat_s GLfloat_t\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2fARB <(GLenum) target> <(GLfloat) s> <(GLfloat) t>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15383,7 +15383,7 @@ TclGL_glMultiTexCoord2fvARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2fvARB GLenum_target GLfloat_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2fvARB <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15426,7 +15426,7 @@ TclGL_glMultiTexCoord2iARBCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2iARB GLenum_target GLint_s GLint_t\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2iARB <(GLenum) target> <(GLint) s> <(GLint) t>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15469,7 +15469,7 @@ TclGL_glMultiTexCoord2ivARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2ivARB GLenum_target GLint_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2ivARB <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15512,7 +15512,7 @@ TclGL_glMultiTexCoord2sARBCmd(
 
     if (objc != 4) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2sARB GLenum_target GLshort_s GLshort_t\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2sARB <(GLenum) target> <(GLshort) s> <(GLshort) t>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15555,7 +15555,7 @@ TclGL_glMultiTexCoord2svARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord2svARB GLenum_target GLshort_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord2svARB <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15598,7 +15598,7 @@ TclGL_glMultiTexCoord3dARBCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3dARB GLenum_target GLdouble_s GLdouble_t GLdouble_r\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3dARB <(GLenum) target> <(GLdouble) s> <(GLdouble) t> <(GLdouble) r>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15641,7 +15641,7 @@ TclGL_glMultiTexCoord3dvARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3dvARB GLenum_target GLdouble_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3dvARB <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15684,7 +15684,7 @@ TclGL_glMultiTexCoord3fARBCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3fARB GLenum_target GLfloat_s GLfloat_t GLfloat_r\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3fARB <(GLenum) target> <(GLfloat) s> <(GLfloat) t> <(GLfloat) r>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15727,7 +15727,7 @@ TclGL_glMultiTexCoord3fvARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3fvARB GLenum_target GLfloat_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3fvARB <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15770,7 +15770,7 @@ TclGL_glMultiTexCoord3iARBCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3iARB GLenum_target GLint_s GLint_t GLint_r\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3iARB <(GLenum) target> <(GLint) s> <(GLint) t> <(GLint) r>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15813,7 +15813,7 @@ TclGL_glMultiTexCoord3ivARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3ivARB GLenum_target GLint_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3ivARB <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15856,7 +15856,7 @@ TclGL_glMultiTexCoord3sARBCmd(
 
     if (objc != 5) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3sARB GLenum_target GLshort_s GLshort_t GLshort_r\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3sARB <(GLenum) target> <(GLshort) s> <(GLshort) t> <(GLshort) r>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15899,7 +15899,7 @@ TclGL_glMultiTexCoord3svARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord3svARB GLenum_target GLshort_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord3svARB <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15942,7 +15942,7 @@ TclGL_glMultiTexCoord4dARBCmd(
 
     if (objc != 6) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4dARB GLenum_target GLdouble_s GLdouble_t GLdouble_r GLdouble_q\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4dARB <(GLenum) target> <(GLdouble) s> <(GLdouble) t> <(GLdouble) r> <(GLdouble) q>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -15985,7 +15985,7 @@ TclGL_glMultiTexCoord4dvARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4dvARB GLenum_target GLdouble_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4dvARB <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -16028,7 +16028,7 @@ TclGL_glMultiTexCoord4fARBCmd(
 
     if (objc != 6) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4fARB GLenum_target GLfloat_s GLfloat_t GLfloat_r GLfloat_q\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4fARB <(GLenum) target> <(GLfloat) s> <(GLfloat) t> <(GLfloat) r> <(GLfloat) q>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -16071,7 +16071,7 @@ TclGL_glMultiTexCoord4fvARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4fvARB GLenum_target GLfloat_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4fvARB <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -16114,7 +16114,7 @@ TclGL_glMultiTexCoord4iARBCmd(
 
     if (objc != 6) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4iARB GLenum_target GLint_s GLint_t GLint_r GLint_q\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4iARB <(GLenum) target> <(GLint) s> <(GLint) t> <(GLint) r> <(GLint) q>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -16157,7 +16157,7 @@ TclGL_glMultiTexCoord4ivARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4ivARB GLenum_target GLint_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4ivARB <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -16200,7 +16200,7 @@ TclGL_glMultiTexCoord4sARBCmd(
 
     if (objc != 6) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4sARB GLenum_target GLshort_s GLshort_t GLshort_r GLshort_q\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4sARB <(GLenum) target> <(GLshort) s> <(GLshort) t> <(GLshort) r> <(GLshort) q>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -16243,7 +16243,7 @@ TclGL_glMultiTexCoord4svARBCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glMultiTexCoord4svARB GLenum_target GLshort_v\"",
+                "wrong # args: should be \"ntk glMultiTexCoord4svARB <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
@@ -16286,7 +16286,7 @@ TclGL_glBlendEquationSeparateATICmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glBlendEquationSeparateATI GLenum_modeRGB GLenum_modeA\"",
+                "wrong # args: should be \"ntk glBlendEquationSeparateATI <(GLenum) modeRGB> <(GLenum) modeA>\"",
                 NULL);
         return TCL_ERROR;
     }

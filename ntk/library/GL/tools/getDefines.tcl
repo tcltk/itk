@@ -230,10 +230,11 @@ puts stderr "444!$entry!"
                         if {$ptype1 != ""} {
 			    set startStr "$ptype1 "
                         }
-		        append param_info "${ptype2}_$pname "
+		        append param_info "<($ptype2) $pname> "
 			switch $ptype2 {
 			GLenum {
                             set myType ""
+#puts stderr "NOYenum!$name!$entry!"
 			    set notYet 1
 			  }
                         GLboolean {
@@ -245,10 +246,12 @@ puts stderr "444!$entry!"
                         GLbitfield {
                             set myType ""
 			    set notYet 1
+#puts stderr "NOYbitfield!$name!$entry!"
                           }
                         GLvoid {
                             set myType ""
 			    set notYet 1
+puts stderr "NOYvoid!$name!$entry!"
                           }
                         GLbyte {
                             set myType "int"
@@ -329,7 +332,7 @@ puts stderr "444!$entry!"
 			        set init " = 0.0"
 			      }
 			    }
-		            lappend funcVarDecls "   $startStr $myType $pname;"
+		            lappend funcVarDecls "    $startStr$myType $pname;"
 			    if {$ptype1 eq ""} {
 			        lappend varInits "    $pname $init;"
 			    }
@@ -340,26 +343,29 @@ puts stderr "444!$entry!"
                 set param_info [string trimright $param_info]
 #puts stderr "param_info!$param_info!"
                 
+		set notYetStr ""
+		if {$notYet} {
+		    set funcVarDecls $varDecls
+		    set varInits ""
+		    set notYetStr " !not yet!"
+		}
 		lappend procNameLst "Tcl_ObjCmdProc TclGL_${name}Cmd;"
-		lappend methodNameLst "    { \"$name\", \"$param_info\", TclGL_${name}Cmd } ,"
+
+		lappend methodNameLst "    { \"$name\", \"$param_info$notYetStr\", TclGL_${name}Cmd } ,"
 	        lappend cmdNameLst "    { \"::ntk::gl::GL::$name\", TclGL_${name}Cmd },"
 	        lappend funcLst [format $funcHeader $name $name]
 	        lappend funcLst "int\nTclGL_${name}Cmd("
                 lappend funcLst $paramHeader
                 lappend funcLst $openCurly
-		if {$notYet} {
-		    set funcVarDecls $varDecls
-		    set varInits ""
-		}
                 lappend funcLst [join $funcVarDecls \n]
 		lappend funcLst "\n    glResult = 0;"
 		lappend funcLst "    hPtr = NULL;"
 		lappend funcLst [join $varInits \n]
 		lappend funcLst "    infoPtr = (TclGLInfo *)clientData;"
                 lappend funcLst "    TclGLShowArgs(0, \"TclGL_${name}Cmd\", objc, objv);"
-                lappend funcLst [format $argsCheck [expr {[llength [split $param_info]] + 1}] $name $param_info]
-puts stderr "NOT YET !$name!"
+                lappend funcLst [format $argsCheck [expr {$paramNum + 1}] $name $param_info]
 		if {$notYet} {
+#puts stderr "NOT YET !$name!"
 		    lappend funcLst "fprintf(stderr, \"$name not yet implemented\");"
 		    lappend funcLst "    result = TCL_OK;"
 		} else {
@@ -375,6 +381,12 @@ puts stderr "NOT YET !$name!"
 }
 set hashTables [list]
 set initLst [list]
+set hashName glDefines
+lappend hashTables "    Tcl_HashTable $hashName;"
+lappend initLst "    Tcl_InitObjHashTable(&infoPtr->$hashName);"
+set hashDefineNames glDefineStrings
+lappend hashTables "    Tcl_HashTable $hashDefineNames;"
+lappend initLst "    Tcl_InitHashTable(&infoPtr->$hashDefineNames, TCL_ONE_WORD_KEYS);"
 foreach name [array names defines] {
     set map_name_idx [lsearch -glob $map_names ${name}*]
     set map_name [lindex [lindex $map_names $map_name_idx] 1]
@@ -383,14 +395,17 @@ puts "NO MAP!$name!"
         continue
     }
 #puts stderr "MAP!$name!$map_name_idx!$map_name!"
-    lappend hashTables "    Tcl_HashTable $name;"
-    lappend initLst "    Tcl_InitObjHashTable(&infoPtr->$name);"
+#    lappend hashTables "    Tcl_HashTable $name;"
+#    lappend initLst "    Tcl_InitObjHashTable(&infoPtr->$name);"
     foreach entry $defines($name) {
 	foreach {entryName entryValue} $entry break
         lappend initLst "    objPtr = Tcl_NewStringObj(\"$entryName\", -1);"
         lappend initLst "    Tcl_IncrRefCount(objPtr);"
-        lappend initLst "    hPtr = Tcl_CreateHashEntry(&infoPtr->$name, (char *)objPtr, &isNew);"
+        lappend initLst "    hPtr = Tcl_CreateHashEntry(&infoPtr->$hashName, (char *)objPtr, &isNew);"
         lappend initLst "    Tcl_SetHashValue(hPtr, $entryValue);"
+        lappend initLst "    hPtr = Tcl_CreateHashEntry(&infoPtr->$hashDefineNames, (char *)$entryValue, &isNew);"
+        lappend initLst "    Tcl_SetHashValue(hPtr, objPtr);"
+        lappend initLst "    Tcl_IncrRefCount(objPtr);"
     }
     lappend initLst ""
 }
