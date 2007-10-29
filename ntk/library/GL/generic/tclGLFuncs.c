@@ -27,7 +27,7 @@ TclGL_glClearIndexCmd(
 
     glResult = 0;
     hPtr = NULL;
-    c  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glClearIndexCmd", objc, objv);
 
@@ -39,7 +39,7 @@ TclGL_glClearIndexCmd(
     }
 
     Tcl_GetDoubleFromObj(interp, objv[1], &c);
-    glClearIndex((float)c);
+    glClearIndex((float )c);
     result = GetGLError(interp);
     return result;
 }
@@ -75,10 +75,7 @@ TclGL_glClearColorCmd(
 
     glResult = 0;
     hPtr = NULL;
-    red  = 0.0;
-    green  = 0.0;
-    blue  = 0.0;
-    alpha  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glClearColorCmd", objc, objv);
 
@@ -93,7 +90,7 @@ TclGL_glClearColorCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &green);
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
     Tcl_GetDoubleFromObj(interp, objv[4], &alpha);
-    glClearColor((float)red, (float)green, (float)blue, (float)alpha);
+    glClearColor((float )red, (float )green, (float )blue, (float )alpha);
     result = GetGLError(interp);
     return result;
 }
@@ -169,7 +166,7 @@ TclGL_glIndexMaskCmd(
 
     glResult = 0;
     hPtr = NULL;
-    mask  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glIndexMaskCmd", objc, objv);
 
@@ -181,7 +178,7 @@ TclGL_glIndexMaskCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &mask);
-    glIndexMask((unsigned int)mask);
+    glIndexMask((unsigned int )mask);
     result = GetGLError(interp);
     return result;
 }
@@ -217,10 +214,7 @@ TclGL_glColorMaskCmd(
 
     glResult = 0;
     hPtr = NULL;
-    red  = 0;
-    green  = 0;
-    blue  = 0;
-    alpha  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glColorMaskCmd", objc, objv);
 
@@ -235,7 +229,7 @@ TclGL_glColorMaskCmd(
     Tcl_GetBooleanFromObj(interp, objv[2], &green);
     Tcl_GetBooleanFromObj(interp, objv[3], &blue);
     Tcl_GetBooleanFromObj(interp, objv[4], &alpha);
-    glColorMask((unsigned char)red, (unsigned char)green, (unsigned char)blue, (unsigned char)alpha);
+    glColorMask((unsigned char )red, (unsigned char )green, (unsigned char )blue, (unsigned char )alpha);
     result = GetGLError(interp);
     return result;
 }
@@ -264,6 +258,8 @@ TclGL_glAlphaFuncCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int func;
+    double ref;
 
     glResult = 0;
     hPtr = NULL;
@@ -278,8 +274,15 @@ TclGL_glAlphaFuncCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glAlphaFunc not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    func = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &ref);
+    glAlphaFunc((GLenum)func, (float )ref);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -307,6 +310,8 @@ TclGL_glBlendFuncCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int sfactor;
+    int dfactor;
 
     glResult = 0;
     hPtr = NULL;
@@ -321,8 +326,20 @@ TclGL_glBlendFuncCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glBlendFunc not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    sfactor = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    dfactor = (int)Tcl_GetHashValue(hPtr); 
+    glBlendFunc((GLenum)sfactor, (GLenum)dfactor);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -350,6 +367,7 @@ TclGL_glLogicOpCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int opcode;
 
     glResult = 0;
     hPtr = NULL;
@@ -364,8 +382,14 @@ TclGL_glLogicOpCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glLogicOp not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    opcode = (int)Tcl_GetHashValue(hPtr); 
+    glLogicOp((GLenum)opcode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -393,6 +417,7 @@ TclGL_glCullFaceCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int mode;
 
     glResult = 0;
     hPtr = NULL;
@@ -407,8 +432,14 @@ TclGL_glCullFaceCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glCullFace not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    glCullFace((GLenum)mode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -436,6 +467,7 @@ TclGL_glFrontFaceCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int mode;
 
     glResult = 0;
     hPtr = NULL;
@@ -450,8 +482,14 @@ TclGL_glFrontFaceCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glFrontFace not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    glFrontFace((GLenum)mode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -483,7 +521,7 @@ TclGL_glPointSizeCmd(
 
     glResult = 0;
     hPtr = NULL;
-    size  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glPointSizeCmd", objc, objv);
 
@@ -495,7 +533,7 @@ TclGL_glPointSizeCmd(
     }
 
     Tcl_GetDoubleFromObj(interp, objv[1], &size);
-    glPointSize((float)size);
+    glPointSize((float )size);
     result = GetGLError(interp);
     return result;
 }
@@ -528,7 +566,7 @@ TclGL_glLineWidthCmd(
 
     glResult = 0;
     hPtr = NULL;
-    width  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glLineWidthCmd", objc, objv);
 
@@ -540,7 +578,7 @@ TclGL_glLineWidthCmd(
     }
 
     Tcl_GetDoubleFromObj(interp, objv[1], &width);
-    glLineWidth((float)width);
+    glLineWidth((float )width);
     result = GetGLError(interp);
     return result;
 }
@@ -574,8 +612,7 @@ TclGL_glLineStippleCmd(
 
     glResult = 0;
     hPtr = NULL;
-    factor  = 0;
-    pattern  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glLineStippleCmd", objc, objv);
 
@@ -588,7 +625,7 @@ TclGL_glLineStippleCmd(
 
     Tcl_GetIntFromObj(interp, objv[1], &factor);
     Tcl_GetIntFromObj(interp, objv[2], &pattern);
-    glLineStipple((int)factor, (unsigned short)pattern);
+    glLineStipple((int )factor, (unsigned short )pattern);
     result = GetGLError(interp);
     return result;
 }
@@ -617,6 +654,8 @@ TclGL_glPolygonModeCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int face;
+    int mode;
 
     glResult = 0;
     hPtr = NULL;
@@ -631,8 +670,20 @@ TclGL_glPolygonModeCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glPolygonMode not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    face = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    glPolygonMode((GLenum)face, (GLenum)mode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -665,8 +716,7 @@ TclGL_glPolygonOffsetCmd(
 
     glResult = 0;
     hPtr = NULL;
-    factor  = 0.0;
-    units  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glPolygonOffsetCmd", objc, objv);
 
@@ -679,7 +729,7 @@ TclGL_glPolygonOffsetCmd(
 
     Tcl_GetDoubleFromObj(interp, objv[1], &factor);
     Tcl_GetDoubleFromObj(interp, objv[2], &units);
-    glPolygonOffset((float)factor, (float)units);
+    glPolygonOffset((float )factor, (float )units);
     result = GetGLError(interp);
     return result;
 }
@@ -708,6 +758,7 @@ TclGL_glPolygonStippleCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *mask;
 
     glResult = 0;
     hPtr = NULL;
@@ -722,8 +773,9 @@ TclGL_glPolygonStippleCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glPolygonStipple not yet implemented");
-    result = TCL_OK;
+    mask = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glPolygonStipple((unsigned char *)mask);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -751,6 +803,7 @@ TclGL_glGetPolygonStippleCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int *mask;
 
     glResult = 0;
     hPtr = NULL;
@@ -765,8 +818,9 @@ TclGL_glGetPolygonStippleCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetPolygonStipple not yet implemented");
-    result = TCL_OK;
+    mask = (int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glGetPolygonStipple((unsigned char *)mask);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -798,7 +852,7 @@ TclGL_glEdgeFlagCmd(
 
     glResult = 0;
     hPtr = NULL;
-    flag  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glEdgeFlagCmd", objc, objv);
 
@@ -810,7 +864,7 @@ TclGL_glEdgeFlagCmd(
     }
 
     Tcl_GetBooleanFromObj(interp, objv[1], &flag);
-    glEdgeFlag((unsigned char)flag);
+    glEdgeFlag((unsigned char )flag);
     result = GetGLError(interp);
     return result;
 }
@@ -839,6 +893,7 @@ TclGL_glEdgeFlagvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *flag;
 
     glResult = 0;
     hPtr = NULL;
@@ -853,8 +908,9 @@ TclGL_glEdgeFlagvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glEdgeFlagv not yet implemented");
-    result = TCL_OK;
+    flag = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glEdgeFlagv((unsigned char *)flag);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -889,10 +945,7 @@ TclGL_glScissorCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0;
-    y  = 0;
-    width  = 0;
-    height  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glScissorCmd", objc, objv);
 
@@ -907,7 +960,7 @@ TclGL_glScissorCmd(
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &width);
     Tcl_GetIntFromObj(interp, objv[4], &height);
-    glScissor((int)x, (int)y, (int)width, (int)height);
+    glScissor((int )x, (int )y, (int )width, (int )height);
     result = GetGLError(interp);
     return result;
 }
@@ -936,6 +989,8 @@ TclGL_glClipPlaneCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int plane;
+    const void *equation;
 
     glResult = 0;
     hPtr = NULL;
@@ -950,8 +1005,15 @@ TclGL_glClipPlaneCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glClipPlane not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    plane = (int)Tcl_GetHashValue(hPtr); 
+    equation = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glClipPlane((GLenum)plane, (GLdouble *)equation);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -979,6 +1041,8 @@ TclGL_glGetClipPlaneCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int plane;
+    void *equation;
 
     glResult = 0;
     hPtr = NULL;
@@ -993,8 +1057,15 @@ TclGL_glGetClipPlaneCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetClipPlane not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    plane = (int)Tcl_GetHashValue(hPtr); 
+    equation = (double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetClipPlane((GLenum)plane, (GLdouble *)equation);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1022,6 +1093,7 @@ TclGL_glDrawBufferCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int mode;
 
     glResult = 0;
     hPtr = NULL;
@@ -1036,8 +1108,14 @@ TclGL_glDrawBufferCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glDrawBuffer not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    glDrawBuffer((GLenum)mode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1065,6 +1143,7 @@ TclGL_glReadBufferCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int mode;
 
     glResult = 0;
     hPtr = NULL;
@@ -1079,8 +1158,14 @@ TclGL_glReadBufferCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glReadBuffer not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    glReadBuffer((GLenum)mode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1108,6 +1193,7 @@ TclGL_glEnableCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int cap;
 
     glResult = 0;
     hPtr = NULL;
@@ -1122,8 +1208,14 @@ TclGL_glEnableCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glEnable not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    cap = (int)Tcl_GetHashValue(hPtr); 
+    glEnable((GLenum)cap);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1151,6 +1243,7 @@ TclGL_glDisableCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int cap;
 
     glResult = 0;
     hPtr = NULL;
@@ -1165,8 +1258,14 @@ TclGL_glDisableCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glDisable not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    cap = (int)Tcl_GetHashValue(hPtr); 
+    glDisable((GLenum)cap);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1194,6 +1293,7 @@ TclGL_glIsEnabledCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int cap;
 
     glResult = 0;
     hPtr = NULL;
@@ -1208,8 +1308,14 @@ TclGL_glIsEnabledCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glIsEnabled not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    cap = (int)Tcl_GetHashValue(hPtr); 
+    glIsEnabled((GLenum)cap);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1237,6 +1343,7 @@ TclGL_glEnableClientStateCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int cap;
 
     glResult = 0;
     hPtr = NULL;
@@ -1251,8 +1358,14 @@ TclGL_glEnableClientStateCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glEnableClientState not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    cap = (int)Tcl_GetHashValue(hPtr); 
+    glEnableClientState((GLenum)cap);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1280,6 +1393,7 @@ TclGL_glDisableClientStateCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int cap;
 
     glResult = 0;
     hPtr = NULL;
@@ -1294,8 +1408,14 @@ TclGL_glDisableClientStateCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glDisableClientState not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    cap = (int)Tcl_GetHashValue(hPtr); 
+    glDisableClientState((GLenum)cap);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1323,6 +1443,8 @@ TclGL_glGetBooleanvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    int *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -1337,8 +1459,15 @@ TclGL_glGetBooleanvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetBooleanv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetBooleanv((GLenum)pname, (unsigned char *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1366,6 +1495,8 @@ TclGL_glGetDoublevCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    void *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -1380,8 +1511,15 @@ TclGL_glGetDoublevCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetDoublev not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetDoublev((GLenum)pname, (GLdouble *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1409,6 +1547,8 @@ TclGL_glGetFloatvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    void *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -1423,8 +1563,15 @@ TclGL_glGetFloatvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetFloatv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetFloatv((GLenum)pname, (float *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1452,6 +1599,8 @@ TclGL_glGetIntegervCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    int *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -1466,8 +1615,15 @@ TclGL_glGetIntegervCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetIntegerv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetIntegerv((GLenum)pname, (int *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1669,6 +1825,7 @@ TclGL_glRenderModeCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int mode;
 
     glResult = 0;
     hPtr = NULL;
@@ -1683,8 +1840,14 @@ TclGL_glRenderModeCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRenderMode not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    glRenderMode((GLenum)mode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1844,6 +2007,8 @@ TclGL_glHintCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int mode;
 
     glResult = 0;
     hPtr = NULL;
@@ -1858,8 +2023,20 @@ TclGL_glHintCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glHint not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    glHint((GLenum)target, (GLenum)mode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1891,7 +2068,7 @@ TclGL_glClearDepthCmd(
 
     glResult = 0;
     hPtr = NULL;
-    depth  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glClearDepthCmd", objc, objv);
 
@@ -1903,7 +2080,7 @@ TclGL_glClearDepthCmd(
     }
 
     Tcl_GetDoubleFromObj(interp, objv[1], &depth);
-    glClearDepth((double)depth);
+    glClearDepth((GLclampd )depth);
     result = GetGLError(interp);
     return result;
 }
@@ -1932,6 +2109,7 @@ TclGL_glDepthFuncCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int func;
 
     glResult = 0;
     hPtr = NULL;
@@ -1946,8 +2124,14 @@ TclGL_glDepthFuncCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glDepthFunc not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    func = (int)Tcl_GetHashValue(hPtr); 
+    glDepthFunc((GLenum)func);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -1979,7 +2163,7 @@ TclGL_glDepthMaskCmd(
 
     glResult = 0;
     hPtr = NULL;
-    flag  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glDepthMaskCmd", objc, objv);
 
@@ -1991,7 +2175,7 @@ TclGL_glDepthMaskCmd(
     }
 
     Tcl_GetBooleanFromObj(interp, objv[1], &flag);
-    glDepthMask((unsigned char)flag);
+    glDepthMask((unsigned char )flag);
     result = GetGLError(interp);
     return result;
 }
@@ -2025,8 +2209,7 @@ TclGL_glDepthRangeCmd(
 
     glResult = 0;
     hPtr = NULL;
-    near_val  = 0.0;
-    far_val  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glDepthRangeCmd", objc, objv);
 
@@ -2039,7 +2222,7 @@ TclGL_glDepthRangeCmd(
 
     Tcl_GetDoubleFromObj(interp, objv[1], &near_val);
     Tcl_GetDoubleFromObj(interp, objv[2], &far_val);
-    glDepthRange((double)near_val, (double)far_val);
+    glDepthRange((GLclampd )near_val, (GLclampd )far_val);
     result = GetGLError(interp);
     return result;
 }
@@ -2075,10 +2258,7 @@ TclGL_glClearAccumCmd(
 
     glResult = 0;
     hPtr = NULL;
-    red  = 0.0;
-    green  = 0.0;
-    blue  = 0.0;
-    alpha  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glClearAccumCmd", objc, objv);
 
@@ -2093,7 +2273,7 @@ TclGL_glClearAccumCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &green);
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
     Tcl_GetDoubleFromObj(interp, objv[4], &alpha);
-    glClearAccum((float)red, (float)green, (float)blue, (float)alpha);
+    glClearAccum((float )red, (float )green, (float )blue, (float )alpha);
     result = GetGLError(interp);
     return result;
 }
@@ -2122,6 +2302,8 @@ TclGL_glAccumCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int op;
+    double value;
 
     glResult = 0;
     hPtr = NULL;
@@ -2136,8 +2318,15 @@ TclGL_glAccumCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glAccum not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    op = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &value);
+    glAccum((GLenum)op, (float )value);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -2165,6 +2354,7 @@ TclGL_glMatrixModeCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int mode;
 
     glResult = 0;
     hPtr = NULL;
@@ -2179,8 +2369,14 @@ TclGL_glMatrixModeCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMatrixMode not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    glMatrixMode((GLenum)mode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -2340,6 +2536,7 @@ TclGL_glLoadMatrixdCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *m;
 
     glResult = 0;
     hPtr = NULL;
@@ -2354,8 +2551,9 @@ TclGL_glLoadMatrixdCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glLoadMatrixd not yet implemented");
-    result = TCL_OK;
+    m = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glLoadMatrixd((GLdouble *)m);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -2383,6 +2581,7 @@ TclGL_glLoadMatrixfCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *m;
 
     glResult = 0;
     hPtr = NULL;
@@ -2397,8 +2596,9 @@ TclGL_glLoadMatrixfCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glLoadMatrixf not yet implemented");
-    result = TCL_OK;
+    m = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glLoadMatrixf((float *)m);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -2426,6 +2626,7 @@ TclGL_glMultMatrixdCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *m;
 
     glResult = 0;
     hPtr = NULL;
@@ -2440,8 +2641,9 @@ TclGL_glMultMatrixdCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultMatrixd not yet implemented");
-    result = TCL_OK;
+    m = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glMultMatrixd((GLdouble *)m);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -2469,6 +2671,7 @@ TclGL_glMultMatrixfCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *m;
 
     glResult = 0;
     hPtr = NULL;
@@ -2483,8 +2686,9 @@ TclGL_glMultMatrixfCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultMatrixf not yet implemented");
-    result = TCL_OK;
+    m = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glMultMatrixf((float *)m);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -2518,9 +2722,7 @@ TclGL_glScaledCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
-    z  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glScaledCmd", objc, objv);
 
@@ -2534,7 +2736,7 @@ TclGL_glScaledCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
-    glScaled((double)x, (double)y, (double)z);
+    glScaled((GLdouble )x, (GLdouble )y, (GLdouble )z);
     result = GetGLError(interp);
     return result;
 }
@@ -2569,9 +2771,7 @@ TclGL_glScalefCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
-    z  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glScalefCmd", objc, objv);
 
@@ -2585,7 +2785,7 @@ TclGL_glScalefCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
-    glScalef((float)x, (float)y, (float)z);
+    glScalef((float )x, (float )y, (float )z);
     result = GetGLError(interp);
     return result;
 }
@@ -2620,9 +2820,7 @@ TclGL_glTranslatedCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
-    z  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTranslatedCmd", objc, objv);
 
@@ -2636,7 +2834,7 @@ TclGL_glTranslatedCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
-    glTranslated((double)x, (double)y, (double)z);
+    glTranslated((GLdouble )x, (GLdouble )y, (GLdouble )z);
     result = GetGLError(interp);
     return result;
 }
@@ -2671,9 +2869,7 @@ TclGL_glTranslatefCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
-    z  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTranslatefCmd", objc, objv);
 
@@ -2687,7 +2883,7 @@ TclGL_glTranslatefCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
-    glTranslatef((float)x, (float)y, (float)z);
+    glTranslatef((float )x, (float )y, (float )z);
     result = GetGLError(interp);
     return result;
 }
@@ -2720,7 +2916,7 @@ TclGL_glIsListCmd(
 
     glResult = 0;
     hPtr = NULL;
-    list  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glIsListCmd", objc, objv);
 
@@ -2732,7 +2928,7 @@ TclGL_glIsListCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &list);
-    glIsList((unsigned int)list);
+    glIsList((unsigned int )list);
     result = GetGLError(interp);
     return result;
 }
@@ -2766,8 +2962,7 @@ TclGL_glDeleteListsCmd(
 
     glResult = 0;
     hPtr = NULL;
-    list  = 0;
-    range  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glDeleteListsCmd", objc, objv);
 
@@ -2780,7 +2975,7 @@ TclGL_glDeleteListsCmd(
 
     Tcl_GetIntFromObj(interp, objv[1], &list);
     Tcl_GetIntFromObj(interp, objv[2], &range);
-    glDeleteLists((unsigned int)list, (int)range);
+    glDeleteLists((unsigned int )list, (int )range);
     result = GetGLError(interp);
     return result;
 }
@@ -2813,7 +3008,7 @@ TclGL_glGenListsCmd(
 
     glResult = 0;
     hPtr = NULL;
-    range  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glGenListsCmd", objc, objv);
 
@@ -2825,7 +3020,7 @@ TclGL_glGenListsCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &range);
-    glGenLists((int)range);
+    glGenLists((int )range);
     result = GetGLError(interp);
     return result;
 }
@@ -2854,6 +3049,8 @@ TclGL_glNewListCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int list;
+    int mode;
 
     glResult = 0;
     hPtr = NULL;
@@ -2868,8 +3065,15 @@ TclGL_glNewListCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glNewList not yet implemented");
-    result = TCL_OK;
+    Tcl_GetIntFromObj(interp, objv[1], &list);
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    glNewList((unsigned int )list, (GLenum)mode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -2945,7 +3149,7 @@ TclGL_glCallListCmd(
 
     glResult = 0;
     hPtr = NULL;
-    list  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glCallListCmd", objc, objv);
 
@@ -2957,7 +3161,7 @@ TclGL_glCallListCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &list);
-    glCallList((unsigned int)list);
+    glCallList((unsigned int )list);
     result = GetGLError(interp);
     return result;
 }
@@ -2990,7 +3194,7 @@ TclGL_glListBaseCmd(
 
     glResult = 0;
     hPtr = NULL;
-    base  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glListBaseCmd", objc, objv);
 
@@ -3002,7 +3206,7 @@ TclGL_glListBaseCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &base);
-    glListBase((unsigned int)base);
+    glListBase((unsigned int )base);
     result = GetGLError(interp);
     return result;
 }
@@ -3031,6 +3235,7 @@ TclGL_glBeginCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int mode;
 
     glResult = 0;
     hPtr = NULL;
@@ -3045,8 +3250,14 @@ TclGL_glBeginCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glBegin not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    glBegin((GLenum)mode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -3123,8 +3334,7 @@ TclGL_glVertex2dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glVertex2dCmd", objc, objv);
 
@@ -3137,7 +3347,7 @@ TclGL_glVertex2dCmd(
 
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
-    glVertex2d((double)x, (double)y);
+    glVertex2d((GLdouble )x, (GLdouble )y);
     result = GetGLError(interp);
     return result;
 }
@@ -3171,8 +3381,7 @@ TclGL_glVertex2fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glVertex2fCmd", objc, objv);
 
@@ -3185,7 +3394,7 @@ TclGL_glVertex2fCmd(
 
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
-    glVertex2f((float)x, (float)y);
+    glVertex2f((float )x, (float )y);
     result = GetGLError(interp);
     return result;
 }
@@ -3219,8 +3428,7 @@ TclGL_glVertex2iCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0;
-    y  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glVertex2iCmd", objc, objv);
 
@@ -3233,7 +3441,7 @@ TclGL_glVertex2iCmd(
 
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
-    glVertex2i((int)x, (int)y);
+    glVertex2i((int )x, (int )y);
     result = GetGLError(interp);
     return result;
 }
@@ -3267,8 +3475,7 @@ TclGL_glVertex2sCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0;
-    y  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glVertex2sCmd", objc, objv);
 
@@ -3281,7 +3488,7 @@ TclGL_glVertex2sCmd(
 
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
-    glVertex2s((short)x, (short)y);
+    glVertex2s((short )x, (short )y);
     result = GetGLError(interp);
     return result;
 }
@@ -3316,9 +3523,7 @@ TclGL_glVertex3dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
-    z  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glVertex3dCmd", objc, objv);
 
@@ -3332,7 +3537,7 @@ TclGL_glVertex3dCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
-    glVertex3d((double)x, (double)y, (double)z);
+    glVertex3d((GLdouble )x, (GLdouble )y, (GLdouble )z);
     result = GetGLError(interp);
     return result;
 }
@@ -3367,9 +3572,7 @@ TclGL_glVertex3fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
-    z  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glVertex3fCmd", objc, objv);
 
@@ -3383,7 +3586,7 @@ TclGL_glVertex3fCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
-    glVertex3f((float)x, (float)y, (float)z);
+    glVertex3f((float )x, (float )y, (float )z);
     result = GetGLError(interp);
     return result;
 }
@@ -3418,9 +3621,7 @@ TclGL_glVertex3iCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0;
-    y  = 0;
-    z  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glVertex3iCmd", objc, objv);
 
@@ -3434,7 +3635,7 @@ TclGL_glVertex3iCmd(
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
-    glVertex3i((int)x, (int)y, (int)z);
+    glVertex3i((int )x, (int )y, (int )z);
     result = GetGLError(interp);
     return result;
 }
@@ -3469,9 +3670,7 @@ TclGL_glVertex3sCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0;
-    y  = 0;
-    z  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glVertex3sCmd", objc, objv);
 
@@ -3485,7 +3684,7 @@ TclGL_glVertex3sCmd(
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
-    glVertex3s((short)x, (short)y, (short)z);
+    glVertex3s((short )x, (short )y, (short )z);
     result = GetGLError(interp);
     return result;
 }
@@ -3521,10 +3720,7 @@ TclGL_glVertex4dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
-    z  = 0.0;
-    w  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glVertex4dCmd", objc, objv);
 
@@ -3539,7 +3735,7 @@ TclGL_glVertex4dCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     Tcl_GetDoubleFromObj(interp, objv[4], &w);
-    glVertex4d((double)x, (double)y, (double)z, (double)w);
+    glVertex4d((GLdouble )x, (GLdouble )y, (GLdouble )z, (GLdouble )w);
     result = GetGLError(interp);
     return result;
 }
@@ -3575,10 +3771,7 @@ TclGL_glVertex4fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
-    z  = 0.0;
-    w  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glVertex4fCmd", objc, objv);
 
@@ -3593,7 +3786,7 @@ TclGL_glVertex4fCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     Tcl_GetDoubleFromObj(interp, objv[4], &w);
-    glVertex4f((float)x, (float)y, (float)z, (float)w);
+    glVertex4f((float )x, (float )y, (float )z, (float )w);
     result = GetGLError(interp);
     return result;
 }
@@ -3629,10 +3822,7 @@ TclGL_glVertex4iCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0;
-    y  = 0;
-    z  = 0;
-    w  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glVertex4iCmd", objc, objv);
 
@@ -3647,7 +3837,7 @@ TclGL_glVertex4iCmd(
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
     Tcl_GetIntFromObj(interp, objv[4], &w);
-    glVertex4i((int)x, (int)y, (int)z, (int)w);
+    glVertex4i((int )x, (int )y, (int )z, (int )w);
     result = GetGLError(interp);
     return result;
 }
@@ -3683,10 +3873,7 @@ TclGL_glVertex4sCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0;
-    y  = 0;
-    z  = 0;
-    w  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glVertex4sCmd", objc, objv);
 
@@ -3701,7 +3888,7 @@ TclGL_glVertex4sCmd(
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
     Tcl_GetIntFromObj(interp, objv[4], &w);
-    glVertex4s((short)x, (short)y, (short)z, (short)w);
+    glVertex4s((short )x, (short )y, (short )z, (short )w);
     result = GetGLError(interp);
     return result;
 }
@@ -3730,6 +3917,7 @@ TclGL_glVertex2dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -3744,8 +3932,9 @@ TclGL_glVertex2dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glVertex2dv not yet implemented");
-    result = TCL_OK;
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex2dv((GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -3773,6 +3962,7 @@ TclGL_glVertex2fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -3787,8 +3977,9 @@ TclGL_glVertex2fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glVertex2fv not yet implemented");
-    result = TCL_OK;
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex2fv((float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -3816,6 +4007,7 @@ TclGL_glVertex2ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -3830,8 +4022,9 @@ TclGL_glVertex2ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glVertex2iv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex2iv((int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -3859,6 +4052,7 @@ TclGL_glVertex2svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -3873,8 +4067,9 @@ TclGL_glVertex2svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glVertex2sv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex2sv((short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -3902,6 +4097,7 @@ TclGL_glVertex3dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -3916,8 +4112,9 @@ TclGL_glVertex3dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glVertex3dv not yet implemented");
-    result = TCL_OK;
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex3dv((GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -3945,6 +4142,7 @@ TclGL_glVertex3fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -3959,8 +4157,9 @@ TclGL_glVertex3fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glVertex3fv not yet implemented");
-    result = TCL_OK;
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex3fv((float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -3988,6 +4187,7 @@ TclGL_glVertex3ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -4002,8 +4202,9 @@ TclGL_glVertex3ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glVertex3iv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex3iv((int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -4031,6 +4232,7 @@ TclGL_glVertex3svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -4045,8 +4247,9 @@ TclGL_glVertex3svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glVertex3sv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex3sv((short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -4074,6 +4277,7 @@ TclGL_glVertex4dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -4088,8 +4292,9 @@ TclGL_glVertex4dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glVertex4dv not yet implemented");
-    result = TCL_OK;
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex4dv((GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -4117,6 +4322,7 @@ TclGL_glVertex4fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -4131,8 +4337,9 @@ TclGL_glVertex4fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glVertex4fv not yet implemented");
-    result = TCL_OK;
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex4fv((float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -4160,6 +4367,7 @@ TclGL_glVertex4ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -4174,8 +4382,9 @@ TclGL_glVertex4ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glVertex4iv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex4iv((int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -4203,6 +4412,7 @@ TclGL_glVertex4svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -4217,8 +4427,9 @@ TclGL_glVertex4svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glVertex4sv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex4sv((short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -4252,9 +4463,7 @@ TclGL_glNormal3bCmd(
 
     glResult = 0;
     hPtr = NULL;
-    nx  = 0;
-    ny  = 0;
-    nz  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glNormal3bCmd", objc, objv);
 
@@ -4268,7 +4477,7 @@ TclGL_glNormal3bCmd(
     Tcl_GetIntFromObj(interp, objv[1], &nx);
     Tcl_GetIntFromObj(interp, objv[2], &ny);
     Tcl_GetIntFromObj(interp, objv[3], &nz);
-    glNormal3b((signed char)nx, (signed char)ny, (signed char)nz);
+    glNormal3b((signed char )nx, (signed char )ny, (signed char )nz);
     result = GetGLError(interp);
     return result;
 }
@@ -4303,9 +4512,7 @@ TclGL_glNormal3dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    nx  = 0.0;
-    ny  = 0.0;
-    nz  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glNormal3dCmd", objc, objv);
 
@@ -4319,7 +4526,7 @@ TclGL_glNormal3dCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &nx);
     Tcl_GetDoubleFromObj(interp, objv[2], &ny);
     Tcl_GetDoubleFromObj(interp, objv[3], &nz);
-    glNormal3d((double)nx, (double)ny, (double)nz);
+    glNormal3d((GLdouble )nx, (GLdouble )ny, (GLdouble )nz);
     result = GetGLError(interp);
     return result;
 }
@@ -4354,9 +4561,7 @@ TclGL_glNormal3fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    nx  = 0.0;
-    ny  = 0.0;
-    nz  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glNormal3fCmd", objc, objv);
 
@@ -4370,7 +4575,7 @@ TclGL_glNormal3fCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &nx);
     Tcl_GetDoubleFromObj(interp, objv[2], &ny);
     Tcl_GetDoubleFromObj(interp, objv[3], &nz);
-    glNormal3f((float)nx, (float)ny, (float)nz);
+    glNormal3f((float )nx, (float )ny, (float )nz);
     result = GetGLError(interp);
     return result;
 }
@@ -4405,9 +4610,7 @@ TclGL_glNormal3iCmd(
 
     glResult = 0;
     hPtr = NULL;
-    nx  = 0;
-    ny  = 0;
-    nz  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glNormal3iCmd", objc, objv);
 
@@ -4421,7 +4624,7 @@ TclGL_glNormal3iCmd(
     Tcl_GetIntFromObj(interp, objv[1], &nx);
     Tcl_GetIntFromObj(interp, objv[2], &ny);
     Tcl_GetIntFromObj(interp, objv[3], &nz);
-    glNormal3i((int)nx, (int)ny, (int)nz);
+    glNormal3i((int )nx, (int )ny, (int )nz);
     result = GetGLError(interp);
     return result;
 }
@@ -4456,9 +4659,7 @@ TclGL_glNormal3sCmd(
 
     glResult = 0;
     hPtr = NULL;
-    nx  = 0;
-    ny  = 0;
-    nz  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glNormal3sCmd", objc, objv);
 
@@ -4472,7 +4673,7 @@ TclGL_glNormal3sCmd(
     Tcl_GetIntFromObj(interp, objv[1], &nx);
     Tcl_GetIntFromObj(interp, objv[2], &ny);
     Tcl_GetIntFromObj(interp, objv[3], &nz);
-    glNormal3s((short)nx, (short)ny, (short)nz);
+    glNormal3s((short )nx, (short )ny, (short )nz);
     result = GetGLError(interp);
     return result;
 }
@@ -4501,6 +4702,7 @@ TclGL_glNormal3bvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -4515,8 +4717,9 @@ TclGL_glNormal3bvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glNormal3bv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glNormal3bv((signed char *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -4544,6 +4747,7 @@ TclGL_glNormal3dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -4558,8 +4762,9 @@ TclGL_glNormal3dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glNormal3dv not yet implemented");
-    result = TCL_OK;
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glNormal3dv((GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -4587,6 +4792,7 @@ TclGL_glNormal3fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -4601,8 +4807,9 @@ TclGL_glNormal3fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glNormal3fv not yet implemented");
-    result = TCL_OK;
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glNormal3fv((float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -4630,6 +4837,7 @@ TclGL_glNormal3ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -4644,8 +4852,9 @@ TclGL_glNormal3ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glNormal3iv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glNormal3iv((int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -4673,6 +4882,7 @@ TclGL_glNormal3svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -4687,8 +4897,9 @@ TclGL_glNormal3svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glNormal3sv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glNormal3sv((short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -4720,7 +4931,7 @@ TclGL_glIndexdCmd(
 
     glResult = 0;
     hPtr = NULL;
-    c  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glIndexdCmd", objc, objv);
 
@@ -4732,7 +4943,7 @@ TclGL_glIndexdCmd(
     }
 
     Tcl_GetDoubleFromObj(interp, objv[1], &c);
-    glIndexd((double)c);
+    glIndexd((GLdouble )c);
     result = GetGLError(interp);
     return result;
 }
@@ -4765,7 +4976,7 @@ TclGL_glIndexfCmd(
 
     glResult = 0;
     hPtr = NULL;
-    c  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glIndexfCmd", objc, objv);
 
@@ -4777,7 +4988,7 @@ TclGL_glIndexfCmd(
     }
 
     Tcl_GetDoubleFromObj(interp, objv[1], &c);
-    glIndexf((float)c);
+    glIndexf((float )c);
     result = GetGLError(interp);
     return result;
 }
@@ -4810,7 +5021,7 @@ TclGL_glIndexiCmd(
 
     glResult = 0;
     hPtr = NULL;
-    c  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glIndexiCmd", objc, objv);
 
@@ -4822,7 +5033,7 @@ TclGL_glIndexiCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &c);
-    glIndexi((int)c);
+    glIndexi((int )c);
     result = GetGLError(interp);
     return result;
 }
@@ -4855,7 +5066,7 @@ TclGL_glIndexsCmd(
 
     glResult = 0;
     hPtr = NULL;
-    c  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glIndexsCmd", objc, objv);
 
@@ -4867,7 +5078,7 @@ TclGL_glIndexsCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &c);
-    glIndexs((short)c);
+    glIndexs((short )c);
     result = GetGLError(interp);
     return result;
 }
@@ -4900,7 +5111,7 @@ TclGL_glIndexubCmd(
 
     glResult = 0;
     hPtr = NULL;
-    c  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glIndexubCmd", objc, objv);
 
@@ -4912,7 +5123,7 @@ TclGL_glIndexubCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &c);
-    glIndexub((unsigned char)c);
+    glIndexub((unsigned char )c);
     result = GetGLError(interp);
     return result;
 }
@@ -4941,6 +5152,7 @@ TclGL_glIndexdvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *c;
 
     glResult = 0;
     hPtr = NULL;
@@ -4955,8 +5167,9 @@ TclGL_glIndexdvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glIndexdv not yet implemented");
-    result = TCL_OK;
+    c = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glIndexdv((GLdouble *)c);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -4984,6 +5197,7 @@ TclGL_glIndexfvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *c;
 
     glResult = 0;
     hPtr = NULL;
@@ -4998,8 +5212,9 @@ TclGL_glIndexfvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glIndexfv not yet implemented");
-    result = TCL_OK;
+    c = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glIndexfv((float *)c);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5027,6 +5242,7 @@ TclGL_glIndexivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *c;
 
     glResult = 0;
     hPtr = NULL;
@@ -5041,8 +5257,9 @@ TclGL_glIndexivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glIndexiv not yet implemented");
-    result = TCL_OK;
+    c = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glIndexiv((int *)c);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5070,6 +5287,7 @@ TclGL_glIndexsvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *c;
 
     glResult = 0;
     hPtr = NULL;
@@ -5084,8 +5302,9 @@ TclGL_glIndexsvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glIndexsv not yet implemented");
-    result = TCL_OK;
+    c = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glIndexsv((short *)c);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5113,6 +5332,7 @@ TclGL_glIndexubvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *c;
 
     glResult = 0;
     hPtr = NULL;
@@ -5127,8 +5347,9 @@ TclGL_glIndexubvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glIndexubv not yet implemented");
-    result = TCL_OK;
+    c = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glIndexubv((unsigned char *)c);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5162,9 +5383,7 @@ TclGL_glColor3bCmd(
 
     glResult = 0;
     hPtr = NULL;
-    red  = 0;
-    green  = 0;
-    blue  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glColor3bCmd", objc, objv);
 
@@ -5178,7 +5397,7 @@ TclGL_glColor3bCmd(
     Tcl_GetIntFromObj(interp, objv[1], &red);
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
-    glColor3b((signed char)red, (signed char)green, (signed char)blue);
+    glColor3b((signed char )red, (signed char )green, (signed char )blue);
     result = GetGLError(interp);
     return result;
 }
@@ -5213,9 +5432,7 @@ TclGL_glColor3dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    red  = 0.0;
-    green  = 0.0;
-    blue  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glColor3dCmd", objc, objv);
 
@@ -5229,7 +5446,7 @@ TclGL_glColor3dCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &red);
     Tcl_GetDoubleFromObj(interp, objv[2], &green);
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
-    glColor3d((double)red, (double)green, (double)blue);
+    glColor3d((GLdouble )red, (GLdouble )green, (GLdouble )blue);
     result = GetGLError(interp);
     return result;
 }
@@ -5264,9 +5481,7 @@ TclGL_glColor3fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    red  = 0.0;
-    green  = 0.0;
-    blue  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glColor3fCmd", objc, objv);
 
@@ -5280,7 +5495,7 @@ TclGL_glColor3fCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &red);
     Tcl_GetDoubleFromObj(interp, objv[2], &green);
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
-    glColor3f((float)red, (float)green, (float)blue);
+    glColor3f((float )red, (float )green, (float )blue);
     result = GetGLError(interp);
     return result;
 }
@@ -5315,9 +5530,7 @@ TclGL_glColor3iCmd(
 
     glResult = 0;
     hPtr = NULL;
-    red  = 0;
-    green  = 0;
-    blue  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glColor3iCmd", objc, objv);
 
@@ -5331,7 +5544,7 @@ TclGL_glColor3iCmd(
     Tcl_GetIntFromObj(interp, objv[1], &red);
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
-    glColor3i((int)red, (int)green, (int)blue);
+    glColor3i((int )red, (int )green, (int )blue);
     result = GetGLError(interp);
     return result;
 }
@@ -5366,9 +5579,7 @@ TclGL_glColor3sCmd(
 
     glResult = 0;
     hPtr = NULL;
-    red  = 0;
-    green  = 0;
-    blue  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glColor3sCmd", objc, objv);
 
@@ -5382,7 +5593,7 @@ TclGL_glColor3sCmd(
     Tcl_GetIntFromObj(interp, objv[1], &red);
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
-    glColor3s((short)red, (short)green, (short)blue);
+    glColor3s((short )red, (short )green, (short )blue);
     result = GetGLError(interp);
     return result;
 }
@@ -5417,9 +5628,7 @@ TclGL_glColor3ubCmd(
 
     glResult = 0;
     hPtr = NULL;
-    red  = 0;
-    green  = 0;
-    blue  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glColor3ubCmd", objc, objv);
 
@@ -5433,7 +5642,7 @@ TclGL_glColor3ubCmd(
     Tcl_GetIntFromObj(interp, objv[1], &red);
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
-    glColor3ub((unsigned char)red, (unsigned char)green, (unsigned char)blue);
+    glColor3ub((unsigned char )red, (unsigned char )green, (unsigned char )blue);
     result = GetGLError(interp);
     return result;
 }
@@ -5468,9 +5677,7 @@ TclGL_glColor3uiCmd(
 
     glResult = 0;
     hPtr = NULL;
-    red  = 0;
-    green  = 0;
-    blue  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glColor3uiCmd", objc, objv);
 
@@ -5484,7 +5691,7 @@ TclGL_glColor3uiCmd(
     Tcl_GetIntFromObj(interp, objv[1], &red);
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
-    glColor3ui((unsigned int)red, (unsigned int)green, (unsigned int)blue);
+    glColor3ui((unsigned int )red, (unsigned int )green, (unsigned int )blue);
     result = GetGLError(interp);
     return result;
 }
@@ -5519,9 +5726,7 @@ TclGL_glColor3usCmd(
 
     glResult = 0;
     hPtr = NULL;
-    red  = 0;
-    green  = 0;
-    blue  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glColor3usCmd", objc, objv);
 
@@ -5535,7 +5740,7 @@ TclGL_glColor3usCmd(
     Tcl_GetIntFromObj(interp, objv[1], &red);
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
-    glColor3us((unsigned short)red, (unsigned short)green, (unsigned short)blue);
+    glColor3us((unsigned short )red, (unsigned short )green, (unsigned short )blue);
     result = GetGLError(interp);
     return result;
 }
@@ -5564,6 +5769,7 @@ TclGL_glColor3bvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -5578,8 +5784,9 @@ TclGL_glColor3bvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor3bv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3bv((signed char *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5607,6 +5814,7 @@ TclGL_glColor3dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -5621,8 +5829,9 @@ TclGL_glColor3dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor3dv not yet implemented");
-    result = TCL_OK;
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3dv((GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5650,6 +5859,7 @@ TclGL_glColor3fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -5664,8 +5874,9 @@ TclGL_glColor3fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor3fv not yet implemented");
-    result = TCL_OK;
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3fv((float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5693,6 +5904,7 @@ TclGL_glColor3ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -5707,8 +5919,9 @@ TclGL_glColor3ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor3iv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3iv((int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5736,6 +5949,7 @@ TclGL_glColor3svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -5750,8 +5964,9 @@ TclGL_glColor3svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor3sv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3sv((short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5779,6 +5994,7 @@ TclGL_glColor3ubvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -5793,8 +6009,9 @@ TclGL_glColor3ubvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor3ubv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3ubv((unsigned char *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5822,6 +6039,7 @@ TclGL_glColor3uivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -5836,8 +6054,9 @@ TclGL_glColor3uivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor3uiv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3uiv((unsigned int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5865,6 +6084,7 @@ TclGL_glColor3usvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -5879,8 +6099,9 @@ TclGL_glColor3usvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor3usv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3usv((unsigned short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5908,6 +6129,7 @@ TclGL_glColor4bvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -5922,8 +6144,9 @@ TclGL_glColor4bvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor4bv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4bv((signed char *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5951,6 +6174,7 @@ TclGL_glColor4dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -5965,8 +6189,9 @@ TclGL_glColor4dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor4dv not yet implemented");
-    result = TCL_OK;
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4dv((GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -5994,6 +6219,7 @@ TclGL_glColor4fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -6008,8 +6234,9 @@ TclGL_glColor4fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor4fv not yet implemented");
-    result = TCL_OK;
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4fv((float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -6037,6 +6264,7 @@ TclGL_glColor4ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -6051,8 +6279,9 @@ TclGL_glColor4ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor4iv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4iv((int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -6080,6 +6309,7 @@ TclGL_glColor4svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -6094,8 +6324,9 @@ TclGL_glColor4svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor4sv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4sv((short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -6123,6 +6354,7 @@ TclGL_glColor4ubvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -6137,8 +6369,9 @@ TclGL_glColor4ubvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor4ubv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4ubv((unsigned char *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -6166,6 +6399,7 @@ TclGL_glColor4uivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -6180,8 +6414,9 @@ TclGL_glColor4uivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor4uiv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4uiv((unsigned int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -6209,6 +6444,7 @@ TclGL_glColor4usvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -6223,8 +6459,9 @@ TclGL_glColor4usvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColor4usv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4usv((unsigned short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -6256,7 +6493,7 @@ TclGL_glTexCoord1dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord1dCmd", objc, objv);
 
@@ -6268,7 +6505,7 @@ TclGL_glTexCoord1dCmd(
     }
 
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
-    glTexCoord1d((double)s);
+    glTexCoord1d((GLdouble )s);
     result = GetGLError(interp);
     return result;
 }
@@ -6301,7 +6538,7 @@ TclGL_glTexCoord1fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord1fCmd", objc, objv);
 
@@ -6313,7 +6550,7 @@ TclGL_glTexCoord1fCmd(
     }
 
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
-    glTexCoord1f((float)s);
+    glTexCoord1f((float )s);
     result = GetGLError(interp);
     return result;
 }
@@ -6346,7 +6583,7 @@ TclGL_glTexCoord1iCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord1iCmd", objc, objv);
 
@@ -6358,7 +6595,7 @@ TclGL_glTexCoord1iCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &s);
-    glTexCoord1i((int)s);
+    glTexCoord1i((int )s);
     result = GetGLError(interp);
     return result;
 }
@@ -6391,7 +6628,7 @@ TclGL_glTexCoord1sCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord1sCmd", objc, objv);
 
@@ -6403,7 +6640,7 @@ TclGL_glTexCoord1sCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &s);
-    glTexCoord1s((short)s);
+    glTexCoord1s((short )s);
     result = GetGLError(interp);
     return result;
 }
@@ -6437,8 +6674,7 @@ TclGL_glTexCoord2dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0.0;
-    t  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord2dCmd", objc, objv);
 
@@ -6451,7 +6687,7 @@ TclGL_glTexCoord2dCmd(
 
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
-    glTexCoord2d((double)s, (double)t);
+    glTexCoord2d((GLdouble )s, (GLdouble )t);
     result = GetGLError(interp);
     return result;
 }
@@ -6485,8 +6721,7 @@ TclGL_glTexCoord2fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0.0;
-    t  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord2fCmd", objc, objv);
 
@@ -6499,7 +6734,7 @@ TclGL_glTexCoord2fCmd(
 
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
-    glTexCoord2f((float)s, (float)t);
+    glTexCoord2f((float )s, (float )t);
     result = GetGLError(interp);
     return result;
 }
@@ -6533,8 +6768,7 @@ TclGL_glTexCoord2iCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0;
-    t  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord2iCmd", objc, objv);
 
@@ -6547,7 +6781,7 @@ TclGL_glTexCoord2iCmd(
 
     Tcl_GetIntFromObj(interp, objv[1], &s);
     Tcl_GetIntFromObj(interp, objv[2], &t);
-    glTexCoord2i((int)s, (int)t);
+    glTexCoord2i((int )s, (int )t);
     result = GetGLError(interp);
     return result;
 }
@@ -6581,8 +6815,7 @@ TclGL_glTexCoord2sCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0;
-    t  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord2sCmd", objc, objv);
 
@@ -6595,7 +6828,7 @@ TclGL_glTexCoord2sCmd(
 
     Tcl_GetIntFromObj(interp, objv[1], &s);
     Tcl_GetIntFromObj(interp, objv[2], &t);
-    glTexCoord2s((short)s, (short)t);
+    glTexCoord2s((short )s, (short )t);
     result = GetGLError(interp);
     return result;
 }
@@ -6630,9 +6863,7 @@ TclGL_glTexCoord3dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0.0;
-    t  = 0.0;
-    r  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord3dCmd", objc, objv);
 
@@ -6646,7 +6877,7 @@ TclGL_glTexCoord3dCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
     Tcl_GetDoubleFromObj(interp, objv[3], &r);
-    glTexCoord3d((double)s, (double)t, (double)r);
+    glTexCoord3d((GLdouble )s, (GLdouble )t, (GLdouble )r);
     result = GetGLError(interp);
     return result;
 }
@@ -6681,9 +6912,7 @@ TclGL_glTexCoord3fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0.0;
-    t  = 0.0;
-    r  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord3fCmd", objc, objv);
 
@@ -6697,7 +6926,7 @@ TclGL_glTexCoord3fCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
     Tcl_GetDoubleFromObj(interp, objv[3], &r);
-    glTexCoord3f((float)s, (float)t, (float)r);
+    glTexCoord3f((float )s, (float )t, (float )r);
     result = GetGLError(interp);
     return result;
 }
@@ -6732,9 +6961,7 @@ TclGL_glTexCoord3iCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0;
-    t  = 0;
-    r  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord3iCmd", objc, objv);
 
@@ -6748,7 +6975,7 @@ TclGL_glTexCoord3iCmd(
     Tcl_GetIntFromObj(interp, objv[1], &s);
     Tcl_GetIntFromObj(interp, objv[2], &t);
     Tcl_GetIntFromObj(interp, objv[3], &r);
-    glTexCoord3i((int)s, (int)t, (int)r);
+    glTexCoord3i((int )s, (int )t, (int )r);
     result = GetGLError(interp);
     return result;
 }
@@ -6783,9 +7010,7 @@ TclGL_glTexCoord3sCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0;
-    t  = 0;
-    r  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord3sCmd", objc, objv);
 
@@ -6799,7 +7024,7 @@ TclGL_glTexCoord3sCmd(
     Tcl_GetIntFromObj(interp, objv[1], &s);
     Tcl_GetIntFromObj(interp, objv[2], &t);
     Tcl_GetIntFromObj(interp, objv[3], &r);
-    glTexCoord3s((short)s, (short)t, (short)r);
+    glTexCoord3s((short )s, (short )t, (short )r);
     result = GetGLError(interp);
     return result;
 }
@@ -6835,10 +7060,7 @@ TclGL_glTexCoord4dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0.0;
-    t  = 0.0;
-    r  = 0.0;
-    q  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord4dCmd", objc, objv);
 
@@ -6853,7 +7075,7 @@ TclGL_glTexCoord4dCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
     Tcl_GetDoubleFromObj(interp, objv[3], &r);
     Tcl_GetDoubleFromObj(interp, objv[4], &q);
-    glTexCoord4d((double)s, (double)t, (double)r, (double)q);
+    glTexCoord4d((GLdouble )s, (GLdouble )t, (GLdouble )r, (GLdouble )q);
     result = GetGLError(interp);
     return result;
 }
@@ -6889,10 +7111,7 @@ TclGL_glTexCoord4fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0.0;
-    t  = 0.0;
-    r  = 0.0;
-    q  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord4fCmd", objc, objv);
 
@@ -6907,7 +7126,7 @@ TclGL_glTexCoord4fCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
     Tcl_GetDoubleFromObj(interp, objv[3], &r);
     Tcl_GetDoubleFromObj(interp, objv[4], &q);
-    glTexCoord4f((float)s, (float)t, (float)r, (float)q);
+    glTexCoord4f((float )s, (float )t, (float )r, (float )q);
     result = GetGLError(interp);
     return result;
 }
@@ -6943,10 +7162,7 @@ TclGL_glTexCoord4iCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0;
-    t  = 0;
-    r  = 0;
-    q  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord4iCmd", objc, objv);
 
@@ -6961,7 +7177,7 @@ TclGL_glTexCoord4iCmd(
     Tcl_GetIntFromObj(interp, objv[2], &t);
     Tcl_GetIntFromObj(interp, objv[3], &r);
     Tcl_GetIntFromObj(interp, objv[4], &q);
-    glTexCoord4i((int)s, (int)t, (int)r, (int)q);
+    glTexCoord4i((int )s, (int )t, (int )r, (int )q);
     result = GetGLError(interp);
     return result;
 }
@@ -6997,10 +7213,7 @@ TclGL_glTexCoord4sCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0;
-    t  = 0;
-    r  = 0;
-    q  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glTexCoord4sCmd", objc, objv);
 
@@ -7015,7 +7228,7 @@ TclGL_glTexCoord4sCmd(
     Tcl_GetIntFromObj(interp, objv[2], &t);
     Tcl_GetIntFromObj(interp, objv[3], &r);
     Tcl_GetIntFromObj(interp, objv[4], &q);
-    glTexCoord4s((short)s, (short)t, (short)r, (short)q);
+    glTexCoord4s((short )s, (short )t, (short )r, (short )q);
     result = GetGLError(interp);
     return result;
 }
@@ -7044,6 +7257,7 @@ TclGL_glTexCoord1dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7058,8 +7272,9 @@ TclGL_glTexCoord1dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord1dv not yet implemented");
-    result = TCL_OK;
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord1dv((GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7087,6 +7302,7 @@ TclGL_glTexCoord1fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7101,8 +7317,9 @@ TclGL_glTexCoord1fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord1fv not yet implemented");
-    result = TCL_OK;
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord1fv((float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7130,6 +7347,7 @@ TclGL_glTexCoord1ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7144,8 +7362,9 @@ TclGL_glTexCoord1ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord1iv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord1iv((int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7173,6 +7392,7 @@ TclGL_glTexCoord1svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7187,8 +7407,9 @@ TclGL_glTexCoord1svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord1sv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord1sv((short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7216,6 +7437,7 @@ TclGL_glTexCoord2dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7230,8 +7452,9 @@ TclGL_glTexCoord2dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord2dv not yet implemented");
-    result = TCL_OK;
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord2dv((GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7259,6 +7482,7 @@ TclGL_glTexCoord2fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7273,8 +7497,9 @@ TclGL_glTexCoord2fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord2fv not yet implemented");
-    result = TCL_OK;
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord2fv((float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7302,6 +7527,7 @@ TclGL_glTexCoord2ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7316,8 +7542,9 @@ TclGL_glTexCoord2ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord2iv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord2iv((int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7345,6 +7572,7 @@ TclGL_glTexCoord2svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7359,8 +7587,9 @@ TclGL_glTexCoord2svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord2sv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord2sv((short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7388,6 +7617,7 @@ TclGL_glTexCoord3dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7402,8 +7632,9 @@ TclGL_glTexCoord3dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord3dv not yet implemented");
-    result = TCL_OK;
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord3dv((GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7431,6 +7662,7 @@ TclGL_glTexCoord3fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7445,8 +7677,9 @@ TclGL_glTexCoord3fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord3fv not yet implemented");
-    result = TCL_OK;
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord3fv((float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7474,6 +7707,7 @@ TclGL_glTexCoord3ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7488,8 +7722,9 @@ TclGL_glTexCoord3ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord3iv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord3iv((int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7517,6 +7752,7 @@ TclGL_glTexCoord3svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7531,8 +7767,9 @@ TclGL_glTexCoord3svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord3sv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord3sv((short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7560,6 +7797,7 @@ TclGL_glTexCoord4dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7574,8 +7812,9 @@ TclGL_glTexCoord4dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord4dv not yet implemented");
-    result = TCL_OK;
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord4dv((GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7603,6 +7842,7 @@ TclGL_glTexCoord4fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7617,8 +7857,9 @@ TclGL_glTexCoord4fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord4fv not yet implemented");
-    result = TCL_OK;
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord4fv((float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7646,6 +7887,7 @@ TclGL_glTexCoord4ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7660,8 +7902,9 @@ TclGL_glTexCoord4ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord4iv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord4iv((int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7689,6 +7932,7 @@ TclGL_glTexCoord4svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -7703,8 +7947,9 @@ TclGL_glTexCoord4svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexCoord4sv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord4sv((short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -7737,8 +7982,7 @@ TclGL_glRasterPos2dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRasterPos2dCmd", objc, objv);
 
@@ -7751,7 +7995,7 @@ TclGL_glRasterPos2dCmd(
 
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
-    glRasterPos2d((double)x, (double)y);
+    glRasterPos2d((GLdouble )x, (GLdouble )y);
     result = GetGLError(interp);
     return result;
 }
@@ -7785,8 +8029,7 @@ TclGL_glRasterPos2fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRasterPos2fCmd", objc, objv);
 
@@ -7799,7 +8042,7 @@ TclGL_glRasterPos2fCmd(
 
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
-    glRasterPos2f((float)x, (float)y);
+    glRasterPos2f((float )x, (float )y);
     result = GetGLError(interp);
     return result;
 }
@@ -7833,8 +8076,7 @@ TclGL_glRasterPos2iCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0;
-    y  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRasterPos2iCmd", objc, objv);
 
@@ -7847,7 +8089,7 @@ TclGL_glRasterPos2iCmd(
 
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
-    glRasterPos2i((int)x, (int)y);
+    glRasterPos2i((int )x, (int )y);
     result = GetGLError(interp);
     return result;
 }
@@ -7881,8 +8123,7 @@ TclGL_glRasterPos2sCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0;
-    y  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRasterPos2sCmd", objc, objv);
 
@@ -7895,7 +8136,7 @@ TclGL_glRasterPos2sCmd(
 
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
-    glRasterPos2s((short)x, (short)y);
+    glRasterPos2s((short )x, (short )y);
     result = GetGLError(interp);
     return result;
 }
@@ -7930,9 +8171,7 @@ TclGL_glRasterPos3dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
-    z  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRasterPos3dCmd", objc, objv);
 
@@ -7946,7 +8185,7 @@ TclGL_glRasterPos3dCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
-    glRasterPos3d((double)x, (double)y, (double)z);
+    glRasterPos3d((GLdouble )x, (GLdouble )y, (GLdouble )z);
     result = GetGLError(interp);
     return result;
 }
@@ -7981,9 +8220,7 @@ TclGL_glRasterPos3fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
-    z  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRasterPos3fCmd", objc, objv);
 
@@ -7997,7 +8234,7 @@ TclGL_glRasterPos3fCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
-    glRasterPos3f((float)x, (float)y, (float)z);
+    glRasterPos3f((float )x, (float )y, (float )z);
     result = GetGLError(interp);
     return result;
 }
@@ -8032,9 +8269,7 @@ TclGL_glRasterPos3iCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0;
-    y  = 0;
-    z  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRasterPos3iCmd", objc, objv);
 
@@ -8048,7 +8283,7 @@ TclGL_glRasterPos3iCmd(
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
-    glRasterPos3i((int)x, (int)y, (int)z);
+    glRasterPos3i((int )x, (int )y, (int )z);
     result = GetGLError(interp);
     return result;
 }
@@ -8083,9 +8318,7 @@ TclGL_glRasterPos3sCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0;
-    y  = 0;
-    z  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRasterPos3sCmd", objc, objv);
 
@@ -8099,7 +8332,7 @@ TclGL_glRasterPos3sCmd(
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
-    glRasterPos3s((short)x, (short)y, (short)z);
+    glRasterPos3s((short )x, (short )y, (short )z);
     result = GetGLError(interp);
     return result;
 }
@@ -8135,10 +8368,7 @@ TclGL_glRasterPos4dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
-    z  = 0.0;
-    w  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRasterPos4dCmd", objc, objv);
 
@@ -8153,7 +8383,7 @@ TclGL_glRasterPos4dCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     Tcl_GetDoubleFromObj(interp, objv[4], &w);
-    glRasterPos4d((double)x, (double)y, (double)z, (double)w);
+    glRasterPos4d((GLdouble )x, (GLdouble )y, (GLdouble )z, (GLdouble )w);
     result = GetGLError(interp);
     return result;
 }
@@ -8189,10 +8419,7 @@ TclGL_glRasterPos4fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0.0;
-    y  = 0.0;
-    z  = 0.0;
-    w  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRasterPos4fCmd", objc, objv);
 
@@ -8207,7 +8434,7 @@ TclGL_glRasterPos4fCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     Tcl_GetDoubleFromObj(interp, objv[4], &w);
-    glRasterPos4f((float)x, (float)y, (float)z, (float)w);
+    glRasterPos4f((float )x, (float )y, (float )z, (float )w);
     result = GetGLError(interp);
     return result;
 }
@@ -8243,10 +8470,7 @@ TclGL_glRasterPos4iCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0;
-    y  = 0;
-    z  = 0;
-    w  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRasterPos4iCmd", objc, objv);
 
@@ -8261,7 +8485,7 @@ TclGL_glRasterPos4iCmd(
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
     Tcl_GetIntFromObj(interp, objv[4], &w);
-    glRasterPos4i((int)x, (int)y, (int)z, (int)w);
+    glRasterPos4i((int )x, (int )y, (int )z, (int )w);
     result = GetGLError(interp);
     return result;
 }
@@ -8297,10 +8521,7 @@ TclGL_glRasterPos4sCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x  = 0;
-    y  = 0;
-    z  = 0;
-    w  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRasterPos4sCmd", objc, objv);
 
@@ -8315,7 +8536,7 @@ TclGL_glRasterPos4sCmd(
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
     Tcl_GetIntFromObj(interp, objv[4], &w);
-    glRasterPos4s((short)x, (short)y, (short)z, (short)w);
+    glRasterPos4s((short )x, (short )y, (short )z, (short )w);
     result = GetGLError(interp);
     return result;
 }
@@ -8344,6 +8565,7 @@ TclGL_glRasterPos2dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -8358,8 +8580,9 @@ TclGL_glRasterPos2dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRasterPos2dv not yet implemented");
-    result = TCL_OK;
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos2dv((GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -8387,6 +8610,7 @@ TclGL_glRasterPos2fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -8401,8 +8625,9 @@ TclGL_glRasterPos2fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRasterPos2fv not yet implemented");
-    result = TCL_OK;
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos2fv((float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -8430,6 +8655,7 @@ TclGL_glRasterPos2ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -8444,8 +8670,9 @@ TclGL_glRasterPos2ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRasterPos2iv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos2iv((int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -8473,6 +8700,7 @@ TclGL_glRasterPos2svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -8487,8 +8715,9 @@ TclGL_glRasterPos2svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRasterPos2sv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos2sv((short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -8516,6 +8745,7 @@ TclGL_glRasterPos3dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -8530,8 +8760,9 @@ TclGL_glRasterPos3dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRasterPos3dv not yet implemented");
-    result = TCL_OK;
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos3dv((GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -8559,6 +8790,7 @@ TclGL_glRasterPos3fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -8573,8 +8805,9 @@ TclGL_glRasterPos3fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRasterPos3fv not yet implemented");
-    result = TCL_OK;
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos3fv((float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -8602,6 +8835,7 @@ TclGL_glRasterPos3ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -8616,8 +8850,9 @@ TclGL_glRasterPos3ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRasterPos3iv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos3iv((int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -8645,6 +8880,7 @@ TclGL_glRasterPos3svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -8659,8 +8895,9 @@ TclGL_glRasterPos3svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRasterPos3sv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos3sv((short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -8688,6 +8925,7 @@ TclGL_glRasterPos4dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -8702,8 +8940,9 @@ TclGL_glRasterPos4dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRasterPos4dv not yet implemented");
-    result = TCL_OK;
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos4dv((GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -8731,6 +8970,7 @@ TclGL_glRasterPos4fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -8745,8 +8985,9 @@ TclGL_glRasterPos4fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRasterPos4fv not yet implemented");
-    result = TCL_OK;
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos4fv((float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -8774,6 +9015,7 @@ TclGL_glRasterPos4ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -8788,8 +9030,9 @@ TclGL_glRasterPos4ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRasterPos4iv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos4iv((int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -8817,6 +9060,7 @@ TclGL_glRasterPos4svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -8831,8 +9075,9 @@ TclGL_glRasterPos4svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRasterPos4sv not yet implemented");
-    result = TCL_OK;
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos4sv((short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -8867,10 +9112,7 @@ TclGL_glRectdCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x1  = 0.0;
-    y1  = 0.0;
-    x2  = 0.0;
-    y2  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRectdCmd", objc, objv);
 
@@ -8885,7 +9127,7 @@ TclGL_glRectdCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y1);
     Tcl_GetDoubleFromObj(interp, objv[3], &x2);
     Tcl_GetDoubleFromObj(interp, objv[4], &y2);
-    glRectd((double)x1, (double)y1, (double)x2, (double)y2);
+    glRectd((GLdouble )x1, (GLdouble )y1, (GLdouble )x2, (GLdouble )y2);
     result = GetGLError(interp);
     return result;
 }
@@ -8921,10 +9163,7 @@ TclGL_glRectfCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x1  = 0.0;
-    y1  = 0.0;
-    x2  = 0.0;
-    y2  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRectfCmd", objc, objv);
 
@@ -8939,7 +9178,7 @@ TclGL_glRectfCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y1);
     Tcl_GetDoubleFromObj(interp, objv[3], &x2);
     Tcl_GetDoubleFromObj(interp, objv[4], &y2);
-    glRectf((float)x1, (float)y1, (float)x2, (float)y2);
+    glRectf((float )x1, (float )y1, (float )x2, (float )y2);
     result = GetGLError(interp);
     return result;
 }
@@ -8975,10 +9214,7 @@ TclGL_glRectiCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x1  = 0;
-    y1  = 0;
-    x2  = 0;
-    y2  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRectiCmd", objc, objv);
 
@@ -8993,7 +9229,7 @@ TclGL_glRectiCmd(
     Tcl_GetIntFromObj(interp, objv[2], &y1);
     Tcl_GetIntFromObj(interp, objv[3], &x2);
     Tcl_GetIntFromObj(interp, objv[4], &y2);
-    glRecti((int)x1, (int)y1, (int)x2, (int)y2);
+    glRecti((int )x1, (int )y1, (int )x2, (int )y2);
     result = GetGLError(interp);
     return result;
 }
@@ -9029,10 +9265,7 @@ TclGL_glRectsCmd(
 
     glResult = 0;
     hPtr = NULL;
-    x1  = 0;
-    y1  = 0;
-    x2  = 0;
-    y2  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glRectsCmd", objc, objv);
 
@@ -9047,7 +9280,7 @@ TclGL_glRectsCmd(
     Tcl_GetIntFromObj(interp, objv[2], &y1);
     Tcl_GetIntFromObj(interp, objv[3], &x2);
     Tcl_GetIntFromObj(interp, objv[4], &y2);
-    glRects((short)x1, (short)y1, (short)x2, (short)y2);
+    glRects((short )x1, (short )y1, (short )x2, (short )y2);
     result = GetGLError(interp);
     return result;
 }
@@ -9076,6 +9309,8 @@ TclGL_glRectdvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v1;
+    const void *v2;
 
     glResult = 0;
     hPtr = NULL;
@@ -9090,8 +9325,10 @@ TclGL_glRectdvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRectdv not yet implemented");
-    result = TCL_OK;
+    v1 = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v2 = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glRectdv((GLdouble *)v1, (GLdouble *)v2);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9119,6 +9356,8 @@ TclGL_glRectfvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *v1;
+    const void *v2;
 
     glResult = 0;
     hPtr = NULL;
@@ -9133,8 +9372,10 @@ TclGL_glRectfvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRectfv not yet implemented");
-    result = TCL_OK;
+    v1 = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v2 = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glRectfv((float *)v1, (float *)v2);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9162,6 +9403,8 @@ TclGL_glRectivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v1;
+    const int *v2;
 
     glResult = 0;
     hPtr = NULL;
@@ -9176,8 +9419,10 @@ TclGL_glRectivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRectiv not yet implemented");
-    result = TCL_OK;
+    v1 = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v2 = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glRectiv((int *)v1, (int *)v2);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9205,6 +9450,8 @@ TclGL_glRectsvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const int *v1;
+    const int *v2;
 
     glResult = 0;
     hPtr = NULL;
@@ -9219,8 +9466,10 @@ TclGL_glRectsvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glRectsv not yet implemented");
-    result = TCL_OK;
+    v1 = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v2 = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glRectsv((short *)v1, (short *)v2);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9248,6 +9497,8 @@ TclGL_glEdgeFlagPointerCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int stride;
+    const void *ptr;
 
     glResult = 0;
     hPtr = NULL;
@@ -9262,8 +9513,10 @@ TclGL_glEdgeFlagPointerCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glEdgeFlagPointer not yet implemented");
-    result = TCL_OK;
+    Tcl_GetIntFromObj(interp, objv[1], &stride);
+    ptr = (const void*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glEdgeFlagPointer((int )stride, (void *)ptr);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9291,6 +9544,8 @@ TclGL_glGetPointervCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    void **params;
 
     glResult = 0;
     hPtr = NULL;
@@ -9300,13 +9555,20 @@ TclGL_glGetPointervCmd(
 
     if (objc != 3) {
         Tcl_AppendResult(interp,
-                "wrong # args: should be \"ntk glGetPointerv <(GLenum) pname> <(GLvoid) *params>\"",
+                "wrong # args: should be \"ntk glGetPointerv <(GLenum) pname> <(GLvoid) params>\"",
                 NULL);
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetPointerv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (void**)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetPointerv((GLenum)pname, (void **)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9338,7 +9600,7 @@ TclGL_glArrayElementCmd(
 
     glResult = 0;
     hPtr = NULL;
-    i  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glArrayElementCmd", objc, objv);
 
@@ -9350,7 +9612,7 @@ TclGL_glArrayElementCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &i);
-    glArrayElement((int)i);
+    glArrayElement((int )i);
     result = GetGLError(interp);
     return result;
 }
@@ -9379,6 +9641,9 @@ TclGL_glDrawArraysCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int mode;
+    int first;
+    int count;
 
     glResult = 0;
     hPtr = NULL;
@@ -9393,8 +9658,16 @@ TclGL_glDrawArraysCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glDrawArrays not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &first);
+    Tcl_GetIntFromObj(interp, objv[3], &count);
+    glDrawArrays((GLenum)mode, (int )first, (int )count);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9422,6 +9695,7 @@ TclGL_glShadeModelCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int mode;
 
     glResult = 0;
     hPtr = NULL;
@@ -9436,8 +9710,14 @@ TclGL_glShadeModelCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glShadeModel not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    glShadeModel((GLenum)mode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9465,6 +9745,9 @@ TclGL_glLightfCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int light;
+    int pname;
+    double param;
 
     glResult = 0;
     hPtr = NULL;
@@ -9479,8 +9762,21 @@ TclGL_glLightfCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glLightf not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    light = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[3], &param);
+    glLightf((GLenum)light, (GLenum)pname, (float )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9508,6 +9804,9 @@ TclGL_glLightiCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int light;
+    int pname;
+    int param;
 
     glResult = 0;
     hPtr = NULL;
@@ -9522,8 +9821,21 @@ TclGL_glLightiCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glLighti not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    light = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[3], &param);
+    glLighti((GLenum)light, (GLenum)pname, (int )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9551,6 +9863,8 @@ TclGL_glLightModelfCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    double param;
 
     glResult = 0;
     hPtr = NULL;
@@ -9565,8 +9879,15 @@ TclGL_glLightModelfCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glLightModelf not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &param);
+    glLightModelf((GLenum)pname, (float )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9594,6 +9915,8 @@ TclGL_glLightModeliCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    int param;
 
     glResult = 0;
     hPtr = NULL;
@@ -9608,8 +9931,15 @@ TclGL_glLightModeliCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glLightModeli not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &param);
+    glLightModeli((GLenum)pname, (int )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9637,6 +9967,8 @@ TclGL_glLightModelfvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    const void *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -9651,8 +9983,15 @@ TclGL_glLightModelfvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glLightModelfv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glLightModelfv((GLenum)pname, (float *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9680,6 +10019,8 @@ TclGL_glLightModelivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    const int *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -9694,8 +10035,15 @@ TclGL_glLightModelivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glLightModeliv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glLightModeliv((GLenum)pname, (int *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9723,6 +10071,9 @@ TclGL_glMaterialfCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int face;
+    int pname;
+    double param;
 
     glResult = 0;
     hPtr = NULL;
@@ -9737,8 +10088,21 @@ TclGL_glMaterialfCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMaterialf not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    face = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[3], &param);
+    glMaterialf((GLenum)face, (GLenum)pname, (float )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9766,6 +10130,9 @@ TclGL_glMaterialiCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int face;
+    int pname;
+    int param;
 
     glResult = 0;
     hPtr = NULL;
@@ -9780,8 +10147,21 @@ TclGL_glMaterialiCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMateriali not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    face = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[3], &param);
+    glMateriali((GLenum)face, (GLenum)pname, (int )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9809,6 +10189,9 @@ TclGL_glMaterialfvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int face;
+    int pname;
+    const void *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -9823,8 +10206,21 @@ TclGL_glMaterialfvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMaterialfv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    face = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (const float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glMaterialfv((GLenum)face, (GLenum)pname, (float *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9852,6 +10248,9 @@ TclGL_glMaterialivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int face;
+    int pname;
+    const int *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -9866,8 +10265,21 @@ TclGL_glMaterialivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMaterialiv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    face = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (const int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glMaterialiv((GLenum)face, (GLenum)pname, (int *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9895,6 +10307,9 @@ TclGL_glGetMaterialfvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int face;
+    int pname;
+    void *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -9909,8 +10324,21 @@ TclGL_glGetMaterialfvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetMaterialfv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    face = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetMaterialfv((GLenum)face, (GLenum)pname, (float *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9938,6 +10366,9 @@ TclGL_glGetMaterialivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int face;
+    int pname;
+    int *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -9952,8 +10383,21 @@ TclGL_glGetMaterialivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetMaterialiv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    face = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetMaterialiv((GLenum)face, (GLenum)pname, (int *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -9981,6 +10425,8 @@ TclGL_glColorMaterialCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int face;
+    int mode;
 
     glResult = 0;
     hPtr = NULL;
@@ -9995,8 +10441,20 @@ TclGL_glColorMaterialCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glColorMaterial not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    face = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    glColorMaterial((GLenum)face, (GLenum)mode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10029,8 +10487,7 @@ TclGL_glPixelZoomCmd(
 
     glResult = 0;
     hPtr = NULL;
-    xfactor  = 0.0;
-    yfactor  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glPixelZoomCmd", objc, objv);
 
@@ -10043,7 +10500,7 @@ TclGL_glPixelZoomCmd(
 
     Tcl_GetDoubleFromObj(interp, objv[1], &xfactor);
     Tcl_GetDoubleFromObj(interp, objv[2], &yfactor);
-    glPixelZoom((float)xfactor, (float)yfactor);
+    glPixelZoom((float )xfactor, (float )yfactor);
     result = GetGLError(interp);
     return result;
 }
@@ -10072,6 +10529,8 @@ TclGL_glPixelStorefCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    double param;
 
     glResult = 0;
     hPtr = NULL;
@@ -10086,8 +10545,15 @@ TclGL_glPixelStorefCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glPixelStoref not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &param);
+    glPixelStoref((GLenum)pname, (float )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10115,6 +10581,8 @@ TclGL_glPixelStoreiCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    int param;
 
     glResult = 0;
     hPtr = NULL;
@@ -10129,8 +10597,15 @@ TclGL_glPixelStoreiCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glPixelStorei not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &param);
+    glPixelStorei((GLenum)pname, (int )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10158,6 +10633,8 @@ TclGL_glPixelTransferfCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    double param;
 
     glResult = 0;
     hPtr = NULL;
@@ -10172,8 +10649,15 @@ TclGL_glPixelTransferfCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glPixelTransferf not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &param);
+    glPixelTransferf((GLenum)pname, (float )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10201,6 +10685,8 @@ TclGL_glPixelTransferiCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    int param;
 
     glResult = 0;
     hPtr = NULL;
@@ -10215,8 +10701,15 @@ TclGL_glPixelTransferiCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glPixelTransferi not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &param);
+    glPixelTransferi((GLenum)pname, (int )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10244,6 +10737,8 @@ TclGL_glGetPixelMapfvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int map;
+    void *values;
 
     glResult = 0;
     hPtr = NULL;
@@ -10258,8 +10753,15 @@ TclGL_glGetPixelMapfvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetPixelMapfv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    map = (int)Tcl_GetHashValue(hPtr); 
+    values = (float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetPixelMapfv((GLenum)map, (float *)values);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10287,6 +10789,8 @@ TclGL_glGetPixelMapuivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int map;
+    int *values;
 
     glResult = 0;
     hPtr = NULL;
@@ -10301,8 +10805,15 @@ TclGL_glGetPixelMapuivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetPixelMapuiv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    map = (int)Tcl_GetHashValue(hPtr); 
+    values = (int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetPixelMapuiv((GLenum)map, (unsigned int *)values);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10330,6 +10841,8 @@ TclGL_glGetPixelMapusvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int map;
+    int *values;
 
     glResult = 0;
     hPtr = NULL;
@@ -10344,8 +10857,15 @@ TclGL_glGetPixelMapusvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetPixelMapusv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    map = (int)Tcl_GetHashValue(hPtr); 
+    values = (int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetPixelMapusv((GLenum)map, (unsigned short *)values);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10373,6 +10893,9 @@ TclGL_glStencilFuncCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int func;
+    int ref;
+    int mask;
 
     glResult = 0;
     hPtr = NULL;
@@ -10387,8 +10910,16 @@ TclGL_glStencilFuncCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glStencilFunc not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    func = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &ref);
+    Tcl_GetIntFromObj(interp, objv[3], &mask);
+    glStencilFunc((GLenum)func, (int )ref, (unsigned int )mask);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10420,7 +10951,7 @@ TclGL_glStencilMaskCmd(
 
     glResult = 0;
     hPtr = NULL;
-    mask  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glStencilMaskCmd", objc, objv);
 
@@ -10432,7 +10963,7 @@ TclGL_glStencilMaskCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &mask);
-    glStencilMask((unsigned int)mask);
+    glStencilMask((unsigned int )mask);
     result = GetGLError(interp);
     return result;
 }
@@ -10461,6 +10992,9 @@ TclGL_glStencilOpCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int fail;
+    int zfail;
+    int zpass;
 
     glResult = 0;
     hPtr = NULL;
@@ -10475,8 +11009,26 @@ TclGL_glStencilOpCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glStencilOp not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    fail = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    zfail = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[3]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[3]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    zpass = (int)Tcl_GetHashValue(hPtr); 
+    glStencilOp((GLenum)fail, (GLenum)zfail, (GLenum)zpass);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10508,7 +11060,7 @@ TclGL_glClearStencilCmd(
 
     glResult = 0;
     hPtr = NULL;
-    s  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glClearStencilCmd", objc, objv);
 
@@ -10520,7 +11072,7 @@ TclGL_glClearStencilCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &s);
-    glClearStencil((int)s);
+    glClearStencil((int )s);
     result = GetGLError(interp);
     return result;
 }
@@ -10549,6 +11101,9 @@ TclGL_glTexGendCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int coord;
+    int pname;
+    double param;
 
     glResult = 0;
     hPtr = NULL;
@@ -10563,8 +11118,21 @@ TclGL_glTexGendCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexGend not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    coord = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[3], &param);
+    glTexGend((GLenum)coord, (GLenum)pname, (GLdouble )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10592,6 +11160,9 @@ TclGL_glTexGenfCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int coord;
+    int pname;
+    double param;
 
     glResult = 0;
     hPtr = NULL;
@@ -10606,8 +11177,21 @@ TclGL_glTexGenfCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexGenf not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    coord = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[3], &param);
+    glTexGenf((GLenum)coord, (GLenum)pname, (float )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10635,6 +11219,9 @@ TclGL_glTexGeniCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int coord;
+    int pname;
+    int param;
 
     glResult = 0;
     hPtr = NULL;
@@ -10649,8 +11236,21 @@ TclGL_glTexGeniCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexGeni not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    coord = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[3], &param);
+    glTexGeni((GLenum)coord, (GLenum)pname, (int )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10678,6 +11278,9 @@ TclGL_glTexGendvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int coord;
+    int pname;
+    const void *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -10692,8 +11295,21 @@ TclGL_glTexGendvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexGendv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    coord = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (const double*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glTexGendv((GLenum)coord, (GLenum)pname, (GLdouble *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10721,6 +11337,9 @@ TclGL_glTexGenfvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int coord;
+    int pname;
+    const void *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -10735,8 +11354,21 @@ TclGL_glTexGenfvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexGenfv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    coord = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (const float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glTexGenfv((GLenum)coord, (GLenum)pname, (float *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10764,6 +11396,9 @@ TclGL_glTexGenivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int coord;
+    int pname;
+    const int *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -10778,8 +11413,21 @@ TclGL_glTexGenivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexGeniv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    coord = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (const int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glTexGeniv((GLenum)coord, (GLenum)pname, (int *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10807,6 +11455,9 @@ TclGL_glGetTexGendvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int coord;
+    int pname;
+    void *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -10821,8 +11472,21 @@ TclGL_glGetTexGendvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetTexGendv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    coord = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (double*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetTexGendv((GLenum)coord, (GLenum)pname, (GLdouble *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10850,6 +11514,9 @@ TclGL_glGetTexGenfvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int coord;
+    int pname;
+    void *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -10864,8 +11531,21 @@ TclGL_glGetTexGenfvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetTexGenfv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    coord = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetTexGenfv((GLenum)coord, (GLenum)pname, (float *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10893,6 +11573,9 @@ TclGL_glGetTexGenivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int coord;
+    int pname;
+    int *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -10907,8 +11590,21 @@ TclGL_glGetTexGenivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetTexGeniv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    coord = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetTexGeniv((GLenum)coord, (GLenum)pname, (int *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10936,6 +11632,9 @@ TclGL_glTexEnvfCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int pname;
+    double param;
 
     glResult = 0;
     hPtr = NULL;
@@ -10950,8 +11649,21 @@ TclGL_glTexEnvfCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexEnvf not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[3], &param);
+    glTexEnvf((GLenum)target, (GLenum)pname, (float )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -10979,6 +11691,9 @@ TclGL_glTexEnviCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int pname;
+    int param;
 
     glResult = 0;
     hPtr = NULL;
@@ -10993,8 +11708,21 @@ TclGL_glTexEnviCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexEnvi not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[3], &param);
+    glTexEnvi((GLenum)target, (GLenum)pname, (int )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11022,6 +11750,9 @@ TclGL_glTexEnvfvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int pname;
+    const void *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -11036,8 +11767,21 @@ TclGL_glTexEnvfvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexEnvfv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (const float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glTexEnvfv((GLenum)target, (GLenum)pname, (float *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11065,6 +11809,9 @@ TclGL_glTexEnvivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int pname;
+    const int *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -11079,8 +11826,21 @@ TclGL_glTexEnvivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexEnviv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (const int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glTexEnviv((GLenum)target, (GLenum)pname, (int *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11108,6 +11868,9 @@ TclGL_glGetTexEnvfvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int pname;
+    void *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -11122,8 +11885,21 @@ TclGL_glGetTexEnvfvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetTexEnvfv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetTexEnvfv((GLenum)target, (GLenum)pname, (float *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11151,6 +11927,9 @@ TclGL_glGetTexEnvivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int pname;
+    int *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -11165,8 +11944,21 @@ TclGL_glGetTexEnvivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetTexEnviv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetTexEnviv((GLenum)target, (GLenum)pname, (int *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11194,6 +11986,9 @@ TclGL_glTexParameterfCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int pname;
+    double param;
 
     glResult = 0;
     hPtr = NULL;
@@ -11208,8 +12003,21 @@ TclGL_glTexParameterfCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexParameterf not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[3], &param);
+    glTexParameterf((GLenum)target, (GLenum)pname, (float )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11237,6 +12045,9 @@ TclGL_glTexParameteriCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int pname;
+    int param;
 
     glResult = 0;
     hPtr = NULL;
@@ -11251,8 +12062,21 @@ TclGL_glTexParameteriCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glTexParameteri not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[3], &param);
+    glTexParameteri((GLenum)target, (GLenum)pname, (int )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11280,6 +12104,8 @@ TclGL_glGenTexturesCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int n;
+    int *textures;
 
     glResult = 0;
     hPtr = NULL;
@@ -11294,8 +12120,10 @@ TclGL_glGenTexturesCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGenTextures not yet implemented");
-    result = TCL_OK;
+    Tcl_GetIntFromObj(interp, objv[1], &n);
+    textures = (int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGenTextures((int )n, (unsigned int *)textures);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11323,6 +12151,8 @@ TclGL_glDeleteTexturesCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int n;
+    const int *textures;
 
     glResult = 0;
     hPtr = NULL;
@@ -11337,8 +12167,10 @@ TclGL_glDeleteTexturesCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glDeleteTextures not yet implemented");
-    result = TCL_OK;
+    Tcl_GetIntFromObj(interp, objv[1], &n);
+    textures = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glDeleteTextures((int )n, (unsigned int *)textures);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11366,6 +12198,8 @@ TclGL_glBindTextureCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int texture;
 
     glResult = 0;
     hPtr = NULL;
@@ -11380,8 +12214,15 @@ TclGL_glBindTextureCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glBindTexture not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &texture);
+    glBindTexture((GLenum)target, (unsigned int )texture);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11413,7 +12254,7 @@ TclGL_glIsTextureCmd(
 
     glResult = 0;
     hPtr = NULL;
-    texture  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glIsTextureCmd", objc, objv);
 
@@ -11425,7 +12266,7 @@ TclGL_glIsTextureCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &texture);
-    glIsTexture((unsigned int)texture);
+    glIsTexture((unsigned int )texture);
     result = GetGLError(interp);
     return result;
 }
@@ -11454,6 +12295,9 @@ TclGL_glGetMapdvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int query;
+    void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -11468,8 +12312,21 @@ TclGL_glGetMapdvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetMapdv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    query = (int)Tcl_GetHashValue(hPtr); 
+    v = (double*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetMapdv((GLenum)target, (GLenum)query, (GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11497,6 +12354,9 @@ TclGL_glGetMapfvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int query;
+    void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -11511,8 +12371,21 @@ TclGL_glGetMapfvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetMapfv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    query = (int)Tcl_GetHashValue(hPtr); 
+    v = (float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetMapfv((GLenum)target, (GLenum)query, (float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11540,6 +12413,9 @@ TclGL_glGetMapivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int query;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -11554,8 +12430,21 @@ TclGL_glGetMapivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetMapiv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    query = (int)Tcl_GetHashValue(hPtr); 
+    v = (int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetMapiv((GLenum)target, (GLenum)query, (int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11587,7 +12476,7 @@ TclGL_glEvalCoord1dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    u  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glEvalCoord1dCmd", objc, objv);
 
@@ -11599,7 +12488,7 @@ TclGL_glEvalCoord1dCmd(
     }
 
     Tcl_GetDoubleFromObj(interp, objv[1], &u);
-    glEvalCoord1d((double)u);
+    glEvalCoord1d((GLdouble )u);
     result = GetGLError(interp);
     return result;
 }
@@ -11632,7 +12521,7 @@ TclGL_glEvalCoord1fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    u  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glEvalCoord1fCmd", objc, objv);
 
@@ -11644,7 +12533,7 @@ TclGL_glEvalCoord1fCmd(
     }
 
     Tcl_GetDoubleFromObj(interp, objv[1], &u);
-    glEvalCoord1f((float)u);
+    glEvalCoord1f((float )u);
     result = GetGLError(interp);
     return result;
 }
@@ -11673,6 +12562,7 @@ TclGL_glEvalCoord1dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *u;
 
     glResult = 0;
     hPtr = NULL;
@@ -11687,8 +12577,9 @@ TclGL_glEvalCoord1dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glEvalCoord1dv not yet implemented");
-    result = TCL_OK;
+    u = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glEvalCoord1dv((GLdouble *)u);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11716,6 +12607,7 @@ TclGL_glEvalCoord1fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *u;
 
     glResult = 0;
     hPtr = NULL;
@@ -11730,8 +12622,9 @@ TclGL_glEvalCoord1fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glEvalCoord1fv not yet implemented");
-    result = TCL_OK;
+    u = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glEvalCoord1fv((float *)u);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11764,8 +12657,7 @@ TclGL_glEvalCoord2dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    u  = 0.0;
-    v  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glEvalCoord2dCmd", objc, objv);
 
@@ -11778,7 +12670,7 @@ TclGL_glEvalCoord2dCmd(
 
     Tcl_GetDoubleFromObj(interp, objv[1], &u);
     Tcl_GetDoubleFromObj(interp, objv[2], &v);
-    glEvalCoord2d((double)u, (double)v);
+    glEvalCoord2d((GLdouble )u, (GLdouble )v);
     result = GetGLError(interp);
     return result;
 }
@@ -11812,8 +12704,7 @@ TclGL_glEvalCoord2fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    u  = 0.0;
-    v  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glEvalCoord2fCmd", objc, objv);
 
@@ -11826,7 +12717,7 @@ TclGL_glEvalCoord2fCmd(
 
     Tcl_GetDoubleFromObj(interp, objv[1], &u);
     Tcl_GetDoubleFromObj(interp, objv[2], &v);
-    glEvalCoord2f((float)u, (float)v);
+    glEvalCoord2f((float )u, (float )v);
     result = GetGLError(interp);
     return result;
 }
@@ -11855,6 +12746,7 @@ TclGL_glEvalCoord2dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *u;
 
     glResult = 0;
     hPtr = NULL;
@@ -11869,8 +12761,9 @@ TclGL_glEvalCoord2dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glEvalCoord2dv not yet implemented");
-    result = TCL_OK;
+    u = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glEvalCoord2dv((GLdouble *)u);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11898,6 +12791,7 @@ TclGL_glEvalCoord2fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    const void *u;
 
     glResult = 0;
     hPtr = NULL;
@@ -11912,8 +12806,9 @@ TclGL_glEvalCoord2fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glEvalCoord2fv not yet implemented");
-    result = TCL_OK;
+    u = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glEvalCoord2fv((float *)u);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -11947,9 +12842,7 @@ TclGL_glMapGrid1dCmd(
 
     glResult = 0;
     hPtr = NULL;
-    un  = 0;
-    u1  = 0.0;
-    u2  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glMapGrid1dCmd", objc, objv);
 
@@ -11963,7 +12856,7 @@ TclGL_glMapGrid1dCmd(
     Tcl_GetIntFromObj(interp, objv[1], &un);
     Tcl_GetDoubleFromObj(interp, objv[2], &u1);
     Tcl_GetDoubleFromObj(interp, objv[3], &u2);
-    glMapGrid1d((int)un, (double)u1, (double)u2);
+    glMapGrid1d((int )un, (GLdouble )u1, (GLdouble )u2);
     result = GetGLError(interp);
     return result;
 }
@@ -11998,9 +12891,7 @@ TclGL_glMapGrid1fCmd(
 
     glResult = 0;
     hPtr = NULL;
-    un  = 0;
-    u1  = 0.0;
-    u2  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glMapGrid1fCmd", objc, objv);
 
@@ -12014,7 +12905,7 @@ TclGL_glMapGrid1fCmd(
     Tcl_GetIntFromObj(interp, objv[1], &un);
     Tcl_GetDoubleFromObj(interp, objv[2], &u1);
     Tcl_GetDoubleFromObj(interp, objv[3], &u2);
-    glMapGrid1f((int)un, (float)u1, (float)u2);
+    glMapGrid1f((int )un, (float )u1, (float )u2);
     result = GetGLError(interp);
     return result;
 }
@@ -12047,7 +12938,7 @@ TclGL_glEvalPoint1Cmd(
 
     glResult = 0;
     hPtr = NULL;
-    i  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glEvalPoint1Cmd", objc, objv);
 
@@ -12059,7 +12950,7 @@ TclGL_glEvalPoint1Cmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &i);
-    glEvalPoint1((int)i);
+    glEvalPoint1((int )i);
     result = GetGLError(interp);
     return result;
 }
@@ -12093,8 +12984,7 @@ TclGL_glEvalPoint2Cmd(
 
     glResult = 0;
     hPtr = NULL;
-    i  = 0;
-    j  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glEvalPoint2Cmd", objc, objv);
 
@@ -12107,7 +12997,7 @@ TclGL_glEvalPoint2Cmd(
 
     Tcl_GetIntFromObj(interp, objv[1], &i);
     Tcl_GetIntFromObj(interp, objv[2], &j);
-    glEvalPoint2((int)i, (int)j);
+    glEvalPoint2((int )i, (int )j);
     result = GetGLError(interp);
     return result;
 }
@@ -12136,6 +13026,9 @@ TclGL_glEvalMesh1Cmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int mode;
+    int i1;
+    int i2;
 
     glResult = 0;
     hPtr = NULL;
@@ -12150,8 +13043,16 @@ TclGL_glEvalMesh1Cmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glEvalMesh1 not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &i1);
+    Tcl_GetIntFromObj(interp, objv[3], &i2);
+    glEvalMesh1((GLenum)mode, (int )i1, (int )i2);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12179,6 +13080,11 @@ TclGL_glEvalMesh2Cmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int mode;
+    int i1;
+    int i2;
+    int j1;
+    int j2;
 
     glResult = 0;
     hPtr = NULL;
@@ -12193,8 +13099,18 @@ TclGL_glEvalMesh2Cmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glEvalMesh2 not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &i1);
+    Tcl_GetIntFromObj(interp, objv[3], &i2);
+    Tcl_GetIntFromObj(interp, objv[4], &j1);
+    Tcl_GetIntFromObj(interp, objv[5], &j2);
+    glEvalMesh2((GLenum)mode, (int )i1, (int )i2, (int )j1, (int )j2);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12222,6 +13138,8 @@ TclGL_glFogfCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    double param;
 
     glResult = 0;
     hPtr = NULL;
@@ -12236,8 +13154,15 @@ TclGL_glFogfCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glFogf not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &param);
+    glFogf((GLenum)pname, (float )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12265,6 +13190,8 @@ TclGL_glFogiCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    int param;
 
     glResult = 0;
     hPtr = NULL;
@@ -12279,8 +13206,15 @@ TclGL_glFogiCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glFogi not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &param);
+    glFogi((GLenum)pname, (int )param);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12308,6 +13242,8 @@ TclGL_glFogfvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    const void *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -12322,8 +13258,15 @@ TclGL_glFogfvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glFogfv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glFogfv((GLenum)pname, (float *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12351,6 +13294,8 @@ TclGL_glFogivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int pname;
+    const int *params;
 
     glResult = 0;
     hPtr = NULL;
@@ -12365,8 +13310,15 @@ TclGL_glFogivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glFogiv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    pname = (int)Tcl_GetHashValue(hPtr); 
+    params = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glFogiv((GLenum)pname, (int *)params);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12394,6 +13346,9 @@ TclGL_glFeedbackBufferCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int size;
+    int type;
+    void *buffer;
 
     glResult = 0;
     hPtr = NULL;
@@ -12408,8 +13363,16 @@ TclGL_glFeedbackBufferCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glFeedbackBuffer not yet implemented");
-    result = TCL_OK;
+    Tcl_GetIntFromObj(interp, objv[1], &size);
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    type = (int)Tcl_GetHashValue(hPtr); 
+    buffer = (float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glFeedbackBuffer((int )size, (GLenum)type, (float *)buffer);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12441,7 +13404,7 @@ TclGL_glPassThroughCmd(
 
     glResult = 0;
     hPtr = NULL;
-    token  = 0.0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glPassThroughCmd", objc, objv);
 
@@ -12453,7 +13416,7 @@ TclGL_glPassThroughCmd(
     }
 
     Tcl_GetDoubleFromObj(interp, objv[1], &token);
-    glPassThrough((float)token);
+    glPassThrough((float )token);
     result = GetGLError(interp);
     return result;
 }
@@ -12482,6 +13445,8 @@ TclGL_glSelectBufferCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int size;
+    int *buffer;
 
     glResult = 0;
     hPtr = NULL;
@@ -12496,8 +13461,10 @@ TclGL_glSelectBufferCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glSelectBuffer not yet implemented");
-    result = TCL_OK;
+    Tcl_GetIntFromObj(interp, objv[1], &size);
+    buffer = (int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glSelectBuffer((int )size, (unsigned int *)buffer);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12573,7 +13540,7 @@ TclGL_glLoadNameCmd(
 
     glResult = 0;
     hPtr = NULL;
-    name  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glLoadNameCmd", objc, objv);
 
@@ -12585,7 +13552,7 @@ TclGL_glLoadNameCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &name);
-    glLoadName((unsigned int)name);
+    glLoadName((unsigned int )name);
     result = GetGLError(interp);
     return result;
 }
@@ -12618,7 +13585,7 @@ TclGL_glPushNameCmd(
 
     glResult = 0;
     hPtr = NULL;
-    name  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glPushNameCmd", objc, objv);
 
@@ -12630,7 +13597,7 @@ TclGL_glPushNameCmd(
     }
 
     Tcl_GetIntFromObj(interp, objv[1], &name);
-    glPushName((unsigned int)name);
+    glPushName((unsigned int )name);
     result = GetGLError(interp);
     return result;
 }
@@ -12703,6 +13670,7 @@ TclGL_glBlendEquationCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int mode;
 
     glResult = 0;
     hPtr = NULL;
@@ -12717,8 +13685,14 @@ TclGL_glBlendEquationCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glBlendEquation not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mode = (int)Tcl_GetHashValue(hPtr); 
+    glBlendEquation((GLenum)mode);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12746,6 +13720,7 @@ TclGL_glResetHistogramCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
 
     glResult = 0;
     hPtr = NULL;
@@ -12760,8 +13735,14 @@ TclGL_glResetHistogramCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glResetHistogram not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    glResetHistogram((GLenum)target);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12789,6 +13770,7 @@ TclGL_glResetMinmaxCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
 
     glResult = 0;
     hPtr = NULL;
@@ -12803,8 +13785,14 @@ TclGL_glResetMinmaxCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glResetMinmax not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    glResetMinmax((GLenum)target);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12832,6 +13820,7 @@ TclGL_glActiveTextureCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int texture;
 
     glResult = 0;
     hPtr = NULL;
@@ -12846,8 +13835,14 @@ TclGL_glActiveTextureCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glActiveTexture not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    texture = (int)Tcl_GetHashValue(hPtr); 
+    glActiveTexture((GLenum)texture);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12875,6 +13870,7 @@ TclGL_glClientActiveTextureCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int texture;
 
     glResult = 0;
     hPtr = NULL;
@@ -12889,8 +13885,14 @@ TclGL_glClientActiveTextureCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glClientActiveTexture not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    texture = (int)Tcl_GetHashValue(hPtr); 
+    glClientActiveTexture((GLenum)texture);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12918,6 +13920,13 @@ TclGL_glCompressedTexImage1DCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int level;
+    int internalformat;
+    int width;
+    int border;
+    int imageSize;
+    const void *data;
 
     glResult = 0;
     hPtr = NULL;
@@ -12932,8 +13941,25 @@ TclGL_glCompressedTexImage1DCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glCompressedTexImage1D not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &level);
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[3]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[3]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    internalformat = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[4], &width);
+    Tcl_GetIntFromObj(interp, objv[5], &border);
+    Tcl_GetIntFromObj(interp, objv[6], &imageSize);
+    data = (const void*)Tcl_GetByteArrayFromObj(objv[7], NULL);
+    glCompressedTexImage1D((GLenum)target, (int )level, (GLenum)internalformat, (int )width, (int )border, (int )imageSize, (void *)data);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -12961,6 +13987,14 @@ TclGL_glCompressedTexImage2DCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int level;
+    int internalformat;
+    int width;
+    int height;
+    int border;
+    int imageSize;
+    const void *data;
 
     glResult = 0;
     hPtr = NULL;
@@ -12975,8 +14009,26 @@ TclGL_glCompressedTexImage2DCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glCompressedTexImage2D not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &level);
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[3]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[3]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    internalformat = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[4], &width);
+    Tcl_GetIntFromObj(interp, objv[5], &height);
+    Tcl_GetIntFromObj(interp, objv[6], &border);
+    Tcl_GetIntFromObj(interp, objv[7], &imageSize);
+    data = (const void*)Tcl_GetByteArrayFromObj(objv[8], NULL);
+    glCompressedTexImage2D((GLenum)target, (int )level, (GLenum)internalformat, (int )width, (int )height, (int )border, (int )imageSize, (void *)data);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13004,6 +14056,15 @@ TclGL_glCompressedTexImage3DCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int level;
+    int internalformat;
+    int width;
+    int height;
+    int depth;
+    int border;
+    int imageSize;
+    const void *data;
 
     glResult = 0;
     hPtr = NULL;
@@ -13018,8 +14079,27 @@ TclGL_glCompressedTexImage3DCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glCompressedTexImage3D not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &level);
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[3]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[3]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    internalformat = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[4], &width);
+    Tcl_GetIntFromObj(interp, objv[5], &height);
+    Tcl_GetIntFromObj(interp, objv[6], &depth);
+    Tcl_GetIntFromObj(interp, objv[7], &border);
+    Tcl_GetIntFromObj(interp, objv[8], &imageSize);
+    data = (const void*)Tcl_GetByteArrayFromObj(objv[9], NULL);
+    glCompressedTexImage3D((GLenum)target, (int )level, (GLenum)internalformat, (int )width, (int )height, (int )depth, (int )border, (int )imageSize, (void *)data);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13047,6 +14127,13 @@ TclGL_glCompressedTexSubImage1DCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int level;
+    int xoffset;
+    int width;
+    int format;
+    int imageSize;
+    const void *data;
 
     glResult = 0;
     hPtr = NULL;
@@ -13061,8 +14148,25 @@ TclGL_glCompressedTexSubImage1DCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glCompressedTexSubImage1D not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &level);
+    Tcl_GetIntFromObj(interp, objv[3], &xoffset);
+    Tcl_GetIntFromObj(interp, objv[4], &width);
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[5]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[5]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    format = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[6], &imageSize);
+    data = (const void*)Tcl_GetByteArrayFromObj(objv[7], NULL);
+    glCompressedTexSubImage1D((GLenum)target, (int )level, (int )xoffset, (int )width, (GLenum)format, (int )imageSize, (void *)data);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13090,6 +14194,15 @@ TclGL_glCompressedTexSubImage2DCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int level;
+    int xoffset;
+    int yoffset;
+    int width;
+    int height;
+    int format;
+    int imageSize;
+    const void *data;
 
     glResult = 0;
     hPtr = NULL;
@@ -13104,8 +14217,27 @@ TclGL_glCompressedTexSubImage2DCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glCompressedTexSubImage2D not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &level);
+    Tcl_GetIntFromObj(interp, objv[3], &xoffset);
+    Tcl_GetIntFromObj(interp, objv[4], &yoffset);
+    Tcl_GetIntFromObj(interp, objv[5], &width);
+    Tcl_GetIntFromObj(interp, objv[6], &height);
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[7]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[7]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    format = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[8], &imageSize);
+    data = (const void*)Tcl_GetByteArrayFromObj(objv[9], NULL);
+    glCompressedTexSubImage2D((GLenum)target, (int )level, (int )xoffset, (int )yoffset, (int )width, (int )height, (GLenum)format, (int )imageSize, (void *)data);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13133,6 +14265,17 @@ TclGL_glCompressedTexSubImage3DCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int level;
+    int xoffset;
+    int yoffset;
+    int zoffset;
+    int width;
+    int height;
+    int depth;
+    int format;
+    int imageSize;
+    const void *data;
 
     glResult = 0;
     hPtr = NULL;
@@ -13147,8 +14290,29 @@ TclGL_glCompressedTexSubImage3DCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glCompressedTexSubImage3D not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &level);
+    Tcl_GetIntFromObj(interp, objv[3], &xoffset);
+    Tcl_GetIntFromObj(interp, objv[4], &yoffset);
+    Tcl_GetIntFromObj(interp, objv[5], &zoffset);
+    Tcl_GetIntFromObj(interp, objv[6], &width);
+    Tcl_GetIntFromObj(interp, objv[7], &height);
+    Tcl_GetIntFromObj(interp, objv[8], &depth);
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[9]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[9]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    format = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[10], &imageSize);
+    data = (const void*)Tcl_GetByteArrayFromObj(objv[11], NULL);
+    glCompressedTexSubImage3D((GLenum)target, (int )level, (int )xoffset, (int )yoffset, (int )zoffset, (int )width, (int )height, (int )depth, (GLenum)format, (int )imageSize, (void *)data);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13176,6 +14340,9 @@ TclGL_glGetCompressedTexImageCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int lod;
+    void *img;
 
     glResult = 0;
     hPtr = NULL;
@@ -13190,8 +14357,16 @@ TclGL_glGetCompressedTexImageCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glGetCompressedTexImage not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &lod);
+    img = (void*)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetCompressedTexImage((GLenum)target, (int )lod, (void *)img);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13219,6 +14394,8 @@ TclGL_glMultiTexCoord1dCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
 
     glResult = 0;
     hPtr = NULL;
@@ -13233,8 +14410,15 @@ TclGL_glMultiTexCoord1dCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1d not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    glMultiTexCoord1d((GLenum)target, (GLdouble )s);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13262,6 +14446,8 @@ TclGL_glMultiTexCoord1dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -13276,8 +14462,15 @@ TclGL_glMultiTexCoord1dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1dv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1dv((GLenum)target, (GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13305,6 +14498,8 @@ TclGL_glMultiTexCoord1fCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
 
     glResult = 0;
     hPtr = NULL;
@@ -13319,8 +14514,15 @@ TclGL_glMultiTexCoord1fCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1f not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    glMultiTexCoord1f((GLenum)target, (float )s);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13348,6 +14550,8 @@ TclGL_glMultiTexCoord1fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -13362,8 +14566,15 @@ TclGL_glMultiTexCoord1fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1fv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1fv((GLenum)target, (float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13391,6 +14602,8 @@ TclGL_glMultiTexCoord1iCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
 
     glResult = 0;
     hPtr = NULL;
@@ -13405,8 +14618,15 @@ TclGL_glMultiTexCoord1iCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1i not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    glMultiTexCoord1i((GLenum)target, (int )s);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13434,6 +14654,8 @@ TclGL_glMultiTexCoord1ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -13448,8 +14670,15 @@ TclGL_glMultiTexCoord1ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1iv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1iv((GLenum)target, (int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13477,6 +14706,8 @@ TclGL_glMultiTexCoord1sCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
 
     glResult = 0;
     hPtr = NULL;
@@ -13491,8 +14722,15 @@ TclGL_glMultiTexCoord1sCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1s not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    glMultiTexCoord1s((GLenum)target, (short )s);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13520,6 +14758,8 @@ TclGL_glMultiTexCoord1svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -13534,8 +14774,15 @@ TclGL_glMultiTexCoord1svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1sv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1sv((GLenum)target, (short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13563,6 +14810,9 @@ TclGL_glMultiTexCoord2dCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
+    double t;
 
     glResult = 0;
     hPtr = NULL;
@@ -13577,8 +14827,16 @@ TclGL_glMultiTexCoord2dCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2d not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    Tcl_GetDoubleFromObj(interp, objv[3], &t);
+    glMultiTexCoord2d((GLenum)target, (GLdouble )s, (GLdouble )t);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13606,6 +14864,8 @@ TclGL_glMultiTexCoord2dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -13620,8 +14880,15 @@ TclGL_glMultiTexCoord2dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2dv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2dv((GLenum)target, (GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13649,6 +14916,9 @@ TclGL_glMultiTexCoord2fCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
+    double t;
 
     glResult = 0;
     hPtr = NULL;
@@ -13663,8 +14933,16 @@ TclGL_glMultiTexCoord2fCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2f not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    Tcl_GetDoubleFromObj(interp, objv[3], &t);
+    glMultiTexCoord2f((GLenum)target, (float )s, (float )t);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13692,6 +14970,8 @@ TclGL_glMultiTexCoord2fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -13706,8 +14986,15 @@ TclGL_glMultiTexCoord2fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2fv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2fv((GLenum)target, (float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13735,6 +15022,9 @@ TclGL_glMultiTexCoord2iCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
+    int t;
 
     glResult = 0;
     hPtr = NULL;
@@ -13749,8 +15039,16 @@ TclGL_glMultiTexCoord2iCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2i not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    Tcl_GetIntFromObj(interp, objv[3], &t);
+    glMultiTexCoord2i((GLenum)target, (int )s, (int )t);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13778,6 +15076,8 @@ TclGL_glMultiTexCoord2ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -13792,8 +15092,15 @@ TclGL_glMultiTexCoord2ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2iv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2iv((GLenum)target, (int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13821,6 +15128,9 @@ TclGL_glMultiTexCoord2sCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
+    int t;
 
     glResult = 0;
     hPtr = NULL;
@@ -13835,8 +15145,16 @@ TclGL_glMultiTexCoord2sCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2s not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    Tcl_GetIntFromObj(interp, objv[3], &t);
+    glMultiTexCoord2s((GLenum)target, (short )s, (short )t);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13864,6 +15182,8 @@ TclGL_glMultiTexCoord2svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -13878,8 +15198,15 @@ TclGL_glMultiTexCoord2svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2sv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2sv((GLenum)target, (short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13907,6 +15234,10 @@ TclGL_glMultiTexCoord3dCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
+    double t;
+    double r;
 
     glResult = 0;
     hPtr = NULL;
@@ -13921,8 +15252,17 @@ TclGL_glMultiTexCoord3dCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3d not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    Tcl_GetDoubleFromObj(interp, objv[3], &t);
+    Tcl_GetDoubleFromObj(interp, objv[4], &r);
+    glMultiTexCoord3d((GLenum)target, (GLdouble )s, (GLdouble )t, (GLdouble )r);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13950,6 +15290,8 @@ TclGL_glMultiTexCoord3dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -13964,8 +15306,15 @@ TclGL_glMultiTexCoord3dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3dv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3dv((GLenum)target, (GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -13993,6 +15342,10 @@ TclGL_glMultiTexCoord3fCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
+    double t;
+    double r;
 
     glResult = 0;
     hPtr = NULL;
@@ -14007,8 +15360,17 @@ TclGL_glMultiTexCoord3fCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3f not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    Tcl_GetDoubleFromObj(interp, objv[3], &t);
+    Tcl_GetDoubleFromObj(interp, objv[4], &r);
+    glMultiTexCoord3f((GLenum)target, (float )s, (float )t, (float )r);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14036,6 +15398,8 @@ TclGL_glMultiTexCoord3fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -14050,8 +15414,15 @@ TclGL_glMultiTexCoord3fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3fv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3fv((GLenum)target, (float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14079,6 +15450,10 @@ TclGL_glMultiTexCoord3iCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
+    int t;
+    int r;
 
     glResult = 0;
     hPtr = NULL;
@@ -14093,8 +15468,17 @@ TclGL_glMultiTexCoord3iCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3i not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    Tcl_GetIntFromObj(interp, objv[3], &t);
+    Tcl_GetIntFromObj(interp, objv[4], &r);
+    glMultiTexCoord3i((GLenum)target, (int )s, (int )t, (int )r);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14122,6 +15506,8 @@ TclGL_glMultiTexCoord3ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -14136,8 +15522,15 @@ TclGL_glMultiTexCoord3ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3iv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3iv((GLenum)target, (int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14165,6 +15558,10 @@ TclGL_glMultiTexCoord3sCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
+    int t;
+    int r;
 
     glResult = 0;
     hPtr = NULL;
@@ -14179,8 +15576,17 @@ TclGL_glMultiTexCoord3sCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3s not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    Tcl_GetIntFromObj(interp, objv[3], &t);
+    Tcl_GetIntFromObj(interp, objv[4], &r);
+    glMultiTexCoord3s((GLenum)target, (short )s, (short )t, (short )r);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14208,6 +15614,8 @@ TclGL_glMultiTexCoord3svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -14222,8 +15630,15 @@ TclGL_glMultiTexCoord3svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3sv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3sv((GLenum)target, (short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14251,6 +15666,11 @@ TclGL_glMultiTexCoord4dCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
+    double t;
+    double r;
+    double q;
 
     glResult = 0;
     hPtr = NULL;
@@ -14265,8 +15685,18 @@ TclGL_glMultiTexCoord4dCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4d not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    Tcl_GetDoubleFromObj(interp, objv[3], &t);
+    Tcl_GetDoubleFromObj(interp, objv[4], &r);
+    Tcl_GetDoubleFromObj(interp, objv[5], &q);
+    glMultiTexCoord4d((GLenum)target, (GLdouble )s, (GLdouble )t, (GLdouble )r, (GLdouble )q);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14294,6 +15724,8 @@ TclGL_glMultiTexCoord4dvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -14308,8 +15740,15 @@ TclGL_glMultiTexCoord4dvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4dv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4dv((GLenum)target, (GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14337,6 +15776,11 @@ TclGL_glMultiTexCoord4fCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
+    double t;
+    double r;
+    double q;
 
     glResult = 0;
     hPtr = NULL;
@@ -14351,8 +15795,18 @@ TclGL_glMultiTexCoord4fCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4f not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    Tcl_GetDoubleFromObj(interp, objv[3], &t);
+    Tcl_GetDoubleFromObj(interp, objv[4], &r);
+    Tcl_GetDoubleFromObj(interp, objv[5], &q);
+    glMultiTexCoord4f((GLenum)target, (float )s, (float )t, (float )r, (float )q);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14380,6 +15834,8 @@ TclGL_glMultiTexCoord4fvCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -14394,8 +15850,15 @@ TclGL_glMultiTexCoord4fvCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4fv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4fv((GLenum)target, (float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14423,6 +15886,11 @@ TclGL_glMultiTexCoord4iCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
+    int t;
+    int r;
+    int q;
 
     glResult = 0;
     hPtr = NULL;
@@ -14437,8 +15905,18 @@ TclGL_glMultiTexCoord4iCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4i not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    Tcl_GetIntFromObj(interp, objv[3], &t);
+    Tcl_GetIntFromObj(interp, objv[4], &r);
+    Tcl_GetIntFromObj(interp, objv[5], &q);
+    glMultiTexCoord4i((GLenum)target, (int )s, (int )t, (int )r, (int )q);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14466,6 +15944,8 @@ TclGL_glMultiTexCoord4ivCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -14480,8 +15960,15 @@ TclGL_glMultiTexCoord4ivCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4iv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4iv((GLenum)target, (int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14509,6 +15996,11 @@ TclGL_glMultiTexCoord4sCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
+    int t;
+    int r;
+    int q;
 
     glResult = 0;
     hPtr = NULL;
@@ -14523,8 +16015,18 @@ TclGL_glMultiTexCoord4sCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4s not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    Tcl_GetIntFromObj(interp, objv[3], &t);
+    Tcl_GetIntFromObj(interp, objv[4], &r);
+    Tcl_GetIntFromObj(interp, objv[5], &q);
+    glMultiTexCoord4s((GLenum)target, (short )s, (short )t, (short )r, (short )q);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14552,6 +16054,8 @@ TclGL_glMultiTexCoord4svCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -14566,8 +16070,15 @@ TclGL_glMultiTexCoord4svCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4sv not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4sv((GLenum)target, (short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14772,8 +16283,7 @@ TclGL_glSampleCoverageCmd(
 
     glResult = 0;
     hPtr = NULL;
-    value  = 0.0;
-    invert  = 0;
+
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(0, "TclGL_glSampleCoverageCmd", objc, objv);
 
@@ -14786,7 +16296,7 @@ TclGL_glSampleCoverageCmd(
 
     Tcl_GetDoubleFromObj(interp, objv[1], &value);
     Tcl_GetBooleanFromObj(interp, objv[2], &invert);
-    glSampleCoverage((float)value, (unsigned char)invert);
+    glSampleCoverage((float )value, (unsigned char )invert);
     result = GetGLError(interp);
     return result;
 }
@@ -14815,6 +16325,7 @@ TclGL_glActiveTextureARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int texture;
 
     glResult = 0;
     hPtr = NULL;
@@ -14829,8 +16340,14 @@ TclGL_glActiveTextureARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glActiveTextureARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    texture = (int)Tcl_GetHashValue(hPtr); 
+    glActiveTextureARB((GLenum)texture);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14858,6 +16375,7 @@ TclGL_glClientActiveTextureARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int texture;
 
     glResult = 0;
     hPtr = NULL;
@@ -14872,8 +16390,14 @@ TclGL_glClientActiveTextureARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glClientActiveTextureARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    texture = (int)Tcl_GetHashValue(hPtr); 
+    glClientActiveTextureARB((GLenum)texture);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14901,6 +16425,8 @@ TclGL_glMultiTexCoord1dARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
 
     glResult = 0;
     hPtr = NULL;
@@ -14915,8 +16441,15 @@ TclGL_glMultiTexCoord1dARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1dARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    glMultiTexCoord1dARB((GLenum)target, (GLdouble )s);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14944,6 +16477,8 @@ TclGL_glMultiTexCoord1dvARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -14958,8 +16493,15 @@ TclGL_glMultiTexCoord1dvARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1dvARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1dvARB((GLenum)target, (GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -14987,6 +16529,8 @@ TclGL_glMultiTexCoord1fARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
 
     glResult = 0;
     hPtr = NULL;
@@ -15001,8 +16545,15 @@ TclGL_glMultiTexCoord1fARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1fARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    glMultiTexCoord1fARB((GLenum)target, (float )s);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15030,6 +16581,8 @@ TclGL_glMultiTexCoord1fvARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -15044,8 +16597,15 @@ TclGL_glMultiTexCoord1fvARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1fvARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1fvARB((GLenum)target, (float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15073,6 +16633,8 @@ TclGL_glMultiTexCoord1iARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
 
     glResult = 0;
     hPtr = NULL;
@@ -15087,8 +16649,15 @@ TclGL_glMultiTexCoord1iARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1iARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    glMultiTexCoord1iARB((GLenum)target, (int )s);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15116,6 +16685,8 @@ TclGL_glMultiTexCoord1ivARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -15130,8 +16701,15 @@ TclGL_glMultiTexCoord1ivARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1ivARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1ivARB((GLenum)target, (int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15159,6 +16737,8 @@ TclGL_glMultiTexCoord1sARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
 
     glResult = 0;
     hPtr = NULL;
@@ -15173,8 +16753,15 @@ TclGL_glMultiTexCoord1sARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1sARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    glMultiTexCoord1sARB((GLenum)target, (short )s);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15202,6 +16789,8 @@ TclGL_glMultiTexCoord1svARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -15216,8 +16805,15 @@ TclGL_glMultiTexCoord1svARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord1svARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1svARB((GLenum)target, (short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15245,6 +16841,9 @@ TclGL_glMultiTexCoord2dARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
+    double t;
 
     glResult = 0;
     hPtr = NULL;
@@ -15259,8 +16858,16 @@ TclGL_glMultiTexCoord2dARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2dARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    Tcl_GetDoubleFromObj(interp, objv[3], &t);
+    glMultiTexCoord2dARB((GLenum)target, (GLdouble )s, (GLdouble )t);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15288,6 +16895,8 @@ TclGL_glMultiTexCoord2dvARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -15302,8 +16911,15 @@ TclGL_glMultiTexCoord2dvARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2dvARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2dvARB((GLenum)target, (GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15331,6 +16947,9 @@ TclGL_glMultiTexCoord2fARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
+    double t;
 
     glResult = 0;
     hPtr = NULL;
@@ -15345,8 +16964,16 @@ TclGL_glMultiTexCoord2fARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2fARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    Tcl_GetDoubleFromObj(interp, objv[3], &t);
+    glMultiTexCoord2fARB((GLenum)target, (float )s, (float )t);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15374,6 +17001,8 @@ TclGL_glMultiTexCoord2fvARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -15388,8 +17017,15 @@ TclGL_glMultiTexCoord2fvARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2fvARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2fvARB((GLenum)target, (float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15417,6 +17053,9 @@ TclGL_glMultiTexCoord2iARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
+    int t;
 
     glResult = 0;
     hPtr = NULL;
@@ -15431,8 +17070,16 @@ TclGL_glMultiTexCoord2iARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2iARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    Tcl_GetIntFromObj(interp, objv[3], &t);
+    glMultiTexCoord2iARB((GLenum)target, (int )s, (int )t);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15460,6 +17107,8 @@ TclGL_glMultiTexCoord2ivARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -15474,8 +17123,15 @@ TclGL_glMultiTexCoord2ivARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2ivARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2ivARB((GLenum)target, (int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15503,6 +17159,9 @@ TclGL_glMultiTexCoord2sARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
+    int t;
 
     glResult = 0;
     hPtr = NULL;
@@ -15517,8 +17176,16 @@ TclGL_glMultiTexCoord2sARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2sARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    Tcl_GetIntFromObj(interp, objv[3], &t);
+    glMultiTexCoord2sARB((GLenum)target, (short )s, (short )t);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15546,6 +17213,8 @@ TclGL_glMultiTexCoord2svARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -15560,8 +17229,15 @@ TclGL_glMultiTexCoord2svARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord2svARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2svARB((GLenum)target, (short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15589,6 +17265,10 @@ TclGL_glMultiTexCoord3dARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
+    double t;
+    double r;
 
     glResult = 0;
     hPtr = NULL;
@@ -15603,8 +17283,17 @@ TclGL_glMultiTexCoord3dARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3dARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    Tcl_GetDoubleFromObj(interp, objv[3], &t);
+    Tcl_GetDoubleFromObj(interp, objv[4], &r);
+    glMultiTexCoord3dARB((GLenum)target, (GLdouble )s, (GLdouble )t, (GLdouble )r);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15632,6 +17321,8 @@ TclGL_glMultiTexCoord3dvARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -15646,8 +17337,15 @@ TclGL_glMultiTexCoord3dvARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3dvARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3dvARB((GLenum)target, (GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15675,6 +17373,10 @@ TclGL_glMultiTexCoord3fARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
+    double t;
+    double r;
 
     glResult = 0;
     hPtr = NULL;
@@ -15689,8 +17391,17 @@ TclGL_glMultiTexCoord3fARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3fARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    Tcl_GetDoubleFromObj(interp, objv[3], &t);
+    Tcl_GetDoubleFromObj(interp, objv[4], &r);
+    glMultiTexCoord3fARB((GLenum)target, (float )s, (float )t, (float )r);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15718,6 +17429,8 @@ TclGL_glMultiTexCoord3fvARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -15732,8 +17445,15 @@ TclGL_glMultiTexCoord3fvARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3fvARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3fvARB((GLenum)target, (float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15761,6 +17481,10 @@ TclGL_glMultiTexCoord3iARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
+    int t;
+    int r;
 
     glResult = 0;
     hPtr = NULL;
@@ -15775,8 +17499,17 @@ TclGL_glMultiTexCoord3iARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3iARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    Tcl_GetIntFromObj(interp, objv[3], &t);
+    Tcl_GetIntFromObj(interp, objv[4], &r);
+    glMultiTexCoord3iARB((GLenum)target, (int )s, (int )t, (int )r);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15804,6 +17537,8 @@ TclGL_glMultiTexCoord3ivARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -15818,8 +17553,15 @@ TclGL_glMultiTexCoord3ivARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3ivARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3ivARB((GLenum)target, (int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15847,6 +17589,10 @@ TclGL_glMultiTexCoord3sARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
+    int t;
+    int r;
 
     glResult = 0;
     hPtr = NULL;
@@ -15861,8 +17607,17 @@ TclGL_glMultiTexCoord3sARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3sARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    Tcl_GetIntFromObj(interp, objv[3], &t);
+    Tcl_GetIntFromObj(interp, objv[4], &r);
+    glMultiTexCoord3sARB((GLenum)target, (short )s, (short )t, (short )r);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15890,6 +17645,8 @@ TclGL_glMultiTexCoord3svARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -15904,8 +17661,15 @@ TclGL_glMultiTexCoord3svARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord3svARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3svARB((GLenum)target, (short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15933,6 +17697,11 @@ TclGL_glMultiTexCoord4dARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
+    double t;
+    double r;
+    double q;
 
     glResult = 0;
     hPtr = NULL;
@@ -15947,8 +17716,18 @@ TclGL_glMultiTexCoord4dARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4dARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    Tcl_GetDoubleFromObj(interp, objv[3], &t);
+    Tcl_GetDoubleFromObj(interp, objv[4], &r);
+    Tcl_GetDoubleFromObj(interp, objv[5], &q);
+    glMultiTexCoord4dARB((GLenum)target, (GLdouble )s, (GLdouble )t, (GLdouble )r, (GLdouble )q);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -15976,6 +17755,8 @@ TclGL_glMultiTexCoord4dvARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -15990,8 +17771,15 @@ TclGL_glMultiTexCoord4dvARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4dvARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4dvARB((GLenum)target, (GLdouble *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -16019,6 +17807,11 @@ TclGL_glMultiTexCoord4fARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    double s;
+    double t;
+    double r;
+    double q;
 
     glResult = 0;
     hPtr = NULL;
@@ -16033,8 +17826,18 @@ TclGL_glMultiTexCoord4fARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4fARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetDoubleFromObj(interp, objv[2], &s);
+    Tcl_GetDoubleFromObj(interp, objv[3], &t);
+    Tcl_GetDoubleFromObj(interp, objv[4], &r);
+    Tcl_GetDoubleFromObj(interp, objv[5], &q);
+    glMultiTexCoord4fARB((GLenum)target, (float )s, (float )t, (float )r, (float )q);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -16062,6 +17865,8 @@ TclGL_glMultiTexCoord4fvARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const void *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -16076,8 +17881,15 @@ TclGL_glMultiTexCoord4fvARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4fvARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4fvARB((GLenum)target, (float *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -16105,6 +17917,11 @@ TclGL_glMultiTexCoord4iARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
+    int t;
+    int r;
+    int q;
 
     glResult = 0;
     hPtr = NULL;
@@ -16119,8 +17936,18 @@ TclGL_glMultiTexCoord4iARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4iARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    Tcl_GetIntFromObj(interp, objv[3], &t);
+    Tcl_GetIntFromObj(interp, objv[4], &r);
+    Tcl_GetIntFromObj(interp, objv[5], &q);
+    glMultiTexCoord4iARB((GLenum)target, (int )s, (int )t, (int )r, (int )q);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -16148,6 +17975,8 @@ TclGL_glMultiTexCoord4ivARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -16162,8 +17991,15 @@ TclGL_glMultiTexCoord4ivARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4ivARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4ivARB((GLenum)target, (int *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -16191,6 +18027,11 @@ TclGL_glMultiTexCoord4sARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    int s;
+    int t;
+    int r;
+    int q;
 
     glResult = 0;
     hPtr = NULL;
@@ -16205,8 +18046,18 @@ TclGL_glMultiTexCoord4sARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4sARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    Tcl_GetIntFromObj(interp, objv[2], &s);
+    Tcl_GetIntFromObj(interp, objv[3], &t);
+    Tcl_GetIntFromObj(interp, objv[4], &r);
+    Tcl_GetIntFromObj(interp, objv[5], &q);
+    glMultiTexCoord4sARB((GLenum)target, (short )s, (short )t, (short )r, (short )q);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -16234,6 +18085,8 @@ TclGL_glMultiTexCoord4svARBCmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int target;
+    const int *v;
 
     glResult = 0;
     hPtr = NULL;
@@ -16248,8 +18101,15 @@ TclGL_glMultiTexCoord4svARBCmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glMultiTexCoord4svARB not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    target = (int)Tcl_GetHashValue(hPtr); 
+    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4svARB((GLenum)target, (short *)v);
+    result = GetGLError(interp);
     return result;
 }
 
@@ -16277,6 +18137,8 @@ TclGL_glBlendEquationSeparateATICmd(
     TclGLInfo *infoPtr;
     int result;
     int glResult;
+    int modeRGB;
+    int modeA;
 
     glResult = 0;
     hPtr = NULL;
@@ -16291,7 +18153,19 @@ TclGL_glBlendEquationSeparateATICmd(
         return TCL_ERROR;
     }
 
-fprintf(stderr, "glBlendEquationSeparateATI not yet implemented");
-    result = TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    modeRGB = (int)Tcl_GetHashValue(hPtr); 
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    modeA = (int)Tcl_GetHashValue(hPtr); 
+    glBlendEquationSeparateATI((GLenum)modeRGB, (GLenum)modeA);
+    result = GetGLError(interp);
     return result;
 }

@@ -138,6 +138,6 @@ $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
 
 tclGLBase.o: $(GENERIC_DIR)/tclGLInt.h $(GENERIC_DIR)/tclGL.h $(GENERIC_DIR)/tclGLInitHashTables.c $(GENERIC_DIR)/tclGLHashTables.h
 
-tclGLCmd.o: $(GENERIC_DIR)/tclGLInt.h $(GENERIC_DIR)/tclGL.h $(GENERIC_DIR)/tclGLHashTables.h
+tclGLCmd.o: $(GENERIC_DIR)/tclGLInt.h $(GENERIC_DIR)/tclGL.h $(GENERIC_DIR)/tclGLHashTables.h $(GENERIC_DIR)/tclGLFuncs.c $(GENERIC_DIR)/tclGLInitHashTables.c $(GENERIC_DIR)/tclGLHashTables.h
 
 tclGLUtil.o: $(GENERIC_DIR)/tclGLInt.h $(GENERIC_DIR)/tclGL.h
