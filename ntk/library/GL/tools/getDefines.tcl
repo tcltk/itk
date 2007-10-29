@@ -238,7 +238,6 @@ puts stderr "444!$entry!"
 			switch $ptype2 {
 			GLenum {
                             set myType "int"
-puts stderr "NOYenum!$name!$entry!"
                             set getParam [format $enumPart $paramNum \
 			            $paramNum $pname]
 			    append paramCallInfos "${callSep}(GLenum)$pname"
