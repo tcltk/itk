@@ -99,10 +99,55 @@ set enumPart {    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[%s]
     }
     %s = (GLenum)Tcl_GetHashValue(hPtr); }
 
+set bitfieldPart {
+    int value;
+    int isEnd;
+    char *cp;
+    char *ep;
+    char *token;
+    Tcl_Obj *objPtr;
+    token = Tcl_GetString(objv[%s]);
+    cp = token;
+    value = 0;
+    isEnd = 0;
+    while (1) {
+        if (strstr(cp, "|") == NULL) {
+	    isEnd = 1;
+	}
+	while (*cp == ' ') {
+	    cp++;
+	}
+	ep = cp;
+	while ((*ep != '\0') && (*ep != '|')) {
+	    ep++;
+	}
+	if (*ep != '\0') {
+	    ep--;
+	}
+	objPtr = Tcl_NewStringObj(cp, ep-cp);
+	if (*ep == '\0') {
+	    isEnd = 1;
+	}
+	cp = ep+2;
+        hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objPtr);
+        if (hPtr == NULL) {
+            Tcl_AppendResult(interp, "no such define \"", \
+	            Tcl_GetString(objv[%s]),"\"", NULL);
+	    return TCL_ERROR;
+        }
+        value |= (GLenum)Tcl_GetHashValue(hPtr);
+        if (isEnd) {
+	    break;
+	}
+    }
+    %s = value;
+}
+
 set openCurly "{"
 set closeCurly "}"
 
 set lineNo 0
+set numFuncs 0
 set comments [list]
 set lastDefineLineNo -1
 set procNameLst [list]
@@ -111,6 +156,18 @@ set cmdNameLst [list]
 set funcLst [list]
 while {[gets stdin line] >= 0} {
     incr lineNo
+    set line [string trimright $line \n]
+    if {[string match "GLAPI void GLAPIENTRY*" $line]} {
+        while {![regexp {.*[(].*[)]} $line]} {
+	    if {[gets stdin line2] < 0} {
+	        break
+	    }
+            incr lineNo
+            set line2 [string trimright $line2 \n]
+            set line2 [string trim $line2]
+	    set line "$line $line2"
+        }
+    }
 #puts stderr "LINE!$line![regexp {^/[*] } $line]!"
     if {[regexp {^/[*] } $line]} {
         # comment save for later use as hash table */
@@ -245,7 +302,7 @@ puts stderr "444!$entry!"
                           }
                         GLbitfield {
                             set myType "GLbitfield"
-                            set getParam [format $enumPart $paramNum \
+                            set getParam [format $bitfieldPart $paramNum \
 			            $paramNum $pname]
 			    append paramCallInfos "${callSep}(GLbitfield)$pname"
 			    set callSep ", "
@@ -355,6 +412,8 @@ puts stderr "NOYvoid!$name!$entry!"
 		            lappend funcVarDecls "    ${myVarType}${starSep}${star}$pname;"
 		            lappend getParamInfos $getParam
 		        }
+		    } else {
+		        incr paramNum -1
 		    }
 	        }
                 set param_info [string trimright $param_info]
@@ -366,6 +425,7 @@ puts stderr "NOYvoid!$name!$entry!"
 		    set varInits ""
 		    set notYetStr " !not yet!"
 		}
+		incr numFuncs
 		lappend procNameLst "Tcl_ObjCmdProc TclGL_${name}Cmd;"
 
 		lappend methodNameLst "    { \"$name\", \"$param_info$notYetStr\", TclGL_${name}Cmd } ,"
@@ -441,3 +501,4 @@ close $fd
 set fd [open ../generic/tclGLFuncs.c w]
 puts $fd [join $funcLst \n]
 close $fd
+puts stderr "numFuncs!$numFuncs!"

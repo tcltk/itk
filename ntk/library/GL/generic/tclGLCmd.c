@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.3 2007/10/29 15:25:59 wiede Exp $
+ * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.4 2007/10/29 21:36:07 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -19,6 +19,7 @@ Tcl_ObjCmdProc TclGL_DefaultCmd;
 Tcl_ObjCmdProc TclGL_UnknownCmd;
 Tcl_ObjCmdProc TclGL_Define2Str;
 Tcl_ObjCmdProc TclGL_Str2Define;
+Tcl_ObjCmdProc TclGL_MakeFloatVector;
 #include "tclGLProcNames.c"
 
 typedef struct GLMethod {
@@ -31,6 +32,7 @@ static GLMethod GLMethodList[] = {
 #include "tclGLMethodNames.c"
     { "glDefine2Str", "<define value>", TclGL_Define2Str },
     { "glStr2Define", "<define string>", TclGL_Str2Define },
+    { "makeFloatVector", "<list>", TclGL_MakeFloatVector },
     /*
      *  Add an error handler to support all of the usual inquiries
      *  for the "info" command in the global namespace.
@@ -50,6 +52,7 @@ static const struct NameProcMap glCmds2[] = {
     { "::ntk::gl::GL::unknown", TclGL_UnknownCmd },
     { "::ntk::gl::GL::glDefine2Str", TclGL_Define2Str },
     { "::ntk::gl::GL::glStr2Define", TclGL_Str2Define },
+    { "::ntk::gl::GL::makeFloatVector", TclGL_MakeFloatVector },
     /*
      *  Add an error handler
      */
@@ -291,6 +294,48 @@ TclGL_Str2Define(
     Tcl_Obj *objPtr;
     sprintf(buf, "0x%08x", (int)Tcl_GetHashValue(hPtr));
     objPtr = Tcl_NewStringObj(buf, -1);
+    Tcl_AppendResult(interp, Tcl_GetString(objPtr), NULL);
+    return TCL_OK;;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  TclGL_MakeFloatVector()
+ *
+ *  convert a list of floats into a Tcl_ByteArrayObj
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+TclGL_MakeFloatVector(
+    ClientData clientData,  /* infoPtr */
+    Tcl_Interp *interp,      /* current interpreter */
+    int objc,                /* number of arguments */
+    Tcl_Obj *CONST objv[])   /* argument objects */
+{
+    Tcl_Obj *objPtr;
+    TclGLInfo *infoPtr;
+    float *floatVec;
+    float floatVal;
+    const char **argv;
+    int argc;
+    int i;
+
+    infoPtr = (TclGLInfo *)clientData;
+    TclGLShowArgs(1, "TclGL_MakeFloatVector", objc, objv);
+    if (objc != 2) {
+        Tcl_AppendResult(interp,
+                "wrong # args: should be \"ntk makeFloatVector list\"",
+                NULL);
+        return TCL_ERROR;
+    }
+    Tcl_SplitList(interp, Tcl_GetString(objv[1]), &argc, &argv);
+    floatVec = (float *)ckalloc(sizeof(float)*argc);
+    for(i=0;i<argc;i++) {
+        floatVal = atof(argv[i]);
+	floatVec[i] = floatVal;
+    }
+    objPtr = Tcl_NewByteArrayObj((unsigned char *)floatVec, sizeof(float)*argc);
     Tcl_AppendResult(interp, Tcl_GetString(objPtr), NULL);
     return TCL_OK;;
 }
