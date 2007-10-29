@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLBase.c,v 1.1.2.1 2007/10/28 15:31:44 wiede Exp $
+ * RCS: @(#) $Id: tclGLBase.c,v 1.1.2.2 2007/10/29 15:25:59 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -66,6 +66,7 @@ Initialize (
 
     TclGL_InitCommands(interp, infoPtr);
 
+// FIX ME !!!
 //    int major, minor, rev;
 //    glGetVersion(&major, &minor, &rev);
 //fprintf(stderr, "GL version!%d!%d!%d!\n", major, minor, rev);
@@ -74,7 +75,6 @@ Initialize (
             TCL_NAMESPACE_ONLY);
     Tcl_SetVar(interp, "::ntk::gl::patchLevel", TCL_GL_PATCH_LEVEL,
             TCL_NAMESPACE_ONLY);
-fprintf(stderr, "RES!%s!\n", Tcl_GetStringResult(interp));
     /*
      *  Package is now loaded.
      */

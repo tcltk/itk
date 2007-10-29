@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.2 2007/10/28 22:50:43 wiede Exp $
+ * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.3 2007/10/29 15:25:59 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -206,7 +206,7 @@ TclGL_UnknownCmd(
 {
     int result;
 
-    TclGLShowArgs(0, "TclGL_UnknownCmd", objc, objv);
+    TclGLShowArgs(1, "TclGL_UnknownCmd", objc, objv);
     result = TCL_ERROR;
     /* produce usage message */
     Tcl_Obj *objPtr = Tcl_NewStringObj("unknown command: \"", -1);
@@ -237,7 +237,7 @@ TclGL_Define2Str(
     int value;
 
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_Define2Str", objc, objv);
+    TclGLShowArgs(1, "TclGL_Define2Str", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glDefine2Str value\"",
@@ -274,7 +274,7 @@ TclGL_Str2Define(
     TclGLInfo *infoPtr;
 
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_Str2Define", objc, objv);
+    TclGLShowArgs(1, "TclGL_Str2Define", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glStr2Define value\"",

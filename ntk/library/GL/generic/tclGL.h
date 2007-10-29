@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGL.h,v 1.1.2.1 2007/10/28 15:31:44 wiede Exp $
+ * RCS: @(#) $Id: tclGL.h,v 1.1.2.2 2007/10/29 15:25:59 wiede Exp $
  */
 
 /*
@@ -24,7 +24,7 @@
 
 #include <string.h>
 #include <ctype.h>
-#include "tcl.h"
+#include <tcl.h>
 
 #ifndef TCL_ALPHA_RELEASE
 #   define TCL_ALPHA_RELEASE    0
