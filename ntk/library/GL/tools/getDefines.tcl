@@ -62,8 +62,7 @@ set glTypes [list \
     GLclampd \
 ]
 
-set funcHeader {
-
+set funcHeader {
 /*
  * ------------------------------------------------------------------------
  *  TclGL_%sCmd()
@@ -72,29 +71,23 @@ set funcHeader {
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
-}
+/* ARGSUSED */}
 
-set paramHeader {
-    ClientData clientData, /* infoPtr */
+set paramHeader {    ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
-    Tcl_Obj *CONST objv[]) /* argument objects */
-}
+    Tcl_Obj *CONST objv[]) /* argument objects */}
 
-set argsCheck {
-    if (objc != %d) {
+set argsCheck {    if (objc != %d) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk %s %s\"",
                 NULL);
         return TCL_ERROR;
-    }
-}
+    }}
 
 set varDecls {
 {    Tcl_HashEntry *hPtr;}
 {    TclGLInfo *infoPtr;}
-{    int result;}
 {    int glResult;}
 }
 
@@ -104,7 +97,7 @@ set enumPart {    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[%s]
 	        Tcl_GetString(objv[%s]),"\"", NULL);
 	return TCL_ERROR;
     }
-    %s = (int)Tcl_GetHashValue(hPtr); }
+    %s = (GLenum)Tcl_GetHashValue(hPtr); }
 
 set openCurly "{"
 set closeCurly "}"
@@ -173,6 +166,7 @@ while {[gets stdin line] >= 0} {
 	        foreach entry $paramLst {
 		    incr paramNum
 		    set star ""
+		    set starSep ""
 		    switch [llength $entry] {
 		    1 {
 		        set ptype1 ""
@@ -187,6 +181,7 @@ while {[gets stdin line] >= 0} {
 		        foreach {ptype2 pname} $entry break
 		        if {[regexp {^([*]*)(.*)} $pname -> star pname2]} {
 			    set pname $pname2
+			    set starSep " "
 			}
 		        if {[regexp {[\[]} $pname]} {
 		            set notYet 1
@@ -196,6 +191,7 @@ while {[gets stdin line] >= 0} {
 		        foreach {ptype1 ptype2 pname} $entry break
 		        if {[regexp {^([*]*)(.*)} $pname -> star pname2]} {
 			    set pname $pname2
+			    set starSep " "
 			}
 		        if {[regexp {[\[]} $pname]} {
 		            set notYet 1
@@ -230,6 +226,7 @@ puts stderr "444!$entry!"
 		        continue
 		    }
 		    if {$ptype2 ne "void"} {
+			set myVarType "int"
 			set startStr ""
                         if {$ptype1 != ""} {
 			    set startStr "$ptype1 "
@@ -237,147 +234,69 @@ puts stderr "444!$entry!"
 		        append param_info "<($ptype2) $pname> "
 			switch $ptype2 {
 			GLenum {
-                            set myType "int"
+                            set myType "GLenum"
                             set getParam [format $enumPart $paramNum \
 			            $paramNum $pname]
 			    append paramCallInfos "${callSep}(GLenum)$pname"
 			    set callSep ", "
 			  }
                         GLboolean {
-                            set myType "int"
-			    if {$star eq ""} {
-			        set getParam "    Tcl_GetBooleanFromObj(interp, objv\[$paramNum\], &$pname);"
-			    } else {
-			        set getParam "    $pname = (${startStr}int*)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
-			    }
-			    append paramCallInfos "${callSep}(unsigned char $star)$pname"
-			    set callSep ", "
+                            set myType "GLboolean"
                           }
                         GLbitfield {
-                            set myType ""
-			    set notYet 1
-#puts stderr "NOYbitfield!$name!$entry!"
+                            set myType "GLbitfield"
+                            set getParam [format $enumPart $paramNum \
+			            $paramNum $pname]
+			    append paramCallInfos "${callSep}(GLbitfield)$pname"
+			    set callSep ", "
                           }
                         GLvoid {
-                            set myType "void"
+                            set myType "GLvoid"
 			    if {$star eq ""} {
 			        set notYet 1
 puts stderr "NOYvoid!$name!$entry!"
 			    } else {
-			        set getParam "    $pname = (${startStr}void$star)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
-			    append paramCallInfos "${callSep}(void $star)$pname"
+			        set getParam "    $pname = (void *)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
+			    append paramCallInfos "${callSep}(${myType}${starSep}$star)$pname"
 			    set callSep ", "
 			    }
                           }
                         GLbyte {
-                            set myType "int"
-			    if {$star eq ""} {
-			        set getParam "    Tcl_GetIntFromObj(interp, objv\[$paramNum\], &$pname);"
-			    } else {
-			        set getParam "    $pname = (${startStr}int*)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
-			    }
-			    append paramCallInfos "${callSep}(signed char $star)$pname"
-			    set callSep ", "
+                            set myType "GLbyte"
                           }
                         GLshort {
-                            set myType "int"
-			    if {$star eq ""} {
-			        set getParam "    Tcl_GetIntFromObj(interp, objv\[$paramNum\], &$pname);"
-			    } else {
-			        set getParam "    $pname = (${startStr}int*)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
-			    }
-			    append paramCallInfos "${callSep}(short $star)$pname"
-			    set callSep ", "
+                            set myType "GLshort"
                           }
                         GLint {
-                            set myType "int"
-			    if {$star eq ""} {
-			        set getParam "    Tcl_GetIntFromObj(interp, objv\[$paramNum\], &$pname);"
-			    } else {
-			        set getParam "    $pname = (${startStr}int*)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
-			    }
-			    append paramCallInfos "${callSep}(int $star)$pname"
-			    set callSep ", "
+                            set myType "GLint"
                           }
                         GLubyte {
-                            set myType "int"
-			    if {$star eq ""} {
-			        set getParam "    Tcl_GetIntFromObj(interp, objv\[$paramNum\], &$pname);"
-			    } else {
-			        set getParam "    $pname = (${startStr}int*)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
-			    }
-			    append paramCallInfos "${callSep}(unsigned char $star)$pname"
-			    set callSep ", "
+                            set myType "GLubyte"
                           }
                         GLushort {
-                            set myType "int"
-			    if {$star eq ""} {
-			        set getParam "    Tcl_GetIntFromObj(interp, objv\[$paramNum\], &$pname);"
-			    } else {
-			        set getParam "    $pname = (${startStr}int*)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
-			    }
-			    append paramCallInfos "${callSep}(unsigned short $star)$pname"
-			    set callSep ", "
+                            set myType "GLushort"
                           }
                         GLuint {
-                            set myType "int"
-			    if {$star eq ""} {
-			        set getParam "    Tcl_GetIntFromObj(interp, objv\[$paramNum\], &$pname);"
-			    } else {
-			        set getParam "    $pname = (${startStr}int*)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
-			    }
-			    append paramCallInfos "${callSep}(unsigned int $star)$pname"
-			    set callSep ", "
+                            set myType "GLuint"
                           }
                         GLsizei {
-                            set myType "int"
-			    set getParam "    Tcl_GetIntFromObj(interp, objv\[$paramNum\], &$pname);"
-			    append paramCallInfos "${callSep}(int $star)$pname"
-			    set callSep ", "
+                            set myType "GLsizei"
                           }
                         GLfloat {
-                            set myType "double"
-			    if {$star eq ""} {
-			        set getParam "    Tcl_GetDoubleFromObj(interp, objv\[$paramNum], &$pname);"
-			    } else {
-				set myType "void"
-			        set getParam "    $pname = (${startStr}float*)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
-			    }
-			    append paramCallInfos "${callSep}(float $star)$pname"
-			    set callSep ", "
+                            set myType "GLfloat"
+			    set myVarType double
                           }
                         GLclampf {
-                            set myType "double"
-			    if {$star eq ""} {
-			        set getParam "    Tcl_GetDoubleFromObj(interp, objv\[$paramNum\], &$pname);"
-			    } else {
-				set myType "void"
-			        set getParam "    $pname = (${startStr}float*)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
-			    }
-			    append paramCallInfos "${callSep}(float $star)$pname"
-			    set callSep ", "
+                            set myType "GLclampf"
+			    set myVarType double
                           }
                         GLdouble {
-                            set myType "double"
-			    if {$star eq ""} {
-			        set getParam "    Tcl_GetDoubleFromObj(interp, objv\[$paramNum\], &$pname);"
-			    } else {
-				set myType "void"
-			        set getParam "    $pname = (${startStr}double*)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
-			    }
-			    append paramCallInfos "${callSep}(GLdouble $star)$pname"
-			    set callSep ", "
+                            set myType "GLdouble"
+			    set myVarType double
                           }
                         GLclampd {
-                            set myType "double"
-			    if {$star eq ""} {
-			         set getParam "    Tcl_GetDoubleFromObj(interp, objv\[$paramNum\], &$pname);"
-			    } else {
-				set myType "void"
-			        set getParam "    $pname = (${startStr}double*)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
-			    }
-			    append paramCallInfos "${callSep}(GLclampd $star)$pname"
-			    set callSep ", "
+                            set myType "GLclampd"
+			    set myVarType double
                           }
                         default {
                             puts stderr "FUNNY GL type!$ptype2"
@@ -385,6 +304,47 @@ puts stderr "NOYvoid!$name!$entry!"
                             continue
                            }
                         }
+			switch $ptype2 {
+			GLenum {
+			  }
+			GLboolean {
+			    if {$star eq ""} {
+			        set getParam "    Tcl_GetBooleanFromObj(interp, objv\[$paramNum\], &$pname);"
+			    } else {
+			        set getParam "    $pname = (void *)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
+			    }
+			    append paramCallInfos "${callSep}(${myType}${starSep}$star)$pname"
+			    set callSep ", "
+			  }
+                        GLbyte -
+                        GLshort -
+                        GLint -
+                        GLubyte -
+                        GLushort -
+                        GLuint -
+                        GLsizei {
+			    if {$star eq ""} {
+			        set getParam "    Tcl_GetIntFromObj(interp, objv\[$paramNum\], &$pname);"
+			    } else {
+			        set getParam "    $pname = (void *)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
+			    }
+			    append paramCallInfos "${callSep}(${myType}${starSep}$star)$pname"
+			    set callSep ", "
+			  }
+                        GLfloat -
+                        GLclampf -
+                        GLdouble -
+                        GLclampd {
+			    if {$star eq ""} {
+			        set getParam "    Tcl_GetDoubleFromObj(interp, objv\[$paramNum], &$pname);"
+			    } else {
+				set myType "void"
+			        set getParam "    $pname = (void *)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
+			    }
+			    append paramCallInfos "${callSep}(${myType}${starSep}$star)$pname"
+			    set callSep ", "
+			  }
+			}
                         if {$myType != ""} {
 			    set init " = 0"
 			    switch $myType {
@@ -392,10 +352,7 @@ puts stderr "NOYvoid!$name!$entry!"
 			        set init " = 0.0"
 			      }
 			    }
-		            lappend funcVarDecls "    $startStr$myType ${star}$pname;"
-			    if {$ptype1 eq ""} {
-#			        lappend varInits "    $pname $init;"
-			    }
+		            lappend funcVarDecls "    ${myVarType}${starSep}${star}$pname;"
 		            lappend getParamInfos $getParam
 		        }
 		    }
@@ -420,20 +377,19 @@ puts stderr "NOYvoid!$name!$entry!"
                 lappend funcLst [join $funcVarDecls \n]
 		lappend funcLst "\n    glResult = 0;"
 		lappend funcLst "    hPtr = NULL;"
-		lappend funcLst [join $varInits \n]
+#		lappend funcLst [join $varInits \n]
 		lappend funcLst "    infoPtr = (TclGLInfo *)clientData;"
-                lappend funcLst "    TclGLShowArgs(0, \"TclGL_${name}Cmd\", objc, objv);"
+                lappend funcLst "    TclGLShowArgs(1, \"TclGL_${name}Cmd\", objc, objv);"
                 lappend funcLst [format $argsCheck [expr {$paramNum + 1}] $name $param_info]
 		if {$notYet} {
-#puts stderr "NOT YET !$name!"
+puts stderr "NOT YET !$name!"
 		    lappend funcLst "fprintf(stderr, \"$name not yet implemented\");"
-		    lappend funcLst "    result = TCL_OK;"
+                    lappend funcLst "    return TCL_OK;"
 		} else {
 		    lappend funcLst [join $getParamInfos \n]
 		    lappend funcLst "    ${name}(${paramCallInfos});"
-		    lappend funcLst "    result = GetGLError(interp);"
+		    lappend funcLst "    return GetGLError(interp);"
 		}
-                lappend funcLst "    return result;"
                 lappend funcLst $closeCurly
 	    }
         }

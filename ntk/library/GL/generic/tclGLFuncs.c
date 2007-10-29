@@ -1,4 +1,3 @@
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9,41 +8,32 @@
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glClearIndexCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double c;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glClearIndexCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glClearIndexCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glClearIndex <(GLfloat) c>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &c);
-    glClearIndex((float )c);
-    result = GetGLError(interp);
-    return result;
+    glClearIndex((GLfloat )c);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -54,19 +44,15 @@ TclGL_glClearIndexCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glClearColorCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double red;
     double green;
@@ -75,26 +61,21 @@ TclGL_glClearColorCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glClearColorCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glClearColorCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glClearColor <(GLclampf) red> <(GLclampf) green> <(GLclampf) blue> <(GLclampf) alpha>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &red);
     Tcl_GetDoubleFromObj(interp, objv[2], &green);
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
     Tcl_GetDoubleFromObj(interp, objv[4], &alpha);
-    glClearColor((float )red, (float )green, (float )blue, (float )alpha);
-    result = GetGLError(interp);
-    return result;
+    glClearColor((GLclampf )red, (GLclampf )green, (GLclampf )blue, (GLclampf )alpha);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -105,39 +86,37 @@ TclGL_glClearColorCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glClearCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
+    int mask;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glClearCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glClearCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glClear <(GLbitfield) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-fprintf(stderr, "glClear not yet implemented");
-    result = TCL_OK;
-    return result;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mask = (GLenum)Tcl_GetHashValue(hPtr); 
+    glClear((GLbitfield)mask);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -148,41 +127,32 @@ fprintf(stderr, "glClear not yet implemented");
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIndexMaskCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mask;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIndexMaskCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIndexMaskCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIndexMask <(GLuint) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &mask);
-    glIndexMask((unsigned int )mask);
-    result = GetGLError(interp);
-    return result;
+    glIndexMask((GLuint )mask);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -193,19 +163,15 @@ TclGL_glIndexMaskCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColorMaskCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int red;
     int green;
@@ -214,26 +180,21 @@ TclGL_glColorMaskCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColorMaskCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColorMaskCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColorMask <(GLboolean) red> <(GLboolean) green> <(GLboolean) blue> <(GLboolean) alpha>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetBooleanFromObj(interp, objv[1], &red);
     Tcl_GetBooleanFromObj(interp, objv[2], &green);
     Tcl_GetBooleanFromObj(interp, objv[3], &blue);
     Tcl_GetBooleanFromObj(interp, objv[4], &alpha);
-    glColorMask((unsigned char )red, (unsigned char )green, (unsigned char )blue, (unsigned char )alpha);
-    result = GetGLError(interp);
-    return result;
+    glColorMask((GLboolean )red, (GLboolean )green, (GLboolean )blue, (GLboolean )alpha);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -244,48 +205,39 @@ TclGL_glColorMaskCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glAlphaFuncCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int func;
     double ref;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glAlphaFuncCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glAlphaFuncCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glAlphaFunc <(GLenum) func> <(GLclampf) ref>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    func = (int)Tcl_GetHashValue(hPtr); 
+    func = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &ref);
-    glAlphaFunc((GLenum)func, (float )ref);
-    result = GetGLError(interp);
-    return result;
+    glAlphaFunc((GLenum)func, (GLclampf )ref);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -296,53 +248,44 @@ TclGL_glAlphaFuncCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glBlendFuncCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int sfactor;
     int dfactor;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glBlendFuncCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glBlendFuncCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glBlendFunc <(GLenum) sfactor> <(GLenum) dfactor>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    sfactor = (int)Tcl_GetHashValue(hPtr); 
+    sfactor = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    dfactor = (int)Tcl_GetHashValue(hPtr); 
+    dfactor = (GLenum)Tcl_GetHashValue(hPtr); 
     glBlendFunc((GLenum)sfactor, (GLenum)dfactor);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -353,46 +296,37 @@ TclGL_glBlendFuncCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLogicOpCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int opcode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLogicOpCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLogicOpCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLogicOp <(GLenum) opcode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    opcode = (int)Tcl_GetHashValue(hPtr); 
+    opcode = (GLenum)Tcl_GetHashValue(hPtr); 
     glLogicOp((GLenum)opcode);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -403,46 +337,37 @@ TclGL_glLogicOpCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glCullFaceCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glCullFaceCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glCullFaceCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glCullFace <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glCullFace((GLenum)mode);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -453,46 +378,37 @@ TclGL_glCullFaceCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glFrontFaceCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glFrontFaceCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glFrontFaceCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glFrontFace <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glFrontFace((GLenum)mode);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -503,41 +419,32 @@ TclGL_glFrontFaceCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPointSizeCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double size;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPointSizeCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPointSizeCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPointSize <(GLfloat) size>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &size);
-    glPointSize((float )size);
-    result = GetGLError(interp);
-    return result;
+    glPointSize((GLfloat )size);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -548,41 +455,32 @@ TclGL_glPointSizeCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLineWidthCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double width;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLineWidthCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLineWidthCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLineWidth <(GLfloat) width>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &width);
-    glLineWidth((float )width);
-    result = GetGLError(interp);
-    return result;
+    glLineWidth((GLfloat )width);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -593,43 +491,34 @@ TclGL_glLineWidthCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLineStippleCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int factor;
     int pattern;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLineStippleCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLineStippleCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLineStipple <(GLint) factor> <(GLushort) pattern>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &factor);
     Tcl_GetIntFromObj(interp, objv[2], &pattern);
-    glLineStipple((int )factor, (unsigned short )pattern);
-    result = GetGLError(interp);
-    return result;
+    glLineStipple((GLint )factor, (GLushort )pattern);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -640,53 +529,44 @@ TclGL_glLineStippleCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPolygonModeCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int face;
     int mode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPolygonModeCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPolygonModeCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPolygonMode <(GLenum) face> <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    face = (int)Tcl_GetHashValue(hPtr); 
+    face = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glPolygonMode((GLenum)face, (GLenum)mode);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -697,43 +577,34 @@ TclGL_glPolygonModeCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPolygonOffsetCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double factor;
     double units;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPolygonOffsetCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPolygonOffsetCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPolygonOffset <(GLfloat) factor> <(GLfloat) units>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &factor);
     Tcl_GetDoubleFromObj(interp, objv[2], &units);
-    glPolygonOffset((float )factor, (float )units);
-    result = GetGLError(interp);
-    return result;
+    glPolygonOffset((GLfloat )factor, (GLfloat )units);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -744,41 +615,32 @@ TclGL_glPolygonOffsetCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPolygonStippleCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *mask;
+    int *mask;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPolygonStippleCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPolygonStippleCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPolygonStipple <(GLubyte) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    mask = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glPolygonStipple((unsigned char *)mask);
-    result = GetGLError(interp);
-    return result;
+    mask = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glPolygonStipple((GLubyte *)mask);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -789,41 +651,32 @@ TclGL_glPolygonStippleCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetPolygonStippleCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int *mask;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetPolygonStippleCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetPolygonStippleCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetPolygonStipple <(GLubyte) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    mask = (int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glGetPolygonStipple((unsigned char *)mask);
-    result = GetGLError(interp);
-    return result;
+    mask = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glGetPolygonStipple((GLubyte *)mask);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -834,41 +687,32 @@ TclGL_glGetPolygonStippleCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEdgeFlagCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int flag;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEdgeFlagCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEdgeFlagCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEdgeFlag <(GLboolean) flag>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetBooleanFromObj(interp, objv[1], &flag);
-    glEdgeFlag((unsigned char )flag);
-    result = GetGLError(interp);
-    return result;
+    glEdgeFlag((GLboolean )flag);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -879,41 +723,32 @@ TclGL_glEdgeFlagCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEdgeFlagvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *flag;
+    int *flag;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEdgeFlagvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEdgeFlagvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEdgeFlagv <(GLboolean) flag>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    flag = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glEdgeFlagv((unsigned char *)flag);
-    result = GetGLError(interp);
-    return result;
+    flag = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glEdgeFlagv((GLboolean *)flag);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -924,19 +759,15 @@ TclGL_glEdgeFlagvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glScissorCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x;
     int y;
@@ -945,26 +776,21 @@ TclGL_glScissorCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glScissorCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glScissorCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glScissor <(GLint) x> <(GLint) y> <(GLsizei) width> <(GLsizei) height>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &width);
     Tcl_GetIntFromObj(interp, objv[4], &height);
-    glScissor((int )x, (int )y, (int )width, (int )height);
-    result = GetGLError(interp);
-    return result;
+    glScissor((GLint )x, (GLint )y, (GLsizei )width, (GLsizei )height);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -975,48 +801,39 @@ TclGL_glScissorCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glClipPlaneCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int plane;
-    const void *equation;
+    double *equation;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glClipPlaneCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glClipPlaneCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glClipPlane <(GLenum) plane> <(GLdouble) equation>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    plane = (int)Tcl_GetHashValue(hPtr); 
-    equation = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glClipPlane((GLenum)plane, (GLdouble *)equation);
-    result = GetGLError(interp);
-    return result;
+    plane = (GLenum)Tcl_GetHashValue(hPtr); 
+    equation = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glClipPlane((GLenum)plane, (void *)equation);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1027,48 +844,39 @@ TclGL_glClipPlaneCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetClipPlaneCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int plane;
-    void *equation;
+    double *equation;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetClipPlaneCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetClipPlaneCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetClipPlane <(GLenum) plane> <(GLdouble) equation>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    plane = (int)Tcl_GetHashValue(hPtr); 
-    equation = (double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glGetClipPlane((GLenum)plane, (GLdouble *)equation);
-    result = GetGLError(interp);
-    return result;
+    plane = (GLenum)Tcl_GetHashValue(hPtr); 
+    equation = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetClipPlane((GLenum)plane, (void *)equation);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1079,46 +887,37 @@ TclGL_glGetClipPlaneCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glDrawBufferCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glDrawBufferCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glDrawBufferCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glDrawBuffer <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glDrawBuffer((GLenum)mode);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1129,46 +928,37 @@ TclGL_glDrawBufferCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glReadBufferCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glReadBufferCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glReadBufferCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glReadBuffer <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glReadBuffer((GLenum)mode);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1179,46 +969,37 @@ TclGL_glReadBufferCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEnableCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int cap;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEnableCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEnableCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEnable <(GLenum) cap>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    cap = (int)Tcl_GetHashValue(hPtr); 
+    cap = (GLenum)Tcl_GetHashValue(hPtr); 
     glEnable((GLenum)cap);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1229,46 +1010,37 @@ TclGL_glEnableCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glDisableCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int cap;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glDisableCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glDisableCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glDisable <(GLenum) cap>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    cap = (int)Tcl_GetHashValue(hPtr); 
+    cap = (GLenum)Tcl_GetHashValue(hPtr); 
     glDisable((GLenum)cap);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1279,46 +1051,37 @@ TclGL_glDisableCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIsEnabledCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int cap;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIsEnabledCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIsEnabledCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIsEnabled <(GLenum) cap>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    cap = (int)Tcl_GetHashValue(hPtr); 
+    cap = (GLenum)Tcl_GetHashValue(hPtr); 
     glIsEnabled((GLenum)cap);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1329,46 +1092,37 @@ TclGL_glIsEnabledCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEnableClientStateCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int cap;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEnableClientStateCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEnableClientStateCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEnableClientState <(GLenum) cap>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    cap = (int)Tcl_GetHashValue(hPtr); 
+    cap = (GLenum)Tcl_GetHashValue(hPtr); 
     glEnableClientState((GLenum)cap);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1379,46 +1133,37 @@ TclGL_glEnableClientStateCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glDisableClientStateCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int cap;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glDisableClientStateCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glDisableClientStateCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glDisableClientState <(GLenum) cap>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    cap = (int)Tcl_GetHashValue(hPtr); 
+    cap = (GLenum)Tcl_GetHashValue(hPtr); 
     glDisableClientState((GLenum)cap);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1429,48 +1174,39 @@ TclGL_glDisableClientStateCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetBooleanvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
     int *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetBooleanvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetBooleanvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetBooleanv <(GLenum) pname> <(GLboolean) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glGetBooleanv((GLenum)pname, (unsigned char *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetBooleanv((GLenum)pname, (GLboolean *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1481,48 +1217,39 @@ TclGL_glGetBooleanvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetDoublevCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
-    void *params;
+    double *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetDoublevCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetDoublevCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetDoublev <(GLenum) pname> <(GLdouble) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glGetDoublev((GLenum)pname, (GLdouble *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetDoublev((GLenum)pname, (void *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1533,48 +1260,39 @@ TclGL_glGetDoublevCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetFloatvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
-    void *params;
+    double *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetFloatvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetFloatvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetFloatv <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glGetFloatv((GLenum)pname, (float *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetFloatv((GLenum)pname, (void *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1585,48 +1303,39 @@ TclGL_glGetFloatvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetIntegervCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
     int *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetIntegervCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetIntegervCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetIntegerv <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glGetIntegerv((GLenum)pname, (int *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetIntegerv((GLenum)pname, (GLint *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1637,39 +1346,37 @@ TclGL_glGetIntegervCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPushAttribCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
+    int mask;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPushAttribCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPushAttribCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPushAttrib <(GLbitfield) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-fprintf(stderr, "glPushAttrib not yet implemented");
-    result = TCL_OK;
-    return result;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mask = (GLenum)Tcl_GetHashValue(hPtr); 
+    glPushAttrib((GLbitfield)mask);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1680,27 +1387,21 @@ fprintf(stderr, "glPushAttrib not yet implemented");
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPopAttribCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPopAttribCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPopAttribCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPopAttrib \"",
@@ -1708,12 +1409,9 @@ TclGL_glPopAttribCmd(
         return TCL_ERROR;
     }
 
-
     glPopAttrib();
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1724,39 +1422,37 @@ TclGL_glPopAttribCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPushClientAttribCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
+    int mask;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPushClientAttribCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPushClientAttribCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPushClientAttrib <(GLbitfield) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-fprintf(stderr, "glPushClientAttrib not yet implemented");
-    result = TCL_OK;
-    return result;
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
+	return TCL_ERROR;
+    }
+    mask = (GLenum)Tcl_GetHashValue(hPtr); 
+    glPushClientAttrib((GLbitfield)mask);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1767,27 +1463,21 @@ fprintf(stderr, "glPushClientAttrib not yet implemented");
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPopClientAttribCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPopClientAttribCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPopClientAttribCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPopClientAttrib \"",
@@ -1795,12 +1485,9 @@ TclGL_glPopClientAttribCmd(
         return TCL_ERROR;
     }
 
-
     glPopClientAttrib();
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1811,46 +1498,37 @@ TclGL_glPopClientAttribCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRenderModeCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRenderModeCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRenderModeCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRenderMode <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glRenderMode((GLenum)mode);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1861,27 +1539,21 @@ TclGL_glRenderModeCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetErrorCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetErrorCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetErrorCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetError \"",
@@ -1889,12 +1561,9 @@ TclGL_glGetErrorCmd(
         return TCL_ERROR;
     }
 
-
     glGetError();
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1905,27 +1574,21 @@ TclGL_glGetErrorCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glFinishCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glFinishCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glFinishCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glFinish \"",
@@ -1933,12 +1596,9 @@ TclGL_glFinishCmd(
         return TCL_ERROR;
     }
 
-
     glFinish();
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1949,27 +1609,21 @@ TclGL_glFinishCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glFlushCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glFlushCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glFlushCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glFlush \"",
@@ -1977,12 +1631,9 @@ TclGL_glFlushCmd(
         return TCL_ERROR;
     }
 
-
     glFlush();
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -1993,53 +1644,44 @@ TclGL_glFlushCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glHintCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int mode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glHintCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glHintCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glHint <(GLenum) target> <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glHint((GLenum)target, (GLenum)mode);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2050,41 +1692,32 @@ TclGL_glHintCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glClearDepthCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double depth;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glClearDepthCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glClearDepthCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glClearDepth <(GLclampd) depth>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &depth);
     glClearDepth((GLclampd )depth);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2095,46 +1728,37 @@ TclGL_glClearDepthCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glDepthFuncCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int func;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glDepthFuncCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glDepthFuncCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glDepthFunc <(GLenum) func>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    func = (int)Tcl_GetHashValue(hPtr); 
+    func = (GLenum)Tcl_GetHashValue(hPtr); 
     glDepthFunc((GLenum)func);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2145,41 +1769,32 @@ TclGL_glDepthFuncCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glDepthMaskCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int flag;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glDepthMaskCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glDepthMaskCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glDepthMask <(GLboolean) flag>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetBooleanFromObj(interp, objv[1], &flag);
-    glDepthMask((unsigned char )flag);
-    result = GetGLError(interp);
-    return result;
+    glDepthMask((GLboolean )flag);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2190,43 +1805,34 @@ TclGL_glDepthMaskCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glDepthRangeCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double near_val;
     double far_val;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glDepthRangeCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glDepthRangeCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glDepthRange <(GLclampd) near_val> <(GLclampd) far_val>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &near_val);
     Tcl_GetDoubleFromObj(interp, objv[2], &far_val);
     glDepthRange((GLclampd )near_val, (GLclampd )far_val);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2237,19 +1843,15 @@ TclGL_glDepthRangeCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glClearAccumCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double red;
     double green;
@@ -2258,26 +1860,21 @@ TclGL_glClearAccumCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glClearAccumCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glClearAccumCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glClearAccum <(GLfloat) red> <(GLfloat) green> <(GLfloat) blue> <(GLfloat) alpha>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &red);
     Tcl_GetDoubleFromObj(interp, objv[2], &green);
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
     Tcl_GetDoubleFromObj(interp, objv[4], &alpha);
-    glClearAccum((float )red, (float )green, (float )blue, (float )alpha);
-    result = GetGLError(interp);
-    return result;
+    glClearAccum((GLfloat )red, (GLfloat )green, (GLfloat )blue, (GLfloat )alpha);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2288,48 +1885,39 @@ TclGL_glClearAccumCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glAccumCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int op;
     double value;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glAccumCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glAccumCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glAccum <(GLenum) op> <(GLfloat) value>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    op = (int)Tcl_GetHashValue(hPtr); 
+    op = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &value);
-    glAccum((GLenum)op, (float )value);
-    result = GetGLError(interp);
-    return result;
+    glAccum((GLenum)op, (GLfloat )value);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2340,46 +1928,37 @@ TclGL_glAccumCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMatrixModeCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMatrixModeCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMatrixModeCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMatrixMode <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glMatrixMode((GLenum)mode);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2390,27 +1969,21 @@ TclGL_glMatrixModeCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPushMatrixCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPushMatrixCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPushMatrixCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPushMatrix \"",
@@ -2418,12 +1991,9 @@ TclGL_glPushMatrixCmd(
         return TCL_ERROR;
     }
 
-
     glPushMatrix();
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2434,27 +2004,21 @@ TclGL_glPushMatrixCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPopMatrixCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPopMatrixCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPopMatrixCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPopMatrix \"",
@@ -2462,12 +2026,9 @@ TclGL_glPopMatrixCmd(
         return TCL_ERROR;
     }
 
-
     glPopMatrix();
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2478,27 +2039,21 @@ TclGL_glPopMatrixCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLoadIdentityCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLoadIdentityCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLoadIdentityCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLoadIdentity \"",
@@ -2506,12 +2061,9 @@ TclGL_glLoadIdentityCmd(
         return TCL_ERROR;
     }
 
-
     glLoadIdentity();
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2522,41 +2074,32 @@ TclGL_glLoadIdentityCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLoadMatrixdCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *m;
+    double *m;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLoadMatrixdCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLoadMatrixdCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLoadMatrixd <(GLdouble) m>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    m = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glLoadMatrixd((GLdouble *)m);
-    result = GetGLError(interp);
-    return result;
+    m = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glLoadMatrixd((void *)m);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2567,41 +2110,32 @@ TclGL_glLoadMatrixdCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLoadMatrixfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *m;
+    double *m;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLoadMatrixfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLoadMatrixfCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLoadMatrixf <(GLfloat) m>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    m = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glLoadMatrixf((float *)m);
-    result = GetGLError(interp);
-    return result;
+    m = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glLoadMatrixf((void *)m);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2612,41 +2146,32 @@ TclGL_glLoadMatrixfCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultMatrixdCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *m;
+    double *m;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultMatrixdCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultMatrixdCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultMatrixd <(GLdouble) m>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    m = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glMultMatrixd((GLdouble *)m);
-    result = GetGLError(interp);
-    return result;
+    m = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glMultMatrixd((void *)m);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2657,41 +2182,32 @@ TclGL_glMultMatrixdCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultMatrixfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *m;
+    double *m;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultMatrixfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultMatrixfCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultMatrixf <(GLfloat) m>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    m = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glMultMatrixf((float *)m);
-    result = GetGLError(interp);
-    return result;
+    m = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glMultMatrixf((void *)m);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2702,19 +2218,15 @@ TclGL_glMultMatrixfCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glScaledCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
@@ -2722,25 +2234,20 @@ TclGL_glScaledCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glScaledCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glScaledCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glScaled <(GLdouble) x> <(GLdouble) y> <(GLdouble) z>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     glScaled((GLdouble )x, (GLdouble )y, (GLdouble )z);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2751,19 +2258,15 @@ TclGL_glScaledCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glScalefCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
@@ -2771,25 +2274,20 @@ TclGL_glScalefCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glScalefCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glScalefCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glScalef <(GLfloat) x> <(GLfloat) y> <(GLfloat) z>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
-    glScalef((float )x, (float )y, (float )z);
-    result = GetGLError(interp);
-    return result;
+    glScalef((GLfloat )x, (GLfloat )y, (GLfloat )z);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2800,19 +2298,15 @@ TclGL_glScalefCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTranslatedCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
@@ -2820,25 +2314,20 @@ TclGL_glTranslatedCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTranslatedCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTranslatedCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTranslated <(GLdouble) x> <(GLdouble) y> <(GLdouble) z>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     glTranslated((GLdouble )x, (GLdouble )y, (GLdouble )z);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2849,19 +2338,15 @@ TclGL_glTranslatedCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTranslatefCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
@@ -2869,25 +2354,20 @@ TclGL_glTranslatefCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTranslatefCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTranslatefCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTranslatef <(GLfloat) x> <(GLfloat) y> <(GLfloat) z>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
-    glTranslatef((float )x, (float )y, (float )z);
-    result = GetGLError(interp);
-    return result;
+    glTranslatef((GLfloat )x, (GLfloat )y, (GLfloat )z);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2898,41 +2378,32 @@ TclGL_glTranslatefCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIsListCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int list;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIsListCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIsListCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIsList <(GLuint) list>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &list);
-    glIsList((unsigned int )list);
-    result = GetGLError(interp);
-    return result;
+    glIsList((GLuint )list);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2943,43 +2414,34 @@ TclGL_glIsListCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glDeleteListsCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int list;
     int range;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glDeleteListsCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glDeleteListsCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glDeleteLists <(GLuint) list> <(GLsizei) range>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &list);
     Tcl_GetIntFromObj(interp, objv[2], &range);
-    glDeleteLists((unsigned int )list, (int )range);
-    result = GetGLError(interp);
-    return result;
+    glDeleteLists((GLuint )list, (GLsizei )range);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -2990,41 +2452,32 @@ TclGL_glDeleteListsCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGenListsCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int range;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGenListsCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGenListsCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGenLists <(GLsizei) range>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &range);
-    glGenLists((int )range);
-    result = GetGLError(interp);
-    return result;
+    glGenLists((GLsizei )range);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3035,48 +2488,39 @@ TclGL_glGenListsCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glNewListCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int list;
     int mode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glNewListCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glNewListCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glNewList <(GLuint) list> <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &list);
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
-    glNewList((unsigned int )list, (GLenum)mode);
-    result = GetGLError(interp);
-    return result;
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
+    glNewList((GLuint )list, (GLenum)mode);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3087,27 +2531,21 @@ TclGL_glNewListCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEndListCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEndListCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEndListCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEndList \"",
@@ -3115,12 +2553,9 @@ TclGL_glEndListCmd(
         return TCL_ERROR;
     }
 
-
     glEndList();
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3131,41 +2566,32 @@ TclGL_glEndListCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glCallListCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int list;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glCallListCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glCallListCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glCallList <(GLuint) list>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &list);
-    glCallList((unsigned int )list);
-    result = GetGLError(interp);
-    return result;
+    glCallList((GLuint )list);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3176,41 +2602,32 @@ TclGL_glCallListCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glListBaseCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int base;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glListBaseCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glListBaseCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glListBase <(GLuint) base>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &base);
-    glListBase((unsigned int )base);
-    result = GetGLError(interp);
-    return result;
+    glListBase((GLuint )base);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3221,46 +2638,37 @@ TclGL_glListBaseCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glBeginCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glBeginCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glBeginCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glBegin <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glBegin((GLenum)mode);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3271,27 +2679,21 @@ TclGL_glBeginCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEndCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEndCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEndCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEnd \"",
@@ -3299,12 +2701,9 @@ TclGL_glEndCmd(
         return TCL_ERROR;
     }
 
-
     glEnd();
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3315,43 +2714,34 @@ TclGL_glEndCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex2dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex2dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex2dCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex2d <(GLdouble) x> <(GLdouble) y>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     glVertex2d((GLdouble )x, (GLdouble )y);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3362,43 +2752,34 @@ TclGL_glVertex2dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex2fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex2fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex2fCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex2f <(GLfloat) x> <(GLfloat) y>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
-    glVertex2f((float )x, (float )y);
-    result = GetGLError(interp);
-    return result;
+    glVertex2f((GLfloat )x, (GLfloat )y);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3409,43 +2790,34 @@ TclGL_glVertex2fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex2iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x;
     int y;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex2iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex2iCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex2i <(GLint) x> <(GLint) y>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
-    glVertex2i((int )x, (int )y);
-    result = GetGLError(interp);
-    return result;
+    glVertex2i((GLint )x, (GLint )y);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3456,43 +2828,34 @@ TclGL_glVertex2iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex2sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x;
     int y;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex2sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex2sCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex2s <(GLshort) x> <(GLshort) y>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
-    glVertex2s((short )x, (short )y);
-    result = GetGLError(interp);
-    return result;
+    glVertex2s((GLshort )x, (GLshort )y);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3503,19 +2866,15 @@ TclGL_glVertex2sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex3dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
@@ -3523,25 +2882,20 @@ TclGL_glVertex3dCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex3dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex3dCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex3d <(GLdouble) x> <(GLdouble) y> <(GLdouble) z>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     glVertex3d((GLdouble )x, (GLdouble )y, (GLdouble )z);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3552,19 +2906,15 @@ TclGL_glVertex3dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex3fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
@@ -3572,25 +2922,20 @@ TclGL_glVertex3fCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex3fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex3fCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex3f <(GLfloat) x> <(GLfloat) y> <(GLfloat) z>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
-    glVertex3f((float )x, (float )y, (float )z);
-    result = GetGLError(interp);
-    return result;
+    glVertex3f((GLfloat )x, (GLfloat )y, (GLfloat )z);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3601,19 +2946,15 @@ TclGL_glVertex3fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex3iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x;
     int y;
@@ -3621,25 +2962,20 @@ TclGL_glVertex3iCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex3iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex3iCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex3i <(GLint) x> <(GLint) y> <(GLint) z>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
-    glVertex3i((int )x, (int )y, (int )z);
-    result = GetGLError(interp);
-    return result;
+    glVertex3i((GLint )x, (GLint )y, (GLint )z);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3650,19 +2986,15 @@ TclGL_glVertex3iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex3sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x;
     int y;
@@ -3670,25 +3002,20 @@ TclGL_glVertex3sCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex3sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex3sCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex3s <(GLshort) x> <(GLshort) y> <(GLshort) z>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
-    glVertex3s((short )x, (short )y, (short )z);
-    result = GetGLError(interp);
-    return result;
+    glVertex3s((GLshort )x, (GLshort )y, (GLshort )z);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3699,19 +3026,15 @@ TclGL_glVertex3sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex4dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
@@ -3720,26 +3043,21 @@ TclGL_glVertex4dCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex4dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex4dCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex4d <(GLdouble) x> <(GLdouble) y> <(GLdouble) z> <(GLdouble) w>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     Tcl_GetDoubleFromObj(interp, objv[4], &w);
     glVertex4d((GLdouble )x, (GLdouble )y, (GLdouble )z, (GLdouble )w);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3750,19 +3068,15 @@ TclGL_glVertex4dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex4fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
@@ -3771,26 +3085,21 @@ TclGL_glVertex4fCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex4fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex4fCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex4f <(GLfloat) x> <(GLfloat) y> <(GLfloat) z> <(GLfloat) w>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     Tcl_GetDoubleFromObj(interp, objv[4], &w);
-    glVertex4f((float )x, (float )y, (float )z, (float )w);
-    result = GetGLError(interp);
-    return result;
+    glVertex4f((GLfloat )x, (GLfloat )y, (GLfloat )z, (GLfloat )w);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3801,19 +3110,15 @@ TclGL_glVertex4fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex4iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x;
     int y;
@@ -3822,26 +3127,21 @@ TclGL_glVertex4iCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex4iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex4iCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex4i <(GLint) x> <(GLint) y> <(GLint) z> <(GLint) w>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
     Tcl_GetIntFromObj(interp, objv[4], &w);
-    glVertex4i((int )x, (int )y, (int )z, (int )w);
-    result = GetGLError(interp);
-    return result;
+    glVertex4i((GLint )x, (GLint )y, (GLint )z, (GLint )w);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3852,19 +3152,15 @@ TclGL_glVertex4iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex4sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x;
     int y;
@@ -3873,26 +3169,21 @@ TclGL_glVertex4sCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex4sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex4sCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex4s <(GLshort) x> <(GLshort) y> <(GLshort) z> <(GLshort) w>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
     Tcl_GetIntFromObj(interp, objv[4], &w);
-    glVertex4s((short )x, (short )y, (short )z, (short )w);
-    result = GetGLError(interp);
-    return result;
+    glVertex4s((GLshort )x, (GLshort )y, (GLshort )z, (GLshort )w);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3903,41 +3194,32 @@ TclGL_glVertex4sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex2dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex2dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex2dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex2dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glVertex2dv((GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex2dv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3948,41 +3230,32 @@ TclGL_glVertex2dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex2fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex2fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex2fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex2fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glVertex2fv((float *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex2fv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -3993,41 +3266,32 @@ TclGL_glVertex2fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex2ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex2ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex2ivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex2iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glVertex2iv((int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex2iv((GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4038,41 +3302,32 @@ TclGL_glVertex2ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex2svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex2svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex2svCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex2sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glVertex2sv((short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex2sv((GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4083,41 +3338,32 @@ TclGL_glVertex2svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex3dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex3dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex3dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex3dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glVertex3dv((GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex3dv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4128,41 +3374,32 @@ TclGL_glVertex3dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex3fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex3fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex3fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex3fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glVertex3fv((float *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex3fv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4173,41 +3410,32 @@ TclGL_glVertex3fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex3ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex3ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex3ivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex3iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glVertex3iv((int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex3iv((GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4218,41 +3446,32 @@ TclGL_glVertex3ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex3svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex3svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex3svCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex3sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glVertex3sv((short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex3sv((GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4263,41 +3482,32 @@ TclGL_glVertex3svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex4dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex4dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex4dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex4dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glVertex4dv((GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex4dv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4308,41 +3518,32 @@ TclGL_glVertex4dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex4fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex4fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex4fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex4fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glVertex4fv((float *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex4fv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4353,41 +3554,32 @@ TclGL_glVertex4fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex4ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex4ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex4ivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex4iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glVertex4iv((int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex4iv((GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4398,41 +3590,32 @@ TclGL_glVertex4ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glVertex4svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glVertex4svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glVertex4svCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glVertex4sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glVertex4sv((short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glVertex4sv((GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4443,19 +3626,15 @@ TclGL_glVertex4svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glNormal3bCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int nx;
     int ny;
@@ -4463,25 +3642,20 @@ TclGL_glNormal3bCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glNormal3bCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glNormal3bCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glNormal3b <(GLbyte) nx> <(GLbyte) ny> <(GLbyte) nz>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &nx);
     Tcl_GetIntFromObj(interp, objv[2], &ny);
     Tcl_GetIntFromObj(interp, objv[3], &nz);
-    glNormal3b((signed char )nx, (signed char )ny, (signed char )nz);
-    result = GetGLError(interp);
-    return result;
+    glNormal3b((GLbyte )nx, (GLbyte )ny, (GLbyte )nz);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4492,19 +3666,15 @@ TclGL_glNormal3bCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glNormal3dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double nx;
     double ny;
@@ -4512,25 +3682,20 @@ TclGL_glNormal3dCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glNormal3dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glNormal3dCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glNormal3d <(GLdouble) nx> <(GLdouble) ny> <(GLdouble) nz>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &nx);
     Tcl_GetDoubleFromObj(interp, objv[2], &ny);
     Tcl_GetDoubleFromObj(interp, objv[3], &nz);
     glNormal3d((GLdouble )nx, (GLdouble )ny, (GLdouble )nz);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4541,19 +3706,15 @@ TclGL_glNormal3dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glNormal3fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double nx;
     double ny;
@@ -4561,25 +3722,20 @@ TclGL_glNormal3fCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glNormal3fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glNormal3fCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glNormal3f <(GLfloat) nx> <(GLfloat) ny> <(GLfloat) nz>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &nx);
     Tcl_GetDoubleFromObj(interp, objv[2], &ny);
     Tcl_GetDoubleFromObj(interp, objv[3], &nz);
-    glNormal3f((float )nx, (float )ny, (float )nz);
-    result = GetGLError(interp);
-    return result;
+    glNormal3f((GLfloat )nx, (GLfloat )ny, (GLfloat )nz);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4590,19 +3746,15 @@ TclGL_glNormal3fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glNormal3iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int nx;
     int ny;
@@ -4610,25 +3762,20 @@ TclGL_glNormal3iCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glNormal3iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glNormal3iCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glNormal3i <(GLint) nx> <(GLint) ny> <(GLint) nz>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &nx);
     Tcl_GetIntFromObj(interp, objv[2], &ny);
     Tcl_GetIntFromObj(interp, objv[3], &nz);
-    glNormal3i((int )nx, (int )ny, (int )nz);
-    result = GetGLError(interp);
-    return result;
+    glNormal3i((GLint )nx, (GLint )ny, (GLint )nz);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4639,19 +3786,15 @@ TclGL_glNormal3iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glNormal3sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int nx;
     int ny;
@@ -4659,25 +3802,20 @@ TclGL_glNormal3sCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glNormal3sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glNormal3sCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glNormal3s <(GLshort) nx> <(GLshort) ny> <(GLshort) nz>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &nx);
     Tcl_GetIntFromObj(interp, objv[2], &ny);
     Tcl_GetIntFromObj(interp, objv[3], &nz);
-    glNormal3s((short )nx, (short )ny, (short )nz);
-    result = GetGLError(interp);
-    return result;
+    glNormal3s((GLshort )nx, (GLshort )ny, (GLshort )nz);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4688,41 +3826,32 @@ TclGL_glNormal3sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glNormal3bvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glNormal3bvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glNormal3bvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glNormal3bv <(GLbyte) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glNormal3bv((signed char *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glNormal3bv((GLbyte *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4733,41 +3862,32 @@ TclGL_glNormal3bvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glNormal3dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glNormal3dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glNormal3dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glNormal3dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glNormal3dv((GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glNormal3dv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4778,41 +3898,32 @@ TclGL_glNormal3dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glNormal3fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glNormal3fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glNormal3fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glNormal3fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glNormal3fv((float *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glNormal3fv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4823,41 +3934,32 @@ TclGL_glNormal3fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glNormal3ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glNormal3ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glNormal3ivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glNormal3iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glNormal3iv((int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glNormal3iv((GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4868,41 +3970,32 @@ TclGL_glNormal3ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glNormal3svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glNormal3svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glNormal3svCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glNormal3sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glNormal3sv((short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glNormal3sv((GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4913,41 +4006,32 @@ TclGL_glNormal3svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIndexdCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double c;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIndexdCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIndexdCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIndexd <(GLdouble) c>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &c);
     glIndexd((GLdouble )c);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -4958,41 +4042,32 @@ TclGL_glIndexdCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIndexfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double c;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIndexfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIndexfCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIndexf <(GLfloat) c>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &c);
-    glIndexf((float )c);
-    result = GetGLError(interp);
-    return result;
+    glIndexf((GLfloat )c);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5003,41 +4078,32 @@ TclGL_glIndexfCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIndexiCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int c;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIndexiCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIndexiCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIndexi <(GLint) c>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &c);
-    glIndexi((int )c);
-    result = GetGLError(interp);
-    return result;
+    glIndexi((GLint )c);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5048,41 +4114,32 @@ TclGL_glIndexiCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIndexsCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int c;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIndexsCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIndexsCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIndexs <(GLshort) c>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &c);
-    glIndexs((short )c);
-    result = GetGLError(interp);
-    return result;
+    glIndexs((GLshort )c);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5093,41 +4150,32 @@ TclGL_glIndexsCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIndexubCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int c;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIndexubCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIndexubCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIndexub <(GLubyte) c>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &c);
-    glIndexub((unsigned char )c);
-    result = GetGLError(interp);
-    return result;
+    glIndexub((GLubyte )c);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5138,41 +4186,32 @@ TclGL_glIndexubCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIndexdvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *c;
+    double *c;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIndexdvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIndexdvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIndexdv <(GLdouble) c>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    c = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glIndexdv((GLdouble *)c);
-    result = GetGLError(interp);
-    return result;
+    c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glIndexdv((void *)c);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5183,41 +4222,32 @@ TclGL_glIndexdvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIndexfvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *c;
+    double *c;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIndexfvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIndexfvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIndexfv <(GLfloat) c>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    c = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glIndexfv((float *)c);
-    result = GetGLError(interp);
-    return result;
+    c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glIndexfv((void *)c);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5228,41 +4258,32 @@ TclGL_glIndexfvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIndexivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *c;
+    int *c;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIndexivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIndexivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIndexiv <(GLint) c>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    c = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glIndexiv((int *)c);
-    result = GetGLError(interp);
-    return result;
+    c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glIndexiv((GLint *)c);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5273,41 +4294,32 @@ TclGL_glIndexivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIndexsvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *c;
+    int *c;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIndexsvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIndexsvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIndexsv <(GLshort) c>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    c = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glIndexsv((short *)c);
-    result = GetGLError(interp);
-    return result;
+    c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glIndexsv((GLshort *)c);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5318,41 +4330,32 @@ TclGL_glIndexsvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIndexubvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *c;
+    int *c;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIndexubvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIndexubvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIndexubv <(GLubyte) c>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    c = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glIndexubv((unsigned char *)c);
-    result = GetGLError(interp);
-    return result;
+    c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glIndexubv((GLubyte *)c);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5363,19 +4366,15 @@ TclGL_glIndexubvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3bCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int red;
     int green;
@@ -5383,25 +4382,20 @@ TclGL_glColor3bCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3bCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3bCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3b <(GLbyte) red> <(GLbyte) green> <(GLbyte) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &red);
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
-    glColor3b((signed char )red, (signed char )green, (signed char )blue);
-    result = GetGLError(interp);
-    return result;
+    glColor3b((GLbyte )red, (GLbyte )green, (GLbyte )blue);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5412,19 +4406,15 @@ TclGL_glColor3bCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double red;
     double green;
@@ -5432,25 +4422,20 @@ TclGL_glColor3dCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3dCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3d <(GLdouble) red> <(GLdouble) green> <(GLdouble) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &red);
     Tcl_GetDoubleFromObj(interp, objv[2], &green);
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
     glColor3d((GLdouble )red, (GLdouble )green, (GLdouble )blue);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5461,19 +4446,15 @@ TclGL_glColor3dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double red;
     double green;
@@ -5481,25 +4462,20 @@ TclGL_glColor3fCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3fCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3f <(GLfloat) red> <(GLfloat) green> <(GLfloat) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &red);
     Tcl_GetDoubleFromObj(interp, objv[2], &green);
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
-    glColor3f((float )red, (float )green, (float )blue);
-    result = GetGLError(interp);
-    return result;
+    glColor3f((GLfloat )red, (GLfloat )green, (GLfloat )blue);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5510,19 +4486,15 @@ TclGL_glColor3fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int red;
     int green;
@@ -5530,25 +4502,20 @@ TclGL_glColor3iCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3iCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3i <(GLint) red> <(GLint) green> <(GLint) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &red);
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
-    glColor3i((int )red, (int )green, (int )blue);
-    result = GetGLError(interp);
-    return result;
+    glColor3i((GLint )red, (GLint )green, (GLint )blue);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5559,19 +4526,15 @@ TclGL_glColor3iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int red;
     int green;
@@ -5579,25 +4542,20 @@ TclGL_glColor3sCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3sCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3s <(GLshort) red> <(GLshort) green> <(GLshort) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &red);
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
-    glColor3s((short )red, (short )green, (short )blue);
-    result = GetGLError(interp);
-    return result;
+    glColor3s((GLshort )red, (GLshort )green, (GLshort )blue);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5608,19 +4566,15 @@ TclGL_glColor3sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3ubCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int red;
     int green;
@@ -5628,25 +4582,20 @@ TclGL_glColor3ubCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3ubCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3ubCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3ub <(GLubyte) red> <(GLubyte) green> <(GLubyte) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &red);
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
-    glColor3ub((unsigned char )red, (unsigned char )green, (unsigned char )blue);
-    result = GetGLError(interp);
-    return result;
+    glColor3ub((GLubyte )red, (GLubyte )green, (GLubyte )blue);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5657,19 +4606,15 @@ TclGL_glColor3ubCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3uiCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int red;
     int green;
@@ -5677,25 +4622,20 @@ TclGL_glColor3uiCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3uiCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3uiCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3ui <(GLuint) red> <(GLuint) green> <(GLuint) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &red);
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
-    glColor3ui((unsigned int )red, (unsigned int )green, (unsigned int )blue);
-    result = GetGLError(interp);
-    return result;
+    glColor3ui((GLuint )red, (GLuint )green, (GLuint )blue);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5706,19 +4646,15 @@ TclGL_glColor3uiCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3usCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int red;
     int green;
@@ -5726,25 +4662,20 @@ TclGL_glColor3usCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3usCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3usCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3us <(GLushort) red> <(GLushort) green> <(GLushort) blue>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &red);
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
-    glColor3us((unsigned short )red, (unsigned short )green, (unsigned short )blue);
-    result = GetGLError(interp);
-    return result;
+    glColor3us((GLushort )red, (GLushort )green, (GLushort )blue);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5755,41 +4686,32 @@ TclGL_glColor3usCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3bvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3bvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3bvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3bv <(GLbyte) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor3bv((signed char *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3bv((GLbyte *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5800,41 +4722,32 @@ TclGL_glColor3bvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor3dv((GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3dv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5845,41 +4758,32 @@ TclGL_glColor3dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor3fv((float *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3fv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5890,41 +4794,32 @@ TclGL_glColor3fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3ivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor3iv((int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3iv((GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5935,41 +4830,32 @@ TclGL_glColor3ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3svCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor3sv((short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3sv((GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -5980,41 +4866,32 @@ TclGL_glColor3svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3ubvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3ubvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3ubvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3ubv <(GLubyte) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor3ubv((unsigned char *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3ubv((GLubyte *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6025,41 +4902,32 @@ TclGL_glColor3ubvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3uivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3uivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3uivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3uiv <(GLuint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor3uiv((unsigned int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3uiv((GLuint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6070,41 +4938,32 @@ TclGL_glColor3uivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor3usvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor3usvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor3usvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor3usv <(GLushort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor3usv((unsigned short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor3usv((GLushort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6115,41 +4974,32 @@ TclGL_glColor3usvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor4bvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor4bvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor4bvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor4bv <(GLbyte) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor4bv((signed char *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4bv((GLbyte *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6160,41 +5010,32 @@ TclGL_glColor4bvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor4dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor4dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor4dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor4dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor4dv((GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4dv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6205,41 +5046,32 @@ TclGL_glColor4dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor4fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor4fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor4fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor4fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor4fv((float *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4fv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6250,41 +5082,32 @@ TclGL_glColor4fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor4ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor4ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor4ivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor4iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor4iv((int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4iv((GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6295,41 +5118,32 @@ TclGL_glColor4ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor4svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor4svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor4svCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor4sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor4sv((short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4sv((GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6340,41 +5154,32 @@ TclGL_glColor4svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor4ubvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor4ubvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor4ubvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor4ubv <(GLubyte) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor4ubv((unsigned char *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4ubv((GLubyte *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6385,41 +5190,32 @@ TclGL_glColor4ubvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor4uivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor4uivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor4uivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor4uiv <(GLuint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor4uiv((unsigned int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4uiv((GLuint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6430,41 +5226,32 @@ TclGL_glColor4uivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColor4usvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColor4usvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColor4usvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColor4usv <(GLushort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glColor4usv((unsigned short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glColor4usv((GLushort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6475,41 +5262,32 @@ TclGL_glColor4usvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord1dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double s;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord1dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord1dCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord1d <(GLdouble) s>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     glTexCoord1d((GLdouble )s);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6520,41 +5298,32 @@ TclGL_glTexCoord1dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord1fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double s;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord1fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord1fCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord1f <(GLfloat) s>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
-    glTexCoord1f((float )s);
-    result = GetGLError(interp);
-    return result;
+    glTexCoord1f((GLfloat )s);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6565,41 +5334,32 @@ TclGL_glTexCoord1fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord1iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int s;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord1iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord1iCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord1i <(GLint) s>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &s);
-    glTexCoord1i((int )s);
-    result = GetGLError(interp);
-    return result;
+    glTexCoord1i((GLint )s);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6610,41 +5370,32 @@ TclGL_glTexCoord1iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord1sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int s;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord1sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord1sCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord1s <(GLshort) s>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &s);
-    glTexCoord1s((short )s);
-    result = GetGLError(interp);
-    return result;
+    glTexCoord1s((GLshort )s);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6655,43 +5406,34 @@ TclGL_glTexCoord1sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord2dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double s;
     double t;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord2dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord2dCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord2d <(GLdouble) s> <(GLdouble) t>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
     glTexCoord2d((GLdouble )s, (GLdouble )t);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6702,43 +5444,34 @@ TclGL_glTexCoord2dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord2fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double s;
     double t;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord2fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord2fCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord2f <(GLfloat) s> <(GLfloat) t>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
-    glTexCoord2f((float )s, (float )t);
-    result = GetGLError(interp);
-    return result;
+    glTexCoord2f((GLfloat )s, (GLfloat )t);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6749,43 +5482,34 @@ TclGL_glTexCoord2fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord2iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int s;
     int t;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord2iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord2iCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord2i <(GLint) s> <(GLint) t>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &s);
     Tcl_GetIntFromObj(interp, objv[2], &t);
-    glTexCoord2i((int )s, (int )t);
-    result = GetGLError(interp);
-    return result;
+    glTexCoord2i((GLint )s, (GLint )t);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6796,43 +5520,34 @@ TclGL_glTexCoord2iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord2sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int s;
     int t;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord2sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord2sCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord2s <(GLshort) s> <(GLshort) t>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &s);
     Tcl_GetIntFromObj(interp, objv[2], &t);
-    glTexCoord2s((short )s, (short )t);
-    result = GetGLError(interp);
-    return result;
+    glTexCoord2s((GLshort )s, (GLshort )t);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6843,19 +5558,15 @@ TclGL_glTexCoord2sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord3dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double s;
     double t;
@@ -6863,25 +5574,20 @@ TclGL_glTexCoord3dCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord3dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord3dCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord3d <(GLdouble) s> <(GLdouble) t> <(GLdouble) r>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
     Tcl_GetDoubleFromObj(interp, objv[3], &r);
     glTexCoord3d((GLdouble )s, (GLdouble )t, (GLdouble )r);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6892,19 +5598,15 @@ TclGL_glTexCoord3dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord3fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double s;
     double t;
@@ -6912,25 +5614,20 @@ TclGL_glTexCoord3fCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord3fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord3fCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord3f <(GLfloat) s> <(GLfloat) t> <(GLfloat) r>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
     Tcl_GetDoubleFromObj(interp, objv[3], &r);
-    glTexCoord3f((float )s, (float )t, (float )r);
-    result = GetGLError(interp);
-    return result;
+    glTexCoord3f((GLfloat )s, (GLfloat )t, (GLfloat )r);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6941,19 +5638,15 @@ TclGL_glTexCoord3fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord3iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int s;
     int t;
@@ -6961,25 +5654,20 @@ TclGL_glTexCoord3iCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord3iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord3iCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord3i <(GLint) s> <(GLint) t> <(GLint) r>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &s);
     Tcl_GetIntFromObj(interp, objv[2], &t);
     Tcl_GetIntFromObj(interp, objv[3], &r);
-    glTexCoord3i((int )s, (int )t, (int )r);
-    result = GetGLError(interp);
-    return result;
+    glTexCoord3i((GLint )s, (GLint )t, (GLint )r);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -6990,19 +5678,15 @@ TclGL_glTexCoord3iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord3sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int s;
     int t;
@@ -7010,25 +5694,20 @@ TclGL_glTexCoord3sCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord3sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord3sCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord3s <(GLshort) s> <(GLshort) t> <(GLshort) r>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &s);
     Tcl_GetIntFromObj(interp, objv[2], &t);
     Tcl_GetIntFromObj(interp, objv[3], &r);
-    glTexCoord3s((short )s, (short )t, (short )r);
-    result = GetGLError(interp);
-    return result;
+    glTexCoord3s((GLshort )s, (GLshort )t, (GLshort )r);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7039,19 +5718,15 @@ TclGL_glTexCoord3sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord4dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double s;
     double t;
@@ -7060,26 +5735,21 @@ TclGL_glTexCoord4dCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord4dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord4dCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord4d <(GLdouble) s> <(GLdouble) t> <(GLdouble) r> <(GLdouble) q>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
     Tcl_GetDoubleFromObj(interp, objv[3], &r);
     Tcl_GetDoubleFromObj(interp, objv[4], &q);
     glTexCoord4d((GLdouble )s, (GLdouble )t, (GLdouble )r, (GLdouble )q);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7090,19 +5760,15 @@ TclGL_glTexCoord4dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord4fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double s;
     double t;
@@ -7111,26 +5777,21 @@ TclGL_glTexCoord4fCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord4fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord4fCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord4f <(GLfloat) s> <(GLfloat) t> <(GLfloat) r> <(GLfloat) q>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
     Tcl_GetDoubleFromObj(interp, objv[3], &r);
     Tcl_GetDoubleFromObj(interp, objv[4], &q);
-    glTexCoord4f((float )s, (float )t, (float )r, (float )q);
-    result = GetGLError(interp);
-    return result;
+    glTexCoord4f((GLfloat )s, (GLfloat )t, (GLfloat )r, (GLfloat )q);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7141,19 +5802,15 @@ TclGL_glTexCoord4fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord4iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int s;
     int t;
@@ -7162,26 +5819,21 @@ TclGL_glTexCoord4iCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord4iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord4iCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord4i <(GLint) s> <(GLint) t> <(GLint) r> <(GLint) q>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &s);
     Tcl_GetIntFromObj(interp, objv[2], &t);
     Tcl_GetIntFromObj(interp, objv[3], &r);
     Tcl_GetIntFromObj(interp, objv[4], &q);
-    glTexCoord4i((int )s, (int )t, (int )r, (int )q);
-    result = GetGLError(interp);
-    return result;
+    glTexCoord4i((GLint )s, (GLint )t, (GLint )r, (GLint )q);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7192,19 +5844,15 @@ TclGL_glTexCoord4iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord4sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int s;
     int t;
@@ -7213,26 +5861,21 @@ TclGL_glTexCoord4sCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord4sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord4sCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord4s <(GLshort) s> <(GLshort) t> <(GLshort) r> <(GLshort) q>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &s);
     Tcl_GetIntFromObj(interp, objv[2], &t);
     Tcl_GetIntFromObj(interp, objv[3], &r);
     Tcl_GetIntFromObj(interp, objv[4], &q);
-    glTexCoord4s((short )s, (short )t, (short )r, (short )q);
-    result = GetGLError(interp);
-    return result;
+    glTexCoord4s((GLshort )s, (GLshort )t, (GLshort )r, (GLshort )q);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7243,41 +5886,32 @@ TclGL_glTexCoord4sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord1dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord1dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord1dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord1dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord1dv((GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord1dv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7288,41 +5922,32 @@ TclGL_glTexCoord1dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord1fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord1fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord1fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord1fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord1fv((float *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord1fv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7333,41 +5958,32 @@ TclGL_glTexCoord1fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord1ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord1ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord1ivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord1iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord1iv((int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord1iv((GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7378,41 +5994,32 @@ TclGL_glTexCoord1ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord1svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord1svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord1svCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord1sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord1sv((short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord1sv((GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7423,41 +6030,32 @@ TclGL_glTexCoord1svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord2dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord2dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord2dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord2dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord2dv((GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord2dv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7468,41 +6066,32 @@ TclGL_glTexCoord2dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord2fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord2fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord2fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord2fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord2fv((float *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord2fv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7513,41 +6102,32 @@ TclGL_glTexCoord2fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord2ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord2ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord2ivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord2iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord2iv((int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord2iv((GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7558,41 +6138,32 @@ TclGL_glTexCoord2ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord2svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord2svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord2svCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord2sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord2sv((short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord2sv((GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7603,41 +6174,32 @@ TclGL_glTexCoord2svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord3dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord3dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord3dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord3dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord3dv((GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord3dv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7648,41 +6210,32 @@ TclGL_glTexCoord3dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord3fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord3fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord3fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord3fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord3fv((float *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord3fv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7693,41 +6246,32 @@ TclGL_glTexCoord3fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord3ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord3ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord3ivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord3iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord3iv((int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord3iv((GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7738,41 +6282,32 @@ TclGL_glTexCoord3ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord3svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord3svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord3svCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord3sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord3sv((short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord3sv((GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7783,41 +6318,32 @@ TclGL_glTexCoord3svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord4dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord4dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord4dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord4dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord4dv((GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord4dv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7828,41 +6354,32 @@ TclGL_glTexCoord4dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord4fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord4fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord4fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord4fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord4fv((float *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord4fv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7873,41 +6390,32 @@ TclGL_glTexCoord4fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord4ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord4ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord4ivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord4iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord4iv((int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord4iv((GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7918,41 +6426,32 @@ TclGL_glTexCoord4ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexCoord4svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexCoord4svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexCoord4svCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexCoord4sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glTexCoord4sv((short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glTexCoord4sv((GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -7963,43 +6462,34 @@ TclGL_glTexCoord4svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos2dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos2dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos2dCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos2d <(GLdouble) x> <(GLdouble) y>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     glRasterPos2d((GLdouble )x, (GLdouble )y);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8010,43 +6500,34 @@ TclGL_glRasterPos2dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos2fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos2fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos2fCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos2f <(GLfloat) x> <(GLfloat) y>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
-    glRasterPos2f((float )x, (float )y);
-    result = GetGLError(interp);
-    return result;
+    glRasterPos2f((GLfloat )x, (GLfloat )y);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8057,43 +6538,34 @@ TclGL_glRasterPos2fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos2iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x;
     int y;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos2iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos2iCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos2i <(GLint) x> <(GLint) y>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
-    glRasterPos2i((int )x, (int )y);
-    result = GetGLError(interp);
-    return result;
+    glRasterPos2i((GLint )x, (GLint )y);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8104,43 +6576,34 @@ TclGL_glRasterPos2iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos2sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x;
     int y;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos2sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos2sCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos2s <(GLshort) x> <(GLshort) y>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
-    glRasterPos2s((short )x, (short )y);
-    result = GetGLError(interp);
-    return result;
+    glRasterPos2s((GLshort )x, (GLshort )y);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8151,19 +6614,15 @@ TclGL_glRasterPos2sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos3dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
@@ -8171,25 +6630,20 @@ TclGL_glRasterPos3dCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos3dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos3dCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos3d <(GLdouble) x> <(GLdouble) y> <(GLdouble) z>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     glRasterPos3d((GLdouble )x, (GLdouble )y, (GLdouble )z);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8200,19 +6654,15 @@ TclGL_glRasterPos3dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos3fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
@@ -8220,25 +6670,20 @@ TclGL_glRasterPos3fCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos3fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos3fCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos3f <(GLfloat) x> <(GLfloat) y> <(GLfloat) z>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
-    glRasterPos3f((float )x, (float )y, (float )z);
-    result = GetGLError(interp);
-    return result;
+    glRasterPos3f((GLfloat )x, (GLfloat )y, (GLfloat )z);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8249,19 +6694,15 @@ TclGL_glRasterPos3fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos3iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x;
     int y;
@@ -8269,25 +6710,20 @@ TclGL_glRasterPos3iCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos3iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos3iCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos3i <(GLint) x> <(GLint) y> <(GLint) z>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
-    glRasterPos3i((int )x, (int )y, (int )z);
-    result = GetGLError(interp);
-    return result;
+    glRasterPos3i((GLint )x, (GLint )y, (GLint )z);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8298,19 +6734,15 @@ TclGL_glRasterPos3iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos3sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x;
     int y;
@@ -8318,25 +6750,20 @@ TclGL_glRasterPos3sCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos3sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos3sCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos3s <(GLshort) x> <(GLshort) y> <(GLshort) z>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
-    glRasterPos3s((short )x, (short )y, (short )z);
-    result = GetGLError(interp);
-    return result;
+    glRasterPos3s((GLshort )x, (GLshort )y, (GLshort )z);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8347,19 +6774,15 @@ TclGL_glRasterPos3sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos4dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
@@ -8368,26 +6791,21 @@ TclGL_glRasterPos4dCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos4dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos4dCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos4d <(GLdouble) x> <(GLdouble) y> <(GLdouble) z> <(GLdouble) w>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     Tcl_GetDoubleFromObj(interp, objv[4], &w);
     glRasterPos4d((GLdouble )x, (GLdouble )y, (GLdouble )z, (GLdouble )w);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8398,19 +6816,15 @@ TclGL_glRasterPos4dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos4fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x;
     double y;
@@ -8419,26 +6833,21 @@ TclGL_glRasterPos4fCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos4fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos4fCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos4f <(GLfloat) x> <(GLfloat) y> <(GLfloat) z> <(GLfloat) w>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     Tcl_GetDoubleFromObj(interp, objv[4], &w);
-    glRasterPos4f((float )x, (float )y, (float )z, (float )w);
-    result = GetGLError(interp);
-    return result;
+    glRasterPos4f((GLfloat )x, (GLfloat )y, (GLfloat )z, (GLfloat )w);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8449,19 +6858,15 @@ TclGL_glRasterPos4fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos4iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x;
     int y;
@@ -8470,26 +6875,21 @@ TclGL_glRasterPos4iCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos4iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos4iCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos4i <(GLint) x> <(GLint) y> <(GLint) z> <(GLint) w>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
     Tcl_GetIntFromObj(interp, objv[4], &w);
-    glRasterPos4i((int )x, (int )y, (int )z, (int )w);
-    result = GetGLError(interp);
-    return result;
+    glRasterPos4i((GLint )x, (GLint )y, (GLint )z, (GLint )w);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8500,19 +6900,15 @@ TclGL_glRasterPos4iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos4sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x;
     int y;
@@ -8521,26 +6917,21 @@ TclGL_glRasterPos4sCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos4sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos4sCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos4s <(GLshort) x> <(GLshort) y> <(GLshort) z> <(GLshort) w>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
     Tcl_GetIntFromObj(interp, objv[4], &w);
-    glRasterPos4s((short )x, (short )y, (short )z, (short )w);
-    result = GetGLError(interp);
-    return result;
+    glRasterPos4s((GLshort )x, (GLshort )y, (GLshort )z, (GLshort )w);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8551,41 +6942,32 @@ TclGL_glRasterPos4sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos2dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos2dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos2dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos2dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glRasterPos2dv((GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos2dv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8596,41 +6978,32 @@ TclGL_glRasterPos2dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos2fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos2fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos2fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos2fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glRasterPos2fv((float *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos2fv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8641,41 +7014,32 @@ TclGL_glRasterPos2fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos2ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos2ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos2ivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos2iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glRasterPos2iv((int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos2iv((GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8686,41 +7050,32 @@ TclGL_glRasterPos2ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos2svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos2svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos2svCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos2sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glRasterPos2sv((short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos2sv((GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8731,41 +7086,32 @@ TclGL_glRasterPos2svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos3dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos3dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos3dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos3dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glRasterPos3dv((GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos3dv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8776,41 +7122,32 @@ TclGL_glRasterPos3dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos3fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos3fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos3fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos3fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glRasterPos3fv((float *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos3fv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8821,41 +7158,32 @@ TclGL_glRasterPos3fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos3ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos3ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos3ivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos3iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glRasterPos3iv((int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos3iv((GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8866,41 +7194,32 @@ TclGL_glRasterPos3ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos3svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos3svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos3svCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos3sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glRasterPos3sv((short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos3sv((GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8911,41 +7230,32 @@ TclGL_glRasterPos3svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos4dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos4dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos4dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos4dv <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glRasterPos4dv((GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos4dv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -8956,41 +7266,32 @@ TclGL_glRasterPos4dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos4fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos4fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos4fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos4fv <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glRasterPos4fv((float *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos4fv((void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9001,41 +7302,32 @@ TclGL_glRasterPos4fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos4ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos4ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos4ivCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos4iv <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glRasterPos4iv((int *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos4iv((GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9046,41 +7338,32 @@ TclGL_glRasterPos4ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRasterPos4svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRasterPos4svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRasterPos4svCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRasterPos4sv <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glRasterPos4sv((short *)v);
-    result = GetGLError(interp);
-    return result;
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glRasterPos4sv((GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9091,19 +7374,15 @@ TclGL_glRasterPos4svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRectdCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x1;
     double y1;
@@ -9112,26 +7391,21 @@ TclGL_glRectdCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRectdCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRectdCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRectd <(GLdouble) x1> <(GLdouble) y1> <(GLdouble) x2> <(GLdouble) y2>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x1);
     Tcl_GetDoubleFromObj(interp, objv[2], &y1);
     Tcl_GetDoubleFromObj(interp, objv[3], &x2);
     Tcl_GetDoubleFromObj(interp, objv[4], &y2);
     glRectd((GLdouble )x1, (GLdouble )y1, (GLdouble )x2, (GLdouble )y2);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9142,19 +7416,15 @@ TclGL_glRectdCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRectfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double x1;
     double y1;
@@ -9163,26 +7433,21 @@ TclGL_glRectfCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRectfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRectfCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRectf <(GLfloat) x1> <(GLfloat) y1> <(GLfloat) x2> <(GLfloat) y2>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &x1);
     Tcl_GetDoubleFromObj(interp, objv[2], &y1);
     Tcl_GetDoubleFromObj(interp, objv[3], &x2);
     Tcl_GetDoubleFromObj(interp, objv[4], &y2);
-    glRectf((float )x1, (float )y1, (float )x2, (float )y2);
-    result = GetGLError(interp);
-    return result;
+    glRectf((GLfloat )x1, (GLfloat )y1, (GLfloat )x2, (GLfloat )y2);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9193,19 +7458,15 @@ TclGL_glRectfCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRectiCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x1;
     int y1;
@@ -9214,26 +7475,21 @@ TclGL_glRectiCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRectiCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRectiCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRecti <(GLint) x1> <(GLint) y1> <(GLint) x2> <(GLint) y2>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x1);
     Tcl_GetIntFromObj(interp, objv[2], &y1);
     Tcl_GetIntFromObj(interp, objv[3], &x2);
     Tcl_GetIntFromObj(interp, objv[4], &y2);
-    glRecti((int )x1, (int )y1, (int )x2, (int )y2);
-    result = GetGLError(interp);
-    return result;
+    glRecti((GLint )x1, (GLint )y1, (GLint )x2, (GLint )y2);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9244,19 +7500,15 @@ TclGL_glRectiCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRectsCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int x1;
     int y1;
@@ -9265,26 +7517,21 @@ TclGL_glRectsCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRectsCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRectsCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRects <(GLshort) x1> <(GLshort) y1> <(GLshort) x2> <(GLshort) y2>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &x1);
     Tcl_GetIntFromObj(interp, objv[2], &y1);
     Tcl_GetIntFromObj(interp, objv[3], &x2);
     Tcl_GetIntFromObj(interp, objv[4], &y2);
-    glRects((short )x1, (short )y1, (short )x2, (short )y2);
-    result = GetGLError(interp);
-    return result;
+    glRects((GLshort )x1, (GLshort )y1, (GLshort )x2, (GLshort )y2);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9295,43 +7542,34 @@ TclGL_glRectsCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRectdvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v1;
-    const void *v2;
+    double *v1;
+    double *v2;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRectdvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRectdvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRectdv <(GLdouble) v1> <(GLdouble) v2>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v1 = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    v2 = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glRectdv((GLdouble *)v1, (GLdouble *)v2);
-    result = GetGLError(interp);
-    return result;
+    v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glRectdv((void *)v1, (void *)v2);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9342,43 +7580,34 @@ TclGL_glRectdvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRectfvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *v1;
-    const void *v2;
+    double *v1;
+    double *v2;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRectfvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRectfvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRectfv <(GLfloat) v1> <(GLfloat) v2>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v1 = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    v2 = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glRectfv((float *)v1, (float *)v2);
-    result = GetGLError(interp);
-    return result;
+    v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glRectfv((void *)v1, (void *)v2);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9389,43 +7618,34 @@ TclGL_glRectfvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRectivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v1;
-    const int *v2;
+    int *v1;
+    int *v2;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRectivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRectivCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRectiv <(GLint) v1> <(GLint) v2>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v1 = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    v2 = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glRectiv((int *)v1, (int *)v2);
-    result = GetGLError(interp);
-    return result;
+    v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glRectiv((GLint *)v1, (GLint *)v2);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9436,43 +7656,34 @@ TclGL_glRectivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glRectsvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const int *v1;
-    const int *v2;
+    int *v1;
+    int *v2;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glRectsvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glRectsvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glRectsv <(GLshort) v1> <(GLshort) v2>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    v1 = (const int*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    v2 = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glRectsv((short *)v1, (short *)v2);
-    result = GetGLError(interp);
-    return result;
+    v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glRectsv((GLshort *)v1, (GLshort *)v2);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9483,43 +7694,34 @@ TclGL_glRectsvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEdgeFlagPointerCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int stride;
-    const void *ptr;
+    int *ptr;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEdgeFlagPointerCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEdgeFlagPointerCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEdgeFlagPointer <(GLsizei) stride> <(GLvoid) ptr>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &stride);
-    ptr = (const void*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glEdgeFlagPointer((int )stride, (void *)ptr);
-    result = GetGLError(interp);
-    return result;
+    ptr = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glEdgeFlagPointer((GLsizei )stride, (GLvoid *)ptr);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9530,48 +7732,39 @@ TclGL_glEdgeFlagPointerCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetPointervCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
-    void **params;
+    int **params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetPointervCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetPointervCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetPointerv <(GLenum) pname> <(GLvoid) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (void**)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glGetPointerv((GLenum)pname, (void **)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetPointerv((GLenum)pname, (GLvoid **)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9582,41 +7775,32 @@ TclGL_glGetPointervCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glArrayElementCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int i;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glArrayElementCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glArrayElementCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glArrayElement <(GLint) i>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &i);
-    glArrayElement((int )i);
-    result = GetGLError(interp);
-    return result;
+    glArrayElement((GLint )i);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9627,19 +7811,15 @@ TclGL_glArrayElementCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glDrawArraysCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mode;
     int first;
@@ -9647,30 +7827,25 @@ TclGL_glDrawArraysCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glDrawArraysCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glDrawArraysCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glDrawArrays <(GLenum) mode> <(GLint) first> <(GLsizei) count>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &first);
     Tcl_GetIntFromObj(interp, objv[3], &count);
-    glDrawArrays((GLenum)mode, (int )first, (int )count);
-    result = GetGLError(interp);
-    return result;
+    glDrawArrays((GLenum)mode, (GLint )first, (GLsizei )count);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9681,46 +7856,37 @@ TclGL_glDrawArraysCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glShadeModelCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glShadeModelCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glShadeModelCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glShadeModel <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glShadeModel((GLenum)mode);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9731,19 +7897,15 @@ TclGL_glShadeModelCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLightfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int light;
     int pname;
@@ -9751,35 +7913,30 @@ TclGL_glLightfCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLightfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLightfCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLightf <(GLenum) light> <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    light = (int)Tcl_GetHashValue(hPtr); 
+    light = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[3], &param);
-    glLightf((GLenum)light, (GLenum)pname, (float )param);
-    result = GetGLError(interp);
-    return result;
+    glLightf((GLenum)light, (GLenum)pname, (GLfloat )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9790,19 +7947,15 @@ TclGL_glLightfCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLightiCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int light;
     int pname;
@@ -9810,35 +7963,30 @@ TclGL_glLightiCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLightiCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLightiCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLighti <(GLenum) light> <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    light = (int)Tcl_GetHashValue(hPtr); 
+    light = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &param);
-    glLighti((GLenum)light, (GLenum)pname, (int )param);
-    result = GetGLError(interp);
-    return result;
+    glLighti((GLenum)light, (GLenum)pname, (GLint )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9849,48 +7997,39 @@ TclGL_glLightiCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLightModelfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
     double param;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLightModelfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLightModelfCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLightModelf <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &param);
-    glLightModelf((GLenum)pname, (float )param);
-    result = GetGLError(interp);
-    return result;
+    glLightModelf((GLenum)pname, (GLfloat )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9901,48 +8040,39 @@ TclGL_glLightModelfCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLightModeliCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
     int param;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLightModeliCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLightModeliCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLightModeli <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &param);
-    glLightModeli((GLenum)pname, (int )param);
-    result = GetGLError(interp);
-    return result;
+    glLightModeli((GLenum)pname, (GLint )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -9953,48 +8083,39 @@ TclGL_glLightModeliCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLightModelfvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
-    const void *params;
+    double *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLightModelfvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLightModelfvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLightModelfv <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glLightModelfv((GLenum)pname, (float *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glLightModelfv((GLenum)pname, (void *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10005,48 +8126,39 @@ TclGL_glLightModelfvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLightModelivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
-    const int *params;
+    int *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLightModelivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLightModelivCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLightModeliv <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glLightModeliv((GLenum)pname, (int *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glLightModeliv((GLenum)pname, (GLint *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10057,19 +8169,15 @@ TclGL_glLightModelivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMaterialfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int face;
     int pname;
@@ -10077,35 +8185,30 @@ TclGL_glMaterialfCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMaterialfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMaterialfCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMaterialf <(GLenum) face> <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    face = (int)Tcl_GetHashValue(hPtr); 
+    face = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[3], &param);
-    glMaterialf((GLenum)face, (GLenum)pname, (float )param);
-    result = GetGLError(interp);
-    return result;
+    glMaterialf((GLenum)face, (GLenum)pname, (GLfloat )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10116,19 +8219,15 @@ TclGL_glMaterialfCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMaterialiCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int face;
     int pname;
@@ -10136,35 +8235,30 @@ TclGL_glMaterialiCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMaterialiCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMaterialiCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMateriali <(GLenum) face> <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    face = (int)Tcl_GetHashValue(hPtr); 
+    face = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &param);
-    glMateriali((GLenum)face, (GLenum)pname, (int )param);
-    result = GetGLError(interp);
-    return result;
+    glMateriali((GLenum)face, (GLenum)pname, (GLint )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10175,55 +8269,46 @@ TclGL_glMaterialiCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMaterialfvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int face;
     int pname;
-    const void *params;
+    double *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMaterialfvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMaterialfvCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMaterialfv <(GLenum) face> <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    face = (int)Tcl_GetHashValue(hPtr); 
+    face = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (const float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glMaterialfv((GLenum)face, (GLenum)pname, (float *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glMaterialfv((GLenum)face, (GLenum)pname, (void *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10234,55 +8319,46 @@ TclGL_glMaterialfvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMaterialivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int face;
     int pname;
-    const int *params;
+    int *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMaterialivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMaterialivCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMaterialiv <(GLenum) face> <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    face = (int)Tcl_GetHashValue(hPtr); 
+    face = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (const int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glMaterialiv((GLenum)face, (GLenum)pname, (int *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glMaterialiv((GLenum)face, (GLenum)pname, (GLint *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10293,55 +8369,46 @@ TclGL_glMaterialivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetMaterialfvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int face;
     int pname;
-    void *params;
+    double *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetMaterialfvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetMaterialfvCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetMaterialfv <(GLenum) face> <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    face = (int)Tcl_GetHashValue(hPtr); 
+    face = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glGetMaterialfv((GLenum)face, (GLenum)pname, (float *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetMaterialfv((GLenum)face, (GLenum)pname, (void *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10352,19 +8419,15 @@ TclGL_glGetMaterialfvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetMaterialivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int face;
     int pname;
@@ -10372,35 +8435,30 @@ TclGL_glGetMaterialivCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetMaterialivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetMaterialivCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetMaterialiv <(GLenum) face> <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    face = (int)Tcl_GetHashValue(hPtr); 
+    face = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glGetMaterialiv((GLenum)face, (GLenum)pname, (int *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetMaterialiv((GLenum)face, (GLenum)pname, (GLint *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10411,53 +8469,44 @@ TclGL_glGetMaterialivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glColorMaterialCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int face;
     int mode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glColorMaterialCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glColorMaterialCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glColorMaterial <(GLenum) face> <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    face = (int)Tcl_GetHashValue(hPtr); 
+    face = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glColorMaterial((GLenum)face, (GLenum)mode);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10468,43 +8517,34 @@ TclGL_glColorMaterialCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPixelZoomCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double xfactor;
     double yfactor;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPixelZoomCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPixelZoomCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPixelZoom <(GLfloat) xfactor> <(GLfloat) yfactor>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &xfactor);
     Tcl_GetDoubleFromObj(interp, objv[2], &yfactor);
-    glPixelZoom((float )xfactor, (float )yfactor);
-    result = GetGLError(interp);
-    return result;
+    glPixelZoom((GLfloat )xfactor, (GLfloat )yfactor);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10515,48 +8555,39 @@ TclGL_glPixelZoomCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPixelStorefCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
     double param;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPixelStorefCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPixelStorefCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPixelStoref <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &param);
-    glPixelStoref((GLenum)pname, (float )param);
-    result = GetGLError(interp);
-    return result;
+    glPixelStoref((GLenum)pname, (GLfloat )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10567,48 +8598,39 @@ TclGL_glPixelStorefCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPixelStoreiCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
     int param;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPixelStoreiCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPixelStoreiCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPixelStorei <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &param);
-    glPixelStorei((GLenum)pname, (int )param);
-    result = GetGLError(interp);
-    return result;
+    glPixelStorei((GLenum)pname, (GLint )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10619,48 +8641,39 @@ TclGL_glPixelStoreiCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPixelTransferfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
     double param;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPixelTransferfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPixelTransferfCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPixelTransferf <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &param);
-    glPixelTransferf((GLenum)pname, (float )param);
-    result = GetGLError(interp);
-    return result;
+    glPixelTransferf((GLenum)pname, (GLfloat )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10671,48 +8684,39 @@ TclGL_glPixelTransferfCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPixelTransferiCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
     int param;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPixelTransferiCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPixelTransferiCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPixelTransferi <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &param);
-    glPixelTransferi((GLenum)pname, (int )param);
-    result = GetGLError(interp);
-    return result;
+    glPixelTransferi((GLenum)pname, (GLint )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10723,48 +8727,39 @@ TclGL_glPixelTransferiCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetPixelMapfvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int map;
-    void *values;
+    double *values;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetPixelMapfvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetPixelMapfvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetPixelMapfv <(GLenum) map> <(GLfloat) values>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    map = (int)Tcl_GetHashValue(hPtr); 
-    values = (float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glGetPixelMapfv((GLenum)map, (float *)values);
-    result = GetGLError(interp);
-    return result;
+    map = (GLenum)Tcl_GetHashValue(hPtr); 
+    values = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetPixelMapfv((GLenum)map, (void *)values);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10775,48 +8770,39 @@ TclGL_glGetPixelMapfvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetPixelMapuivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int map;
     int *values;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetPixelMapuivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetPixelMapuivCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetPixelMapuiv <(GLenum) map> <(GLuint) values>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    map = (int)Tcl_GetHashValue(hPtr); 
-    values = (int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glGetPixelMapuiv((GLenum)map, (unsigned int *)values);
-    result = GetGLError(interp);
-    return result;
+    map = (GLenum)Tcl_GetHashValue(hPtr); 
+    values = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetPixelMapuiv((GLenum)map, (GLuint *)values);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10827,48 +8813,39 @@ TclGL_glGetPixelMapuivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetPixelMapusvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int map;
     int *values;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetPixelMapusvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetPixelMapusvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetPixelMapusv <(GLenum) map> <(GLushort) values>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    map = (int)Tcl_GetHashValue(hPtr); 
-    values = (int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glGetPixelMapusv((GLenum)map, (unsigned short *)values);
-    result = GetGLError(interp);
-    return result;
+    map = (GLenum)Tcl_GetHashValue(hPtr); 
+    values = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGetPixelMapusv((GLenum)map, (GLushort *)values);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10879,19 +8856,15 @@ TclGL_glGetPixelMapusvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glStencilFuncCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int func;
     int ref;
@@ -10899,30 +8872,25 @@ TclGL_glStencilFuncCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glStencilFuncCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glStencilFuncCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glStencilFunc <(GLenum) func> <(GLint) ref> <(GLuint) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    func = (int)Tcl_GetHashValue(hPtr); 
+    func = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &ref);
     Tcl_GetIntFromObj(interp, objv[3], &mask);
-    glStencilFunc((GLenum)func, (int )ref, (unsigned int )mask);
-    result = GetGLError(interp);
-    return result;
+    glStencilFunc((GLenum)func, (GLint )ref, (GLuint )mask);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10933,41 +8901,32 @@ TclGL_glStencilFuncCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glStencilMaskCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mask;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glStencilMaskCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glStencilMaskCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glStencilMask <(GLuint) mask>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &mask);
-    glStencilMask((unsigned int )mask);
-    result = GetGLError(interp);
-    return result;
+    glStencilMask((GLuint )mask);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -10978,19 +8937,15 @@ TclGL_glStencilMaskCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glStencilOpCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int fail;
     int zfail;
@@ -10998,40 +8953,35 @@ TclGL_glStencilOpCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glStencilOpCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glStencilOpCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glStencilOp <(GLenum) fail> <(GLenum) zfail> <(GLenum) zpass>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    fail = (int)Tcl_GetHashValue(hPtr); 
+    fail = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    zfail = (int)Tcl_GetHashValue(hPtr); 
+    zfail = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[3]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[3]),"\"", NULL);
 	return TCL_ERROR;
     }
-    zpass = (int)Tcl_GetHashValue(hPtr); 
+    zpass = (GLenum)Tcl_GetHashValue(hPtr); 
     glStencilOp((GLenum)fail, (GLenum)zfail, (GLenum)zpass);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11042,41 +8992,32 @@ TclGL_glStencilOpCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glClearStencilCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int s;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glClearStencilCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glClearStencilCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glClearStencil <(GLint) s>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &s);
-    glClearStencil((int )s);
-    result = GetGLError(interp);
-    return result;
+    glClearStencil((GLint )s);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11087,19 +9028,15 @@ TclGL_glClearStencilCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexGendCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int coord;
     int pname;
@@ -11107,35 +9044,30 @@ TclGL_glTexGendCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexGendCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexGendCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexGend <(GLenum) coord> <(GLenum) pname> <(GLdouble) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    coord = (int)Tcl_GetHashValue(hPtr); 
+    coord = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[3], &param);
     glTexGend((GLenum)coord, (GLenum)pname, (GLdouble )param);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11146,19 +9078,15 @@ TclGL_glTexGendCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexGenfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int coord;
     int pname;
@@ -11166,35 +9094,30 @@ TclGL_glTexGenfCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexGenfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexGenfCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexGenf <(GLenum) coord> <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    coord = (int)Tcl_GetHashValue(hPtr); 
+    coord = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[3], &param);
-    glTexGenf((GLenum)coord, (GLenum)pname, (float )param);
-    result = GetGLError(interp);
-    return result;
+    glTexGenf((GLenum)coord, (GLenum)pname, (GLfloat )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11205,19 +9128,15 @@ TclGL_glTexGenfCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexGeniCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int coord;
     int pname;
@@ -11225,35 +9144,30 @@ TclGL_glTexGeniCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexGeniCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexGeniCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexGeni <(GLenum) coord> <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    coord = (int)Tcl_GetHashValue(hPtr); 
+    coord = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &param);
-    glTexGeni((GLenum)coord, (GLenum)pname, (int )param);
-    result = GetGLError(interp);
-    return result;
+    glTexGeni((GLenum)coord, (GLenum)pname, (GLint )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11264,55 +9178,46 @@ TclGL_glTexGeniCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexGendvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int coord;
     int pname;
-    const void *params;
+    double *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexGendvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexGendvCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexGendv <(GLenum) coord> <(GLenum) pname> <(GLdouble) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    coord = (int)Tcl_GetHashValue(hPtr); 
+    coord = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (const double*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glTexGendv((GLenum)coord, (GLenum)pname, (GLdouble *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glTexGendv((GLenum)coord, (GLenum)pname, (void *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11323,55 +9228,46 @@ TclGL_glTexGendvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexGenfvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int coord;
     int pname;
-    const void *params;
+    double *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexGenfvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexGenfvCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexGenfv <(GLenum) coord> <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    coord = (int)Tcl_GetHashValue(hPtr); 
+    coord = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (const float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glTexGenfv((GLenum)coord, (GLenum)pname, (float *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glTexGenfv((GLenum)coord, (GLenum)pname, (void *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11382,55 +9278,46 @@ TclGL_glTexGenfvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexGenivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int coord;
     int pname;
-    const int *params;
+    int *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexGenivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexGenivCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexGeniv <(GLenum) coord> <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    coord = (int)Tcl_GetHashValue(hPtr); 
+    coord = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (const int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glTexGeniv((GLenum)coord, (GLenum)pname, (int *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glTexGeniv((GLenum)coord, (GLenum)pname, (GLint *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11441,55 +9328,46 @@ TclGL_glTexGenivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetTexGendvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int coord;
     int pname;
-    void *params;
+    double *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetTexGendvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetTexGendvCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetTexGendv <(GLenum) coord> <(GLenum) pname> <(GLdouble) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    coord = (int)Tcl_GetHashValue(hPtr); 
+    coord = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (double*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glGetTexGendv((GLenum)coord, (GLenum)pname, (GLdouble *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetTexGendv((GLenum)coord, (GLenum)pname, (void *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11500,55 +9378,46 @@ TclGL_glGetTexGendvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetTexGenfvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int coord;
     int pname;
-    void *params;
+    double *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetTexGenfvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetTexGenfvCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetTexGenfv <(GLenum) coord> <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    coord = (int)Tcl_GetHashValue(hPtr); 
+    coord = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glGetTexGenfv((GLenum)coord, (GLenum)pname, (float *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetTexGenfv((GLenum)coord, (GLenum)pname, (void *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11559,19 +9428,15 @@ TclGL_glGetTexGenfvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetTexGenivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int coord;
     int pname;
@@ -11579,35 +9444,30 @@ TclGL_glGetTexGenivCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetTexGenivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetTexGenivCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetTexGeniv <(GLenum) coord> <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    coord = (int)Tcl_GetHashValue(hPtr); 
+    coord = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glGetTexGeniv((GLenum)coord, (GLenum)pname, (int *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetTexGeniv((GLenum)coord, (GLenum)pname, (GLint *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11618,19 +9478,15 @@ TclGL_glGetTexGenivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexEnvfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int pname;
@@ -11638,35 +9494,30 @@ TclGL_glTexEnvfCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexEnvfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexEnvfCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexEnvf <(GLenum) target> <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[3], &param);
-    glTexEnvf((GLenum)target, (GLenum)pname, (float )param);
-    result = GetGLError(interp);
-    return result;
+    glTexEnvf((GLenum)target, (GLenum)pname, (GLfloat )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11677,19 +9528,15 @@ TclGL_glTexEnvfCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexEnviCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int pname;
@@ -11697,35 +9544,30 @@ TclGL_glTexEnviCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexEnviCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexEnviCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexEnvi <(GLenum) target> <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &param);
-    glTexEnvi((GLenum)target, (GLenum)pname, (int )param);
-    result = GetGLError(interp);
-    return result;
+    glTexEnvi((GLenum)target, (GLenum)pname, (GLint )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11736,55 +9578,46 @@ TclGL_glTexEnviCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexEnvfvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int pname;
-    const void *params;
+    double *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexEnvfvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexEnvfvCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexEnvfv <(GLenum) target> <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (const float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glTexEnvfv((GLenum)target, (GLenum)pname, (float *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glTexEnvfv((GLenum)target, (GLenum)pname, (void *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11795,55 +9628,46 @@ TclGL_glTexEnvfvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexEnvivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int pname;
-    const int *params;
+    int *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexEnvivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexEnvivCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexEnviv <(GLenum) target> <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (const int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glTexEnviv((GLenum)target, (GLenum)pname, (int *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glTexEnviv((GLenum)target, (GLenum)pname, (GLint *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11854,55 +9678,46 @@ TclGL_glTexEnvivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetTexEnvfvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int pname;
-    void *params;
+    double *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetTexEnvfvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetTexEnvfvCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetTexEnvfv <(GLenum) target> <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glGetTexEnvfv((GLenum)target, (GLenum)pname, (float *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetTexEnvfv((GLenum)target, (GLenum)pname, (void *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11913,19 +9728,15 @@ TclGL_glGetTexEnvfvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetTexEnvivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int pname;
@@ -11933,35 +9744,30 @@ TclGL_glGetTexEnvivCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetTexEnvivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetTexEnvivCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetTexEnviv <(GLenum) target> <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glGetTexEnviv((GLenum)target, (GLenum)pname, (int *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetTexEnviv((GLenum)target, (GLenum)pname, (GLint *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -11972,19 +9778,15 @@ TclGL_glGetTexEnvivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexParameterfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int pname;
@@ -11992,35 +9794,30 @@ TclGL_glTexParameterfCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexParameterfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexParameterfCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexParameterf <(GLenum) target> <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[3], &param);
-    glTexParameterf((GLenum)target, (GLenum)pname, (float )param);
-    result = GetGLError(interp);
-    return result;
+    glTexParameterf((GLenum)target, (GLenum)pname, (GLfloat )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12031,19 +9828,15 @@ TclGL_glTexParameterfCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glTexParameteriCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int pname;
@@ -12051,35 +9844,30 @@ TclGL_glTexParameteriCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glTexParameteriCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glTexParameteriCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glTexParameteri <(GLenum) target> <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &param);
-    glTexParameteri((GLenum)target, (GLenum)pname, (int )param);
-    result = GetGLError(interp);
-    return result;
+    glTexParameteri((GLenum)target, (GLenum)pname, (GLint )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12090,43 +9878,34 @@ TclGL_glTexParameteriCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGenTexturesCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int n;
     int *textures;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGenTexturesCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGenTexturesCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGenTextures <(GLsizei) n> <(GLuint) textures>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &n);
-    textures = (int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glGenTextures((int )n, (unsigned int *)textures);
-    result = GetGLError(interp);
-    return result;
+    textures = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glGenTextures((GLsizei )n, (GLuint *)textures);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12137,43 +9916,34 @@ TclGL_glGenTexturesCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glDeleteTexturesCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int n;
-    const int *textures;
+    int *textures;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glDeleteTexturesCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glDeleteTexturesCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glDeleteTextures <(GLsizei) n> <(GLuint) textures>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &n);
-    textures = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glDeleteTextures((int )n, (unsigned int *)textures);
-    result = GetGLError(interp);
-    return result;
+    textures = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glDeleteTextures((GLsizei )n, (GLuint *)textures);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12184,48 +9954,39 @@ TclGL_glDeleteTexturesCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glBindTextureCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int texture;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glBindTextureCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glBindTextureCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glBindTexture <(GLenum) target> <(GLuint) texture>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &texture);
-    glBindTexture((GLenum)target, (unsigned int )texture);
-    result = GetGLError(interp);
-    return result;
+    glBindTexture((GLenum)target, (GLuint )texture);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12236,41 +9997,32 @@ TclGL_glBindTextureCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glIsTextureCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int texture;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glIsTextureCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glIsTextureCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glIsTexture <(GLuint) texture>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &texture);
-    glIsTexture((unsigned int )texture);
-    result = GetGLError(interp);
-    return result;
+    glIsTexture((GLuint )texture);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12281,55 +10033,46 @@ TclGL_glIsTextureCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetMapdvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int query;
-    void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetMapdvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetMapdvCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetMapdv <(GLenum) target> <(GLenum) query> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    query = (int)Tcl_GetHashValue(hPtr); 
-    v = (double*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glGetMapdv((GLenum)target, (GLenum)query, (GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    query = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetMapdv((GLenum)target, (GLenum)query, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12340,55 +10083,46 @@ TclGL_glGetMapdvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetMapfvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int query;
-    void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetMapfvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetMapfvCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetMapfv <(GLenum) target> <(GLenum) query> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    query = (int)Tcl_GetHashValue(hPtr); 
-    v = (float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glGetMapfv((GLenum)target, (GLenum)query, (float *)v);
-    result = GetGLError(interp);
-    return result;
+    query = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetMapfv((GLenum)target, (GLenum)query, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12399,19 +10133,15 @@ TclGL_glGetMapfvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetMapivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int query;
@@ -12419,35 +10149,30 @@ TclGL_glGetMapivCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetMapivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetMapivCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetMapiv <(GLenum) target> <(GLenum) query> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    query = (int)Tcl_GetHashValue(hPtr); 
-    v = (int*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glGetMapiv((GLenum)target, (GLenum)query, (int *)v);
-    result = GetGLError(interp);
-    return result;
+    query = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetMapiv((GLenum)target, (GLenum)query, (GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12458,41 +10183,32 @@ TclGL_glGetMapivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEvalCoord1dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double u;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEvalCoord1dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEvalCoord1dCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEvalCoord1d <(GLdouble) u>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &u);
     glEvalCoord1d((GLdouble )u);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12503,41 +10219,32 @@ TclGL_glEvalCoord1dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEvalCoord1fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double u;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEvalCoord1fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEvalCoord1fCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEvalCoord1f <(GLfloat) u>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &u);
-    glEvalCoord1f((float )u);
-    result = GetGLError(interp);
-    return result;
+    glEvalCoord1f((GLfloat )u);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12548,41 +10255,32 @@ TclGL_glEvalCoord1fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEvalCoord1dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *u;
+    double *u;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEvalCoord1dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEvalCoord1dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEvalCoord1dv <(GLdouble) u>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    u = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glEvalCoord1dv((GLdouble *)u);
-    result = GetGLError(interp);
-    return result;
+    u = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glEvalCoord1dv((void *)u);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12593,41 +10291,32 @@ TclGL_glEvalCoord1dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEvalCoord1fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *u;
+    double *u;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEvalCoord1fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEvalCoord1fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEvalCoord1fv <(GLfloat) u>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    u = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glEvalCoord1fv((float *)u);
-    result = GetGLError(interp);
-    return result;
+    u = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glEvalCoord1fv((void *)u);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12638,43 +10327,34 @@ TclGL_glEvalCoord1fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEvalCoord2dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double u;
     double v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEvalCoord2dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEvalCoord2dCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEvalCoord2d <(GLdouble) u> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &u);
     Tcl_GetDoubleFromObj(interp, objv[2], &v);
     glEvalCoord2d((GLdouble )u, (GLdouble )v);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12685,43 +10365,34 @@ TclGL_glEvalCoord2dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEvalCoord2fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double u;
     double v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEvalCoord2fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEvalCoord2fCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEvalCoord2f <(GLfloat) u> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &u);
     Tcl_GetDoubleFromObj(interp, objv[2], &v);
-    glEvalCoord2f((float )u, (float )v);
-    result = GetGLError(interp);
-    return result;
+    glEvalCoord2f((GLfloat )u, (GLfloat )v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12732,41 +10403,32 @@ TclGL_glEvalCoord2fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEvalCoord2dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *u;
+    double *u;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEvalCoord2dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEvalCoord2dvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEvalCoord2dv <(GLdouble) u>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    u = (const double*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glEvalCoord2dv((GLdouble *)u);
-    result = GetGLError(interp);
-    return result;
+    u = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glEvalCoord2dv((void *)u);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12777,41 +10439,32 @@ TclGL_glEvalCoord2dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEvalCoord2fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
-    const void *u;
+    double *u;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEvalCoord2fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEvalCoord2fvCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEvalCoord2fv <(GLfloat) u>\"",
                 NULL);
         return TCL_ERROR;
     }
-
-    u = (const float*)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    glEvalCoord2fv((float *)u);
-    result = GetGLError(interp);
-    return result;
+    u = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    glEvalCoord2fv((void *)u);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12822,19 +10475,15 @@ TclGL_glEvalCoord2fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMapGrid1dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int un;
     double u1;
@@ -12842,25 +10491,20 @@ TclGL_glMapGrid1dCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMapGrid1dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMapGrid1dCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMapGrid1d <(GLint) un> <(GLdouble) u1> <(GLdouble) u2>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &un);
     Tcl_GetDoubleFromObj(interp, objv[2], &u1);
     Tcl_GetDoubleFromObj(interp, objv[3], &u2);
-    glMapGrid1d((int )un, (GLdouble )u1, (GLdouble )u2);
-    result = GetGLError(interp);
-    return result;
+    glMapGrid1d((GLint )un, (GLdouble )u1, (GLdouble )u2);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12871,19 +10515,15 @@ TclGL_glMapGrid1dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMapGrid1fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int un;
     double u1;
@@ -12891,25 +10531,20 @@ TclGL_glMapGrid1fCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMapGrid1fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMapGrid1fCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMapGrid1f <(GLint) un> <(GLfloat) u1> <(GLfloat) u2>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &un);
     Tcl_GetDoubleFromObj(interp, objv[2], &u1);
     Tcl_GetDoubleFromObj(interp, objv[3], &u2);
-    glMapGrid1f((int )un, (float )u1, (float )u2);
-    result = GetGLError(interp);
-    return result;
+    glMapGrid1f((GLint )un, (GLfloat )u1, (GLfloat )u2);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12920,41 +10555,32 @@ TclGL_glMapGrid1fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEvalPoint1Cmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int i;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEvalPoint1Cmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEvalPoint1Cmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEvalPoint1 <(GLint) i>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &i);
-    glEvalPoint1((int )i);
-    result = GetGLError(interp);
-    return result;
+    glEvalPoint1((GLint )i);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -12965,43 +10591,34 @@ TclGL_glEvalPoint1Cmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEvalPoint2Cmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int i;
     int j;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEvalPoint2Cmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEvalPoint2Cmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEvalPoint2 <(GLint) i> <(GLint) j>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &i);
     Tcl_GetIntFromObj(interp, objv[2], &j);
-    glEvalPoint2((int )i, (int )j);
-    result = GetGLError(interp);
-    return result;
+    glEvalPoint2((GLint )i, (GLint )j);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13012,19 +10629,15 @@ TclGL_glEvalPoint2Cmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEvalMesh1Cmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mode;
     int i1;
@@ -13032,30 +10645,25 @@ TclGL_glEvalMesh1Cmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEvalMesh1Cmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEvalMesh1Cmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEvalMesh1 <(GLenum) mode> <(GLint) i1> <(GLint) i2>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &i1);
     Tcl_GetIntFromObj(interp, objv[3], &i2);
-    glEvalMesh1((GLenum)mode, (int )i1, (int )i2);
-    result = GetGLError(interp);
-    return result;
+    glEvalMesh1((GLenum)mode, (GLint )i1, (GLint )i2);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13066,19 +10674,15 @@ TclGL_glEvalMesh1Cmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glEvalMesh2Cmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mode;
     int i1;
@@ -13088,32 +10692,27 @@ TclGL_glEvalMesh2Cmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glEvalMesh2Cmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glEvalMesh2Cmd", objc, objv);
     if (objc != 6) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glEvalMesh2 <(GLenum) mode> <(GLint) i1> <(GLint) i2> <(GLint) j1> <(GLint) j2>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &i1);
     Tcl_GetIntFromObj(interp, objv[3], &i2);
     Tcl_GetIntFromObj(interp, objv[4], &j1);
     Tcl_GetIntFromObj(interp, objv[5], &j2);
-    glEvalMesh2((GLenum)mode, (int )i1, (int )i2, (int )j1, (int )j2);
-    result = GetGLError(interp);
-    return result;
+    glEvalMesh2((GLenum)mode, (GLint )i1, (GLint )i2, (GLint )j1, (GLint )j2);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13124,48 +10723,39 @@ TclGL_glEvalMesh2Cmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glFogfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
     double param;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glFogfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glFogfCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glFogf <(GLenum) pname> <(GLfloat) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &param);
-    glFogf((GLenum)pname, (float )param);
-    result = GetGLError(interp);
-    return result;
+    glFogf((GLenum)pname, (GLfloat )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13176,48 +10766,39 @@ TclGL_glFogfCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glFogiCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
     int param;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glFogiCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glFogiCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glFogi <(GLenum) pname> <(GLint) param>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &param);
-    glFogi((GLenum)pname, (int )param);
-    result = GetGLError(interp);
-    return result;
+    glFogi((GLenum)pname, (GLint )param);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13228,48 +10809,39 @@ TclGL_glFogiCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glFogfvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
-    const void *params;
+    double *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glFogfvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glFogfvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glFogfv <(GLenum) pname> <(GLfloat) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glFogfv((GLenum)pname, (float *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glFogfv((GLenum)pname, (void *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13280,48 +10852,39 @@ TclGL_glFogfvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glFogivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int pname;
-    const int *params;
+    int *params;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glFogivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glFogivCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glFogiv <(GLenum) pname> <(GLint) params>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    pname = (int)Tcl_GetHashValue(hPtr); 
-    params = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glFogiv((GLenum)pname, (int *)params);
-    result = GetGLError(interp);
-    return result;
+    pname = (GLenum)Tcl_GetHashValue(hPtr); 
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glFogiv((GLenum)pname, (GLint *)params);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13332,50 +10895,41 @@ TclGL_glFogivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glFeedbackBufferCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int size;
     int type;
-    void *buffer;
+    double *buffer;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glFeedbackBufferCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glFeedbackBufferCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glFeedbackBuffer <(GLsizei) size> <(GLenum) type> <(GLfloat) buffer>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &size);
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    type = (int)Tcl_GetHashValue(hPtr); 
-    buffer = (float*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glFeedbackBuffer((int )size, (GLenum)type, (float *)buffer);
-    result = GetGLError(interp);
-    return result;
+    type = (GLenum)Tcl_GetHashValue(hPtr); 
+    buffer = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glFeedbackBuffer((GLsizei )size, (GLenum)type, (void *)buffer);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13386,41 +10940,32 @@ TclGL_glFeedbackBufferCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPassThroughCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double token;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPassThroughCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPassThroughCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPassThrough <(GLfloat) token>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &token);
-    glPassThrough((float )token);
-    result = GetGLError(interp);
-    return result;
+    glPassThrough((GLfloat )token);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13431,43 +10976,34 @@ TclGL_glPassThroughCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glSelectBufferCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int size;
     int *buffer;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glSelectBufferCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glSelectBufferCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glSelectBuffer <(GLsizei) size> <(GLuint) buffer>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &size);
-    buffer = (int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glSelectBuffer((int )size, (unsigned int *)buffer);
-    result = GetGLError(interp);
-    return result;
+    buffer = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glSelectBuffer((GLsizei )size, (GLuint *)buffer);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13478,27 +11014,21 @@ TclGL_glSelectBufferCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glInitNamesCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glInitNamesCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glInitNamesCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glInitNames \"",
@@ -13506,12 +11036,9 @@ TclGL_glInitNamesCmd(
         return TCL_ERROR;
     }
 
-
     glInitNames();
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13522,41 +11049,32 @@ TclGL_glInitNamesCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLoadNameCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int name;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLoadNameCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLoadNameCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLoadName <(GLuint) name>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &name);
-    glLoadName((unsigned int )name);
-    result = GetGLError(interp);
-    return result;
+    glLoadName((GLuint )name);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13567,41 +11085,32 @@ TclGL_glLoadNameCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPushNameCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int name;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPushNameCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPushNameCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPushName <(GLuint) name>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetIntFromObj(interp, objv[1], &name);
-    glPushName((unsigned int )name);
-    result = GetGLError(interp);
-    return result;
+    glPushName((GLuint )name);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13612,27 +11121,21 @@ TclGL_glPushNameCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glPopNameCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glPopNameCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glPopNameCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glPopName \"",
@@ -13640,12 +11143,9 @@ TclGL_glPopNameCmd(
         return TCL_ERROR;
     }
 
-
     glPopName();
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13656,46 +11156,37 @@ TclGL_glPopNameCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glBlendEquationCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int mode;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glBlendEquationCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glBlendEquationCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glBlendEquation <(GLenum) mode>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    mode = (int)Tcl_GetHashValue(hPtr); 
+    mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glBlendEquation((GLenum)mode);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13706,46 +11197,37 @@ TclGL_glBlendEquationCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glResetHistogramCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glResetHistogramCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glResetHistogramCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glResetHistogram <(GLenum) target>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     glResetHistogram((GLenum)target);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13756,46 +11238,37 @@ TclGL_glResetHistogramCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glResetMinmaxCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glResetMinmaxCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glResetMinmaxCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glResetMinmax <(GLenum) target>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     glResetMinmax((GLenum)target);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13806,46 +11279,37 @@ TclGL_glResetMinmaxCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glActiveTextureCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int texture;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glActiveTextureCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glActiveTextureCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glActiveTexture <(GLenum) texture>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    texture = (int)Tcl_GetHashValue(hPtr); 
+    texture = (GLenum)Tcl_GetHashValue(hPtr); 
     glActiveTexture((GLenum)texture);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13856,46 +11320,37 @@ TclGL_glActiveTextureCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glClientActiveTextureCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int texture;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glClientActiveTextureCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glClientActiveTextureCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glClientActiveTexture <(GLenum) texture>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    texture = (int)Tcl_GetHashValue(hPtr); 
+    texture = (GLenum)Tcl_GetHashValue(hPtr); 
     glClientActiveTexture((GLenum)texture);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13906,19 +11361,15 @@ TclGL_glClientActiveTextureCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glCompressedTexImage1DCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int level;
@@ -13926,43 +11377,38 @@ TclGL_glCompressedTexImage1DCmd(
     int width;
     int border;
     int imageSize;
-    const void *data;
+    int *data;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glCompressedTexImage1DCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glCompressedTexImage1DCmd", objc, objv);
     if (objc != 8) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glCompressedTexImage1D <(GLenum) target> <(GLint) level> <(GLenum) internalformat> <(GLsizei) width> <(GLint) border> <(GLsizei) imageSize> <(GLvoid) data>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &level);
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[3]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[3]),"\"", NULL);
 	return TCL_ERROR;
     }
-    internalformat = (int)Tcl_GetHashValue(hPtr); 
+    internalformat = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[4], &width);
     Tcl_GetIntFromObj(interp, objv[5], &border);
     Tcl_GetIntFromObj(interp, objv[6], &imageSize);
-    data = (const void*)Tcl_GetByteArrayFromObj(objv[7], NULL);
-    glCompressedTexImage1D((GLenum)target, (int )level, (GLenum)internalformat, (int )width, (int )border, (int )imageSize, (void *)data);
-    result = GetGLError(interp);
-    return result;
+    data = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
+    glCompressedTexImage1D((GLenum)target, (GLint )level, (GLenum)internalformat, (GLsizei )width, (GLint )border, (GLsizei )imageSize, (GLvoid *)data);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -13973,19 +11419,15 @@ TclGL_glCompressedTexImage1DCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glCompressedTexImage2DCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int level;
@@ -13994,44 +11436,39 @@ TclGL_glCompressedTexImage2DCmd(
     int height;
     int border;
     int imageSize;
-    const void *data;
+    int *data;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glCompressedTexImage2DCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glCompressedTexImage2DCmd", objc, objv);
     if (objc != 9) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glCompressedTexImage2D <(GLenum) target> <(GLint) level> <(GLenum) internalformat> <(GLsizei) width> <(GLsizei) height> <(GLint) border> <(GLsizei) imageSize> <(GLvoid) data>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &level);
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[3]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[3]),"\"", NULL);
 	return TCL_ERROR;
     }
-    internalformat = (int)Tcl_GetHashValue(hPtr); 
+    internalformat = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[4], &width);
     Tcl_GetIntFromObj(interp, objv[5], &height);
     Tcl_GetIntFromObj(interp, objv[6], &border);
     Tcl_GetIntFromObj(interp, objv[7], &imageSize);
-    data = (const void*)Tcl_GetByteArrayFromObj(objv[8], NULL);
-    glCompressedTexImage2D((GLenum)target, (int )level, (GLenum)internalformat, (int )width, (int )height, (int )border, (int )imageSize, (void *)data);
-    result = GetGLError(interp);
-    return result;
+    data = (void *)Tcl_GetByteArrayFromObj(objv[8], NULL);
+    glCompressedTexImage2D((GLenum)target, (GLint )level, (GLenum)internalformat, (GLsizei )width, (GLsizei )height, (GLint )border, (GLsizei )imageSize, (GLvoid *)data);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14042,19 +11479,15 @@ TclGL_glCompressedTexImage2DCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glCompressedTexImage3DCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int level;
@@ -14064,45 +11497,40 @@ TclGL_glCompressedTexImage3DCmd(
     int depth;
     int border;
     int imageSize;
-    const void *data;
+    int *data;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glCompressedTexImage3DCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glCompressedTexImage3DCmd", objc, objv);
     if (objc != 10) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glCompressedTexImage3D <(GLenum) target> <(GLint) level> <(GLenum) internalformat> <(GLsizei) width> <(GLsizei) height> <(GLsizei) depth> <(GLint) border> <(GLsizei) imageSize> <(GLvoid) data>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &level);
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[3]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[3]),"\"", NULL);
 	return TCL_ERROR;
     }
-    internalformat = (int)Tcl_GetHashValue(hPtr); 
+    internalformat = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[4], &width);
     Tcl_GetIntFromObj(interp, objv[5], &height);
     Tcl_GetIntFromObj(interp, objv[6], &depth);
     Tcl_GetIntFromObj(interp, objv[7], &border);
     Tcl_GetIntFromObj(interp, objv[8], &imageSize);
-    data = (const void*)Tcl_GetByteArrayFromObj(objv[9], NULL);
-    glCompressedTexImage3D((GLenum)target, (int )level, (GLenum)internalformat, (int )width, (int )height, (int )depth, (int )border, (int )imageSize, (void *)data);
-    result = GetGLError(interp);
-    return result;
+    data = (void *)Tcl_GetByteArrayFromObj(objv[9], NULL);
+    glCompressedTexImage3D((GLenum)target, (GLint )level, (GLenum)internalformat, (GLsizei )width, (GLsizei )height, (GLsizei )depth, (GLint )border, (GLsizei )imageSize, (GLvoid *)data);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14113,19 +11541,15 @@ TclGL_glCompressedTexImage3DCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glCompressedTexSubImage1DCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int level;
@@ -14133,27 +11557,24 @@ TclGL_glCompressedTexSubImage1DCmd(
     int width;
     int format;
     int imageSize;
-    const void *data;
+    int *data;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glCompressedTexSubImage1DCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glCompressedTexSubImage1DCmd", objc, objv);
     if (objc != 8) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glCompressedTexSubImage1D <(GLenum) target> <(GLint) level> <(GLint) xoffset> <(GLsizei) width> <(GLenum) format> <(GLsizei) imageSize> <(GLvoid) data>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &level);
     Tcl_GetIntFromObj(interp, objv[3], &xoffset);
     Tcl_GetIntFromObj(interp, objv[4], &width);
@@ -14162,14 +11583,12 @@ TclGL_glCompressedTexSubImage1DCmd(
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[5]),"\"", NULL);
 	return TCL_ERROR;
     }
-    format = (int)Tcl_GetHashValue(hPtr); 
+    format = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[6], &imageSize);
-    data = (const void*)Tcl_GetByteArrayFromObj(objv[7], NULL);
-    glCompressedTexSubImage1D((GLenum)target, (int )level, (int )xoffset, (int )width, (GLenum)format, (int )imageSize, (void *)data);
-    result = GetGLError(interp);
-    return result;
+    data = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
+    glCompressedTexSubImage1D((GLenum)target, (GLint )level, (GLint )xoffset, (GLsizei )width, (GLenum)format, (GLsizei )imageSize, (GLvoid *)data);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14180,19 +11599,15 @@ TclGL_glCompressedTexSubImage1DCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glCompressedTexSubImage2DCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int level;
@@ -14202,27 +11617,24 @@ TclGL_glCompressedTexSubImage2DCmd(
     int height;
     int format;
     int imageSize;
-    const void *data;
+    int *data;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glCompressedTexSubImage2DCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glCompressedTexSubImage2DCmd", objc, objv);
     if (objc != 10) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glCompressedTexSubImage2D <(GLenum) target> <(GLint) level> <(GLint) xoffset> <(GLint) yoffset> <(GLsizei) width> <(GLsizei) height> <(GLenum) format> <(GLsizei) imageSize> <(GLvoid) data>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &level);
     Tcl_GetIntFromObj(interp, objv[3], &xoffset);
     Tcl_GetIntFromObj(interp, objv[4], &yoffset);
@@ -14233,14 +11645,12 @@ TclGL_glCompressedTexSubImage2DCmd(
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[7]),"\"", NULL);
 	return TCL_ERROR;
     }
-    format = (int)Tcl_GetHashValue(hPtr); 
+    format = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[8], &imageSize);
-    data = (const void*)Tcl_GetByteArrayFromObj(objv[9], NULL);
-    glCompressedTexSubImage2D((GLenum)target, (int )level, (int )xoffset, (int )yoffset, (int )width, (int )height, (GLenum)format, (int )imageSize, (void *)data);
-    result = GetGLError(interp);
-    return result;
+    data = (void *)Tcl_GetByteArrayFromObj(objv[9], NULL);
+    glCompressedTexSubImage2D((GLenum)target, (GLint )level, (GLint )xoffset, (GLint )yoffset, (GLsizei )width, (GLsizei )height, (GLenum)format, (GLsizei )imageSize, (GLvoid *)data);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14251,19 +11661,15 @@ TclGL_glCompressedTexSubImage2DCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glCompressedTexSubImage3DCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int level;
@@ -14275,27 +11681,24 @@ TclGL_glCompressedTexSubImage3DCmd(
     int depth;
     int format;
     int imageSize;
-    const void *data;
+    int *data;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glCompressedTexSubImage3DCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glCompressedTexSubImage3DCmd", objc, objv);
     if (objc != 12) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glCompressedTexSubImage3D <(GLenum) target> <(GLint) level> <(GLint) xoffset> <(GLint) yoffset> <(GLint) zoffset> <(GLsizei) width> <(GLsizei) height> <(GLsizei) depth> <(GLenum) format> <(GLsizei) imageSize> <(GLvoid) data>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &level);
     Tcl_GetIntFromObj(interp, objv[3], &xoffset);
     Tcl_GetIntFromObj(interp, objv[4], &yoffset);
@@ -14308,14 +11711,12 @@ TclGL_glCompressedTexSubImage3DCmd(
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[9]),"\"", NULL);
 	return TCL_ERROR;
     }
-    format = (int)Tcl_GetHashValue(hPtr); 
+    format = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[10], &imageSize);
-    data = (const void*)Tcl_GetByteArrayFromObj(objv[11], NULL);
-    glCompressedTexSubImage3D((GLenum)target, (int )level, (int )xoffset, (int )yoffset, (int )zoffset, (int )width, (int )height, (int )depth, (GLenum)format, (int )imageSize, (void *)data);
-    result = GetGLError(interp);
-    return result;
+    data = (void *)Tcl_GetByteArrayFromObj(objv[11], NULL);
+    glCompressedTexSubImage3D((GLenum)target, (GLint )level, (GLint )xoffset, (GLint )yoffset, (GLint )zoffset, (GLsizei )width, (GLsizei )height, (GLsizei )depth, (GLenum)format, (GLsizei )imageSize, (GLvoid *)data);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14326,50 +11727,41 @@ TclGL_glCompressedTexSubImage3DCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glGetCompressedTexImageCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int lod;
-    void *img;
+    int *img;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glGetCompressedTexImageCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glGetCompressedTexImageCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glGetCompressedTexImage <(GLenum) target> <(GLint) lod> <(GLvoid) img>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &lod);
-    img = (void*)Tcl_GetByteArrayFromObj(objv[3], NULL);
-    glGetCompressedTexImage((GLenum)target, (int )lod, (void *)img);
-    result = GetGLError(interp);
-    return result;
+    img = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    glGetCompressedTexImage((GLenum)target, (GLint )lod, (GLvoid *)img);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14380,48 +11772,39 @@ TclGL_glGetCompressedTexImageCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1dCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1d <(GLenum) target> <(GLdouble) s>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     glMultiTexCoord1d((GLenum)target, (GLdouble )s);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14432,48 +11815,39 @@ TclGL_glMultiTexCoord1dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1dvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1dv <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord1dv((GLenum)target, (GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1dv((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14484,48 +11858,39 @@ TclGL_glMultiTexCoord1dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1fCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1f <(GLenum) target> <(GLfloat) s>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
-    glMultiTexCoord1f((GLenum)target, (float )s);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord1f((GLenum)target, (GLfloat )s);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14536,48 +11901,39 @@ TclGL_glMultiTexCoord1fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1fvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1fv <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord1fv((GLenum)target, (float *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1fv((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14588,48 +11944,39 @@ TclGL_glMultiTexCoord1fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1iCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1i <(GLenum) target> <(GLint) s>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
-    glMultiTexCoord1i((GLenum)target, (int )s);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord1i((GLenum)target, (GLint )s);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14640,48 +11987,39 @@ TclGL_glMultiTexCoord1iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1ivCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1iv <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord1iv((GLenum)target, (int *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1iv((GLenum)target, (GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14692,48 +12030,39 @@ TclGL_glMultiTexCoord1ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1sCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1s <(GLenum) target> <(GLshort) s>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
-    glMultiTexCoord1s((GLenum)target, (short )s);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord1s((GLenum)target, (GLshort )s);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14744,48 +12073,39 @@ TclGL_glMultiTexCoord1sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1svCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1sv <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord1sv((GLenum)target, (short *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1sv((GLenum)target, (GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14796,19 +12116,15 @@ TclGL_glMultiTexCoord1svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
@@ -14816,30 +12132,25 @@ TclGL_glMultiTexCoord2dCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2dCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2d <(GLenum) target> <(GLdouble) s> <(GLdouble) t>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     glMultiTexCoord2d((GLenum)target, (GLdouble )s, (GLdouble )t);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14850,48 +12161,39 @@ TclGL_glMultiTexCoord2dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2dvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2dv <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord2dv((GLenum)target, (GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2dv((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14902,19 +12204,15 @@ TclGL_glMultiTexCoord2dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
@@ -14922,30 +12220,25 @@ TclGL_glMultiTexCoord2fCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2fCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2f <(GLenum) target> <(GLfloat) s> <(GLfloat) t>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
-    glMultiTexCoord2f((GLenum)target, (float )s, (float )t);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord2f((GLenum)target, (GLfloat )s, (GLfloat )t);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -14956,48 +12249,39 @@ TclGL_glMultiTexCoord2fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2fvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2fv <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord2fv((GLenum)target, (float *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2fv((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15008,19 +12292,15 @@ TclGL_glMultiTexCoord2fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
@@ -15028,30 +12308,25 @@ TclGL_glMultiTexCoord2iCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2iCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2i <(GLenum) target> <(GLint) s> <(GLint) t>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
-    glMultiTexCoord2i((GLenum)target, (int )s, (int )t);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord2i((GLenum)target, (GLint )s, (GLint )t);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15062,48 +12337,39 @@ TclGL_glMultiTexCoord2iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2ivCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2iv <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord2iv((GLenum)target, (int *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2iv((GLenum)target, (GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15114,19 +12380,15 @@ TclGL_glMultiTexCoord2ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
@@ -15134,30 +12396,25 @@ TclGL_glMultiTexCoord2sCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2sCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2s <(GLenum) target> <(GLshort) s> <(GLshort) t>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
-    glMultiTexCoord2s((GLenum)target, (short )s, (short )t);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord2s((GLenum)target, (GLshort )s, (GLshort )t);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15168,48 +12425,39 @@ TclGL_glMultiTexCoord2sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2svCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2sv <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord2sv((GLenum)target, (short *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2sv((GLenum)target, (GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15220,19 +12468,15 @@ TclGL_glMultiTexCoord2svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
@@ -15241,31 +12485,26 @@ TclGL_glMultiTexCoord3dCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3dCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3d <(GLenum) target> <(GLdouble) s> <(GLdouble) t> <(GLdouble) r>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     glMultiTexCoord3d((GLenum)target, (GLdouble )s, (GLdouble )t, (GLdouble )r);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15276,48 +12515,39 @@ TclGL_glMultiTexCoord3dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3dvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3dv <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord3dv((GLenum)target, (GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3dv((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15328,19 +12558,15 @@ TclGL_glMultiTexCoord3dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
@@ -15349,31 +12575,26 @@ TclGL_glMultiTexCoord3fCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3fCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3f <(GLenum) target> <(GLfloat) s> <(GLfloat) t> <(GLfloat) r>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
-    glMultiTexCoord3f((GLenum)target, (float )s, (float )t, (float )r);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord3f((GLenum)target, (GLfloat )s, (GLfloat )t, (GLfloat )r);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15384,48 +12605,39 @@ TclGL_glMultiTexCoord3fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3fvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3fv <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord3fv((GLenum)target, (float *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3fv((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15436,19 +12648,15 @@ TclGL_glMultiTexCoord3fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
@@ -15457,31 +12665,26 @@ TclGL_glMultiTexCoord3iCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3iCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3i <(GLenum) target> <(GLint) s> <(GLint) t> <(GLint) r>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
     Tcl_GetIntFromObj(interp, objv[4], &r);
-    glMultiTexCoord3i((GLenum)target, (int )s, (int )t, (int )r);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord3i((GLenum)target, (GLint )s, (GLint )t, (GLint )r);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15492,48 +12695,39 @@ TclGL_glMultiTexCoord3iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3ivCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3iv <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord3iv((GLenum)target, (int *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3iv((GLenum)target, (GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15544,19 +12738,15 @@ TclGL_glMultiTexCoord3ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
@@ -15565,31 +12755,26 @@ TclGL_glMultiTexCoord3sCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3sCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3s <(GLenum) target> <(GLshort) s> <(GLshort) t> <(GLshort) r>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
     Tcl_GetIntFromObj(interp, objv[4], &r);
-    glMultiTexCoord3s((GLenum)target, (short )s, (short )t, (short )r);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord3s((GLenum)target, (GLshort )s, (GLshort )t, (GLshort )r);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15600,48 +12785,39 @@ TclGL_glMultiTexCoord3sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3svCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3sv <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord3sv((GLenum)target, (short *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3sv((GLenum)target, (GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15652,19 +12828,15 @@ TclGL_glMultiTexCoord3svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4dCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
@@ -15674,32 +12846,27 @@ TclGL_glMultiTexCoord4dCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4dCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4dCmd", objc, objv);
     if (objc != 6) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4d <(GLenum) target> <(GLdouble) s> <(GLdouble) t> <(GLdouble) r> <(GLdouble) q>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     Tcl_GetDoubleFromObj(interp, objv[5], &q);
     glMultiTexCoord4d((GLenum)target, (GLdouble )s, (GLdouble )t, (GLdouble )r, (GLdouble )q);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15710,48 +12877,39 @@ TclGL_glMultiTexCoord4dCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4dvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4dvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4dvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4dv <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord4dv((GLenum)target, (GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4dv((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15762,19 +12920,15 @@ TclGL_glMultiTexCoord4dvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4fCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
@@ -15784,32 +12938,27 @@ TclGL_glMultiTexCoord4fCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4fCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4fCmd", objc, objv);
     if (objc != 6) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4f <(GLenum) target> <(GLfloat) s> <(GLfloat) t> <(GLfloat) r> <(GLfloat) q>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     Tcl_GetDoubleFromObj(interp, objv[5], &q);
-    glMultiTexCoord4f((GLenum)target, (float )s, (float )t, (float )r, (float )q);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord4f((GLenum)target, (GLfloat )s, (GLfloat )t, (GLfloat )r, (GLfloat )q);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15820,48 +12969,39 @@ TclGL_glMultiTexCoord4fCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4fvCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4fvCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4fvCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4fv <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord4fv((GLenum)target, (float *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4fv((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15872,19 +13012,15 @@ TclGL_glMultiTexCoord4fvCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4iCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
@@ -15894,32 +13030,27 @@ TclGL_glMultiTexCoord4iCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4iCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4iCmd", objc, objv);
     if (objc != 6) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4i <(GLenum) target> <(GLint) s> <(GLint) t> <(GLint) r> <(GLint) q>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
     Tcl_GetIntFromObj(interp, objv[4], &r);
     Tcl_GetIntFromObj(interp, objv[5], &q);
-    glMultiTexCoord4i((GLenum)target, (int )s, (int )t, (int )r, (int )q);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord4i((GLenum)target, (GLint )s, (GLint )t, (GLint )r, (GLint )q);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15930,48 +13061,39 @@ TclGL_glMultiTexCoord4iCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4ivCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4ivCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4ivCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4iv <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord4iv((GLenum)target, (int *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4iv((GLenum)target, (GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -15982,19 +13104,15 @@ TclGL_glMultiTexCoord4ivCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4sCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
@@ -16004,32 +13122,27 @@ TclGL_glMultiTexCoord4sCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4sCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4sCmd", objc, objv);
     if (objc != 6) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4s <(GLenum) target> <(GLshort) s> <(GLshort) t> <(GLshort) r> <(GLshort) q>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
     Tcl_GetIntFromObj(interp, objv[4], &r);
     Tcl_GetIntFromObj(interp, objv[5], &q);
-    glMultiTexCoord4s((GLenum)target, (short )s, (short )t, (short )r, (short )q);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord4s((GLenum)target, (GLshort )s, (GLshort )t, (GLshort )r, (GLshort )q);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16040,48 +13153,39 @@ TclGL_glMultiTexCoord4sCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4svCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4svCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4svCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4sv <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord4sv((GLenum)target, (short *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4sv((GLenum)target, (GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16092,39 +13196,30 @@ TclGL_glMultiTexCoord4svCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLoadTransposeMatrixdCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLoadTransposeMatrixdCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLoadTransposeMatrixdCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLoadTransposeMatrixd <(GLdouble) m[16]>\"",
                 NULL);
         return TCL_ERROR;
     }
-
 fprintf(stderr, "glLoadTransposeMatrixd not yet implemented");
-    result = TCL_OK;
-    return result;
+    return TCL_OK;
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16135,39 +13230,30 @@ fprintf(stderr, "glLoadTransposeMatrixd not yet implemented");
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glLoadTransposeMatrixfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glLoadTransposeMatrixfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glLoadTransposeMatrixfCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glLoadTransposeMatrixf <(GLfloat) m[16]>\"",
                 NULL);
         return TCL_ERROR;
     }
-
 fprintf(stderr, "glLoadTransposeMatrixf not yet implemented");
-    result = TCL_OK;
-    return result;
+    return TCL_OK;
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16178,39 +13264,30 @@ fprintf(stderr, "glLoadTransposeMatrixf not yet implemented");
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultTransposeMatrixdCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultTransposeMatrixdCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultTransposeMatrixdCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultTransposeMatrixd <(GLdouble) m[16]>\"",
                 NULL);
         return TCL_ERROR;
     }
-
 fprintf(stderr, "glMultTransposeMatrixd not yet implemented");
-    result = TCL_OK;
-    return result;
+    return TCL_OK;
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16221,39 +13298,30 @@ fprintf(stderr, "glMultTransposeMatrixd not yet implemented");
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultTransposeMatrixfCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultTransposeMatrixfCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultTransposeMatrixfCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultTransposeMatrixf <(GLfloat) m[16]>\"",
                 NULL);
         return TCL_ERROR;
     }
-
 fprintf(stderr, "glMultTransposeMatrixf not yet implemented");
-    result = TCL_OK;
-    return result;
+    return TCL_OK;
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16264,43 +13332,34 @@ fprintf(stderr, "glMultTransposeMatrixf not yet implemented");
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glSampleCoverageCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     double value;
     int invert;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glSampleCoverageCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glSampleCoverageCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glSampleCoverage <(GLclampf) value> <(GLboolean) invert>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     Tcl_GetDoubleFromObj(interp, objv[1], &value);
     Tcl_GetBooleanFromObj(interp, objv[2], &invert);
-    glSampleCoverage((float )value, (unsigned char )invert);
-    result = GetGLError(interp);
-    return result;
+    glSampleCoverage((GLclampf )value, (GLboolean )invert);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16311,46 +13370,37 @@ TclGL_glSampleCoverageCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glActiveTextureARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int texture;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glActiveTextureARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glActiveTextureARBCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glActiveTextureARB <(GLenum) texture>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    texture = (int)Tcl_GetHashValue(hPtr); 
+    texture = (GLenum)Tcl_GetHashValue(hPtr); 
     glActiveTextureARB((GLenum)texture);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16361,46 +13411,37 @@ TclGL_glActiveTextureARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glClientActiveTextureARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int texture;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glClientActiveTextureARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glClientActiveTextureARBCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glClientActiveTextureARB <(GLenum) texture>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    texture = (int)Tcl_GetHashValue(hPtr); 
+    texture = (GLenum)Tcl_GetHashValue(hPtr); 
     glClientActiveTextureARB((GLenum)texture);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16411,48 +13452,39 @@ TclGL_glClientActiveTextureARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1dARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1dARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1dARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1dARB <(GLenum) target> <(GLdouble) s>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     glMultiTexCoord1dARB((GLenum)target, (GLdouble )s);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16463,48 +13495,39 @@ TclGL_glMultiTexCoord1dARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1dvARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1dvARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1dvARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1dvARB <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord1dvARB((GLenum)target, (GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1dvARB((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16515,48 +13538,39 @@ TclGL_glMultiTexCoord1dvARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1fARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1fARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1fARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1fARB <(GLenum) target> <(GLfloat) s>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
-    glMultiTexCoord1fARB((GLenum)target, (float )s);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord1fARB((GLenum)target, (GLfloat )s);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16567,48 +13581,39 @@ TclGL_glMultiTexCoord1fARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1fvARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1fvARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1fvARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1fvARB <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord1fvARB((GLenum)target, (float *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1fvARB((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16619,48 +13624,39 @@ TclGL_glMultiTexCoord1fvARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1iARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1iARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1iARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1iARB <(GLenum) target> <(GLint) s>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
-    glMultiTexCoord1iARB((GLenum)target, (int )s);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord1iARB((GLenum)target, (GLint )s);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16671,48 +13667,39 @@ TclGL_glMultiTexCoord1iARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1ivARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1ivARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1ivARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1ivARB <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord1ivARB((GLenum)target, (int *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1ivARB((GLenum)target, (GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16723,48 +13710,39 @@ TclGL_glMultiTexCoord1ivARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1sARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1sARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1sARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1sARB <(GLenum) target> <(GLshort) s>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
-    glMultiTexCoord1sARB((GLenum)target, (short )s);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord1sARB((GLenum)target, (GLshort )s);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16775,48 +13753,39 @@ TclGL_glMultiTexCoord1sARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord1svARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord1svARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord1svARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord1svARB <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord1svARB((GLenum)target, (short *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord1svARB((GLenum)target, (GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16827,19 +13796,15 @@ TclGL_glMultiTexCoord1svARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2dARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
@@ -16847,30 +13812,25 @@ TclGL_glMultiTexCoord2dARBCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2dARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2dARBCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2dARB <(GLenum) target> <(GLdouble) s> <(GLdouble) t>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     glMultiTexCoord2dARB((GLenum)target, (GLdouble )s, (GLdouble )t);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16881,48 +13841,39 @@ TclGL_glMultiTexCoord2dARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2dvARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2dvARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2dvARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2dvARB <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord2dvARB((GLenum)target, (GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2dvARB((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16933,19 +13884,15 @@ TclGL_glMultiTexCoord2dvARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2fARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
@@ -16953,30 +13900,25 @@ TclGL_glMultiTexCoord2fARBCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2fARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2fARBCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2fARB <(GLenum) target> <(GLfloat) s> <(GLfloat) t>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
-    glMultiTexCoord2fARB((GLenum)target, (float )s, (float )t);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord2fARB((GLenum)target, (GLfloat )s, (GLfloat )t);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -16987,48 +13929,39 @@ TclGL_glMultiTexCoord2fARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2fvARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2fvARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2fvARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2fvARB <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord2fvARB((GLenum)target, (float *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2fvARB((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17039,19 +13972,15 @@ TclGL_glMultiTexCoord2fvARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2iARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
@@ -17059,30 +13988,25 @@ TclGL_glMultiTexCoord2iARBCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2iARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2iARBCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2iARB <(GLenum) target> <(GLint) s> <(GLint) t>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
-    glMultiTexCoord2iARB((GLenum)target, (int )s, (int )t);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord2iARB((GLenum)target, (GLint )s, (GLint )t);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17093,48 +14017,39 @@ TclGL_glMultiTexCoord2iARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2ivARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2ivARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2ivARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2ivARB <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord2ivARB((GLenum)target, (int *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2ivARB((GLenum)target, (GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17145,19 +14060,15 @@ TclGL_glMultiTexCoord2ivARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2sARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
@@ -17165,30 +14076,25 @@ TclGL_glMultiTexCoord2sARBCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2sARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2sARBCmd", objc, objv);
     if (objc != 4) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2sARB <(GLenum) target> <(GLshort) s> <(GLshort) t>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
-    glMultiTexCoord2sARB((GLenum)target, (short )s, (short )t);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord2sARB((GLenum)target, (GLshort )s, (GLshort )t);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17199,48 +14105,39 @@ TclGL_glMultiTexCoord2sARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord2svARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord2svARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord2svARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord2svARB <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord2svARB((GLenum)target, (short *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord2svARB((GLenum)target, (GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17251,19 +14148,15 @@ TclGL_glMultiTexCoord2svARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3dARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
@@ -17272,31 +14165,26 @@ TclGL_glMultiTexCoord3dARBCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3dARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3dARBCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3dARB <(GLenum) target> <(GLdouble) s> <(GLdouble) t> <(GLdouble) r>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     glMultiTexCoord3dARB((GLenum)target, (GLdouble )s, (GLdouble )t, (GLdouble )r);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17307,48 +14195,39 @@ TclGL_glMultiTexCoord3dARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3dvARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3dvARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3dvARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3dvARB <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord3dvARB((GLenum)target, (GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3dvARB((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17359,19 +14238,15 @@ TclGL_glMultiTexCoord3dvARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3fARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
@@ -17380,31 +14255,26 @@ TclGL_glMultiTexCoord3fARBCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3fARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3fARBCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3fARB <(GLenum) target> <(GLfloat) s> <(GLfloat) t> <(GLfloat) r>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
-    glMultiTexCoord3fARB((GLenum)target, (float )s, (float )t, (float )r);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord3fARB((GLenum)target, (GLfloat )s, (GLfloat )t, (GLfloat )r);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17415,48 +14285,39 @@ TclGL_glMultiTexCoord3fARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3fvARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3fvARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3fvARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3fvARB <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord3fvARB((GLenum)target, (float *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3fvARB((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17467,19 +14328,15 @@ TclGL_glMultiTexCoord3fvARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3iARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
@@ -17488,31 +14345,26 @@ TclGL_glMultiTexCoord3iARBCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3iARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3iARBCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3iARB <(GLenum) target> <(GLint) s> <(GLint) t> <(GLint) r>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
     Tcl_GetIntFromObj(interp, objv[4], &r);
-    glMultiTexCoord3iARB((GLenum)target, (int )s, (int )t, (int )r);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord3iARB((GLenum)target, (GLint )s, (GLint )t, (GLint )r);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17523,48 +14375,39 @@ TclGL_glMultiTexCoord3iARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3ivARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3ivARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3ivARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3ivARB <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord3ivARB((GLenum)target, (int *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3ivARB((GLenum)target, (GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17575,19 +14418,15 @@ TclGL_glMultiTexCoord3ivARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3sARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
@@ -17596,31 +14435,26 @@ TclGL_glMultiTexCoord3sARBCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3sARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3sARBCmd", objc, objv);
     if (objc != 5) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3sARB <(GLenum) target> <(GLshort) s> <(GLshort) t> <(GLshort) r>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
     Tcl_GetIntFromObj(interp, objv[4], &r);
-    glMultiTexCoord3sARB((GLenum)target, (short )s, (short )t, (short )r);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord3sARB((GLenum)target, (GLshort )s, (GLshort )t, (GLshort )r);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17631,48 +14465,39 @@ TclGL_glMultiTexCoord3sARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord3svARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord3svARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord3svARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord3svARB <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord3svARB((GLenum)target, (short *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord3svARB((GLenum)target, (GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17683,19 +14508,15 @@ TclGL_glMultiTexCoord3svARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4dARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
@@ -17705,32 +14526,27 @@ TclGL_glMultiTexCoord4dARBCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4dARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4dARBCmd", objc, objv);
     if (objc != 6) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4dARB <(GLenum) target> <(GLdouble) s> <(GLdouble) t> <(GLdouble) r> <(GLdouble) q>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     Tcl_GetDoubleFromObj(interp, objv[5], &q);
     glMultiTexCoord4dARB((GLenum)target, (GLdouble )s, (GLdouble )t, (GLdouble )r, (GLdouble )q);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17741,48 +14557,39 @@ TclGL_glMultiTexCoord4dARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4dvARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4dvARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4dvARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4dvARB <(GLenum) target> <(GLdouble) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const double*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord4dvARB((GLenum)target, (GLdouble *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4dvARB((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17793,19 +14600,15 @@ TclGL_glMultiTexCoord4dvARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4fARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     double s;
@@ -17815,32 +14618,27 @@ TclGL_glMultiTexCoord4fARBCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4fARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4fARBCmd", objc, objv);
     if (objc != 6) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4fARB <(GLenum) target> <(GLfloat) s> <(GLfloat) t> <(GLfloat) r> <(GLfloat) q>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     Tcl_GetDoubleFromObj(interp, objv[5], &q);
-    glMultiTexCoord4fARB((GLenum)target, (float )s, (float )t, (float )r, (float )q);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord4fARB((GLenum)target, (GLfloat )s, (GLfloat )t, (GLfloat )r, (GLfloat )q);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17851,48 +14649,39 @@ TclGL_glMultiTexCoord4fARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4fvARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const void *v;
+    double *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4fvARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4fvARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4fvARB <(GLenum) target> <(GLfloat) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const float*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord4fvARB((GLenum)target, (float *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4fvARB((GLenum)target, (void *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17903,19 +14692,15 @@ TclGL_glMultiTexCoord4fvARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4iARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
@@ -17925,32 +14710,27 @@ TclGL_glMultiTexCoord4iARBCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4iARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4iARBCmd", objc, objv);
     if (objc != 6) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4iARB <(GLenum) target> <(GLint) s> <(GLint) t> <(GLint) r> <(GLint) q>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
     Tcl_GetIntFromObj(interp, objv[4], &r);
     Tcl_GetIntFromObj(interp, objv[5], &q);
-    glMultiTexCoord4iARB((GLenum)target, (int )s, (int )t, (int )r, (int )q);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord4iARB((GLenum)target, (GLint )s, (GLint )t, (GLint )r, (GLint )q);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -17961,48 +14741,39 @@ TclGL_glMultiTexCoord4iARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4ivARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4ivARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4ivARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4ivARB <(GLenum) target> <(GLint) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord4ivARB((GLenum)target, (int *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4ivARB((GLenum)target, (GLint *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -18013,19 +14784,15 @@ TclGL_glMultiTexCoord4ivARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4sARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
     int s;
@@ -18035,32 +14802,27 @@ TclGL_glMultiTexCoord4sARBCmd(
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4sARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4sARBCmd", objc, objv);
     if (objc != 6) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4sARB <(GLenum) target> <(GLshort) s> <(GLshort) t> <(GLshort) r> <(GLshort) q>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
     Tcl_GetIntFromObj(interp, objv[4], &r);
     Tcl_GetIntFromObj(interp, objv[5], &q);
-    glMultiTexCoord4sARB((GLenum)target, (short )s, (short )t, (short )r, (short )q);
-    result = GetGLError(interp);
-    return result;
+    glMultiTexCoord4sARB((GLenum)target, (GLshort )s, (GLshort )t, (GLshort )r, (GLshort )q);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -18071,48 +14833,39 @@ TclGL_glMultiTexCoord4sARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glMultiTexCoord4svARBCmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int target;
-    const int *v;
+    int *v;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glMultiTexCoord4svARBCmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glMultiTexCoord4svARBCmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glMultiTexCoord4svARB <(GLenum) target> <(GLshort) v>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    target = (int)Tcl_GetHashValue(hPtr); 
-    v = (const int*)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    glMultiTexCoord4svARB((GLenum)target, (short *)v);
-    result = GetGLError(interp);
-    return result;
+    target = (GLenum)Tcl_GetHashValue(hPtr); 
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    glMultiTexCoord4svARB((GLenum)target, (GLshort *)v);
+    return GetGLError(interp);
 }
-
 
 /*
  * ------------------------------------------------------------------------
@@ -18123,49 +14876,41 @@ TclGL_glMultiTexCoord4svARBCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-
 int
 TclGL_glBlendEquationSeparateATICmd(
-
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
-
 {
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
-    int result;
     int glResult;
     int modeRGB;
     int modeA;
 
     glResult = 0;
     hPtr = NULL;
-
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(0, "TclGL_glBlendEquationSeparateATICmd", objc, objv);
-
+    TclGLShowArgs(1, "TclGL_glBlendEquationSeparateATICmd", objc, objv);
     if (objc != 3) {
         Tcl_AppendResult(interp,
                 "wrong # args: should be \"ntk glBlendEquationSeparateATI <(GLenum) modeRGB> <(GLenum) modeA>\"",
                 NULL);
         return TCL_ERROR;
     }
-
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[1]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[1]),"\"", NULL);
 	return TCL_ERROR;
     }
-    modeRGB = (int)Tcl_GetHashValue(hPtr); 
+    modeRGB = (GLenum)Tcl_GetHashValue(hPtr); 
     hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[2]);
     if (hPtr == NULL) {
         Tcl_AppendResult(interp, "no such define \"",  Tcl_GetString(objv[2]),"\"", NULL);
 	return TCL_ERROR;
     }
-    modeA = (int)Tcl_GetHashValue(hPtr); 
+    modeA = (GLenum)Tcl_GetHashValue(hPtr); 
     glBlendEquationSeparateATI((GLenum)modeRGB, (GLenum)modeA);
-    result = GetGLError(interp);
-    return result;
+    return GetGLError(interp);
 }

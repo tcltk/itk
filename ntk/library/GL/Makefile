@@ -40,8 +40,8 @@ SHLIB_LD=${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}
 SHLIB_LD_LIBS=${LIBS} /home/arnulf/SOURCES/tclOO/itcl-ng/itk/ntk/library/glfw/lib/x11/libglfw.a -L/home/arnulf/SOURCES/tclOO/head/unix -ltclstub8.5 \
 -L/usr/X11/lib -lGLU -lGL -lX11 -lXrandr -pthread -lm
 STLIB_LD=${AR} cr
-TCL_SRC_DIR=/home/arnulf/SOURCES/tclOO/head	                             TCL_BIN_DIR=/home/arnulf/SOURCES/tclOO/head/unix
-# Not actually used, but can help when tracing errors	                   TCL_LIBS=${DL_LIBS} ${LIBS} ${MATH_LIBS}
+TCL_SRC_DIR=/home/arnulf/SOURCES/tclOO/head				     TCL_BIN_DIR=/home/arnulf/SOURCES/tclOO/head/unix
+# Not actually used, but can help when tracing errors			   TCL_LIBS=${DL_LIBS} ${LIBS} ${MATH_LIBS}
 TCLSH_PROGRAM=/home/arnulf/SOURCES/tclOO/head/unix/tclsh
 INCLUDES= -I. -I"./generic" -I"/home/arnulf/SOURCES/tclOO/head/generic" -I"/unix"
 EXTRA_CFLAGS=
@@ -55,7 +55,7 @@ SDX=/home/arnulf/bin/sdx
 RC=
 CC_SWITCHES = ${CFLAGS} ${EXTRA_CLFAGS} ${CFLAGS_WARNING} ${SHLIB_CFLAGS} \
 -I${GENERIC_DIR} -I../include -I"/home/arnulf/SOURCES/tclOO/head/unix" \
--DTCL_GLFW_DEBUG \
+-DTCL_GL_DEBUG \
 ${AC_FLAGS} ${GENERIC_FLAGS} ${PROTO_FLAGS} \
 ${ENV_FLAGS}
 
@@ -136,8 +136,32 @@ $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
 .c.o:
 	$(COMPILE) -c $(CC_SWITCHES) `$(CYGPATH) $<` -o $@
 
+pkgIndex.tcl: Makefile
+	-@echo Creating pkgIndex.tcl
+	@( \
+	echo 'if {[catch {package present Tcl $(TCL_VERSION_REQ)}]} return'; \
+	echo 'package ifneeded $(PACKAGE_NAME) $(PACKAGE_VERSION) \
+	    [list load [file join $$dir $(PKG_LIB_FILE)] TclGL] ';  \
+	) > pkgIndex.tcl
+
+
 tclGLBase.o: $(GENERIC_DIR)/tclGLInt.h $(GENERIC_DIR)/tclGL.h $(GENERIC_DIR)/tclGLInitHashTables.c $(GENERIC_DIR)/tclGLHashTables.h
 
 tclGLCmd.o: $(GENERIC_DIR)/tclGLInt.h $(GENERIC_DIR)/tclGL.h $(GENERIC_DIR)/tclGLHashTables.h $(GENERIC_DIR)/tclGLFuncs.c $(GENERIC_DIR)/tclGLInitHashTables.c $(GENERIC_DIR)/tclGLHashTables.h
 
 tclGLUtil.o: $(GENERIC_DIR)/tclGLInt.h $(GENERIC_DIR)/tclGL.h
+
+#========================================================================
+# How to clean up after a build.
+#========================================================================
+
+clean:
+	-test -z "$(BINARIES)" || rm -f $(BINARIES)
+	-rm -f *.$(OBJEXT) core *.core
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+distclean: clean
+	-rm -f *.tab.c
+	-rm -f $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log config.status
+
+
