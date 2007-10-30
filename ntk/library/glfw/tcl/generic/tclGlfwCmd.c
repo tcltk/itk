@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGlfwCmd.c,v 1.1.2.3 2007/10/27 20:30:04 wiede Exp $
+ * RCS: @(#) $Id: tclGlfwCmd.c,v 1.1.2.4 2007/10/30 22:01:54 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -278,7 +278,7 @@ TclGlfw_InitCmd(
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
 {
-    TclGlfwShowArgs(0, "TclGlfw_InitCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_InitCmd", objc, objv);
     if (objc != 1) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw init\"",
@@ -306,7 +306,7 @@ TclGlfw_TerminateCmd(
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
 {
-    TclGlfwShowArgs(0, "TclGlfw_TerminateCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_TerminateCmd", objc, objv);
     if (objc != 1) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw terminate\"",
@@ -342,7 +342,7 @@ TclGlfw_OpenWindowCmd(
     int result;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_OpenWindowCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_OpenWindowCmd", objc, objv);
     if (objc != 3) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw openWindow width height\"",
@@ -396,7 +396,7 @@ TclGlfw_CloseWindowCmd(
     TclGlfwInfo *infoPtr;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_CloseWindowCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_CloseWindowCmd", objc, objv);
     if (objc != 1) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw closeWindow\"",
@@ -427,7 +427,7 @@ TclGlfw_OpenWindowHintCmd(
     int hint;
     const char *token;
 
-    TclGlfwShowArgs(0, "TclGlfw_OpenWindowHintCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_OpenWindowHintCmd", objc, objv);
     if (objc != 3) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw openWindowHint <target> <hint>\"",
@@ -464,7 +464,7 @@ TclGlfw_SetWindowTitleCmd(
     TclGlfwInfo *infoPtr;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_SetWindowTitleCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_SetWindowTitleCmd", objc, objv);
     if (objc != 2) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw setWindowTitle title\"",
@@ -495,7 +495,7 @@ TclGlfw_SetWindowSizeCmd(
     int height;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_SetWindowSizeCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_SetWindowSizeCmd", objc, objv);
     if (objc != 3) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw setWindowSize width height\"",
@@ -529,7 +529,7 @@ TclGlfw_GetWindowSizeCmd(
     Tcl_Obj *listPtr;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_GetWindowSizeCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_GetWindowSizeCmd", objc, objv);
     if (objc != 1) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw getWindowSize\"",
@@ -565,7 +565,7 @@ TclGlfw_GetMousePosCmd(
     int y;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_GetMousePosCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_GetMousePosCmd", objc, objv);
     if (objc != 1) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw getMousePos\"",
@@ -604,7 +604,7 @@ TclGlfw_GetVideoModesCmd(
     int i;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_GetVideoModesCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_GetVideoModesCmd", objc, objv);
     if (objc != 1) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw getVideoModes\"",
@@ -649,7 +649,7 @@ TclGlfw_GetDesktopModeCmd(
     GLFWvidmode mode;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_GetDesktopModeCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_GetDesktopModeCmd", objc, objv);
     if (objc != 1) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw getDesktopMode\"",
@@ -689,7 +689,7 @@ TclGlfw_SetWindowPosCmd(
     int y;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_SetWindowPosCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_SetWindowPosCmd", objc, objv);
     if (objc != 3) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw setWindowPos x y\"",
@@ -723,7 +723,7 @@ TclGlfw_EnableCmd(
     int param;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_EnableCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_EnableCmd", objc, objv);
     if (objc != 2) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw enable param\"",
@@ -762,7 +762,7 @@ TclGlfw_DisableCmd(
     int param;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_DisableCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_DisableCmd", objc, objv);
     if (objc != 2) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw disable param\"",
@@ -873,7 +873,7 @@ TclGlfw_GetKeyCmd(
     int value;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_GetKeyCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_GetKeyCmd", objc, objv);
     if (objc != 2) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw getKey <char>|<key string>\"",
@@ -1125,7 +1125,7 @@ TclGlfw_SetKeyCallbackCmd(
     TclGlfwInfo *infoPtr;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_SetKeyCallbackCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_SetKeyCallbackCmd", objc, objv);
     if (objc != 3) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw setKeyCallback winHandle function\"",
@@ -1166,7 +1166,7 @@ TclGlfw_SetMousePosCallbackCmd(
     TclGlfwInfo *infoPtr;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_SetMousePosCallbackCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_SetMousePosCallbackCmd", objc, objv);
     if (objc != 3) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw setMousePosCallback windowHandle function\"",
@@ -1207,7 +1207,7 @@ TclGlfw_SetMouseButtonCallbackCmd(
     TclGlfwInfo *infoPtr;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_SetMouseButtonCallbackCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_SetMouseButtonCallbackCmd", objc, objv);
     if (objc != 3) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw setMouseButtonCallback windowHandle function\"",
@@ -1248,7 +1248,7 @@ TclGlfw_SetMouseWheelCallbackCmd(
     TclGlfwInfo *infoPtr;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_SetMouseWheelCallbackCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_SetMouseWheelCallbackCmd", objc, objv);
     if (objc != 3) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw setMouseWheelCallback windowHandle function\"",
@@ -1289,7 +1289,7 @@ TclGlfw_SetWindowSizeCallbackCmd(
     TclGlfwInfo *infoPtr;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_SetWindowSizeCallbackCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_SetWindowSizeCallbackCmd", objc, objv);
     if (objc != 3) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw setWindowSizeCallback windowHandle function\"",
@@ -1330,7 +1330,7 @@ TclGlfw_SetWindowRefreshCallbackCmd(
     TclGlfwInfo *infoPtr;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_SetWindowRefreshCallbackCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_SetWindowRefreshCallbackCmd", objc, objv);
     if (objc != 3) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw setWindowRefreshCallback windowHandle function\"",
@@ -1371,7 +1371,7 @@ TclGlfw_SetWindowCloseCallbackCmd(
     TclGlfwInfo *infoPtr;
 
     infoPtr = (TclGlfwInfo *)clientData;
-    TclGlfwShowArgs(0, "TclGlfw_SetWindowCloseCallbackCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_SetWindowCloseCallbackCmd", objc, objv);
     if (objc != 3) {
 	Tcl_AppendResult(interp,
 	        "wrong # args: should be \"ntk glfw setWindowCloseCallback windowHandle function\"",
@@ -1413,7 +1413,7 @@ TclGlfw_DefaultCmd(
 
     infoPtr = (TclGlfwInfo *)clientData;
     result = TCL_ERROR;
-    TclGlfwShowArgs(0, "TclGlfw_DefaultCmd", objc, objv);
+    TclGlfwShowArgs(1, "TclGlfw_DefaultCmd", objc, objv);
 //    TclGlfw_GetEnsembleUsageForObj(interp, objv[0], resultPtr);
     return result;
 }
@@ -1600,7 +1600,7 @@ TclGlfw_glFlushCmd(
     return result;
 }
 
-#include "/home/arnulf/SOURCES/MEGAIMAGE/megapkg/csrc/megaimage/megaimage_shared.h"
+#include "/home/arnulf/SOURCES/MEGAIMAGE/megapkg/csrc/include/megaimage_shared.h"
 /*
  * ------------------------------------------------------------------------
  *  TclGlfw_DrawMegaimageCmd()
@@ -1637,7 +1637,13 @@ TclGlfw_DrawMegaimageCmd(
     hdPtr = Tcl_GetByteArrayFromObj(objv[1], &lgth);
     memcpy(&megaimageHeader, hdPtr, sizeof(struct megaimage_header));
     data = hdPtr + sizeof(struct megaimage_header);
+//    glGet(GL_CURRENT_RASTER_POSITION);
     glDrawPixels(megaimageHeader.width, megaimageHeader.height,
             GL_RGBA, GL_UNSIGNED_BYTE, data);
+#ifdef NOTDEF
+    glRotatef(5.0f,0.0f,0.0f,1.0f);
+    glRotatef(5.0f,0.0f,1.0f,0.0f);
+    glRotatef(5.0f,1.0f,0.0f,0.0f);
+#endif
     return result;
 }
