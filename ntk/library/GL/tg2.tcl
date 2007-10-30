@@ -16,9 +16,10 @@ proc testTorus {innerRadius outerRadius sides rings} {
         set theta1 [expr {$theta + $ringDelta}]
         set cosTheta1 [expr {cos($theta1)}]
         set sinTheta1 [expr {sin($theta1)}]
-        ::ntk::gl::GL glBegin GL_QUAD_STRIP
         set phi 0.0
         set j $sides
+	set numStrips 0
+        ::ntk::gl::GL glBegin GL_QUAD_STRIP
         while {$j >= 0} {
             set phi [expr {$phi + $sideDelta}]
             set cosPhi [expr {cos($phi)}]
@@ -26,17 +27,19 @@ proc testTorus {innerRadius outerRadius sides rings} {
             set dist [expr {$outerRadius + $innerRadius * $cosPhi}]
             ::ntk::gl::GL glNormal3f [expr {$cosTheta1 * $cosPhi}] \
                     [expr {-$sinTheta1 * $cosPhi}] $sinPhi
+	    incr numStrips
             ::ntk::gl::GL glVertex3f [expr {$cosTheta1 * $dist}] \
                     [expr {-$sinTheta1 * $dist}] \
                     [expr {$innerRadius * $sinPhi}]
             ::ntk::gl::GL  glNormal3f [expr {$cosTheta * $cosPhi}] \
                     [expr {-$sinTheta * $cosPhi}] $sinPhi
+	    incr numStrips
             ::ntk::gl::GL glVertex3f [expr {$cosTheta * $dist}] \
                     [expr {-$sinTheta * $dist}] \
                     [expr {$innerRadius * $sinPhi}]
             incr j -1
         }
-#        ::ntk::gl::GL glEnd
+        ::ntk::gl::GL glEnd
         set theta $theta1
         set cosTheta $cosTheta1
         set sinTheta $sinTheta1
@@ -58,7 +61,7 @@ proc testRender {} {
 
     ::ntk::gl::GL glEnable GL_LIGHTING
     ::ntk::gl::GL glEnable GL_LIGHT0
-#    ::ntk::gl::GL glEnable GL_DEPTH_TEST
+    ::ntk::gl::GL glEnable GL_DEPTH_TEST
     ::ntk::gl::GL glMatrixMode GL_PROJECTION
     ::ntk::gl::GL glLoadIdentity 
     ::ntk::gl::GL glClear "GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT"

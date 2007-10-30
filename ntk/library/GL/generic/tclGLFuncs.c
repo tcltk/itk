@@ -32,7 +32,7 @@ TclGL_glClearIndexCmd(
     }
     Tcl_GetDoubleFromObj(interp, objv[1], &c);
     glClearIndex((GLfloat )c);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -74,7 +74,7 @@ TclGL_glClearColorCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
     Tcl_GetDoubleFromObj(interp, objv[4], &alpha);
     glClearColor((GLclampf )red, (GLclampf )green, (GLclampf )blue, (GLclampf )alpha);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -151,7 +151,7 @@ TclGL_glClearCmd(
     mask = value;
 
     glClear((GLbitfield)mask);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -187,7 +187,7 @@ TclGL_glIndexMaskCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &mask);
     glIndexMask((GLuint )mask);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -229,7 +229,7 @@ TclGL_glColorMaskCmd(
     Tcl_GetBooleanFromObj(interp, objv[3], &blue);
     Tcl_GetBooleanFromObj(interp, objv[4], &alpha);
     glColorMask((GLboolean )red, (GLboolean )green, (GLboolean )blue, (GLboolean )alpha);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -272,7 +272,7 @@ TclGL_glAlphaFuncCmd(
     func = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &ref);
     glAlphaFunc((GLenum)func, (GLclampf )ref);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -320,7 +320,7 @@ TclGL_glBlendFuncCmd(
     }
     dfactor = (GLenum)Tcl_GetHashValue(hPtr); 
     glBlendFunc((GLenum)sfactor, (GLenum)dfactor);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -361,7 +361,7 @@ TclGL_glLogicOpCmd(
     }
     opcode = (GLenum)Tcl_GetHashValue(hPtr); 
     glLogicOp((GLenum)opcode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -402,7 +402,7 @@ TclGL_glCullFaceCmd(
     }
     mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glCullFace((GLenum)mode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -443,7 +443,7 @@ TclGL_glFrontFaceCmd(
     }
     mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glFrontFace((GLenum)mode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -479,7 +479,7 @@ TclGL_glPointSizeCmd(
     }
     Tcl_GetDoubleFromObj(interp, objv[1], &size);
     glPointSize((GLfloat )size);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -515,7 +515,7 @@ TclGL_glLineWidthCmd(
     }
     Tcl_GetDoubleFromObj(interp, objv[1], &width);
     glLineWidth((GLfloat )width);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -553,7 +553,7 @@ TclGL_glLineStippleCmd(
     Tcl_GetIntFromObj(interp, objv[1], &factor);
     Tcl_GetIntFromObj(interp, objv[2], &pattern);
     glLineStipple((GLint )factor, (GLushort )pattern);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -601,7 +601,7 @@ TclGL_glPolygonModeCmd(
     }
     mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glPolygonMode((GLenum)face, (GLenum)mode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -639,7 +639,7 @@ TclGL_glPolygonOffsetCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &factor);
     Tcl_GetDoubleFromObj(interp, objv[2], &units);
     glPolygonOffset((GLfloat )factor, (GLfloat )units);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -675,7 +675,7 @@ TclGL_glPolygonStippleCmd(
     }
     mask = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glPolygonStipple((GLubyte *)mask);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -711,7 +711,7 @@ TclGL_glGetPolygonStippleCmd(
     }
     mask = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glGetPolygonStipple((GLubyte *)mask);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -747,7 +747,7 @@ TclGL_glEdgeFlagCmd(
     }
     Tcl_GetBooleanFromObj(interp, objv[1], &flag);
     glEdgeFlag((GLboolean )flag);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -783,7 +783,7 @@ TclGL_glEdgeFlagvCmd(
     }
     flag = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glEdgeFlagv((GLboolean *)flag);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -825,7 +825,7 @@ TclGL_glScissorCmd(
     Tcl_GetIntFromObj(interp, objv[3], &width);
     Tcl_GetIntFromObj(interp, objv[4], &height);
     glScissor((GLint )x, (GLint )y, (GLsizei )width, (GLsizei )height);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -868,7 +868,7 @@ TclGL_glClipPlaneCmd(
     plane = (GLenum)Tcl_GetHashValue(hPtr); 
     equation = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glClipPlane((GLenum)plane, (void *)equation);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -911,7 +911,7 @@ TclGL_glGetClipPlaneCmd(
     plane = (GLenum)Tcl_GetHashValue(hPtr); 
     equation = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glGetClipPlane((GLenum)plane, (void *)equation);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -952,7 +952,7 @@ TclGL_glDrawBufferCmd(
     }
     mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glDrawBuffer((GLenum)mode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -993,7 +993,7 @@ TclGL_glReadBufferCmd(
     }
     mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glReadBuffer((GLenum)mode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1034,7 +1034,7 @@ TclGL_glEnableCmd(
     }
     cap = (GLenum)Tcl_GetHashValue(hPtr); 
     glEnable((GLenum)cap);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1075,7 +1075,7 @@ TclGL_glDisableCmd(
     }
     cap = (GLenum)Tcl_GetHashValue(hPtr); 
     glDisable((GLenum)cap);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1116,7 +1116,7 @@ TclGL_glIsEnabledCmd(
     }
     cap = (GLenum)Tcl_GetHashValue(hPtr); 
     glIsEnabled((GLenum)cap);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1157,7 +1157,7 @@ TclGL_glEnableClientStateCmd(
     }
     cap = (GLenum)Tcl_GetHashValue(hPtr); 
     glEnableClientState((GLenum)cap);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1198,7 +1198,7 @@ TclGL_glDisableClientStateCmd(
     }
     cap = (GLenum)Tcl_GetHashValue(hPtr); 
     glDisableClientState((GLenum)cap);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1241,7 +1241,7 @@ TclGL_glGetBooleanvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glGetBooleanv((GLenum)pname, (GLboolean *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1284,7 +1284,7 @@ TclGL_glGetDoublevCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glGetDoublev((GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1327,7 +1327,7 @@ TclGL_glGetFloatvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glGetFloatv((GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1370,7 +1370,7 @@ TclGL_glGetIntegervCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glGetIntegerv((GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1447,7 +1447,7 @@ TclGL_glPushAttribCmd(
     mask = value;
 
     glPushAttrib((GLbitfield)mask);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1482,7 +1482,7 @@ TclGL_glPopAttribCmd(
     }
 
     glPopAttrib();
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1559,7 +1559,7 @@ TclGL_glPushClientAttribCmd(
     mask = value;
 
     glPushClientAttrib((GLbitfield)mask);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1594,7 +1594,7 @@ TclGL_glPopClientAttribCmd(
     }
 
     glPopClientAttrib();
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1635,7 +1635,7 @@ TclGL_glRenderModeCmd(
     }
     mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glRenderMode((GLenum)mode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1670,7 +1670,7 @@ TclGL_glGetErrorCmd(
     }
 
     glGetError();
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1705,7 +1705,7 @@ TclGL_glFinishCmd(
     }
 
     glFinish();
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1740,7 +1740,7 @@ TclGL_glFlushCmd(
     }
 
     glFlush();
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1788,7 +1788,7 @@ TclGL_glHintCmd(
     }
     mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glHint((GLenum)target, (GLenum)mode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1824,7 +1824,7 @@ TclGL_glClearDepthCmd(
     }
     Tcl_GetDoubleFromObj(interp, objv[1], &depth);
     glClearDepth((GLclampd )depth);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1865,7 +1865,7 @@ TclGL_glDepthFuncCmd(
     }
     func = (GLenum)Tcl_GetHashValue(hPtr); 
     glDepthFunc((GLenum)func);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1901,7 +1901,7 @@ TclGL_glDepthMaskCmd(
     }
     Tcl_GetBooleanFromObj(interp, objv[1], &flag);
     glDepthMask((GLboolean )flag);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1939,7 +1939,7 @@ TclGL_glDepthRangeCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &near_val);
     Tcl_GetDoubleFromObj(interp, objv[2], &far_val);
     glDepthRange((GLclampd )near_val, (GLclampd )far_val);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -1981,7 +1981,7 @@ TclGL_glClearAccumCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
     Tcl_GetDoubleFromObj(interp, objv[4], &alpha);
     glClearAccum((GLfloat )red, (GLfloat )green, (GLfloat )blue, (GLfloat )alpha);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2024,7 +2024,7 @@ TclGL_glAccumCmd(
     op = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &value);
     glAccum((GLenum)op, (GLfloat )value);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2065,7 +2065,7 @@ TclGL_glMatrixModeCmd(
     }
     mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glMatrixMode((GLenum)mode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2111,7 +2111,7 @@ TclGL_glOrthoCmd(
     Tcl_GetDoubleFromObj(interp, objv[5], &near_val);
     Tcl_GetDoubleFromObj(interp, objv[6], &far_val);
     glOrtho((GLdouble )left, (GLdouble )right, (GLdouble )bottom, (GLdouble )top, (GLdouble )near_val, (GLdouble )far_val);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2157,7 +2157,7 @@ TclGL_glFrustumCmd(
     Tcl_GetDoubleFromObj(interp, objv[5], &near_val);
     Tcl_GetDoubleFromObj(interp, objv[6], &far_val);
     glFrustum((GLdouble )left, (GLdouble )right, (GLdouble )bottom, (GLdouble )top, (GLdouble )near_val, (GLdouble )far_val);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2199,7 +2199,7 @@ TclGL_glViewportCmd(
     Tcl_GetIntFromObj(interp, objv[3], &width);
     Tcl_GetIntFromObj(interp, objv[4], &height);
     glViewport((GLint )x, (GLint )y, (GLsizei )width, (GLsizei )height);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2234,7 +2234,7 @@ TclGL_glPushMatrixCmd(
     }
 
     glPushMatrix();
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2269,7 +2269,7 @@ TclGL_glPopMatrixCmd(
     }
 
     glPopMatrix();
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2304,7 +2304,7 @@ TclGL_glLoadIdentityCmd(
     }
 
     glLoadIdentity();
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2340,7 +2340,7 @@ TclGL_glLoadMatrixdCmd(
     }
     m = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glLoadMatrixd((void *)m);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2376,7 +2376,7 @@ TclGL_glLoadMatrixfCmd(
     }
     m = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glLoadMatrixf((void *)m);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2412,7 +2412,7 @@ TclGL_glMultMatrixdCmd(
     }
     m = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glMultMatrixd((void *)m);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2448,7 +2448,7 @@ TclGL_glMultMatrixfCmd(
     }
     m = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glMultMatrixf((void *)m);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2490,7 +2490,7 @@ TclGL_glRotatedCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &y);
     Tcl_GetDoubleFromObj(interp, objv[4], &z);
     glRotated((GLdouble )angle, (GLdouble )x, (GLdouble )y, (GLdouble )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2532,7 +2532,7 @@ TclGL_glRotatefCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &y);
     Tcl_GetDoubleFromObj(interp, objv[4], &z);
     glRotatef((GLfloat )angle, (GLfloat )x, (GLfloat )y, (GLfloat )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2572,7 +2572,7 @@ TclGL_glScaledCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     glScaled((GLdouble )x, (GLdouble )y, (GLdouble )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2612,7 +2612,7 @@ TclGL_glScalefCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     glScalef((GLfloat )x, (GLfloat )y, (GLfloat )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2652,7 +2652,7 @@ TclGL_glTranslatedCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     glTranslated((GLdouble )x, (GLdouble )y, (GLdouble )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2692,7 +2692,7 @@ TclGL_glTranslatefCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     glTranslatef((GLfloat )x, (GLfloat )y, (GLfloat )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2728,7 +2728,7 @@ TclGL_glIsListCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &list);
     glIsList((GLuint )list);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2766,7 +2766,7 @@ TclGL_glDeleteListsCmd(
     Tcl_GetIntFromObj(interp, objv[1], &list);
     Tcl_GetIntFromObj(interp, objv[2], &range);
     glDeleteLists((GLuint )list, (GLsizei )range);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2802,7 +2802,7 @@ TclGL_glGenListsCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &range);
     glGenLists((GLsizei )range);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2845,7 +2845,7 @@ TclGL_glNewListCmd(
     }
     mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glNewList((GLuint )list, (GLenum)mode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2880,7 +2880,7 @@ TclGL_glEndListCmd(
     }
 
     glEndList();
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2916,7 +2916,7 @@ TclGL_glCallListCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &list);
     glCallList((GLuint )list);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2961,7 +2961,7 @@ TclGL_glCallListsCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     lists = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glCallLists((GLsizei )n, (GLenum)type, (GLvoid *)lists);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -2997,7 +2997,7 @@ TclGL_glListBaseCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &base);
     glListBase((GLuint )base);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3024,6 +3024,7 @@ TclGL_glBeginCmd(
     glResult = 0;
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
+    infoPtr->noGLGetError = 1;
     TclGLShowArgs(1, "TclGL_glBeginCmd", objc, objv);
     if (objc != 2) {
         Tcl_AppendResult(interp,
@@ -3038,7 +3039,7 @@ TclGL_glBeginCmd(
     }
     mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glBegin((GLenum)mode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3064,6 +3065,7 @@ TclGL_glEndCmd(
     glResult = 0;
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
+    infoPtr->noGLGetError = 0;
     TclGLShowArgs(1, "TclGL_glEndCmd", objc, objv);
     if (objc != 1) {
         Tcl_AppendResult(interp,
@@ -3073,7 +3075,7 @@ TclGL_glEndCmd(
     }
 
     glEnd();
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3111,7 +3113,7 @@ TclGL_glVertex2dCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     glVertex2d((GLdouble )x, (GLdouble )y);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3149,7 +3151,7 @@ TclGL_glVertex2fCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     glVertex2f((GLfloat )x, (GLfloat )y);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3187,7 +3189,7 @@ TclGL_glVertex2iCmd(
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     glVertex2i((GLint )x, (GLint )y);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3225,7 +3227,7 @@ TclGL_glVertex2sCmd(
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     glVertex2s((GLshort )x, (GLshort )y);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3265,7 +3267,7 @@ TclGL_glVertex3dCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     glVertex3d((GLdouble )x, (GLdouble )y, (GLdouble )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3305,7 +3307,7 @@ TclGL_glVertex3fCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     glVertex3f((GLfloat )x, (GLfloat )y, (GLfloat )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3345,7 +3347,7 @@ TclGL_glVertex3iCmd(
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
     glVertex3i((GLint )x, (GLint )y, (GLint )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3385,7 +3387,7 @@ TclGL_glVertex3sCmd(
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
     glVertex3s((GLshort )x, (GLshort )y, (GLshort )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3427,7 +3429,7 @@ TclGL_glVertex4dCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     Tcl_GetDoubleFromObj(interp, objv[4], &w);
     glVertex4d((GLdouble )x, (GLdouble )y, (GLdouble )z, (GLdouble )w);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3469,7 +3471,7 @@ TclGL_glVertex4fCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     Tcl_GetDoubleFromObj(interp, objv[4], &w);
     glVertex4f((GLfloat )x, (GLfloat )y, (GLfloat )z, (GLfloat )w);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3511,7 +3513,7 @@ TclGL_glVertex4iCmd(
     Tcl_GetIntFromObj(interp, objv[3], &z);
     Tcl_GetIntFromObj(interp, objv[4], &w);
     glVertex4i((GLint )x, (GLint )y, (GLint )z, (GLint )w);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3553,7 +3555,7 @@ TclGL_glVertex4sCmd(
     Tcl_GetIntFromObj(interp, objv[3], &z);
     Tcl_GetIntFromObj(interp, objv[4], &w);
     glVertex4s((GLshort )x, (GLshort )y, (GLshort )z, (GLshort )w);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3589,7 +3591,7 @@ TclGL_glVertex2dvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glVertex2dv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3625,7 +3627,7 @@ TclGL_glVertex2fvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glVertex2fv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3661,7 +3663,7 @@ TclGL_glVertex2ivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glVertex2iv((GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3697,7 +3699,7 @@ TclGL_glVertex2svCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glVertex2sv((GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3733,7 +3735,7 @@ TclGL_glVertex3dvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glVertex3dv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3769,7 +3771,7 @@ TclGL_glVertex3fvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glVertex3fv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3805,7 +3807,7 @@ TclGL_glVertex3ivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glVertex3iv((GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3841,7 +3843,7 @@ TclGL_glVertex3svCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glVertex3sv((GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3877,7 +3879,7 @@ TclGL_glVertex4dvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glVertex4dv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3913,7 +3915,7 @@ TclGL_glVertex4fvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glVertex4fv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3949,7 +3951,7 @@ TclGL_glVertex4ivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glVertex4iv((GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -3985,7 +3987,7 @@ TclGL_glVertex4svCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glVertex4sv((GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4025,7 +4027,7 @@ TclGL_glNormal3bCmd(
     Tcl_GetIntFromObj(interp, objv[2], &ny);
     Tcl_GetIntFromObj(interp, objv[3], &nz);
     glNormal3b((GLbyte )nx, (GLbyte )ny, (GLbyte )nz);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4065,7 +4067,7 @@ TclGL_glNormal3dCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &ny);
     Tcl_GetDoubleFromObj(interp, objv[3], &nz);
     glNormal3d((GLdouble )nx, (GLdouble )ny, (GLdouble )nz);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4105,7 +4107,7 @@ TclGL_glNormal3fCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &ny);
     Tcl_GetDoubleFromObj(interp, objv[3], &nz);
     glNormal3f((GLfloat )nx, (GLfloat )ny, (GLfloat )nz);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4145,7 +4147,7 @@ TclGL_glNormal3iCmd(
     Tcl_GetIntFromObj(interp, objv[2], &ny);
     Tcl_GetIntFromObj(interp, objv[3], &nz);
     glNormal3i((GLint )nx, (GLint )ny, (GLint )nz);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4185,7 +4187,7 @@ TclGL_glNormal3sCmd(
     Tcl_GetIntFromObj(interp, objv[2], &ny);
     Tcl_GetIntFromObj(interp, objv[3], &nz);
     glNormal3s((GLshort )nx, (GLshort )ny, (GLshort )nz);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4221,7 +4223,7 @@ TclGL_glNormal3bvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glNormal3bv((GLbyte *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4257,7 +4259,7 @@ TclGL_glNormal3dvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glNormal3dv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4293,7 +4295,7 @@ TclGL_glNormal3fvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glNormal3fv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4329,7 +4331,7 @@ TclGL_glNormal3ivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glNormal3iv((GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4365,7 +4367,7 @@ TclGL_glNormal3svCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glNormal3sv((GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4401,7 +4403,7 @@ TclGL_glIndexdCmd(
     }
     Tcl_GetDoubleFromObj(interp, objv[1], &c);
     glIndexd((GLdouble )c);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4437,7 +4439,7 @@ TclGL_glIndexfCmd(
     }
     Tcl_GetDoubleFromObj(interp, objv[1], &c);
     glIndexf((GLfloat )c);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4473,7 +4475,7 @@ TclGL_glIndexiCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &c);
     glIndexi((GLint )c);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4509,7 +4511,7 @@ TclGL_glIndexsCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &c);
     glIndexs((GLshort )c);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4545,7 +4547,7 @@ TclGL_glIndexubCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &c);
     glIndexub((GLubyte )c);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4581,7 +4583,7 @@ TclGL_glIndexdvCmd(
     }
     c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glIndexdv((void *)c);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4617,7 +4619,7 @@ TclGL_glIndexfvCmd(
     }
     c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glIndexfv((void *)c);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4653,7 +4655,7 @@ TclGL_glIndexivCmd(
     }
     c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glIndexiv((GLint *)c);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4689,7 +4691,7 @@ TclGL_glIndexsvCmd(
     }
     c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glIndexsv((GLshort *)c);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4725,7 +4727,7 @@ TclGL_glIndexubvCmd(
     }
     c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glIndexubv((GLubyte *)c);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4765,7 +4767,7 @@ TclGL_glColor3bCmd(
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
     glColor3b((GLbyte )red, (GLbyte )green, (GLbyte )blue);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4805,7 +4807,7 @@ TclGL_glColor3dCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &green);
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
     glColor3d((GLdouble )red, (GLdouble )green, (GLdouble )blue);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4845,7 +4847,7 @@ TclGL_glColor3fCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &green);
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
     glColor3f((GLfloat )red, (GLfloat )green, (GLfloat )blue);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4885,7 +4887,7 @@ TclGL_glColor3iCmd(
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
     glColor3i((GLint )red, (GLint )green, (GLint )blue);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4925,7 +4927,7 @@ TclGL_glColor3sCmd(
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
     glColor3s((GLshort )red, (GLshort )green, (GLshort )blue);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -4965,7 +4967,7 @@ TclGL_glColor3ubCmd(
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
     glColor3ub((GLubyte )red, (GLubyte )green, (GLubyte )blue);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5005,7 +5007,7 @@ TclGL_glColor3uiCmd(
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
     glColor3ui((GLuint )red, (GLuint )green, (GLuint )blue);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5045,7 +5047,7 @@ TclGL_glColor3usCmd(
     Tcl_GetIntFromObj(interp, objv[2], &green);
     Tcl_GetIntFromObj(interp, objv[3], &blue);
     glColor3us((GLushort )red, (GLushort )green, (GLushort )blue);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5087,7 +5089,7 @@ TclGL_glColor4bCmd(
     Tcl_GetIntFromObj(interp, objv[3], &blue);
     Tcl_GetIntFromObj(interp, objv[4], &alpha);
     glColor4b((GLbyte )red, (GLbyte )green, (GLbyte )blue, (GLbyte )alpha);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5129,7 +5131,7 @@ TclGL_glColor4dCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
     Tcl_GetDoubleFromObj(interp, objv[4], &alpha);
     glColor4d((GLdouble )red, (GLdouble )green, (GLdouble )blue, (GLdouble )alpha);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5171,7 +5173,7 @@ TclGL_glColor4fCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
     Tcl_GetDoubleFromObj(interp, objv[4], &alpha);
     glColor4f((GLfloat )red, (GLfloat )green, (GLfloat )blue, (GLfloat )alpha);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5213,7 +5215,7 @@ TclGL_glColor4iCmd(
     Tcl_GetIntFromObj(interp, objv[3], &blue);
     Tcl_GetIntFromObj(interp, objv[4], &alpha);
     glColor4i((GLint )red, (GLint )green, (GLint )blue, (GLint )alpha);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5255,7 +5257,7 @@ TclGL_glColor4sCmd(
     Tcl_GetIntFromObj(interp, objv[3], &blue);
     Tcl_GetIntFromObj(interp, objv[4], &alpha);
     glColor4s((GLshort )red, (GLshort )green, (GLshort )blue, (GLshort )alpha);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5297,7 +5299,7 @@ TclGL_glColor4ubCmd(
     Tcl_GetIntFromObj(interp, objv[3], &blue);
     Tcl_GetIntFromObj(interp, objv[4], &alpha);
     glColor4ub((GLubyte )red, (GLubyte )green, (GLubyte )blue, (GLubyte )alpha);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5339,7 +5341,7 @@ TclGL_glColor4uiCmd(
     Tcl_GetIntFromObj(interp, objv[3], &blue);
     Tcl_GetIntFromObj(interp, objv[4], &alpha);
     glColor4ui((GLuint )red, (GLuint )green, (GLuint )blue, (GLuint )alpha);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5381,7 +5383,7 @@ TclGL_glColor4usCmd(
     Tcl_GetIntFromObj(interp, objv[3], &blue);
     Tcl_GetIntFromObj(interp, objv[4], &alpha);
     glColor4us((GLushort )red, (GLushort )green, (GLushort )blue, (GLushort )alpha);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5417,7 +5419,7 @@ TclGL_glColor3bvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor3bv((GLbyte *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5453,7 +5455,7 @@ TclGL_glColor3dvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor3dv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5489,7 +5491,7 @@ TclGL_glColor3fvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor3fv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5525,7 +5527,7 @@ TclGL_glColor3ivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor3iv((GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5561,7 +5563,7 @@ TclGL_glColor3svCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor3sv((GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5597,7 +5599,7 @@ TclGL_glColor3ubvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor3ubv((GLubyte *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5633,7 +5635,7 @@ TclGL_glColor3uivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor3uiv((GLuint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5669,7 +5671,7 @@ TclGL_glColor3usvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor3usv((GLushort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5705,7 +5707,7 @@ TclGL_glColor4bvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor4bv((GLbyte *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5741,7 +5743,7 @@ TclGL_glColor4dvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor4dv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5777,7 +5779,7 @@ TclGL_glColor4fvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor4fv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5813,7 +5815,7 @@ TclGL_glColor4ivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor4iv((GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5849,7 +5851,7 @@ TclGL_glColor4svCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor4sv((GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5885,7 +5887,7 @@ TclGL_glColor4ubvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor4ubv((GLubyte *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5921,7 +5923,7 @@ TclGL_glColor4uivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor4uiv((GLuint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5957,7 +5959,7 @@ TclGL_glColor4usvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glColor4usv((GLushort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -5993,7 +5995,7 @@ TclGL_glTexCoord1dCmd(
     }
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     glTexCoord1d((GLdouble )s);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6029,7 +6031,7 @@ TclGL_glTexCoord1fCmd(
     }
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     glTexCoord1f((GLfloat )s);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6065,7 +6067,7 @@ TclGL_glTexCoord1iCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &s);
     glTexCoord1i((GLint )s);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6101,7 +6103,7 @@ TclGL_glTexCoord1sCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &s);
     glTexCoord1s((GLshort )s);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6139,7 +6141,7 @@ TclGL_glTexCoord2dCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
     glTexCoord2d((GLdouble )s, (GLdouble )t);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6177,7 +6179,7 @@ TclGL_glTexCoord2fCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &s);
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
     glTexCoord2f((GLfloat )s, (GLfloat )t);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6215,7 +6217,7 @@ TclGL_glTexCoord2iCmd(
     Tcl_GetIntFromObj(interp, objv[1], &s);
     Tcl_GetIntFromObj(interp, objv[2], &t);
     glTexCoord2i((GLint )s, (GLint )t);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6253,7 +6255,7 @@ TclGL_glTexCoord2sCmd(
     Tcl_GetIntFromObj(interp, objv[1], &s);
     Tcl_GetIntFromObj(interp, objv[2], &t);
     glTexCoord2s((GLshort )s, (GLshort )t);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6293,7 +6295,7 @@ TclGL_glTexCoord3dCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
     Tcl_GetDoubleFromObj(interp, objv[3], &r);
     glTexCoord3d((GLdouble )s, (GLdouble )t, (GLdouble )r);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6333,7 +6335,7 @@ TclGL_glTexCoord3fCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &t);
     Tcl_GetDoubleFromObj(interp, objv[3], &r);
     glTexCoord3f((GLfloat )s, (GLfloat )t, (GLfloat )r);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6373,7 +6375,7 @@ TclGL_glTexCoord3iCmd(
     Tcl_GetIntFromObj(interp, objv[2], &t);
     Tcl_GetIntFromObj(interp, objv[3], &r);
     glTexCoord3i((GLint )s, (GLint )t, (GLint )r);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6413,7 +6415,7 @@ TclGL_glTexCoord3sCmd(
     Tcl_GetIntFromObj(interp, objv[2], &t);
     Tcl_GetIntFromObj(interp, objv[3], &r);
     glTexCoord3s((GLshort )s, (GLshort )t, (GLshort )r);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6455,7 +6457,7 @@ TclGL_glTexCoord4dCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &r);
     Tcl_GetDoubleFromObj(interp, objv[4], &q);
     glTexCoord4d((GLdouble )s, (GLdouble )t, (GLdouble )r, (GLdouble )q);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6497,7 +6499,7 @@ TclGL_glTexCoord4fCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &r);
     Tcl_GetDoubleFromObj(interp, objv[4], &q);
     glTexCoord4f((GLfloat )s, (GLfloat )t, (GLfloat )r, (GLfloat )q);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6539,7 +6541,7 @@ TclGL_glTexCoord4iCmd(
     Tcl_GetIntFromObj(interp, objv[3], &r);
     Tcl_GetIntFromObj(interp, objv[4], &q);
     glTexCoord4i((GLint )s, (GLint )t, (GLint )r, (GLint )q);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6581,7 +6583,7 @@ TclGL_glTexCoord4sCmd(
     Tcl_GetIntFromObj(interp, objv[3], &r);
     Tcl_GetIntFromObj(interp, objv[4], &q);
     glTexCoord4s((GLshort )s, (GLshort )t, (GLshort )r, (GLshort )q);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6617,7 +6619,7 @@ TclGL_glTexCoord1dvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord1dv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6653,7 +6655,7 @@ TclGL_glTexCoord1fvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord1fv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6689,7 +6691,7 @@ TclGL_glTexCoord1ivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord1iv((GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6725,7 +6727,7 @@ TclGL_glTexCoord1svCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord1sv((GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6761,7 +6763,7 @@ TclGL_glTexCoord2dvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord2dv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6797,7 +6799,7 @@ TclGL_glTexCoord2fvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord2fv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6833,7 +6835,7 @@ TclGL_glTexCoord2ivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord2iv((GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6869,7 +6871,7 @@ TclGL_glTexCoord2svCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord2sv((GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6905,7 +6907,7 @@ TclGL_glTexCoord3dvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord3dv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6941,7 +6943,7 @@ TclGL_glTexCoord3fvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord3fv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -6977,7 +6979,7 @@ TclGL_glTexCoord3ivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord3iv((GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7013,7 +7015,7 @@ TclGL_glTexCoord3svCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord3sv((GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7049,7 +7051,7 @@ TclGL_glTexCoord4dvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord4dv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7085,7 +7087,7 @@ TclGL_glTexCoord4fvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord4fv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7121,7 +7123,7 @@ TclGL_glTexCoord4ivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord4iv((GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7157,7 +7159,7 @@ TclGL_glTexCoord4svCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glTexCoord4sv((GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7195,7 +7197,7 @@ TclGL_glRasterPos2dCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     glRasterPos2d((GLdouble )x, (GLdouble )y);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7233,7 +7235,7 @@ TclGL_glRasterPos2fCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &x);
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     glRasterPos2f((GLfloat )x, (GLfloat )y);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7271,7 +7273,7 @@ TclGL_glRasterPos2iCmd(
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     glRasterPos2i((GLint )x, (GLint )y);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7309,7 +7311,7 @@ TclGL_glRasterPos2sCmd(
     Tcl_GetIntFromObj(interp, objv[1], &x);
     Tcl_GetIntFromObj(interp, objv[2], &y);
     glRasterPos2s((GLshort )x, (GLshort )y);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7349,7 +7351,7 @@ TclGL_glRasterPos3dCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     glRasterPos3d((GLdouble )x, (GLdouble )y, (GLdouble )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7389,7 +7391,7 @@ TclGL_glRasterPos3fCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &y);
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     glRasterPos3f((GLfloat )x, (GLfloat )y, (GLfloat )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7429,7 +7431,7 @@ TclGL_glRasterPos3iCmd(
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
     glRasterPos3i((GLint )x, (GLint )y, (GLint )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7469,7 +7471,7 @@ TclGL_glRasterPos3sCmd(
     Tcl_GetIntFromObj(interp, objv[2], &y);
     Tcl_GetIntFromObj(interp, objv[3], &z);
     glRasterPos3s((GLshort )x, (GLshort )y, (GLshort )z);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7511,7 +7513,7 @@ TclGL_glRasterPos4dCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     Tcl_GetDoubleFromObj(interp, objv[4], &w);
     glRasterPos4d((GLdouble )x, (GLdouble )y, (GLdouble )z, (GLdouble )w);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7553,7 +7555,7 @@ TclGL_glRasterPos4fCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &z);
     Tcl_GetDoubleFromObj(interp, objv[4], &w);
     glRasterPos4f((GLfloat )x, (GLfloat )y, (GLfloat )z, (GLfloat )w);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7595,7 +7597,7 @@ TclGL_glRasterPos4iCmd(
     Tcl_GetIntFromObj(interp, objv[3], &z);
     Tcl_GetIntFromObj(interp, objv[4], &w);
     glRasterPos4i((GLint )x, (GLint )y, (GLint )z, (GLint )w);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7637,7 +7639,7 @@ TclGL_glRasterPos4sCmd(
     Tcl_GetIntFromObj(interp, objv[3], &z);
     Tcl_GetIntFromObj(interp, objv[4], &w);
     glRasterPos4s((GLshort )x, (GLshort )y, (GLshort )z, (GLshort )w);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7673,7 +7675,7 @@ TclGL_glRasterPos2dvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glRasterPos2dv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7709,7 +7711,7 @@ TclGL_glRasterPos2fvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glRasterPos2fv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7745,7 +7747,7 @@ TclGL_glRasterPos2ivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glRasterPos2iv((GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7781,7 +7783,7 @@ TclGL_glRasterPos2svCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glRasterPos2sv((GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7817,7 +7819,7 @@ TclGL_glRasterPos3dvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glRasterPos3dv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7853,7 +7855,7 @@ TclGL_glRasterPos3fvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glRasterPos3fv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7889,7 +7891,7 @@ TclGL_glRasterPos3ivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glRasterPos3iv((GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7925,7 +7927,7 @@ TclGL_glRasterPos3svCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glRasterPos3sv((GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7961,7 +7963,7 @@ TclGL_glRasterPos4dvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glRasterPos4dv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -7997,7 +7999,7 @@ TclGL_glRasterPos4fvCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glRasterPos4fv((void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8033,7 +8035,7 @@ TclGL_glRasterPos4ivCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glRasterPos4iv((GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8069,7 +8071,7 @@ TclGL_glRasterPos4svCmd(
     }
     v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glRasterPos4sv((GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8111,7 +8113,7 @@ TclGL_glRectdCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &x2);
     Tcl_GetDoubleFromObj(interp, objv[4], &y2);
     glRectd((GLdouble )x1, (GLdouble )y1, (GLdouble )x2, (GLdouble )y2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8153,7 +8155,7 @@ TclGL_glRectfCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &x2);
     Tcl_GetDoubleFromObj(interp, objv[4], &y2);
     glRectf((GLfloat )x1, (GLfloat )y1, (GLfloat )x2, (GLfloat )y2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8195,7 +8197,7 @@ TclGL_glRectiCmd(
     Tcl_GetIntFromObj(interp, objv[3], &x2);
     Tcl_GetIntFromObj(interp, objv[4], &y2);
     glRecti((GLint )x1, (GLint )y1, (GLint )x2, (GLint )y2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8237,7 +8239,7 @@ TclGL_glRectsCmd(
     Tcl_GetIntFromObj(interp, objv[3], &x2);
     Tcl_GetIntFromObj(interp, objv[4], &y2);
     glRects((GLshort )x1, (GLshort )y1, (GLshort )x2, (GLshort )y2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8275,7 +8277,7 @@ TclGL_glRectdvCmd(
     v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glRectdv((void *)v1, (void *)v2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8313,7 +8315,7 @@ TclGL_glRectfvCmd(
     v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glRectfv((void *)v1, (void *)v2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8351,7 +8353,7 @@ TclGL_glRectivCmd(
     v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glRectiv((GLint *)v1, (GLint *)v2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8389,7 +8391,7 @@ TclGL_glRectsvCmd(
     v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glRectsv((GLshort *)v1, (GLshort *)v2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8436,7 +8438,7 @@ TclGL_glVertexPointerCmd(
     Tcl_GetIntFromObj(interp, objv[3], &stride);
     ptr = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
     glVertexPointer((GLint )size, (GLenum)type, (GLsizei )stride, (GLvoid *)ptr);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8481,7 +8483,7 @@ TclGL_glNormalPointerCmd(
     Tcl_GetIntFromObj(interp, objv[2], &stride);
     ptr = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glNormalPointer((GLenum)type, (GLsizei )stride, (GLvoid *)ptr);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8528,7 +8530,7 @@ TclGL_glColorPointerCmd(
     Tcl_GetIntFromObj(interp, objv[3], &stride);
     ptr = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
     glColorPointer((GLint )size, (GLenum)type, (GLsizei )stride, (GLvoid *)ptr);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8573,7 +8575,7 @@ TclGL_glIndexPointerCmd(
     Tcl_GetIntFromObj(interp, objv[2], &stride);
     ptr = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glIndexPointer((GLenum)type, (GLsizei )stride, (GLvoid *)ptr);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8620,7 +8622,7 @@ TclGL_glTexCoordPointerCmd(
     Tcl_GetIntFromObj(interp, objv[3], &stride);
     ptr = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
     glTexCoordPointer((GLint )size, (GLenum)type, (GLsizei )stride, (GLvoid *)ptr);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8658,7 +8660,7 @@ TclGL_glEdgeFlagPointerCmd(
     Tcl_GetIntFromObj(interp, objv[1], &stride);
     ptr = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glEdgeFlagPointer((GLsizei )stride, (GLvoid *)ptr);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8701,7 +8703,7 @@ TclGL_glGetPointervCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glGetPointerv((GLenum)pname, (GLvoid **)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8737,7 +8739,7 @@ TclGL_glArrayElementCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &i);
     glArrayElement((GLint )i);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8782,7 +8784,7 @@ TclGL_glDrawArraysCmd(
     Tcl_GetIntFromObj(interp, objv[2], &first);
     Tcl_GetIntFromObj(interp, objv[3], &count);
     glDrawArrays((GLenum)mode, (GLint )first, (GLsizei )count);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8834,7 +8836,7 @@ TclGL_glDrawElementsCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     indices = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
     glDrawElements((GLenum)mode, (GLsizei )count, (GLenum)type, (GLvoid *)indices);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8879,7 +8881,7 @@ TclGL_glInterleavedArraysCmd(
     Tcl_GetIntFromObj(interp, objv[2], &stride);
     pointer = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glInterleavedArrays((GLenum)format, (GLsizei )stride, (GLvoid *)pointer);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8920,7 +8922,7 @@ TclGL_glShadeModelCmd(
     }
     mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glShadeModel((GLenum)mode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -8970,7 +8972,7 @@ TclGL_glLightfCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[3], &param);
     glLightf((GLenum)light, (GLenum)pname, (GLfloat )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9020,7 +9022,7 @@ TclGL_glLightiCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &param);
     glLighti((GLenum)light, (GLenum)pname, (GLint )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9070,7 +9072,7 @@ TclGL_glLightfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glLightfv((GLenum)light, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9120,7 +9122,7 @@ TclGL_glLightivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glLightiv((GLenum)light, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9170,7 +9172,7 @@ TclGL_glGetLightfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetLightfv((GLenum)light, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9220,7 +9222,7 @@ TclGL_glGetLightivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetLightiv((GLenum)light, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9263,7 +9265,7 @@ TclGL_glLightModelfCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &param);
     glLightModelf((GLenum)pname, (GLfloat )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9306,7 +9308,7 @@ TclGL_glLightModeliCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &param);
     glLightModeli((GLenum)pname, (GLint )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9349,7 +9351,7 @@ TclGL_glLightModelfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glLightModelfv((GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9392,7 +9394,7 @@ TclGL_glLightModelivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glLightModeliv((GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9442,7 +9444,7 @@ TclGL_glMaterialfCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[3], &param);
     glMaterialf((GLenum)face, (GLenum)pname, (GLfloat )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9492,7 +9494,7 @@ TclGL_glMaterialiCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &param);
     glMateriali((GLenum)face, (GLenum)pname, (GLint )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9542,7 +9544,7 @@ TclGL_glMaterialfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glMaterialfv((GLenum)face, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9592,7 +9594,7 @@ TclGL_glMaterialivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glMaterialiv((GLenum)face, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9642,7 +9644,7 @@ TclGL_glGetMaterialfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetMaterialfv((GLenum)face, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9692,7 +9694,7 @@ TclGL_glGetMaterialivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetMaterialiv((GLenum)face, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9740,7 +9742,7 @@ TclGL_glColorMaterialCmd(
     }
     mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glColorMaterial((GLenum)face, (GLenum)mode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9778,7 +9780,7 @@ TclGL_glPixelZoomCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &xfactor);
     Tcl_GetDoubleFromObj(interp, objv[2], &yfactor);
     glPixelZoom((GLfloat )xfactor, (GLfloat )yfactor);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9821,7 +9823,7 @@ TclGL_glPixelStorefCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &param);
     glPixelStoref((GLenum)pname, (GLfloat )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9864,7 +9866,7 @@ TclGL_glPixelStoreiCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &param);
     glPixelStorei((GLenum)pname, (GLint )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9907,7 +9909,7 @@ TclGL_glPixelTransferfCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &param);
     glPixelTransferf((GLenum)pname, (GLfloat )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9950,7 +9952,7 @@ TclGL_glPixelTransferiCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &param);
     glPixelTransferi((GLenum)pname, (GLint )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -9995,7 +9997,7 @@ TclGL_glPixelMapfvCmd(
     Tcl_GetIntFromObj(interp, objv[2], &mapsize);
     values = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glPixelMapfv((GLenum)map, (GLsizei )mapsize, (void *)values);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10040,7 +10042,7 @@ TclGL_glPixelMapuivCmd(
     Tcl_GetIntFromObj(interp, objv[2], &mapsize);
     values = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glPixelMapuiv((GLenum)map, (GLsizei )mapsize, (GLuint *)values);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10085,7 +10087,7 @@ TclGL_glPixelMapusvCmd(
     Tcl_GetIntFromObj(interp, objv[2], &mapsize);
     values = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glPixelMapusv((GLenum)map, (GLsizei )mapsize, (GLushort *)values);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10128,7 +10130,7 @@ TclGL_glGetPixelMapfvCmd(
     map = (GLenum)Tcl_GetHashValue(hPtr); 
     values = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glGetPixelMapfv((GLenum)map, (void *)values);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10171,7 +10173,7 @@ TclGL_glGetPixelMapuivCmd(
     map = (GLenum)Tcl_GetHashValue(hPtr); 
     values = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glGetPixelMapuiv((GLenum)map, (GLuint *)values);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10214,7 +10216,7 @@ TclGL_glGetPixelMapusvCmd(
     map = (GLenum)Tcl_GetHashValue(hPtr); 
     values = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glGetPixelMapusv((GLenum)map, (GLushort *)values);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10262,7 +10264,7 @@ TclGL_glBitmapCmd(
     Tcl_GetDoubleFromObj(interp, objv[6], &ymove);
     bitmap = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
     glBitmap((GLsizei )width, (GLsizei )height, (GLfloat )xorig, (GLfloat )yorig, (GLfloat )xmove, (GLfloat )ymove, (GLubyte *)bitmap);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10320,7 +10322,7 @@ TclGL_glReadPixelsCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     pixels = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
     glReadPixels((GLint )x, (GLint )y, (GLsizei )width, (GLsizei )height, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10374,7 +10376,7 @@ TclGL_glDrawPixelsCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     pixels = (void *)Tcl_GetByteArrayFromObj(objv[5], NULL);
     glDrawPixels((GLsizei )width, (GLsizei )height, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10423,7 +10425,7 @@ TclGL_glCopyPixelsCmd(
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     glCopyPixels((GLint )x, (GLint )y, (GLsizei )width, (GLsizei )height, (GLenum)type);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10468,7 +10470,7 @@ TclGL_glStencilFuncCmd(
     Tcl_GetIntFromObj(interp, objv[2], &ref);
     Tcl_GetIntFromObj(interp, objv[3], &mask);
     glStencilFunc((GLenum)func, (GLint )ref, (GLuint )mask);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10504,7 +10506,7 @@ TclGL_glStencilMaskCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &mask);
     glStencilMask((GLuint )mask);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10559,7 +10561,7 @@ TclGL_glStencilOpCmd(
     }
     zpass = (GLenum)Tcl_GetHashValue(hPtr); 
     glStencilOp((GLenum)fail, (GLenum)zfail, (GLenum)zpass);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10595,7 +10597,7 @@ TclGL_glClearStencilCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &s);
     glClearStencil((GLint )s);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10645,7 +10647,7 @@ TclGL_glTexGendCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[3], &param);
     glTexGend((GLenum)coord, (GLenum)pname, (GLdouble )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10695,7 +10697,7 @@ TclGL_glTexGenfCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[3], &param);
     glTexGenf((GLenum)coord, (GLenum)pname, (GLfloat )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10745,7 +10747,7 @@ TclGL_glTexGeniCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &param);
     glTexGeni((GLenum)coord, (GLenum)pname, (GLint )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10795,7 +10797,7 @@ TclGL_glTexGendvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glTexGendv((GLenum)coord, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10845,7 +10847,7 @@ TclGL_glTexGenfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glTexGenfv((GLenum)coord, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10895,7 +10897,7 @@ TclGL_glTexGenivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glTexGeniv((GLenum)coord, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10945,7 +10947,7 @@ TclGL_glGetTexGendvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetTexGendv((GLenum)coord, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -10995,7 +10997,7 @@ TclGL_glGetTexGenfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetTexGenfv((GLenum)coord, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11045,7 +11047,7 @@ TclGL_glGetTexGenivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetTexGeniv((GLenum)coord, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11095,7 +11097,7 @@ TclGL_glTexEnvfCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[3], &param);
     glTexEnvf((GLenum)target, (GLenum)pname, (GLfloat )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11145,7 +11147,7 @@ TclGL_glTexEnviCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &param);
     glTexEnvi((GLenum)target, (GLenum)pname, (GLint )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11195,7 +11197,7 @@ TclGL_glTexEnvfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glTexEnvfv((GLenum)target, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11245,7 +11247,7 @@ TclGL_glTexEnvivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glTexEnviv((GLenum)target, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11295,7 +11297,7 @@ TclGL_glGetTexEnvfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetTexEnvfv((GLenum)target, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11345,7 +11347,7 @@ TclGL_glGetTexEnvivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetTexEnviv((GLenum)target, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11395,7 +11397,7 @@ TclGL_glTexParameterfCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[3], &param);
     glTexParameterf((GLenum)target, (GLenum)pname, (GLfloat )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11445,7 +11447,7 @@ TclGL_glTexParameteriCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &param);
     glTexParameteri((GLenum)target, (GLenum)pname, (GLint )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11495,7 +11497,7 @@ TclGL_glTexParameterfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glTexParameterfv((GLenum)target, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11545,7 +11547,7 @@ TclGL_glTexParameterivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glTexParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11595,7 +11597,7 @@ TclGL_glGetTexParameterfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetTexParameterfv((GLenum)target, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11645,7 +11647,7 @@ TclGL_glGetTexParameterivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetTexParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11697,7 +11699,7 @@ TclGL_glGetTexLevelParameterfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
     glGetTexLevelParameterfv((GLenum)target, (GLint )level, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11749,7 +11751,7 @@ TclGL_glGetTexLevelParameterivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
     glGetTexLevelParameteriv((GLenum)target, (GLint )level, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11814,7 +11816,7 @@ TclGL_glTexImage1DCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     pixels = (void *)Tcl_GetByteArrayFromObj(objv[8], NULL);
     glTexImage1D((GLenum)target, (GLint )level, (GLint )internalFormat, (GLsizei )width, (GLint )border, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11881,7 +11883,7 @@ TclGL_glTexImage2DCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     pixels = (void *)Tcl_GetByteArrayFromObj(objv[9], NULL);
     glTexImage2D((GLenum)target, (GLint )level, (GLint )internalFormat, (GLsizei )width, (GLsizei )height, (GLint )border, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11940,7 +11942,7 @@ TclGL_glGetTexImageCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     pixels = (void *)Tcl_GetByteArrayFromObj(objv[5], NULL);
     glGetTexImage((GLenum)target, (GLint )level, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -11978,7 +11980,7 @@ TclGL_glGenTexturesCmd(
     Tcl_GetIntFromObj(interp, objv[1], &n);
     textures = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glGenTextures((GLsizei )n, (GLuint *)textures);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12016,7 +12018,7 @@ TclGL_glDeleteTexturesCmd(
     Tcl_GetIntFromObj(interp, objv[1], &n);
     textures = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glDeleteTextures((GLsizei )n, (GLuint *)textures);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12059,7 +12061,7 @@ TclGL_glBindTextureCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &texture);
     glBindTexture((GLenum)target, (GLuint )texture);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12099,7 +12101,7 @@ TclGL_glPrioritizeTexturesCmd(
     textures = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     priorities = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glPrioritizeTextures((GLsizei )n, (GLuint *)textures, (void *)priorities);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12135,7 +12137,7 @@ TclGL_glIsTextureCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &texture);
     glIsTexture((GLuint )texture);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12198,7 +12200,7 @@ TclGL_glTexSubImage1DCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     pixels = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
     glTexSubImage1D((GLenum)target, (GLint )level, (GLint )xoffset, (GLsizei )width, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12265,7 +12267,7 @@ TclGL_glTexSubImage2DCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     pixels = (void *)Tcl_GetByteArrayFromObj(objv[9], NULL);
     glTexSubImage2D((GLenum)target, (GLint )level, (GLint )xoffset, (GLint )yoffset, (GLsizei )width, (GLsizei )height, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12323,7 +12325,7 @@ TclGL_glCopyTexImage1DCmd(
     Tcl_GetIntFromObj(interp, objv[6], &width);
     Tcl_GetIntFromObj(interp, objv[7], &border);
     glCopyTexImage1D((GLenum)target, (GLint )level, (GLenum)internalformat, (GLint )x, (GLint )y, (GLsizei )width, (GLint )border);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12383,7 +12385,7 @@ TclGL_glCopyTexImage2DCmd(
     Tcl_GetIntFromObj(interp, objv[7], &height);
     Tcl_GetIntFromObj(interp, objv[8], &border);
     glCopyTexImage2D((GLenum)target, (GLint )level, (GLenum)internalformat, (GLint )x, (GLint )y, (GLsizei )width, (GLsizei )height, (GLint )border);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12434,7 +12436,7 @@ TclGL_glCopyTexSubImage1DCmd(
     Tcl_GetIntFromObj(interp, objv[5], &y);
     Tcl_GetIntFromObj(interp, objv[6], &width);
     glCopyTexSubImage1D((GLenum)target, (GLint )level, (GLint )xoffset, (GLint )x, (GLint )y, (GLsizei )width);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12489,7 +12491,7 @@ TclGL_glCopyTexSubImage2DCmd(
     Tcl_GetIntFromObj(interp, objv[7], &width);
     Tcl_GetIntFromObj(interp, objv[8], &height);
     glCopyTexSubImage2D((GLenum)target, (GLint )level, (GLint )xoffset, (GLint )yoffset, (GLint )x, (GLint )y, (GLsizei )width, (GLsizei )height);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12540,7 +12542,7 @@ TclGL_glMap1dCmd(
     Tcl_GetIntFromObj(interp, objv[5], &order);
     points = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
     glMap1d((GLenum)target, (GLdouble )u1, (GLdouble )u2, (GLint )stride, (GLint )order, (void *)points);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12591,7 +12593,7 @@ TclGL_glMap1fCmd(
     Tcl_GetIntFromObj(interp, objv[5], &order);
     points = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
     glMap1f((GLenum)target, (GLfloat )u1, (GLfloat )u2, (GLint )stride, (GLint )order, (void *)points);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12650,7 +12652,7 @@ TclGL_glMap2dCmd(
     Tcl_GetIntFromObj(interp, objv[9], &vorder);
     points = (void *)Tcl_GetByteArrayFromObj(objv[10], NULL);
     glMap2d((GLenum)target, (GLdouble )u1, (GLdouble )u2, (GLint )ustride, (GLint )uorder, (GLdouble )v1, (GLdouble )v2, (GLint )vstride, (GLint )vorder, (void *)points);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12709,7 +12711,7 @@ TclGL_glMap2fCmd(
     Tcl_GetIntFromObj(interp, objv[9], &vorder);
     points = (void *)Tcl_GetByteArrayFromObj(objv[10], NULL);
     glMap2f((GLenum)target, (GLfloat )u1, (GLfloat )u2, (GLint )ustride, (GLint )uorder, (GLfloat )v1, (GLfloat )v2, (GLint )vstride, (GLint )vorder, (void *)points);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12759,7 +12761,7 @@ TclGL_glGetMapdvCmd(
     query = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetMapdv((GLenum)target, (GLenum)query, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12809,7 +12811,7 @@ TclGL_glGetMapfvCmd(
     query = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetMapfv((GLenum)target, (GLenum)query, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12859,7 +12861,7 @@ TclGL_glGetMapivCmd(
     query = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetMapiv((GLenum)target, (GLenum)query, (GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12895,7 +12897,7 @@ TclGL_glEvalCoord1dCmd(
     }
     Tcl_GetDoubleFromObj(interp, objv[1], &u);
     glEvalCoord1d((GLdouble )u);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12931,7 +12933,7 @@ TclGL_glEvalCoord1fCmd(
     }
     Tcl_GetDoubleFromObj(interp, objv[1], &u);
     glEvalCoord1f((GLfloat )u);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -12967,7 +12969,7 @@ TclGL_glEvalCoord1dvCmd(
     }
     u = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glEvalCoord1dv((void *)u);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13003,7 +13005,7 @@ TclGL_glEvalCoord1fvCmd(
     }
     u = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glEvalCoord1fv((void *)u);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13041,7 +13043,7 @@ TclGL_glEvalCoord2dCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &u);
     Tcl_GetDoubleFromObj(interp, objv[2], &v);
     glEvalCoord2d((GLdouble )u, (GLdouble )v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13079,7 +13081,7 @@ TclGL_glEvalCoord2fCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &u);
     Tcl_GetDoubleFromObj(interp, objv[2], &v);
     glEvalCoord2f((GLfloat )u, (GLfloat )v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13115,7 +13117,7 @@ TclGL_glEvalCoord2dvCmd(
     }
     u = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glEvalCoord2dv((void *)u);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13151,7 +13153,7 @@ TclGL_glEvalCoord2fvCmd(
     }
     u = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
     glEvalCoord2fv((void *)u);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13191,7 +13193,7 @@ TclGL_glMapGrid1dCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &u1);
     Tcl_GetDoubleFromObj(interp, objv[3], &u2);
     glMapGrid1d((GLint )un, (GLdouble )u1, (GLdouble )u2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13231,7 +13233,7 @@ TclGL_glMapGrid1fCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &u1);
     Tcl_GetDoubleFromObj(interp, objv[3], &u2);
     glMapGrid1f((GLint )un, (GLfloat )u1, (GLfloat )u2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13277,7 +13279,7 @@ TclGL_glMapGrid2dCmd(
     Tcl_GetDoubleFromObj(interp, objv[5], &v1);
     Tcl_GetDoubleFromObj(interp, objv[6], &v2);
     glMapGrid2d((GLint )un, (GLdouble )u1, (GLdouble )u2, (GLint )vn, (GLdouble )v1, (GLdouble )v2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13323,7 +13325,7 @@ TclGL_glMapGrid2fCmd(
     Tcl_GetDoubleFromObj(interp, objv[5], &v1);
     Tcl_GetDoubleFromObj(interp, objv[6], &v2);
     glMapGrid2f((GLint )un, (GLfloat )u1, (GLfloat )u2, (GLint )vn, (GLfloat )v1, (GLfloat )v2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13359,7 +13361,7 @@ TclGL_glEvalPoint1Cmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &i);
     glEvalPoint1((GLint )i);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13397,7 +13399,7 @@ TclGL_glEvalPoint2Cmd(
     Tcl_GetIntFromObj(interp, objv[1], &i);
     Tcl_GetIntFromObj(interp, objv[2], &j);
     glEvalPoint2((GLint )i, (GLint )j);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13442,7 +13444,7 @@ TclGL_glEvalMesh1Cmd(
     Tcl_GetIntFromObj(interp, objv[2], &i1);
     Tcl_GetIntFromObj(interp, objv[3], &i2);
     glEvalMesh1((GLenum)mode, (GLint )i1, (GLint )i2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13491,7 +13493,7 @@ TclGL_glEvalMesh2Cmd(
     Tcl_GetIntFromObj(interp, objv[4], &j1);
     Tcl_GetIntFromObj(interp, objv[5], &j2);
     glEvalMesh2((GLenum)mode, (GLint )i1, (GLint )i2, (GLint )j1, (GLint )j2);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13534,7 +13536,7 @@ TclGL_glFogfCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &param);
     glFogf((GLenum)pname, (GLfloat )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13577,7 +13579,7 @@ TclGL_glFogiCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &param);
     glFogi((GLenum)pname, (GLint )param);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13620,7 +13622,7 @@ TclGL_glFogfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glFogfv((GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13663,7 +13665,7 @@ TclGL_glFogivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glFogiv((GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13708,7 +13710,7 @@ TclGL_glFeedbackBufferCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     buffer = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glFeedbackBuffer((GLsizei )size, (GLenum)type, (void *)buffer);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13744,7 +13746,7 @@ TclGL_glPassThroughCmd(
     }
     Tcl_GetDoubleFromObj(interp, objv[1], &token);
     glPassThrough((GLfloat )token);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13782,7 +13784,7 @@ TclGL_glSelectBufferCmd(
     Tcl_GetIntFromObj(interp, objv[1], &size);
     buffer = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glSelectBuffer((GLsizei )size, (GLuint *)buffer);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13817,7 +13819,7 @@ TclGL_glInitNamesCmd(
     }
 
     glInitNames();
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13853,7 +13855,7 @@ TclGL_glLoadNameCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &name);
     glLoadName((GLuint )name);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13889,7 +13891,7 @@ TclGL_glPushNameCmd(
     }
     Tcl_GetIntFromObj(interp, objv[1], &name);
     glPushName((GLuint )name);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13924,7 +13926,7 @@ TclGL_glPopNameCmd(
     }
 
     glPopName();
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -13980,7 +13982,7 @@ TclGL_glDrawRangeElementsCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     indices = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
     glDrawRangeElements((GLenum)mode, (GLuint )start, (GLuint )end, (GLsizei )count, (GLenum)type, (GLvoid *)indices);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14049,7 +14051,7 @@ TclGL_glTexImage3DCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     pixels = (void *)Tcl_GetByteArrayFromObj(objv[10], NULL);
     glTexImage3D((GLenum)target, (GLint )level, (GLint )internalFormat, (GLsizei )width, (GLsizei )height, (GLsizei )depth, (GLint )border, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14120,7 +14122,7 @@ TclGL_glTexSubImage3DCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     pixels = (void *)Tcl_GetByteArrayFromObj(objv[11], NULL);
     glTexSubImage3D((GLenum)target, (GLint )level, (GLint )xoffset, (GLint )yoffset, (GLint )zoffset, (GLsizei )width, (GLsizei )height, (GLsizei )depth, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14177,7 +14179,7 @@ TclGL_glCopyTexSubImage3DCmd(
     Tcl_GetIntFromObj(interp, objv[8], &width);
     Tcl_GetIntFromObj(interp, objv[9], &height);
     glCopyTexSubImage3D((GLenum)target, (GLint )level, (GLint )xoffset, (GLint )yoffset, (GLint )zoffset, (GLint )x, (GLint )y, (GLsizei )width, (GLsizei )height);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14243,7 +14245,7 @@ TclGL_glColorTableCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     table = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
     glColorTable((GLenum)target, (GLenum)internalformat, (GLsizei )width, (GLenum)format, (GLenum)type, (GLvoid *)table);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14304,7 +14306,7 @@ TclGL_glColorSubTableCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     data = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
     glColorSubTable((GLenum)target, (GLsizei )start, (GLsizei )count, (GLenum)format, (GLenum)type, (GLvoid *)data);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14354,7 +14356,7 @@ TclGL_glColorTableParameterivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glColorTableParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14404,7 +14406,7 @@ TclGL_glColorTableParameterfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glColorTableParameterfv((GLenum)target, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14453,7 +14455,7 @@ TclGL_glCopyColorSubTableCmd(
     Tcl_GetIntFromObj(interp, objv[4], &y);
     Tcl_GetIntFromObj(interp, objv[5], &width);
     glCopyColorSubTable((GLenum)target, (GLsizei )start, (GLint )x, (GLint )y, (GLsizei )width);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14507,7 +14509,7 @@ TclGL_glCopyColorTableCmd(
     Tcl_GetIntFromObj(interp, objv[4], &y);
     Tcl_GetIntFromObj(interp, objv[5], &width);
     glCopyColorTable((GLenum)target, (GLenum)internalformat, (GLint )x, (GLint )y, (GLsizei )width);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14564,7 +14566,7 @@ TclGL_glGetColorTableCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     table = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
     glGetColorTable((GLenum)target, (GLenum)format, (GLenum)type, (GLvoid *)table);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14614,7 +14616,7 @@ TclGL_glGetColorTableParameterfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetColorTableParameterfv((GLenum)target, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14664,7 +14666,7 @@ TclGL_glGetColorTableParameterivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetColorTableParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14705,7 +14707,7 @@ TclGL_glBlendEquationCmd(
     }
     mode = (GLenum)Tcl_GetHashValue(hPtr); 
     glBlendEquation((GLenum)mode);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14747,7 +14749,7 @@ TclGL_glBlendColorCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &blue);
     Tcl_GetDoubleFromObj(interp, objv[4], &alpha);
     glBlendColor((GLclampf )red, (GLclampf )green, (GLclampf )blue, (GLclampf )alpha);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14799,7 +14801,7 @@ TclGL_glHistogramCmd(
     internalformat = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetBooleanFromObj(interp, objv[4], &sink);
     glHistogram((GLenum)target, (GLsizei )width, (GLenum)internalformat, (GLboolean )sink);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14840,7 +14842,7 @@ TclGL_glResetHistogramCmd(
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     glResetHistogram((GLenum)target);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14899,7 +14901,7 @@ TclGL_glGetHistogramCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     values = (void *)Tcl_GetByteArrayFromObj(objv[5], NULL);
     glGetHistogram((GLenum)target, (GLboolean )reset, (GLenum)format, (GLenum)type, (GLvoid *)values);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14949,7 +14951,7 @@ TclGL_glGetHistogramParameterfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetHistogramParameterfv((GLenum)target, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -14999,7 +15001,7 @@ TclGL_glGetHistogramParameterivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetHistogramParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15049,7 +15051,7 @@ TclGL_glMinmaxCmd(
     internalformat = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetBooleanFromObj(interp, objv[3], &sink);
     glMinmax((GLenum)target, (GLenum)internalformat, (GLboolean )sink);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15090,7 +15092,7 @@ TclGL_glResetMinmaxCmd(
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     glResetMinmax((GLenum)target);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15149,7 +15151,7 @@ TclGL_glGetMinmaxCmd(
     types = (GLenum)Tcl_GetHashValue(hPtr); 
     values = (void *)Tcl_GetByteArrayFromObj(objv[5], NULL);
     glGetMinmax((GLenum)target, (GLboolean )reset, (GLenum)format, (GLenum)types, (GLvoid *)values);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15199,7 +15201,7 @@ TclGL_glGetMinmaxParameterfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetMinmaxParameterfv((GLenum)target, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15249,7 +15251,7 @@ TclGL_glGetMinmaxParameterivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetMinmaxParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15315,7 +15317,7 @@ TclGL_glConvolutionFilter1DCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     image = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
     glConvolutionFilter1D((GLenum)target, (GLenum)internalformat, (GLsizei )width, (GLenum)format, (GLenum)type, (GLvoid *)image);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15383,7 +15385,7 @@ TclGL_glConvolutionFilter2DCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     image = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
     glConvolutionFilter2D((GLenum)target, (GLenum)internalformat, (GLsizei )width, (GLsizei )height, (GLenum)format, (GLenum)type, (GLvoid *)image);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15433,7 +15435,7 @@ TclGL_glConvolutionParameterfCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[3], &params);
     glConvolutionParameterf((GLenum)target, (GLenum)pname, (GLfloat )params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15483,7 +15485,7 @@ TclGL_glConvolutionParameterfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glConvolutionParameterfv((GLenum)target, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15533,7 +15535,7 @@ TclGL_glConvolutionParameteriCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &params);
     glConvolutionParameteri((GLenum)target, (GLenum)pname, (GLint )params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15583,7 +15585,7 @@ TclGL_glConvolutionParameterivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glConvolutionParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15637,7 +15639,7 @@ TclGL_glCopyConvolutionFilter1DCmd(
     Tcl_GetIntFromObj(interp, objv[4], &y);
     Tcl_GetIntFromObj(interp, objv[5], &width);
     glCopyConvolutionFilter1D((GLenum)target, (GLenum)internalformat, (GLint )x, (GLint )y, (GLsizei )width);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15693,7 +15695,7 @@ TclGL_glCopyConvolutionFilter2DCmd(
     Tcl_GetIntFromObj(interp, objv[5], &width);
     Tcl_GetIntFromObj(interp, objv[6], &height);
     glCopyConvolutionFilter2D((GLenum)target, (GLenum)internalformat, (GLint )x, (GLint )y, (GLsizei )width, (GLsizei )height);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15750,7 +15752,7 @@ TclGL_glGetConvolutionFilterCmd(
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     image = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
     glGetConvolutionFilter((GLenum)target, (GLenum)format, (GLenum)type, (GLvoid *)image);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15800,7 +15802,7 @@ TclGL_glGetConvolutionParameterfvCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetConvolutionParameterfv((GLenum)target, (GLenum)pname, (void *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15850,7 +15852,7 @@ TclGL_glGetConvolutionParameterivCmd(
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
     params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetConvolutionParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15920,7 +15922,7 @@ TclGL_glSeparableFilter2DCmd(
     row = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
     column = (void *)Tcl_GetByteArrayFromObj(objv[8], NULL);
     glSeparableFilter2D((GLenum)target, (GLenum)internalformat, (GLsizei )width, (GLsizei )height, (GLenum)format, (GLenum)type, (GLvoid *)row, (GLvoid *)column);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -15981,7 +15983,7 @@ TclGL_glGetSeparableFilterCmd(
     column = (void *)Tcl_GetByteArrayFromObj(objv[5], NULL);
     span = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
     glGetSeparableFilter((GLenum)target, (GLenum)format, (GLenum)type, (GLvoid *)row, (GLvoid *)column, (GLvoid *)span);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16022,7 +16024,7 @@ TclGL_glActiveTextureCmd(
     }
     texture = (GLenum)Tcl_GetHashValue(hPtr); 
     glActiveTexture((GLenum)texture);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16063,7 +16065,7 @@ TclGL_glClientActiveTextureCmd(
     }
     texture = (GLenum)Tcl_GetHashValue(hPtr); 
     glClientActiveTexture((GLenum)texture);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16121,7 +16123,7 @@ TclGL_glCompressedTexImage1DCmd(
     Tcl_GetIntFromObj(interp, objv[6], &imageSize);
     data = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
     glCompressedTexImage1D((GLenum)target, (GLint )level, (GLenum)internalformat, (GLsizei )width, (GLint )border, (GLsizei )imageSize, (GLvoid *)data);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16181,7 +16183,7 @@ TclGL_glCompressedTexImage2DCmd(
     Tcl_GetIntFromObj(interp, objv[7], &imageSize);
     data = (void *)Tcl_GetByteArrayFromObj(objv[8], NULL);
     glCompressedTexImage2D((GLenum)target, (GLint )level, (GLenum)internalformat, (GLsizei )width, (GLsizei )height, (GLint )border, (GLsizei )imageSize, (GLvoid *)data);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16243,7 +16245,7 @@ TclGL_glCompressedTexImage3DCmd(
     Tcl_GetIntFromObj(interp, objv[8], &imageSize);
     data = (void *)Tcl_GetByteArrayFromObj(objv[9], NULL);
     glCompressedTexImage3D((GLenum)target, (GLint )level, (GLenum)internalformat, (GLsizei )width, (GLsizei )height, (GLsizei )depth, (GLint )border, (GLsizei )imageSize, (GLvoid *)data);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16301,7 +16303,7 @@ TclGL_glCompressedTexSubImage1DCmd(
     Tcl_GetIntFromObj(interp, objv[6], &imageSize);
     data = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
     glCompressedTexSubImage1D((GLenum)target, (GLint )level, (GLint )xoffset, (GLsizei )width, (GLenum)format, (GLsizei )imageSize, (GLvoid *)data);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16363,7 +16365,7 @@ TclGL_glCompressedTexSubImage2DCmd(
     Tcl_GetIntFromObj(interp, objv[8], &imageSize);
     data = (void *)Tcl_GetByteArrayFromObj(objv[9], NULL);
     glCompressedTexSubImage2D((GLenum)target, (GLint )level, (GLint )xoffset, (GLint )yoffset, (GLsizei )width, (GLsizei )height, (GLenum)format, (GLsizei )imageSize, (GLvoid *)data);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16429,7 +16431,7 @@ TclGL_glCompressedTexSubImage3DCmd(
     Tcl_GetIntFromObj(interp, objv[10], &imageSize);
     data = (void *)Tcl_GetByteArrayFromObj(objv[11], NULL);
     glCompressedTexSubImage3D((GLenum)target, (GLint )level, (GLint )xoffset, (GLint )yoffset, (GLint )zoffset, (GLsizei )width, (GLsizei )height, (GLsizei )depth, (GLenum)format, (GLsizei )imageSize, (GLvoid *)data);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16474,7 +16476,7 @@ TclGL_glGetCompressedTexImageCmd(
     Tcl_GetIntFromObj(interp, objv[2], &lod);
     img = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
     glGetCompressedTexImage((GLenum)target, (GLint )lod, (GLvoid *)img);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16517,7 +16519,7 @@ TclGL_glMultiTexCoord1dCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     glMultiTexCoord1d((GLenum)target, (GLdouble )s);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16560,7 +16562,7 @@ TclGL_glMultiTexCoord1dvCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord1dv((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16603,7 +16605,7 @@ TclGL_glMultiTexCoord1fCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     glMultiTexCoord1f((GLenum)target, (GLfloat )s);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16646,7 +16648,7 @@ TclGL_glMultiTexCoord1fvCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord1fv((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16689,7 +16691,7 @@ TclGL_glMultiTexCoord1iCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     glMultiTexCoord1i((GLenum)target, (GLint )s);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16732,7 +16734,7 @@ TclGL_glMultiTexCoord1ivCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord1iv((GLenum)target, (GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16775,7 +16777,7 @@ TclGL_glMultiTexCoord1sCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     glMultiTexCoord1s((GLenum)target, (GLshort )s);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16818,7 +16820,7 @@ TclGL_glMultiTexCoord1svCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord1sv((GLenum)target, (GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16863,7 +16865,7 @@ TclGL_glMultiTexCoord2dCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     glMultiTexCoord2d((GLenum)target, (GLdouble )s, (GLdouble )t);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16906,7 +16908,7 @@ TclGL_glMultiTexCoord2dvCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord2dv((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16951,7 +16953,7 @@ TclGL_glMultiTexCoord2fCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     glMultiTexCoord2f((GLenum)target, (GLfloat )s, (GLfloat )t);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -16994,7 +16996,7 @@ TclGL_glMultiTexCoord2fvCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord2fv((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17039,7 +17041,7 @@ TclGL_glMultiTexCoord2iCmd(
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
     glMultiTexCoord2i((GLenum)target, (GLint )s, (GLint )t);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17082,7 +17084,7 @@ TclGL_glMultiTexCoord2ivCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord2iv((GLenum)target, (GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17127,7 +17129,7 @@ TclGL_glMultiTexCoord2sCmd(
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
     glMultiTexCoord2s((GLenum)target, (GLshort )s, (GLshort )t);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17170,7 +17172,7 @@ TclGL_glMultiTexCoord2svCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord2sv((GLenum)target, (GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17217,7 +17219,7 @@ TclGL_glMultiTexCoord3dCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     glMultiTexCoord3d((GLenum)target, (GLdouble )s, (GLdouble )t, (GLdouble )r);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17260,7 +17262,7 @@ TclGL_glMultiTexCoord3dvCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord3dv((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17307,7 +17309,7 @@ TclGL_glMultiTexCoord3fCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     glMultiTexCoord3f((GLenum)target, (GLfloat )s, (GLfloat )t, (GLfloat )r);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17350,7 +17352,7 @@ TclGL_glMultiTexCoord3fvCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord3fv((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17397,7 +17399,7 @@ TclGL_glMultiTexCoord3iCmd(
     Tcl_GetIntFromObj(interp, objv[3], &t);
     Tcl_GetIntFromObj(interp, objv[4], &r);
     glMultiTexCoord3i((GLenum)target, (GLint )s, (GLint )t, (GLint )r);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17440,7 +17442,7 @@ TclGL_glMultiTexCoord3ivCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord3iv((GLenum)target, (GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17487,7 +17489,7 @@ TclGL_glMultiTexCoord3sCmd(
     Tcl_GetIntFromObj(interp, objv[3], &t);
     Tcl_GetIntFromObj(interp, objv[4], &r);
     glMultiTexCoord3s((GLenum)target, (GLshort )s, (GLshort )t, (GLshort )r);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17530,7 +17532,7 @@ TclGL_glMultiTexCoord3svCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord3sv((GLenum)target, (GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17579,7 +17581,7 @@ TclGL_glMultiTexCoord4dCmd(
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     Tcl_GetDoubleFromObj(interp, objv[5], &q);
     glMultiTexCoord4d((GLenum)target, (GLdouble )s, (GLdouble )t, (GLdouble )r, (GLdouble )q);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17622,7 +17624,7 @@ TclGL_glMultiTexCoord4dvCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord4dv((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17671,7 +17673,7 @@ TclGL_glMultiTexCoord4fCmd(
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     Tcl_GetDoubleFromObj(interp, objv[5], &q);
     glMultiTexCoord4f((GLenum)target, (GLfloat )s, (GLfloat )t, (GLfloat )r, (GLfloat )q);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17714,7 +17716,7 @@ TclGL_glMultiTexCoord4fvCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord4fv((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17763,7 +17765,7 @@ TclGL_glMultiTexCoord4iCmd(
     Tcl_GetIntFromObj(interp, objv[4], &r);
     Tcl_GetIntFromObj(interp, objv[5], &q);
     glMultiTexCoord4i((GLenum)target, (GLint )s, (GLint )t, (GLint )r, (GLint )q);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17806,7 +17808,7 @@ TclGL_glMultiTexCoord4ivCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord4iv((GLenum)target, (GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17855,7 +17857,7 @@ TclGL_glMultiTexCoord4sCmd(
     Tcl_GetIntFromObj(interp, objv[4], &r);
     Tcl_GetIntFromObj(interp, objv[5], &q);
     glMultiTexCoord4s((GLenum)target, (GLshort )s, (GLshort )t, (GLshort )r, (GLshort )q);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -17898,7 +17900,7 @@ TclGL_glMultiTexCoord4svCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord4sv((GLenum)target, (GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18072,7 +18074,7 @@ TclGL_glSampleCoverageCmd(
     Tcl_GetDoubleFromObj(interp, objv[1], &value);
     Tcl_GetBooleanFromObj(interp, objv[2], &invert);
     glSampleCoverage((GLclampf )value, (GLboolean )invert);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18113,7 +18115,7 @@ TclGL_glActiveTextureARBCmd(
     }
     texture = (GLenum)Tcl_GetHashValue(hPtr); 
     glActiveTextureARB((GLenum)texture);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18154,7 +18156,7 @@ TclGL_glClientActiveTextureARBCmd(
     }
     texture = (GLenum)Tcl_GetHashValue(hPtr); 
     glClientActiveTextureARB((GLenum)texture);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18197,7 +18199,7 @@ TclGL_glMultiTexCoord1dARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     glMultiTexCoord1dARB((GLenum)target, (GLdouble )s);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18240,7 +18242,7 @@ TclGL_glMultiTexCoord1dvARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord1dvARB((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18283,7 +18285,7 @@ TclGL_glMultiTexCoord1fARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     glMultiTexCoord1fARB((GLenum)target, (GLfloat )s);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18326,7 +18328,7 @@ TclGL_glMultiTexCoord1fvARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord1fvARB((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18369,7 +18371,7 @@ TclGL_glMultiTexCoord1iARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     glMultiTexCoord1iARB((GLenum)target, (GLint )s);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18412,7 +18414,7 @@ TclGL_glMultiTexCoord1ivARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord1ivARB((GLenum)target, (GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18455,7 +18457,7 @@ TclGL_glMultiTexCoord1sARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &s);
     glMultiTexCoord1sARB((GLenum)target, (GLshort )s);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18498,7 +18500,7 @@ TclGL_glMultiTexCoord1svARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord1svARB((GLenum)target, (GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18543,7 +18545,7 @@ TclGL_glMultiTexCoord2dARBCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     glMultiTexCoord2dARB((GLenum)target, (GLdouble )s, (GLdouble )t);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18586,7 +18588,7 @@ TclGL_glMultiTexCoord2dvARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord2dvARB((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18631,7 +18633,7 @@ TclGL_glMultiTexCoord2fARBCmd(
     Tcl_GetDoubleFromObj(interp, objv[2], &s);
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     glMultiTexCoord2fARB((GLenum)target, (GLfloat )s, (GLfloat )t);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18674,7 +18676,7 @@ TclGL_glMultiTexCoord2fvARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord2fvARB((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18719,7 +18721,7 @@ TclGL_glMultiTexCoord2iARBCmd(
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
     glMultiTexCoord2iARB((GLenum)target, (GLint )s, (GLint )t);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18762,7 +18764,7 @@ TclGL_glMultiTexCoord2ivARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord2ivARB((GLenum)target, (GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18807,7 +18809,7 @@ TclGL_glMultiTexCoord2sARBCmd(
     Tcl_GetIntFromObj(interp, objv[2], &s);
     Tcl_GetIntFromObj(interp, objv[3], &t);
     glMultiTexCoord2sARB((GLenum)target, (GLshort )s, (GLshort )t);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18850,7 +18852,7 @@ TclGL_glMultiTexCoord2svARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord2svARB((GLenum)target, (GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18897,7 +18899,7 @@ TclGL_glMultiTexCoord3dARBCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     glMultiTexCoord3dARB((GLenum)target, (GLdouble )s, (GLdouble )t, (GLdouble )r);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18940,7 +18942,7 @@ TclGL_glMultiTexCoord3dvARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord3dvARB((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -18987,7 +18989,7 @@ TclGL_glMultiTexCoord3fARBCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &t);
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     glMultiTexCoord3fARB((GLenum)target, (GLfloat )s, (GLfloat )t, (GLfloat )r);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19030,7 +19032,7 @@ TclGL_glMultiTexCoord3fvARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord3fvARB((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19077,7 +19079,7 @@ TclGL_glMultiTexCoord3iARBCmd(
     Tcl_GetIntFromObj(interp, objv[3], &t);
     Tcl_GetIntFromObj(interp, objv[4], &r);
     glMultiTexCoord3iARB((GLenum)target, (GLint )s, (GLint )t, (GLint )r);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19120,7 +19122,7 @@ TclGL_glMultiTexCoord3ivARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord3ivARB((GLenum)target, (GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19167,7 +19169,7 @@ TclGL_glMultiTexCoord3sARBCmd(
     Tcl_GetIntFromObj(interp, objv[3], &t);
     Tcl_GetIntFromObj(interp, objv[4], &r);
     glMultiTexCoord3sARB((GLenum)target, (GLshort )s, (GLshort )t, (GLshort )r);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19210,7 +19212,7 @@ TclGL_glMultiTexCoord3svARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord3svARB((GLenum)target, (GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19259,7 +19261,7 @@ TclGL_glMultiTexCoord4dARBCmd(
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     Tcl_GetDoubleFromObj(interp, objv[5], &q);
     glMultiTexCoord4dARB((GLenum)target, (GLdouble )s, (GLdouble )t, (GLdouble )r, (GLdouble )q);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19302,7 +19304,7 @@ TclGL_glMultiTexCoord4dvARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord4dvARB((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19351,7 +19353,7 @@ TclGL_glMultiTexCoord4fARBCmd(
     Tcl_GetDoubleFromObj(interp, objv[4], &r);
     Tcl_GetDoubleFromObj(interp, objv[5], &q);
     glMultiTexCoord4fARB((GLenum)target, (GLfloat )s, (GLfloat )t, (GLfloat )r, (GLfloat )q);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19394,7 +19396,7 @@ TclGL_glMultiTexCoord4fvARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord4fvARB((GLenum)target, (void *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19443,7 +19445,7 @@ TclGL_glMultiTexCoord4iARBCmd(
     Tcl_GetIntFromObj(interp, objv[4], &r);
     Tcl_GetIntFromObj(interp, objv[5], &q);
     glMultiTexCoord4iARB((GLenum)target, (GLint )s, (GLint )t, (GLint )r, (GLint )q);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19486,7 +19488,7 @@ TclGL_glMultiTexCoord4ivARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord4ivARB((GLenum)target, (GLint *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19535,7 +19537,7 @@ TclGL_glMultiTexCoord4sARBCmd(
     Tcl_GetIntFromObj(interp, objv[4], &r);
     Tcl_GetIntFromObj(interp, objv[5], &q);
     glMultiTexCoord4sARB((GLenum)target, (GLshort )s, (GLshort )t, (GLshort )r, (GLshort )q);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19578,7 +19580,7 @@ TclGL_glMultiTexCoord4svARBCmd(
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
     glMultiTexCoord4svARB((GLenum)target, (GLshort *)v);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }
 
 /*
@@ -19626,5 +19628,5 @@ TclGL_glBlendEquationSeparateATICmd(
     }
     modeA = (GLenum)Tcl_GetHashValue(hPtr); 
     glBlendEquationSeparateATI((GLenum)modeRGB, (GLenum)modeA);
-    return GetGLError(interp);
+    return GetGLError(interp, infoPtr);
 }

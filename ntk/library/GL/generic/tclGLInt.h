@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLInt.h,v 1.1.2.2 2007/10/29 15:25:59 wiede Exp $
+ * RCS: @(#) $Id: tclGLInt.h,v 1.1.2.3 2007/10/30 21:59:32 wiede Exp $
  */
 
 #include <string.h>
@@ -36,6 +36,7 @@
 
 typedef struct TclGLInfo {
     int version;
+    int noGLGetError;
 #include "tclGLHashTables.h"
 } TclGLInfo;
 

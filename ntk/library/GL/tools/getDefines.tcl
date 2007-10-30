@@ -437,8 +437,13 @@ puts stderr "NOYvoid!$name!$entry!"
                 lappend funcLst [join $funcVarDecls \n]
 		lappend funcLst "\n    glResult = 0;"
 		lappend funcLst "    hPtr = NULL;"
-#		lappend funcLst [join $varInits \n]
 		lappend funcLst "    infoPtr = (TclGLInfo *)clientData;"
+		if {$name eq "glBegin"} {
+		    lappend funcLst "    infoPtr->noGLGetError = 1;"
+		}
+		if {$name eq "glEnd"} {
+		    lappend funcLst "    infoPtr->noGLGetError = 0;"
+		}
                 lappend funcLst "    TclGLShowArgs(1, \"TclGL_${name}Cmd\", objc, objv);"
                 lappend funcLst [format $argsCheck [expr {$paramNum + 1}] $name $param_info]
 		if {$notYet} {
@@ -448,7 +453,7 @@ puts stderr "NOT YET !$name!"
 		} else {
 		    lappend funcLst [join $getParamInfos \n]
 		    lappend funcLst "    ${name}(${paramCallInfos});"
-		    lappend funcLst "    return GetGLError(interp);"
+		    lappend funcLst "    return GetGLError(interp, infoPtr);"
 		}
                 lappend funcLst $closeCurly
 	    }

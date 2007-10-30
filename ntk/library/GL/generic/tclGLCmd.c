@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.4 2007/10/29 21:36:07 wiede Exp $
+ * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.5 2007/10/30 21:59:30 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -71,11 +71,15 @@ static const struct NameProcMap glCmds2[] = {
 
 static int
 GetGLError (
-    Tcl_Interp *interp)
+    Tcl_Interp *interp,
+    TclGLInfo *infoPtr)
 {
     GLenum glResult;
     int result;
 
+    if (infoPtr->noGLGetError) {
+        return TCL_OK;
+    }
     glResult = glGetError();
     result = TCL_ERROR;
     switch (glResult) {

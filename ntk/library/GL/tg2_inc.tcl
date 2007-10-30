@@ -35,7 +35,7 @@ proc Draw {} {
     upvar lst lst
     upvar data data
 
-    ::ntk::glfw::Glfw glClearColor 0.25 0.0 0.0 0.0
+    ::ntk::glfw::Glfw glClearColor 0.55 0.55 0.55 0.0
     ::ntk::glfw::Glfw glClear GL_COLOR_BUFFER_BIT
     testRender
     ::ntk::glfw::Glfw swapBuffers
