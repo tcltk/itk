@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLFWCmd.c,v 1.1.2.1 2007/10/31 09:26:14 wiede Exp $
+ * RCS: @(#) $Id: tclGLFWCmd.c,v 1.1.2.2 2007/10/31 10:09:58 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -207,28 +207,18 @@ TclGLFWGetUsage(
     Tcl_Obj *objPtr)       /* returns: summary of usage info */
 {
     char *spaces = "  ";
-    int isOpenEnded = 0;
 
     int i;
 
     for (i=0; GLFWMethodList[i].name != NULL; i++) {
-        if (*GLFWMethodList[i].name == '@'
-	        && strcmp(GLFWMethodList[i].name,"@error") == 0) {
-            isOpenEnded = 1;
-        } else {
-            Tcl_AppendToObj(objPtr, spaces, -1);
-            Tcl_AppendToObj(objPtr, "ntk glfw ", -1);
-            Tcl_AppendToObj(objPtr, GLFWMethodList[i].name, -1);
-	    if (strlen(GLFWMethodList[i].usage) > 0) {
-              Tcl_AppendToObj(objPtr, " ", -1);
-              Tcl_AppendToObj(objPtr, GLFWMethodList[i].usage, -1);
-	    }
-            spaces = "\n  ";
-        }
-    }
-    if (isOpenEnded) {
-        Tcl_AppendToObj(objPtr,
-            "\n...and others described on the man page", -1);
+        Tcl_AppendToObj(objPtr, spaces, -1);
+        Tcl_AppendToObj(objPtr, "ntk glfw ", -1);
+        Tcl_AppendToObj(objPtr, GLFWMethodList[i].name, -1);
+        if (strlen(GLFWMethodList[i].usage) > 0) {
+            Tcl_AppendToObj(objPtr, " ", -1);
+            Tcl_AppendToObj(objPtr, GLFWMethodList[i].usage, -1);
+	}
+        spaces = "\n  ";
     }
 }
 
@@ -314,6 +304,7 @@ TclGLFW_TerminateCmd(
         return TCL_ERROR;
     }
     glfwTerminate();
+/* FIX ME have to free the TclGLFWWindow structure(s) here !! */
     return TCL_OK;
 }
 
@@ -404,6 +395,7 @@ TclGLFW_CloseWindowCmd(
         return TCL_ERROR;
     }
     glfwCloseWindow();
+/* FIX ME have to free the TclGLFWWindow structure here !! */
     return TCL_OK;
 }
 
@@ -923,6 +915,7 @@ void DispatchKey(
     objPtr = TclGLFWDefine2Key(key);
 //fprintf(stderr, "DispatchKey!%s!%d!%d!\n", objPtr == NULL ? "(nil)" : Tcl_GetString(objPtr), key, state);
     listPtr = Tcl_NewListObj(0, NULL);
+    Tcl_IncrRefCount (listPtr);
     keyPtr = Tcl_NewIntObj (key);
     Tcl_IncrRefCount (keyPtr);
     statePtr = Tcl_NewIntObj (state);
@@ -932,6 +925,8 @@ void DispatchKey(
     Tcl_ListObjAppendElement(_interp, listPtr, statePtr);
 //fprintf(stderr, "CALL!%s!\n", Tcl_GetString(listPtr));
     result = Tcl_GlobalEvalObj (_interp, listPtr);
+    Tcl_DecrRefCount (listPtr);
+    Tcl_DecrRefCount (keyPtr);
 }
 
 /*
@@ -956,6 +951,7 @@ void DispatchMousePos(
     infoPtr = Tcl_GetAssocData(_interp, TCL_GLFW_INTERP_DATA, NULL);
     winPtr = infoPtr->currWindow;
     listPtr = Tcl_NewListObj(0, NULL);
+    Tcl_IncrRefCount (listPtr);
     xPtr = Tcl_NewIntObj (x);
     Tcl_IncrRefCount (xPtr);
     yPtr = Tcl_NewIntObj (y);
@@ -964,6 +960,9 @@ void DispatchMousePos(
     Tcl_ListObjAppendElement(_interp, listPtr, xPtr);
     Tcl_ListObjAppendElement(_interp, listPtr, yPtr);
     result = Tcl_GlobalEvalObj (_interp, listPtr);
+    Tcl_DecrRefCount (xPtr);
+    Tcl_DecrRefCount (yPtr);
+    Tcl_DecrRefCount (listPtr);
 }
 
 /*
@@ -988,6 +987,7 @@ void DispatchMouseButton(
     infoPtr = Tcl_GetAssocData(_interp, TCL_GLFW_INTERP_DATA, NULL);
     winPtr = infoPtr->currWindow;
     listPtr = Tcl_NewListObj(0, NULL);
+    Tcl_IncrRefCount (listPtr);
     whichPtr = Tcl_NewIntObj (which);
     Tcl_IncrRefCount (whichPtr);
     whatPtr = Tcl_NewIntObj (what);
@@ -996,6 +996,9 @@ void DispatchMouseButton(
     Tcl_ListObjAppendElement(_interp, listPtr, whichPtr);
     Tcl_ListObjAppendElement(_interp, listPtr, whatPtr);
     result = Tcl_GlobalEvalObj (_interp, listPtr);
+    Tcl_DecrRefCount (whichPtr);
+    Tcl_DecrRefCount (whatPtr);
+    Tcl_DecrRefCount (listPtr);
 }
 
 /*
@@ -1018,11 +1021,14 @@ void DispatchMouseWheel(
     infoPtr = Tcl_GetAssocData(_interp, TCL_GLFW_INTERP_DATA, NULL);
     winPtr = infoPtr->currWindow;
     listPtr = Tcl_NewListObj(0, NULL);
+    Tcl_IncrRefCount (listPtr);
     wherePtr = Tcl_NewIntObj (where);
     Tcl_IncrRefCount (wherePtr);
     Tcl_ListObjAppendElement (_interp, listPtr, winPtr->mouseWheelCallback);
     Tcl_ListObjAppendElement(_interp, listPtr, wherePtr);
     result = Tcl_GlobalEvalObj (_interp, listPtr);
+    Tcl_DecrRefCount (wherePtr);
+    Tcl_DecrRefCount (listPtr);
 }
 
 /*
@@ -1047,6 +1053,7 @@ void DispatchWindowSize(
     infoPtr = Tcl_GetAssocData(_interp, TCL_GLFW_INTERP_DATA, NULL);
     winPtr = infoPtr->currWindow;
     listPtr = Tcl_NewListObj(0, NULL);
+    Tcl_IncrRefCount (listPtr);
     widthPtr = Tcl_NewIntObj (width);
     Tcl_IncrRefCount (widthPtr);
     heightPtr = Tcl_NewIntObj (height);
@@ -1055,6 +1062,9 @@ void DispatchWindowSize(
     Tcl_ListObjAppendElement(_interp, listPtr, widthPtr);
     Tcl_ListObjAppendElement(_interp, listPtr, heightPtr);
     result = Tcl_GlobalEvalObj (_interp, listPtr);
+    Tcl_DecrRefCount (widthPtr);
+    Tcl_DecrRefCount (heightPtr);
+    Tcl_DecrRefCount (listPtr);
 }
 
 /*
@@ -1076,8 +1086,10 @@ void DispatchWindowRefresh(
     infoPtr = Tcl_GetAssocData(_interp, TCL_GLFW_INTERP_DATA, NULL);
     winPtr = infoPtr->currWindow;
     listPtr = Tcl_NewListObj(0, NULL);
+    Tcl_IncrRefCount (listPtr);
     Tcl_ListObjAppendElement (_interp, listPtr, winPtr->windowRefreshCallback);
     result = Tcl_GlobalEvalObj (_interp, listPtr);
+    Tcl_DecrRefCount (listPtr);
 }
 
 /*
@@ -1100,8 +1112,10 @@ void DispatchWindowClose(
     infoPtr = Tcl_GetAssocData(_interp, TCL_GLFW_INTERP_DATA, NULL);
     winPtr = infoPtr->currWindow;
     listPtr = Tcl_NewListObj(0, NULL);
+    Tcl_IncrRefCount (listPtr);
     Tcl_ListObjAppendElement (_interp, listPtr, winPtr->windowCloseCallback);
     result = Tcl_GlobalEvalObj (_interp, listPtr);
+    Tcl_DecrRefCount (listPtr);
 }
 
 /*
@@ -1413,7 +1427,7 @@ TclGLFW_DefaultCmd(
 
     infoPtr = (TclGLFWInfo *)clientData;
     result = TCL_ERROR;
-    TclGLFWShowArgs(1, "TclGLFW_DefaultCmd", objc, objv);
+    TclGLFWShowArgs(0, "TclGLFW_DefaultCmd", objc, objv);
 //    TclGLFW_GetEnsembleUsageForObj(interp, objv[0], resultPtr);
     return result;
 }
