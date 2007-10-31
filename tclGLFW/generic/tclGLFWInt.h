@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLFWInt.h,v 1.1.2.1 2007/10/31 09:26:15 wiede Exp $
+ * RCS: @(#) $Id: tclGLFWInt.h,v 1.1.2.2 2007/10/31 13:52:27 wiede Exp $
  */
 
 #include <string.h>
@@ -33,6 +33,24 @@
 
 #define TCL_GLFW_INTERP_DATA "tclGLFW_data"
 #define TCL_GLFW_INFO_VERSION 1
+
+/*
+ * Convenience macros for iterating through hash tables. FOREACH_HASH_DECLS
+ * sets up the declarations needed for the main macro, FOREACH_HASH, which
+ * does the actual iteration. FOREACH_HASH_VALUE is a restricted version that
+ * only iterates over values.
+ */
+
+#define FOREACH_HASH_DECLS \
+    Tcl_HashEntry *hPtr;Tcl_HashSearch search
+#define FOREACH_HASH(key,val,tablePtr) \
+    for(hPtr=Tcl_FirstHashEntry((tablePtr),&search); hPtr!=NULL ? \
+            ((key)=(void *)Tcl_GetHashKey((tablePtr),hPtr),\
+            (val)=Tcl_GetHashValue(hPtr),1):0; hPtr=Tcl_NextHashEntry(&search))
+#define FOREACH_HASH_VALUE(val,tablePtr) \
+    for(hPtr=Tcl_FirstHashEntry((tablePtr),&search); hPtr!=NULL ? \
+            ((val)=Tcl_GetHashValue(hPtr),1):0;hPtr=Tcl_NextHashEntry(&search))
+
 #define WINDOW_ALLOC 20
 
 typedef struct TclGLFWWindow {

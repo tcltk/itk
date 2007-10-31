@@ -20,7 +20,7 @@ INSTALL_SCRIPT=${INSTALL}
 PACKAGE_NAME=TclGLFW
 PACKAGE_VERSION=0.1
 CC=gcc
-CFLAGS_DEFAULT=-g
+CFLAGS_DEFAULT=-g -DTCL_MEM_DEBUG
 CFLAGS_WARNING=-Wall -Wno-implicit-int
 CLEANFILES= pkgIndex.tcl
 EXEEXT=
@@ -40,8 +40,8 @@ SHLIB_LD=${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}
 SHLIB_LD_LIBS=${LIBS} /home/arnulf/SOURCES/tclOO/itcl-ng/itk/ntk/library/glfw/lib/x11/libglfw.a -L/home/arnulf/SOURCES/tclOO/head/unix -ltclstub8.5 \
 -L/usr/X11/lib -lGLU -lGL -lX11 -lXrandr -pthread -lm
 STLIB_LD=${AR} cr
-TCL_SRC_DIR=/home/arnulf/SOURCES/tclOO/head	                             TCL_BIN_DIR=/home/arnulf/SOURCES/tclOO/head/unix
-# Not actually used, but can help when tracing errors	                   TCL_LIBS=${DL_LIBS} ${LIBS} ${MATH_LIBS}
+TCL_SRC_DIR=/home/arnulf/SOURCES/tclOO/head				     TCL_BIN_DIR=/home/arnulf/SOURCES/tclOO/head/unix
+# Not actually used, but can help when tracing errors			   TCL_LIBS=${DL_LIBS} ${LIBS} ${MATH_LIBS}
 TCLSH_PROGRAM=/home/arnulf/SOURCES/tclOO/head/unix/tclsh
 INCLUDES= -I. -I"./generic" -I"/home/arnulf/SOURCES/tclOO/head/generic" -I"/unix"
 EXTRA_CFLAGS=
@@ -144,3 +144,18 @@ tclGLFWCmd.o: $(GENERIC_DIR)/tclGLFWInt.h $(GENERIC_DIR)/tclGLFW.h
 tclGLFWUtil.o: $(GENERIC_DIR)/tclGLFWInt.h $(GENERIC_DIR)/tclGLFW.h
 
 tclGLFWMaps.o: $(GENERIC_DIR)/tclGLFWInt.h $(GENERIC_DIR)/tclGLFW.h
+
+
+#========================================================================
+# How to clean up after a build.
+#========================================================================
+
+clean:
+	-test -z "$(BINARIES)" || rm -f $(BINARIES)
+	-rm -f *.$(OBJEXT) core *.core
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+distclean: clean
+	-rm -f *.tab.c
+	-rm -f $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log config.status
+

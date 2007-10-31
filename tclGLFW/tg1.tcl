@@ -24,10 +24,12 @@ puts stderr "win!$win!"
 ::ntk::glfw::GLFW setWindowTitle "Hallo Arnulf"
 set running 1
 puts stderr "start!"
+if {0} {
 set modes [::ntk::glfw::GLFW getVideoModes]
 puts stderr "modes![join $modes \n]!"
 set dmode [::ntk::glfw::GLFW getDesktopMode]
 puts stderr "dmode!$dmode!"
+}
 proc DispatchKey {key state} {
     puts stderr "DispatchKey!$key!$state!"
 }

@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLFWCmd.c,v 1.1.2.2 2007/10/31 10:09:58 wiede Exp $
+ * RCS: @(#) $Id: tclGLFWCmd.c,v 1.1.2.3 2007/10/31 13:52:25 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -296,6 +296,11 @@ TclGLFW_TerminateCmd(
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
 {
+    FOREACH_HASH_DECLS;
+    TclGLFWInfo *infoPtr;
+    TclGLFWWindow *winPtr;
+
+    infoPtr = (TclGLFWInfo *)clientData;
     TclGLFWShowArgs(1, "TclGLFW_TerminateCmd", objc, objv);
     if (objc != 1) {
 	Tcl_AppendResult(interp,
@@ -304,7 +309,12 @@ TclGLFW_TerminateCmd(
         return TCL_ERROR;
     }
     glfwTerminate();
-/* FIX ME have to free the TclGLFWWindow structure(s) here !! */
+    FOREACH_HASH_VALUE(winPtr, &infoPtr->windowHandles) {
+        Tcl_IncrRefCount(winPtr->handlePtr);
+	ckfree((char *)winPtr);
+    }
+//TclDumpMemoryInfo(stderr);
+//Tcl_DumpActiveMemory(NULL);
     return TCL_OK;
 }
 
@@ -589,6 +599,11 @@ TclGLFW_GetVideoModesCmd(
 {
     Tcl_Obj *listPtr;
     Tcl_Obj *listPtr2;
+    Tcl_Obj *widthPtr;
+    Tcl_Obj *heightPtr;
+    Tcl_Obj *redBitsPtr;
+    Tcl_Obj *greenBitsPtr;
+    Tcl_Obj *blueBitsPtr;
     TclGLFWInfo *infoPtr;
     GLFWvidmode *modePtr;
     GLFWvidmode mode;
@@ -609,12 +624,29 @@ TclGLFW_GetVideoModesCmd(
     for(i=0; i<numModes;i++) {
         mode = modePtr[i];
         listPtr2 = Tcl_NewListObj(0, NULL);
-        Tcl_ListObjAppendElement(interp, listPtr2, Tcl_NewIntObj(mode.Height));
-        Tcl_ListObjAppendElement(interp, listPtr2, Tcl_NewIntObj(mode.Width));
-        Tcl_ListObjAppendElement(interp, listPtr2, Tcl_NewIntObj(mode.RedBits));
-        Tcl_ListObjAppendElement(interp, listPtr2, Tcl_NewIntObj(mode.GreenBits));
-        Tcl_ListObjAppendElement(interp, listPtr2, Tcl_NewIntObj(mode.BlueBits));
+	Tcl_IncrRefCount(listPtr2);
+	heightPtr = Tcl_NewIntObj(mode.Height);
+	Tcl_IncrRefCount(heightPtr);
+	widthPtr = Tcl_NewIntObj(mode.Width);
+	Tcl_IncrRefCount(widthPtr);
+	redBitsPtr = Tcl_NewIntObj(mode.RedBits);
+	Tcl_IncrRefCount(redBitsPtr);
+	greenBitsPtr = Tcl_NewIntObj(mode.GreenBits);
+	Tcl_IncrRefCount(greenBitsPtr);
+	blueBitsPtr = Tcl_NewIntObj(mode.BlueBits);
+	Tcl_IncrRefCount(blueBitsPtr);
+        Tcl_ListObjAppendElement(interp, listPtr2, heightPtr);
+        Tcl_ListObjAppendElement(interp, listPtr2, widthPtr);
+        Tcl_ListObjAppendElement(interp, listPtr2, redBitsPtr);
+        Tcl_ListObjAppendElement(interp, listPtr2, greenBitsPtr);
+        Tcl_ListObjAppendElement(interp, listPtr2, blueBitsPtr);
         Tcl_ListObjAppendElement(interp, listPtr, listPtr2);
+	Tcl_DecrRefCount(listPtr2);
+	Tcl_DecrRefCount(heightPtr);
+	Tcl_DecrRefCount(widthPtr);
+	Tcl_DecrRefCount(redBitsPtr);
+	Tcl_DecrRefCount(greenBitsPtr);
+	Tcl_DecrRefCount(blueBitsPtr);
     }
     Tcl_SetObjResult(interp, listPtr);
     return TCL_OK;
@@ -788,6 +820,7 @@ TclGLFW_GetWindowParamCmd(
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
 {
+    Tcl_Obj *objPtr;
     TclGLFWInfo *infoPtr;
     const char *token;
     int param;
@@ -809,7 +842,10 @@ TclGLFW_GetWindowParamCmd(
         return TCL_ERROR;
     }
     value = glfwGetWindowParam(param);
-    Tcl_SetObjResult(interp, Tcl_NewIntObj(value));
+    objPtr = Tcl_NewIntObj(value);
+    Tcl_IncrRefCount(objPtr);
+    Tcl_SetObjResult(interp, objPtr);
+    Tcl_DecrRefCount(objPtr);
     return TCL_OK;
 }
 
@@ -926,6 +962,7 @@ void DispatchKey(
 //fprintf(stderr, "CALL!%s!\n", Tcl_GetString(listPtr));
     result = Tcl_GlobalEvalObj (_interp, listPtr);
     Tcl_DecrRefCount (listPtr);
+    Tcl_DecrRefCount (statePtr);
     Tcl_DecrRefCount (keyPtr);
 }
 
@@ -948,6 +985,7 @@ void DispatchMousePos(
     TclGLFWInfo *infoPtr;
     int result;
 
+fprintf(stderr, "DispatchMousePos\n");
     infoPtr = Tcl_GetAssocData(_interp, TCL_GLFW_INTERP_DATA, NULL);
     winPtr = infoPtr->currWindow;
     listPtr = Tcl_NewListObj(0, NULL);
@@ -963,6 +1001,7 @@ void DispatchMousePos(
     Tcl_DecrRefCount (xPtr);
     Tcl_DecrRefCount (yPtr);
     Tcl_DecrRefCount (listPtr);
+fprintf(stderr, "DispatchMousePos END\n");
 }
 
 /*
@@ -1488,8 +1527,11 @@ TclGLFW_glDrawPixelsCmd(
 	        *cp = (unsigned char)atoi(fldv[f]);
 	        cp++;
 	    }
+	    ckfree((char *)fldv);
 	}
+	ckfree((char *)colv);
     }
+    ckfree((char *)rowv);
     glDrawPixels(width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
     ckfree((char *)data);
     return result;
