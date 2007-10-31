@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLFWCmd.c,v 1.1.2.5 2007/10/31 16:06:24 wiede Exp $
+ * RCS: @(#) $Id: tclGLFWCmd.c,v 1.1.2.6 2007/10/31 17:08:33 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -43,7 +43,6 @@ Tcl_ObjCmdProc TclGLFW_DefaultCmd;
 Tcl_ObjCmdProc TclGLFW_UnknownCmd;
 Tcl_ObjCmdProc TclGLFW_WaitEventsCmd;
 Tcl_ObjCmdProc TclGLFW_DrawMegaimageCmd;
-Tcl_ObjCmdProc TclGLFW_glDrawPixelsCmd;
 
 typedef struct GLFWMethod {
     char* name;              /* method name */
@@ -83,7 +82,6 @@ static GLFWMethod GLFWMethodList[] = {
     { "setMouseWheelCallback", "functionName",
             TclGLFW_SetMouseWheelCallbackCmd },
     { "waitEvents", "", TclGLFW_WaitEventsCmd },
-    { "glDrawPixels", "width height <pixel-list>", TclGLFW_glDrawPixelsCmd },
     { "drawMegaimage", "width height <pixel-list>", TclGLFW_DrawMegaimageCmd },
     /*
      *  Add an error handler to support all of the usual inquiries
@@ -132,7 +130,6 @@ static const struct NameProcMap glfwCmds2[] = {
             TclGLFW_SetWindowCloseCallbackCmd },
     { "::ntk::glfw::GLFW::waitEvents", TclGLFW_WaitEventsCmd },
     { "::ntk::glfw::GLFW::unknown", TclGLFW_UnknownCmd },
-    { "::ntk::glfw::GLFW::glDrawPixels", TclGLFW_glDrawPixelsCmd },
     { "::ntk::glfw::GLFW::drawMegaimage", TclGLFW_DrawMegaimageCmd },
     /*
      *  Add an error handler
@@ -1492,72 +1489,6 @@ TclGLFW_WaitEventsCmd(
     return TCL_OK;
 }
 
-#include <GL/gl.h>
-/*
- * ------------------------------------------------------------------------
- *  TclGLFW_glDrawPixelsCmd()
- *
- *  Handles drawing of a pixel area with rgba values
- *
- *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
- * ------------------------------------------------------------------------
- */
-/* ARGSUSED */
-int
-TclGLFW_glDrawPixelsCmd(
-    ClientData clientData, /* infoPtr */
-    Tcl_Interp *interp,    /* current interpreter */
-    int objc,              /* number of arguments */
-    Tcl_Obj *CONST objv[]) /* argument objects */
-{
-    TclGLFWInfo *infoPtr;
-    unsigned char *data;
-    const char **rowv;
-    const char **colv;
-    const char **fldv;
-    unsigned char *cp;
-    int result;
-    int width;
-    int height;
-    int rows;
-    int cols;
-    int flds;
-    int r;
-    int c;
-    int f;
-
-    infoPtr = (TclGLFWInfo *)clientData;
-    result = TCL_OK;
-    TclGLFWShowArgs(1, "TclGLFW_glDrawPixelsCmd", objc, objv);
-    if (objc != 4) {
-	Tcl_AppendResult(interp,
-	        "wrong # args: should be \"ntk glfw drawPixels width height <rgba-list>\"",
-	        NULL);
-        return TCL_ERROR;
-    }
-    Tcl_GetIntFromObj(interp, objv[1], &width);
-    Tcl_GetIntFromObj(interp, objv[2], &height);
-    Tcl_SplitList(interp, Tcl_GetString(objv[3]), &rows, &rowv);
-    data = (unsigned char *)ckalloc(sizeof(unsigned char)*(width*height*4));
-    cp = data;
-    for(r=0;r<rows;r++) {
-        Tcl_SplitList(interp, rowv[r], &cols, &colv);
-        for(c=0;c<cols;c++) {
-            Tcl_SplitList(interp, colv[c], &flds, &fldv);
-            for(f=0;f<flds;f++) {
-	        *cp = (unsigned char)atoi(fldv[f]);
-	        cp++;
-	    }
-	    ckfree((char *)fldv);
-	}
-	ckfree((char *)colv);
-    }
-    ckfree((char *)rowv);
-    glDrawPixels(width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    ckfree((char *)data);
-    return result;
-}
-
 #include "/home/arnulf/SOURCES/MEGAIMAGE/megapkg/csrc/include/megaimage_shared.h"
 /*
  * ------------------------------------------------------------------------
@@ -1595,13 +1526,7 @@ TclGLFW_DrawMegaimageCmd(
     hdPtr = Tcl_GetByteArrayFromObj(objv[1], &lgth);
     memcpy(&megaimageHeader, hdPtr, sizeof(struct megaimage_header));
     data = hdPtr + sizeof(struct megaimage_header);
-//    glGet(GL_CURRENT_RASTER_POSITION);
     glDrawPixels(megaimageHeader.width, megaimageHeader.height,
             GL_RGBA, GL_UNSIGNED_BYTE, data);
-#ifdef NOTDEF
-    glRotatef(5.0f,0.0f,0.0f,1.0f);
-    glRotatef(5.0f,0.0f,1.0f,0.0f);
-    glRotatef(5.0f,1.0f,0.0f,0.0f);
-#endif
     return result;
 }
