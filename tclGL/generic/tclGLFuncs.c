@@ -108,7 +108,6 @@ TclGL_glClearCmd(
                 NULL);
         return TCL_ERROR;
     }
-
     int value;
     int isEnd;
     char *cp;
@@ -148,8 +147,7 @@ TclGL_glClearCmd(
 	    break;
 	}
     }
-    mask = value;
-
+    mask = value; 
     glClear((GLbitfield)mask);
     return GetGLError(interp, infoPtr);
 }
@@ -661,6 +659,7 @@ TclGL_glPolygonStippleCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *mask;
 
     glResult = 0;
@@ -673,7 +672,7 @@ TclGL_glPolygonStippleCmd(
                 NULL);
         return TCL_ERROR;
     }
-    mask = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    mask = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glPolygonStipple((GLubyte *)mask);
     return GetGLError(interp, infoPtr);
 }
@@ -697,6 +696,7 @@ TclGL_glGetPolygonStippleCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *mask;
 
     glResult = 0;
@@ -709,7 +709,7 @@ TclGL_glGetPolygonStippleCmd(
                 NULL);
         return TCL_ERROR;
     }
-    mask = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    mask = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glGetPolygonStipple((GLubyte *)mask);
     return GetGLError(interp, infoPtr);
 }
@@ -769,6 +769,7 @@ TclGL_glEdgeFlagvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *flag;
 
     glResult = 0;
@@ -781,7 +782,7 @@ TclGL_glEdgeFlagvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    flag = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    flag = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glEdgeFlagv((GLboolean *)flag);
     return GetGLError(interp, infoPtr);
 }
@@ -848,6 +849,7 @@ TclGL_glClipPlaneCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int plane;
+    int byteArrayLength2;
     double *equation;
 
     glResult = 0;
@@ -866,7 +868,7 @@ TclGL_glClipPlaneCmd(
 	return TCL_ERROR;
     }
     plane = (GLenum)Tcl_GetHashValue(hPtr); 
-    equation = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    equation = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glClipPlane((GLenum)plane, (void *)equation);
     return GetGLError(interp, infoPtr);
 }
@@ -891,6 +893,7 @@ TclGL_glGetClipPlaneCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int plane;
+    int byteArrayLength2;
     double *equation;
 
     glResult = 0;
@@ -909,7 +912,7 @@ TclGL_glGetClipPlaneCmd(
 	return TCL_ERROR;
     }
     plane = (GLenum)Tcl_GetHashValue(hPtr); 
-    equation = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    equation = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glGetClipPlane((GLenum)plane, (void *)equation);
     return GetGLError(interp, infoPtr);
 }
@@ -1221,6 +1224,7 @@ TclGL_glGetBooleanvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int pname;
+    int byteArrayLength2;
     int *params;
 
     glResult = 0;
@@ -1239,7 +1243,7 @@ TclGL_glGetBooleanvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glGetBooleanv((GLenum)pname, (GLboolean *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -1264,6 +1268,7 @@ TclGL_glGetDoublevCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int pname;
+    int byteArrayLength2;
     double *params;
 
     glResult = 0;
@@ -1282,7 +1287,7 @@ TclGL_glGetDoublevCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glGetDoublev((GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -1307,6 +1312,7 @@ TclGL_glGetFloatvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int pname;
+    int byteArrayLength2;
     double *params;
 
     glResult = 0;
@@ -1325,7 +1331,7 @@ TclGL_glGetFloatvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glGetFloatv((GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -1350,6 +1356,7 @@ TclGL_glGetIntegervCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int pname;
+    int byteArrayLength2;
     int *params;
 
     glResult = 0;
@@ -1368,7 +1375,7 @@ TclGL_glGetIntegervCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glGetIntegerv((GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -1404,7 +1411,6 @@ TclGL_glPushAttribCmd(
                 NULL);
         return TCL_ERROR;
     }
-
     int value;
     int isEnd;
     char *cp;
@@ -1444,8 +1450,7 @@ TclGL_glPushAttribCmd(
 	    break;
 	}
     }
-    mask = value;
-
+    mask = value; 
     glPushAttrib((GLbitfield)mask);
     return GetGLError(interp, infoPtr);
 }
@@ -1516,7 +1521,6 @@ TclGL_glPushClientAttribCmd(
                 NULL);
         return TCL_ERROR;
     }
-
     int value;
     int isEnd;
     char *cp;
@@ -1556,8 +1560,7 @@ TclGL_glPushClientAttribCmd(
 	    break;
 	}
     }
-    mask = value;
-
+    mask = value; 
     glPushClientAttrib((GLbitfield)mask);
     return GetGLError(interp, infoPtr);
 }
@@ -2326,6 +2329,7 @@ TclGL_glLoadMatrixdCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *m;
 
     glResult = 0;
@@ -2338,7 +2342,7 @@ TclGL_glLoadMatrixdCmd(
                 NULL);
         return TCL_ERROR;
     }
-    m = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    m = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glLoadMatrixd((void *)m);
     return GetGLError(interp, infoPtr);
 }
@@ -2362,6 +2366,7 @@ TclGL_glLoadMatrixfCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *m;
 
     glResult = 0;
@@ -2374,7 +2379,7 @@ TclGL_glLoadMatrixfCmd(
                 NULL);
         return TCL_ERROR;
     }
-    m = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    m = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glLoadMatrixf((void *)m);
     return GetGLError(interp, infoPtr);
 }
@@ -2398,6 +2403,7 @@ TclGL_glMultMatrixdCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *m;
 
     glResult = 0;
@@ -2410,7 +2416,7 @@ TclGL_glMultMatrixdCmd(
                 NULL);
         return TCL_ERROR;
     }
-    m = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    m = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glMultMatrixd((void *)m);
     return GetGLError(interp, infoPtr);
 }
@@ -2434,6 +2440,7 @@ TclGL_glMultMatrixfCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *m;
 
     glResult = 0;
@@ -2446,7 +2453,7 @@ TclGL_glMultMatrixfCmd(
                 NULL);
         return TCL_ERROR;
     }
-    m = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    m = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glMultMatrixf((void *)m);
     return GetGLError(interp, infoPtr);
 }
@@ -2940,6 +2947,7 @@ TclGL_glCallListsCmd(
     int glResult;
     int n;
     int type;
+    int byteArrayLength3;
     int *lists;
 
     glResult = 0;
@@ -2959,7 +2967,7 @@ TclGL_glCallListsCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    lists = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    lists = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glCallLists((GLsizei )n, (GLenum)type, (GLvoid *)lists);
     return GetGLError(interp, infoPtr);
 }
@@ -3577,6 +3585,7 @@ TclGL_glVertex2dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -3589,7 +3598,7 @@ TclGL_glVertex2dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glVertex2dv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3613,6 +3622,7 @@ TclGL_glVertex2fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -3625,7 +3635,7 @@ TclGL_glVertex2fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glVertex2fv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3649,6 +3659,7 @@ TclGL_glVertex2ivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -3661,7 +3672,7 @@ TclGL_glVertex2ivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glVertex2iv((GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3685,6 +3696,7 @@ TclGL_glVertex2svCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -3697,7 +3709,7 @@ TclGL_glVertex2svCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glVertex2sv((GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3721,6 +3733,7 @@ TclGL_glVertex3dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -3733,7 +3746,7 @@ TclGL_glVertex3dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glVertex3dv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3757,6 +3770,7 @@ TclGL_glVertex3fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -3769,7 +3783,7 @@ TclGL_glVertex3fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glVertex3fv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3793,6 +3807,7 @@ TclGL_glVertex3ivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -3805,7 +3820,7 @@ TclGL_glVertex3ivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glVertex3iv((GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3829,6 +3844,7 @@ TclGL_glVertex3svCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -3841,7 +3857,7 @@ TclGL_glVertex3svCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glVertex3sv((GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3865,6 +3881,7 @@ TclGL_glVertex4dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -3877,7 +3894,7 @@ TclGL_glVertex4dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glVertex4dv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3901,6 +3918,7 @@ TclGL_glVertex4fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -3913,7 +3931,7 @@ TclGL_glVertex4fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glVertex4fv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3937,6 +3955,7 @@ TclGL_glVertex4ivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -3949,7 +3968,7 @@ TclGL_glVertex4ivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glVertex4iv((GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3973,6 +3992,7 @@ TclGL_glVertex4svCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -3985,7 +4005,7 @@ TclGL_glVertex4svCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glVertex4sv((GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4209,6 +4229,7 @@ TclGL_glNormal3bvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -4221,7 +4242,7 @@ TclGL_glNormal3bvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glNormal3bv((GLbyte *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4245,6 +4266,7 @@ TclGL_glNormal3dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -4257,7 +4279,7 @@ TclGL_glNormal3dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glNormal3dv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4281,6 +4303,7 @@ TclGL_glNormal3fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -4293,7 +4316,7 @@ TclGL_glNormal3fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glNormal3fv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4317,6 +4340,7 @@ TclGL_glNormal3ivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -4329,7 +4353,7 @@ TclGL_glNormal3ivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glNormal3iv((GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4353,6 +4377,7 @@ TclGL_glNormal3svCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -4365,7 +4390,7 @@ TclGL_glNormal3svCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glNormal3sv((GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4569,6 +4594,7 @@ TclGL_glIndexdvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *c;
 
     glResult = 0;
@@ -4581,7 +4607,7 @@ TclGL_glIndexdvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    c = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glIndexdv((void *)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4605,6 +4631,7 @@ TclGL_glIndexfvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *c;
 
     glResult = 0;
@@ -4617,7 +4644,7 @@ TclGL_glIndexfvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    c = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glIndexfv((void *)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4641,6 +4668,7 @@ TclGL_glIndexivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *c;
 
     glResult = 0;
@@ -4653,7 +4681,7 @@ TclGL_glIndexivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    c = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glIndexiv((GLint *)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4677,6 +4705,7 @@ TclGL_glIndexsvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *c;
 
     glResult = 0;
@@ -4689,7 +4718,7 @@ TclGL_glIndexsvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    c = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glIndexsv((GLshort *)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4713,6 +4742,7 @@ TclGL_glIndexubvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *c;
 
     glResult = 0;
@@ -4725,7 +4755,7 @@ TclGL_glIndexubvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    c = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    c = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glIndexubv((GLubyte *)c);
     return GetGLError(interp, infoPtr);
 }
@@ -5405,6 +5435,7 @@ TclGL_glColor3bvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -5417,7 +5448,7 @@ TclGL_glColor3bvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor3bv((GLbyte *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5441,6 +5472,7 @@ TclGL_glColor3dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -5453,7 +5485,7 @@ TclGL_glColor3dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor3dv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5477,6 +5509,7 @@ TclGL_glColor3fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -5489,7 +5522,7 @@ TclGL_glColor3fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor3fv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5513,6 +5546,7 @@ TclGL_glColor3ivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -5525,7 +5559,7 @@ TclGL_glColor3ivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor3iv((GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5549,6 +5583,7 @@ TclGL_glColor3svCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -5561,7 +5596,7 @@ TclGL_glColor3svCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor3sv((GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5585,6 +5620,7 @@ TclGL_glColor3ubvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -5597,7 +5633,7 @@ TclGL_glColor3ubvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor3ubv((GLubyte *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5621,6 +5657,7 @@ TclGL_glColor3uivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -5633,7 +5670,7 @@ TclGL_glColor3uivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor3uiv((GLuint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5657,6 +5694,7 @@ TclGL_glColor3usvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -5669,7 +5707,7 @@ TclGL_glColor3usvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor3usv((GLushort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5693,6 +5731,7 @@ TclGL_glColor4bvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -5705,7 +5744,7 @@ TclGL_glColor4bvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor4bv((GLbyte *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5729,6 +5768,7 @@ TclGL_glColor4dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -5741,7 +5781,7 @@ TclGL_glColor4dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor4dv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5765,6 +5805,7 @@ TclGL_glColor4fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -5777,7 +5818,7 @@ TclGL_glColor4fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor4fv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5801,6 +5842,7 @@ TclGL_glColor4ivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -5813,7 +5855,7 @@ TclGL_glColor4ivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor4iv((GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5837,6 +5879,7 @@ TclGL_glColor4svCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -5849,7 +5892,7 @@ TclGL_glColor4svCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor4sv((GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5873,6 +5916,7 @@ TclGL_glColor4ubvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -5885,7 +5929,7 @@ TclGL_glColor4ubvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor4ubv((GLubyte *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5909,6 +5953,7 @@ TclGL_glColor4uivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -5921,7 +5966,7 @@ TclGL_glColor4uivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor4uiv((GLuint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5945,6 +5990,7 @@ TclGL_glColor4usvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -5957,7 +6003,7 @@ TclGL_glColor4usvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glColor4usv((GLushort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6605,6 +6651,7 @@ TclGL_glTexCoord1dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -6617,7 +6664,7 @@ TclGL_glTexCoord1dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord1dv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6641,6 +6688,7 @@ TclGL_glTexCoord1fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -6653,7 +6701,7 @@ TclGL_glTexCoord1fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord1fv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6677,6 +6725,7 @@ TclGL_glTexCoord1ivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -6689,7 +6738,7 @@ TclGL_glTexCoord1ivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord1iv((GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6713,6 +6762,7 @@ TclGL_glTexCoord1svCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -6725,7 +6775,7 @@ TclGL_glTexCoord1svCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord1sv((GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6749,6 +6799,7 @@ TclGL_glTexCoord2dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -6761,7 +6812,7 @@ TclGL_glTexCoord2dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord2dv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6785,6 +6836,7 @@ TclGL_glTexCoord2fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -6797,7 +6849,7 @@ TclGL_glTexCoord2fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord2fv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6821,6 +6873,7 @@ TclGL_glTexCoord2ivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -6833,7 +6886,7 @@ TclGL_glTexCoord2ivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord2iv((GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6857,6 +6910,7 @@ TclGL_glTexCoord2svCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -6869,7 +6923,7 @@ TclGL_glTexCoord2svCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord2sv((GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6893,6 +6947,7 @@ TclGL_glTexCoord3dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -6905,7 +6960,7 @@ TclGL_glTexCoord3dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord3dv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6929,6 +6984,7 @@ TclGL_glTexCoord3fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -6941,7 +6997,7 @@ TclGL_glTexCoord3fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord3fv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6965,6 +7021,7 @@ TclGL_glTexCoord3ivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -6977,7 +7034,7 @@ TclGL_glTexCoord3ivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord3iv((GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7001,6 +7058,7 @@ TclGL_glTexCoord3svCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -7013,7 +7071,7 @@ TclGL_glTexCoord3svCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord3sv((GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7037,6 +7095,7 @@ TclGL_glTexCoord4dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -7049,7 +7108,7 @@ TclGL_glTexCoord4dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord4dv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7073,6 +7132,7 @@ TclGL_glTexCoord4fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -7085,7 +7145,7 @@ TclGL_glTexCoord4fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord4fv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7109,6 +7169,7 @@ TclGL_glTexCoord4ivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -7121,7 +7182,7 @@ TclGL_glTexCoord4ivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord4iv((GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7145,6 +7206,7 @@ TclGL_glTexCoord4svCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -7157,7 +7219,7 @@ TclGL_glTexCoord4svCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glTexCoord4sv((GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7661,6 +7723,7 @@ TclGL_glRasterPos2dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -7673,7 +7736,7 @@ TclGL_glRasterPos2dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glRasterPos2dv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7697,6 +7760,7 @@ TclGL_glRasterPos2fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -7709,7 +7773,7 @@ TclGL_glRasterPos2fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glRasterPos2fv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7733,6 +7797,7 @@ TclGL_glRasterPos2ivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -7745,7 +7810,7 @@ TclGL_glRasterPos2ivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glRasterPos2iv((GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7769,6 +7834,7 @@ TclGL_glRasterPos2svCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -7781,7 +7847,7 @@ TclGL_glRasterPos2svCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glRasterPos2sv((GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7805,6 +7871,7 @@ TclGL_glRasterPos3dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -7817,7 +7884,7 @@ TclGL_glRasterPos3dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glRasterPos3dv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7841,6 +7908,7 @@ TclGL_glRasterPos3fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -7853,7 +7921,7 @@ TclGL_glRasterPos3fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glRasterPos3fv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7877,6 +7945,7 @@ TclGL_glRasterPos3ivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -7889,7 +7958,7 @@ TclGL_glRasterPos3ivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glRasterPos3iv((GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7913,6 +7982,7 @@ TclGL_glRasterPos3svCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -7925,7 +7995,7 @@ TclGL_glRasterPos3svCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glRasterPos3sv((GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7949,6 +8019,7 @@ TclGL_glRasterPos4dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -7961,7 +8032,7 @@ TclGL_glRasterPos4dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glRasterPos4dv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7985,6 +8056,7 @@ TclGL_glRasterPos4fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v;
 
     glResult = 0;
@@ -7997,7 +8069,7 @@ TclGL_glRasterPos4fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glRasterPos4fv((void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8021,6 +8093,7 @@ TclGL_glRasterPos4ivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -8033,7 +8106,7 @@ TclGL_glRasterPos4ivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glRasterPos4iv((GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8057,6 +8130,7 @@ TclGL_glRasterPos4svCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v;
 
     glResult = 0;
@@ -8069,7 +8143,7 @@ TclGL_glRasterPos4svCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glRasterPos4sv((GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8261,7 +8335,9 @@ TclGL_glRectdvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v1;
+    int byteArrayLength2;
     double *v2;
 
     glResult = 0;
@@ -8274,8 +8350,8 @@ TclGL_glRectdvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
+    v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glRectdv((void *)v1, (void *)v2);
     return GetGLError(interp, infoPtr);
 }
@@ -8299,7 +8375,9 @@ TclGL_glRectfvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *v1;
+    int byteArrayLength2;
     double *v2;
 
     glResult = 0;
@@ -8312,8 +8390,8 @@ TclGL_glRectfvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
+    v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glRectfv((void *)v1, (void *)v2);
     return GetGLError(interp, infoPtr);
 }
@@ -8337,7 +8415,9 @@ TclGL_glRectivCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v1;
+    int byteArrayLength2;
     int *v2;
 
     glResult = 0;
@@ -8350,8 +8430,8 @@ TclGL_glRectivCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
+    v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glRectiv((GLint *)v1, (GLint *)v2);
     return GetGLError(interp, infoPtr);
 }
@@ -8375,7 +8455,9 @@ TclGL_glRectsvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     int *v1;
+    int byteArrayLength2;
     int *v2;
 
     glResult = 0;
@@ -8388,8 +8470,8 @@ TclGL_glRectsvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
-    v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v1 = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
+    v2 = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glRectsv((GLshort *)v1, (GLshort *)v2);
     return GetGLError(interp, infoPtr);
 }
@@ -8416,6 +8498,7 @@ TclGL_glVertexPointerCmd(
     int size;
     int type;
     int stride;
+    int byteArrayLength4;
     int *ptr;
 
     glResult = 0;
@@ -8436,7 +8519,7 @@ TclGL_glVertexPointerCmd(
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &stride);
-    ptr = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
+    ptr = (void *)Tcl_GetByteArrayFromObj(objv[4], &byteArrayLength4);
     glVertexPointer((GLint )size, (GLenum)type, (GLsizei )stride, (GLvoid *)ptr);
     return GetGLError(interp, infoPtr);
 }
@@ -8462,6 +8545,7 @@ TclGL_glNormalPointerCmd(
     int glResult;
     int type;
     int stride;
+    int byteArrayLength3;
     int *ptr;
 
     glResult = 0;
@@ -8481,7 +8565,7 @@ TclGL_glNormalPointerCmd(
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &stride);
-    ptr = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    ptr = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glNormalPointer((GLenum)type, (GLsizei )stride, (GLvoid *)ptr);
     return GetGLError(interp, infoPtr);
 }
@@ -8508,6 +8592,7 @@ TclGL_glColorPointerCmd(
     int size;
     int type;
     int stride;
+    int byteArrayLength4;
     int *ptr;
 
     glResult = 0;
@@ -8528,7 +8613,7 @@ TclGL_glColorPointerCmd(
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &stride);
-    ptr = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
+    ptr = (void *)Tcl_GetByteArrayFromObj(objv[4], &byteArrayLength4);
     glColorPointer((GLint )size, (GLenum)type, (GLsizei )stride, (GLvoid *)ptr);
     return GetGLError(interp, infoPtr);
 }
@@ -8554,6 +8639,7 @@ TclGL_glIndexPointerCmd(
     int glResult;
     int type;
     int stride;
+    int byteArrayLength3;
     int *ptr;
 
     glResult = 0;
@@ -8573,7 +8659,7 @@ TclGL_glIndexPointerCmd(
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &stride);
-    ptr = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    ptr = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glIndexPointer((GLenum)type, (GLsizei )stride, (GLvoid *)ptr);
     return GetGLError(interp, infoPtr);
 }
@@ -8600,6 +8686,7 @@ TclGL_glTexCoordPointerCmd(
     int size;
     int type;
     int stride;
+    int byteArrayLength4;
     int *ptr;
 
     glResult = 0;
@@ -8620,7 +8707,7 @@ TclGL_glTexCoordPointerCmd(
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[3], &stride);
-    ptr = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
+    ptr = (void *)Tcl_GetByteArrayFromObj(objv[4], &byteArrayLength4);
     glTexCoordPointer((GLint )size, (GLenum)type, (GLsizei )stride, (GLvoid *)ptr);
     return GetGLError(interp, infoPtr);
 }
@@ -8645,6 +8732,7 @@ TclGL_glEdgeFlagPointerCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int stride;
+    int byteArrayLength2;
     int *ptr;
 
     glResult = 0;
@@ -8658,7 +8746,7 @@ TclGL_glEdgeFlagPointerCmd(
         return TCL_ERROR;
     }
     Tcl_GetIntFromObj(interp, objv[1], &stride);
-    ptr = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    ptr = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glEdgeFlagPointer((GLsizei )stride, (GLvoid *)ptr);
     return GetGLError(interp, infoPtr);
 }
@@ -8683,6 +8771,7 @@ TclGL_glGetPointervCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int pname;
+    int byteArrayLength2;
     int **params;
 
     glResult = 0;
@@ -8701,7 +8790,7 @@ TclGL_glGetPointervCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glGetPointerv((GLenum)pname, (GLvoid **)params);
     return GetGLError(interp, infoPtr);
 }
@@ -8809,6 +8898,7 @@ TclGL_glDrawElementsCmd(
     int mode;
     int count;
     int type;
+    int byteArrayLength4;
     int *indices;
 
     glResult = 0;
@@ -8834,7 +8924,7 @@ TclGL_glDrawElementsCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    indices = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
+    indices = (void *)Tcl_GetByteArrayFromObj(objv[4], &byteArrayLength4);
     glDrawElements((GLenum)mode, (GLsizei )count, (GLenum)type, (GLvoid *)indices);
     return GetGLError(interp, infoPtr);
 }
@@ -8860,6 +8950,7 @@ TclGL_glInterleavedArraysCmd(
     int glResult;
     int format;
     int stride;
+    int byteArrayLength3;
     int *pointer;
 
     glResult = 0;
@@ -8879,7 +8970,7 @@ TclGL_glInterleavedArraysCmd(
     }
     format = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &stride);
-    pointer = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    pointer = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glInterleavedArrays((GLenum)format, (GLsizei )stride, (GLvoid *)pointer);
     return GetGLError(interp, infoPtr);
 }
@@ -9046,6 +9137,7 @@ TclGL_glLightfvCmd(
     int glResult;
     int light;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -9070,7 +9162,7 @@ TclGL_glLightfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glLightfv((GLenum)light, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -9096,6 +9188,7 @@ TclGL_glLightivCmd(
     int glResult;
     int light;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -9120,7 +9213,7 @@ TclGL_glLightivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glLightiv((GLenum)light, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -9146,6 +9239,7 @@ TclGL_glGetLightfvCmd(
     int glResult;
     int light;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -9170,7 +9264,7 @@ TclGL_glGetLightfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetLightfv((GLenum)light, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -9196,6 +9290,7 @@ TclGL_glGetLightivCmd(
     int glResult;
     int light;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -9220,7 +9315,7 @@ TclGL_glGetLightivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetLightiv((GLenum)light, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -9331,6 +9426,7 @@ TclGL_glLightModelfvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int pname;
+    int byteArrayLength2;
     double *params;
 
     glResult = 0;
@@ -9349,7 +9445,7 @@ TclGL_glLightModelfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glLightModelfv((GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -9374,6 +9470,7 @@ TclGL_glLightModelivCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int pname;
+    int byteArrayLength2;
     int *params;
 
     glResult = 0;
@@ -9392,7 +9489,7 @@ TclGL_glLightModelivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glLightModeliv((GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -9518,6 +9615,7 @@ TclGL_glMaterialfvCmd(
     int glResult;
     int face;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -9542,7 +9640,7 @@ TclGL_glMaterialfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glMaterialfv((GLenum)face, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -9568,6 +9666,7 @@ TclGL_glMaterialivCmd(
     int glResult;
     int face;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -9592,7 +9691,7 @@ TclGL_glMaterialivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glMaterialiv((GLenum)face, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -9618,6 +9717,7 @@ TclGL_glGetMaterialfvCmd(
     int glResult;
     int face;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -9642,7 +9742,7 @@ TclGL_glGetMaterialfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetMaterialfv((GLenum)face, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -9668,6 +9768,7 @@ TclGL_glGetMaterialivCmd(
     int glResult;
     int face;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -9692,7 +9793,7 @@ TclGL_glGetMaterialivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetMaterialiv((GLenum)face, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -9976,6 +10077,7 @@ TclGL_glPixelMapfvCmd(
     int glResult;
     int map;
     int mapsize;
+    int byteArrayLength3;
     double *values;
 
     glResult = 0;
@@ -9995,7 +10097,7 @@ TclGL_glPixelMapfvCmd(
     }
     map = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &mapsize);
-    values = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    values = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glPixelMapfv((GLenum)map, (GLsizei )mapsize, (void *)values);
     return GetGLError(interp, infoPtr);
 }
@@ -10021,6 +10123,7 @@ TclGL_glPixelMapuivCmd(
     int glResult;
     int map;
     int mapsize;
+    int byteArrayLength3;
     int *values;
 
     glResult = 0;
@@ -10040,7 +10143,7 @@ TclGL_glPixelMapuivCmd(
     }
     map = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &mapsize);
-    values = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    values = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glPixelMapuiv((GLenum)map, (GLsizei )mapsize, (GLuint *)values);
     return GetGLError(interp, infoPtr);
 }
@@ -10066,6 +10169,7 @@ TclGL_glPixelMapusvCmd(
     int glResult;
     int map;
     int mapsize;
+    int byteArrayLength3;
     int *values;
 
     glResult = 0;
@@ -10085,7 +10189,7 @@ TclGL_glPixelMapusvCmd(
     }
     map = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &mapsize);
-    values = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    values = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glPixelMapusv((GLenum)map, (GLsizei )mapsize, (GLushort *)values);
     return GetGLError(interp, infoPtr);
 }
@@ -10110,6 +10214,7 @@ TclGL_glGetPixelMapfvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int map;
+    int byteArrayLength2;
     double *values;
 
     glResult = 0;
@@ -10128,7 +10233,7 @@ TclGL_glGetPixelMapfvCmd(
 	return TCL_ERROR;
     }
     map = (GLenum)Tcl_GetHashValue(hPtr); 
-    values = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    values = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glGetPixelMapfv((GLenum)map, (void *)values);
     return GetGLError(interp, infoPtr);
 }
@@ -10153,6 +10258,7 @@ TclGL_glGetPixelMapuivCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int map;
+    int byteArrayLength2;
     int *values;
 
     glResult = 0;
@@ -10171,7 +10277,7 @@ TclGL_glGetPixelMapuivCmd(
 	return TCL_ERROR;
     }
     map = (GLenum)Tcl_GetHashValue(hPtr); 
-    values = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    values = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glGetPixelMapuiv((GLenum)map, (GLuint *)values);
     return GetGLError(interp, infoPtr);
 }
@@ -10196,6 +10302,7 @@ TclGL_glGetPixelMapusvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int map;
+    int byteArrayLength2;
     int *values;
 
     glResult = 0;
@@ -10214,7 +10321,7 @@ TclGL_glGetPixelMapusvCmd(
 	return TCL_ERROR;
     }
     map = (GLenum)Tcl_GetHashValue(hPtr); 
-    values = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    values = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glGetPixelMapusv((GLenum)map, (GLushort *)values);
     return GetGLError(interp, infoPtr);
 }
@@ -10244,6 +10351,7 @@ TclGL_glBitmapCmd(
     double yorig;
     double xmove;
     double ymove;
+    int byteArrayLength7;
     int *bitmap;
 
     glResult = 0;
@@ -10262,7 +10370,7 @@ TclGL_glBitmapCmd(
     Tcl_GetDoubleFromObj(interp, objv[4], &yorig);
     Tcl_GetDoubleFromObj(interp, objv[5], &xmove);
     Tcl_GetDoubleFromObj(interp, objv[6], &ymove);
-    bitmap = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
+    bitmap = (void *)Tcl_GetByteArrayFromObj(objv[7], &byteArrayLength7);
     glBitmap((GLsizei )width, (GLsizei )height, (GLfloat )xorig, (GLfloat )yorig, (GLfloat )xmove, (GLfloat )ymove, (GLubyte *)bitmap);
     return GetGLError(interp, infoPtr);
 }
@@ -10292,6 +10400,7 @@ TclGL_glReadPixelsCmd(
     int height;
     int format;
     int type;
+    int byteArrayLength7;
     int *pixels;
 
     glResult = 0;
@@ -10320,7 +10429,7 @@ TclGL_glReadPixelsCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    pixels = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
+    pixels = (void *)Tcl_GetByteArrayFromObj(objv[7], &byteArrayLength7);
     glReadPixels((GLint )x, (GLint )y, (GLsizei )width, (GLsizei )height, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -10348,6 +10457,7 @@ TclGL_glDrawPixelsCmd(
     int height;
     int format;
     int type;
+    int byteArrayLength5;
     int *pixels;
 
     glResult = 0;
@@ -10374,7 +10484,14 @@ TclGL_glDrawPixelsCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    pixels = (void *)Tcl_GetByteArrayFromObj(objv[5], NULL);
+    pixels = (void *)Tcl_GetByteArrayFromObj(objv[5], &byteArrayLength5);
+    if (width * height * 16 != byteArrayLength5) {
+	char buf[100];
+	sprintf(buf, "%d*%d*%d instead of %d", width , height , 16, byteArrayLength5);
+        Tcl_AppendResult(interp, "bad byteArrayLength for param \"", pixels,
+	        "\" should be: ", buf, NULL);
+	return TCL_ERROR;
+    }
     glDrawPixels((GLsizei )width, (GLsizei )height, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -10771,6 +10888,7 @@ TclGL_glTexGendvCmd(
     int glResult;
     int coord;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -10795,7 +10913,7 @@ TclGL_glTexGendvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glTexGendv((GLenum)coord, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -10821,6 +10939,7 @@ TclGL_glTexGenfvCmd(
     int glResult;
     int coord;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -10845,7 +10964,7 @@ TclGL_glTexGenfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glTexGenfv((GLenum)coord, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -10871,6 +10990,7 @@ TclGL_glTexGenivCmd(
     int glResult;
     int coord;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -10895,7 +11015,7 @@ TclGL_glTexGenivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glTexGeniv((GLenum)coord, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -10921,6 +11041,7 @@ TclGL_glGetTexGendvCmd(
     int glResult;
     int coord;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -10945,7 +11066,7 @@ TclGL_glGetTexGendvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetTexGendv((GLenum)coord, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -10971,6 +11092,7 @@ TclGL_glGetTexGenfvCmd(
     int glResult;
     int coord;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -10995,7 +11117,7 @@ TclGL_glGetTexGenfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetTexGenfv((GLenum)coord, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11021,6 +11143,7 @@ TclGL_glGetTexGenivCmd(
     int glResult;
     int coord;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -11045,7 +11168,7 @@ TclGL_glGetTexGenivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetTexGeniv((GLenum)coord, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11171,6 +11294,7 @@ TclGL_glTexEnvfvCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -11195,7 +11319,7 @@ TclGL_glTexEnvfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glTexEnvfv((GLenum)target, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11221,6 +11345,7 @@ TclGL_glTexEnvivCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -11245,7 +11370,7 @@ TclGL_glTexEnvivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glTexEnviv((GLenum)target, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11271,6 +11396,7 @@ TclGL_glGetTexEnvfvCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -11295,7 +11421,7 @@ TclGL_glGetTexEnvfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetTexEnvfv((GLenum)target, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11321,6 +11447,7 @@ TclGL_glGetTexEnvivCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -11345,7 +11472,7 @@ TclGL_glGetTexEnvivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetTexEnviv((GLenum)target, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11471,6 +11598,7 @@ TclGL_glTexParameterfvCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -11495,7 +11623,7 @@ TclGL_glTexParameterfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glTexParameterfv((GLenum)target, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11521,6 +11649,7 @@ TclGL_glTexParameterivCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -11545,7 +11674,7 @@ TclGL_glTexParameterivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glTexParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11571,6 +11700,7 @@ TclGL_glGetTexParameterfvCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -11595,7 +11725,7 @@ TclGL_glGetTexParameterfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetTexParameterfv((GLenum)target, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11621,6 +11751,7 @@ TclGL_glGetTexParameterivCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -11645,7 +11776,7 @@ TclGL_glGetTexParameterivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetTexParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11672,6 +11803,7 @@ TclGL_glGetTexLevelParameterfvCmd(
     int target;
     int level;
     int pname;
+    int byteArrayLength4;
     double *params;
 
     glResult = 0;
@@ -11697,7 +11829,7 @@ TclGL_glGetTexLevelParameterfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[4], &byteArrayLength4);
     glGetTexLevelParameterfv((GLenum)target, (GLint )level, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11724,6 +11856,7 @@ TclGL_glGetTexLevelParameterivCmd(
     int target;
     int level;
     int pname;
+    int byteArrayLength4;
     int *params;
 
     glResult = 0;
@@ -11749,7 +11882,7 @@ TclGL_glGetTexLevelParameterivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[4], &byteArrayLength4);
     glGetTexLevelParameteriv((GLenum)target, (GLint )level, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11780,6 +11913,7 @@ TclGL_glTexImage1DCmd(
     int border;
     int format;
     int type;
+    int byteArrayLength8;
     int *pixels;
 
     glResult = 0;
@@ -11814,7 +11948,7 @@ TclGL_glTexImage1DCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    pixels = (void *)Tcl_GetByteArrayFromObj(objv[8], NULL);
+    pixels = (void *)Tcl_GetByteArrayFromObj(objv[8], &byteArrayLength8);
     glTexImage1D((GLenum)target, (GLint )level, (GLint )internalFormat, (GLsizei )width, (GLint )border, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -11846,6 +11980,7 @@ TclGL_glTexImage2DCmd(
     int border;
     int format;
     int type;
+    int byteArrayLength9;
     int *pixels;
 
     glResult = 0;
@@ -11881,7 +12016,7 @@ TclGL_glTexImage2DCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    pixels = (void *)Tcl_GetByteArrayFromObj(objv[9], NULL);
+    pixels = (void *)Tcl_GetByteArrayFromObj(objv[9], &byteArrayLength9);
     glTexImage2D((GLenum)target, (GLint )level, (GLint )internalFormat, (GLsizei )width, (GLsizei )height, (GLint )border, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -11909,6 +12044,7 @@ TclGL_glGetTexImageCmd(
     int level;
     int format;
     int type;
+    int byteArrayLength5;
     int *pixels;
 
     glResult = 0;
@@ -11940,7 +12076,7 @@ TclGL_glGetTexImageCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    pixels = (void *)Tcl_GetByteArrayFromObj(objv[5], NULL);
+    pixels = (void *)Tcl_GetByteArrayFromObj(objv[5], &byteArrayLength5);
     glGetTexImage((GLenum)target, (GLint )level, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -11965,6 +12101,7 @@ TclGL_glGenTexturesCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int n;
+    int byteArrayLength2;
     int *textures;
 
     glResult = 0;
@@ -11978,7 +12115,7 @@ TclGL_glGenTexturesCmd(
         return TCL_ERROR;
     }
     Tcl_GetIntFromObj(interp, objv[1], &n);
-    textures = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    textures = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glGenTextures((GLsizei )n, (GLuint *)textures);
     return GetGLError(interp, infoPtr);
 }
@@ -12003,6 +12140,7 @@ TclGL_glDeleteTexturesCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int n;
+    int byteArrayLength2;
     int *textures;
 
     glResult = 0;
@@ -12016,7 +12154,7 @@ TclGL_glDeleteTexturesCmd(
         return TCL_ERROR;
     }
     Tcl_GetIntFromObj(interp, objv[1], &n);
-    textures = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    textures = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glDeleteTextures((GLsizei )n, (GLuint *)textures);
     return GetGLError(interp, infoPtr);
 }
@@ -12084,7 +12222,9 @@ TclGL_glPrioritizeTexturesCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int n;
+    int byteArrayLength2;
     int *textures;
+    int byteArrayLength3;
     double *priorities;
 
     glResult = 0;
@@ -12098,8 +12238,8 @@ TclGL_glPrioritizeTexturesCmd(
         return TCL_ERROR;
     }
     Tcl_GetIntFromObj(interp, objv[1], &n);
-    textures = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
-    priorities = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    textures = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
+    priorities = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glPrioritizeTextures((GLsizei )n, (GLuint *)textures, (void *)priorities);
     return GetGLError(interp, infoPtr);
 }
@@ -12165,6 +12305,7 @@ TclGL_glTexSubImage1DCmd(
     int width;
     int format;
     int type;
+    int byteArrayLength7;
     int *pixels;
 
     glResult = 0;
@@ -12198,7 +12339,7 @@ TclGL_glTexSubImage1DCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    pixels = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
+    pixels = (void *)Tcl_GetByteArrayFromObj(objv[7], &byteArrayLength7);
     glTexSubImage1D((GLenum)target, (GLint )level, (GLint )xoffset, (GLsizei )width, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -12230,6 +12371,7 @@ TclGL_glTexSubImage2DCmd(
     int height;
     int format;
     int type;
+    int byteArrayLength9;
     int *pixels;
 
     glResult = 0;
@@ -12265,7 +12407,7 @@ TclGL_glTexSubImage2DCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    pixels = (void *)Tcl_GetByteArrayFromObj(objv[9], NULL);
+    pixels = (void *)Tcl_GetByteArrayFromObj(objv[9], &byteArrayLength9);
     glTexSubImage2D((GLenum)target, (GLint )level, (GLint )xoffset, (GLint )yoffset, (GLsizei )width, (GLsizei )height, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -12518,6 +12660,7 @@ TclGL_glMap1dCmd(
     double u2;
     int stride;
     int order;
+    int byteArrayLength6;
     double *points;
 
     glResult = 0;
@@ -12540,7 +12683,7 @@ TclGL_glMap1dCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &u2);
     Tcl_GetIntFromObj(interp, objv[4], &stride);
     Tcl_GetIntFromObj(interp, objv[5], &order);
-    points = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
+    points = (void *)Tcl_GetByteArrayFromObj(objv[6], &byteArrayLength6);
     glMap1d((GLenum)target, (GLdouble )u1, (GLdouble )u2, (GLint )stride, (GLint )order, (void *)points);
     return GetGLError(interp, infoPtr);
 }
@@ -12569,6 +12712,7 @@ TclGL_glMap1fCmd(
     double u2;
     int stride;
     int order;
+    int byteArrayLength6;
     double *points;
 
     glResult = 0;
@@ -12591,7 +12735,7 @@ TclGL_glMap1fCmd(
     Tcl_GetDoubleFromObj(interp, objv[3], &u2);
     Tcl_GetIntFromObj(interp, objv[4], &stride);
     Tcl_GetIntFromObj(interp, objv[5], &order);
-    points = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
+    points = (void *)Tcl_GetByteArrayFromObj(objv[6], &byteArrayLength6);
     glMap1f((GLenum)target, (GLfloat )u1, (GLfloat )u2, (GLint )stride, (GLint )order, (void *)points);
     return GetGLError(interp, infoPtr);
 }
@@ -12624,6 +12768,7 @@ TclGL_glMap2dCmd(
     double v2;
     int vstride;
     int vorder;
+    int byteArrayLength10;
     double *points;
 
     glResult = 0;
@@ -12650,7 +12795,7 @@ TclGL_glMap2dCmd(
     Tcl_GetDoubleFromObj(interp, objv[7], &v2);
     Tcl_GetIntFromObj(interp, objv[8], &vstride);
     Tcl_GetIntFromObj(interp, objv[9], &vorder);
-    points = (void *)Tcl_GetByteArrayFromObj(objv[10], NULL);
+    points = (void *)Tcl_GetByteArrayFromObj(objv[10], &byteArrayLength10);
     glMap2d((GLenum)target, (GLdouble )u1, (GLdouble )u2, (GLint )ustride, (GLint )uorder, (GLdouble )v1, (GLdouble )v2, (GLint )vstride, (GLint )vorder, (void *)points);
     return GetGLError(interp, infoPtr);
 }
@@ -12683,6 +12828,7 @@ TclGL_glMap2fCmd(
     double v2;
     int vstride;
     int vorder;
+    int byteArrayLength10;
     double *points;
 
     glResult = 0;
@@ -12709,7 +12855,7 @@ TclGL_glMap2fCmd(
     Tcl_GetDoubleFromObj(interp, objv[7], &v2);
     Tcl_GetIntFromObj(interp, objv[8], &vstride);
     Tcl_GetIntFromObj(interp, objv[9], &vorder);
-    points = (void *)Tcl_GetByteArrayFromObj(objv[10], NULL);
+    points = (void *)Tcl_GetByteArrayFromObj(objv[10], &byteArrayLength10);
     glMap2f((GLenum)target, (GLfloat )u1, (GLfloat )u2, (GLint )ustride, (GLint )uorder, (GLfloat )v1, (GLfloat )v2, (GLint )vstride, (GLint )vorder, (void *)points);
     return GetGLError(interp, infoPtr);
 }
@@ -12735,6 +12881,7 @@ TclGL_glGetMapdvCmd(
     int glResult;
     int target;
     int query;
+    int byteArrayLength3;
     double *v;
 
     glResult = 0;
@@ -12759,7 +12906,7 @@ TclGL_glGetMapdvCmd(
 	return TCL_ERROR;
     }
     query = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetMapdv((GLenum)target, (GLenum)query, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -12785,6 +12932,7 @@ TclGL_glGetMapfvCmd(
     int glResult;
     int target;
     int query;
+    int byteArrayLength3;
     double *v;
 
     glResult = 0;
@@ -12809,7 +12957,7 @@ TclGL_glGetMapfvCmd(
 	return TCL_ERROR;
     }
     query = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetMapfv((GLenum)target, (GLenum)query, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -12835,6 +12983,7 @@ TclGL_glGetMapivCmd(
     int glResult;
     int target;
     int query;
+    int byteArrayLength3;
     int *v;
 
     glResult = 0;
@@ -12859,7 +13008,7 @@ TclGL_glGetMapivCmd(
 	return TCL_ERROR;
     }
     query = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetMapiv((GLenum)target, (GLenum)query, (GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -12955,6 +13104,7 @@ TclGL_glEvalCoord1dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *u;
 
     glResult = 0;
@@ -12967,7 +13117,7 @@ TclGL_glEvalCoord1dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    u = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    u = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glEvalCoord1dv((void *)u);
     return GetGLError(interp, infoPtr);
 }
@@ -12991,6 +13141,7 @@ TclGL_glEvalCoord1fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *u;
 
     glResult = 0;
@@ -13003,7 +13154,7 @@ TclGL_glEvalCoord1fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    u = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    u = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glEvalCoord1fv((void *)u);
     return GetGLError(interp, infoPtr);
 }
@@ -13103,6 +13254,7 @@ TclGL_glEvalCoord2dvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *u;
 
     glResult = 0;
@@ -13115,7 +13267,7 @@ TclGL_glEvalCoord2dvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    u = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    u = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glEvalCoord2dv((void *)u);
     return GetGLError(interp, infoPtr);
 }
@@ -13139,6 +13291,7 @@ TclGL_glEvalCoord2fvCmd(
     Tcl_HashEntry *hPtr;
     TclGLInfo *infoPtr;
     int glResult;
+    int byteArrayLength1;
     double *u;
 
     glResult = 0;
@@ -13151,7 +13304,7 @@ TclGL_glEvalCoord2fvCmd(
                 NULL);
         return TCL_ERROR;
     }
-    u = (void *)Tcl_GetByteArrayFromObj(objv[1], NULL);
+    u = (void *)Tcl_GetByteArrayFromObj(objv[1], &byteArrayLength1);
     glEvalCoord2fv((void *)u);
     return GetGLError(interp, infoPtr);
 }
@@ -13602,6 +13755,7 @@ TclGL_glFogfvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int pname;
+    int byteArrayLength2;
     double *params;
 
     glResult = 0;
@@ -13620,7 +13774,7 @@ TclGL_glFogfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glFogfv((GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -13645,6 +13799,7 @@ TclGL_glFogivCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int pname;
+    int byteArrayLength2;
     int *params;
 
     glResult = 0;
@@ -13663,7 +13818,7 @@ TclGL_glFogivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glFogiv((GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -13689,6 +13844,7 @@ TclGL_glFeedbackBufferCmd(
     int glResult;
     int size;
     int type;
+    int byteArrayLength3;
     double *buffer;
 
     glResult = 0;
@@ -13708,7 +13864,7 @@ TclGL_glFeedbackBufferCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    buffer = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    buffer = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glFeedbackBuffer((GLsizei )size, (GLenum)type, (void *)buffer);
     return GetGLError(interp, infoPtr);
 }
@@ -13769,6 +13925,7 @@ TclGL_glSelectBufferCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int size;
+    int byteArrayLength2;
     int *buffer;
 
     glResult = 0;
@@ -13782,7 +13939,7 @@ TclGL_glSelectBufferCmd(
         return TCL_ERROR;
     }
     Tcl_GetIntFromObj(interp, objv[1], &size);
-    buffer = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    buffer = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glSelectBuffer((GLsizei )size, (GLuint *)buffer);
     return GetGLError(interp, infoPtr);
 }
@@ -13953,6 +14110,7 @@ TclGL_glDrawRangeElementsCmd(
     int end;
     int count;
     int type;
+    int byteArrayLength6;
     int *indices;
 
     glResult = 0;
@@ -13980,7 +14138,7 @@ TclGL_glDrawRangeElementsCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    indices = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
+    indices = (void *)Tcl_GetByteArrayFromObj(objv[6], &byteArrayLength6);
     glDrawRangeElements((GLenum)mode, (GLuint )start, (GLuint )end, (GLsizei )count, (GLenum)type, (GLvoid *)indices);
     return GetGLError(interp, infoPtr);
 }
@@ -14013,6 +14171,7 @@ TclGL_glTexImage3DCmd(
     int border;
     int format;
     int type;
+    int byteArrayLength10;
     int *pixels;
 
     glResult = 0;
@@ -14049,7 +14208,7 @@ TclGL_glTexImage3DCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    pixels = (void *)Tcl_GetByteArrayFromObj(objv[10], NULL);
+    pixels = (void *)Tcl_GetByteArrayFromObj(objv[10], &byteArrayLength10);
     glTexImage3D((GLenum)target, (GLint )level, (GLint )internalFormat, (GLsizei )width, (GLsizei )height, (GLsizei )depth, (GLint )border, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -14083,6 +14242,7 @@ TclGL_glTexSubImage3DCmd(
     int depth;
     int format;
     int type;
+    int byteArrayLength11;
     int *pixels;
 
     glResult = 0;
@@ -14120,7 +14280,7 @@ TclGL_glTexSubImage3DCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    pixels = (void *)Tcl_GetByteArrayFromObj(objv[11], NULL);
+    pixels = (void *)Tcl_GetByteArrayFromObj(objv[11], &byteArrayLength11);
     glTexSubImage3D((GLenum)target, (GLint )level, (GLint )xoffset, (GLint )yoffset, (GLint )zoffset, (GLsizei )width, (GLsizei )height, (GLsizei )depth, (GLenum)format, (GLenum)type, (GLvoid *)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -14206,6 +14366,7 @@ TclGL_glColorTableCmd(
     int width;
     int format;
     int type;
+    int byteArrayLength6;
     int *table;
 
     glResult = 0;
@@ -14243,7 +14404,7 @@ TclGL_glColorTableCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    table = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
+    table = (void *)Tcl_GetByteArrayFromObj(objv[6], &byteArrayLength6);
     glColorTable((GLenum)target, (GLenum)internalformat, (GLsizei )width, (GLenum)format, (GLenum)type, (GLvoid *)table);
     return GetGLError(interp, infoPtr);
 }
@@ -14272,6 +14433,7 @@ TclGL_glColorSubTableCmd(
     int count;
     int format;
     int type;
+    int byteArrayLength6;
     int *data;
 
     glResult = 0;
@@ -14304,7 +14466,7 @@ TclGL_glColorSubTableCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    data = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
+    data = (void *)Tcl_GetByteArrayFromObj(objv[6], &byteArrayLength6);
     glColorSubTable((GLenum)target, (GLsizei )start, (GLsizei )count, (GLenum)format, (GLenum)type, (GLvoid *)data);
     return GetGLError(interp, infoPtr);
 }
@@ -14330,6 +14492,7 @@ TclGL_glColorTableParameterivCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -14354,7 +14517,7 @@ TclGL_glColorTableParameterivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glColorTableParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -14380,6 +14543,7 @@ TclGL_glColorTableParameterfvCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -14404,7 +14568,7 @@ TclGL_glColorTableParameterfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glColorTableParameterfv((GLenum)target, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -14534,6 +14698,7 @@ TclGL_glGetColorTableCmd(
     int target;
     int format;
     int type;
+    int byteArrayLength4;
     int *table;
 
     glResult = 0;
@@ -14564,7 +14729,7 @@ TclGL_glGetColorTableCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    table = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
+    table = (void *)Tcl_GetByteArrayFromObj(objv[4], &byteArrayLength4);
     glGetColorTable((GLenum)target, (GLenum)format, (GLenum)type, (GLvoid *)table);
     return GetGLError(interp, infoPtr);
 }
@@ -14590,6 +14755,7 @@ TclGL_glGetColorTableParameterfvCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -14614,7 +14780,7 @@ TclGL_glGetColorTableParameterfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetColorTableParameterfv((GLenum)target, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -14640,6 +14806,7 @@ TclGL_glGetColorTableParameterivCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -14664,7 +14831,7 @@ TclGL_glGetColorTableParameterivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetColorTableParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -14868,6 +15035,7 @@ TclGL_glGetHistogramCmd(
     int reset;
     int format;
     int type;
+    int byteArrayLength5;
     int *values;
 
     glResult = 0;
@@ -14899,7 +15067,7 @@ TclGL_glGetHistogramCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    values = (void *)Tcl_GetByteArrayFromObj(objv[5], NULL);
+    values = (void *)Tcl_GetByteArrayFromObj(objv[5], &byteArrayLength5);
     glGetHistogram((GLenum)target, (GLboolean )reset, (GLenum)format, (GLenum)type, (GLvoid *)values);
     return GetGLError(interp, infoPtr);
 }
@@ -14925,6 +15093,7 @@ TclGL_glGetHistogramParameterfvCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -14949,7 +15118,7 @@ TclGL_glGetHistogramParameterfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetHistogramParameterfv((GLenum)target, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -14975,6 +15144,7 @@ TclGL_glGetHistogramParameterivCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -14999,7 +15169,7 @@ TclGL_glGetHistogramParameterivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetHistogramParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -15118,6 +15288,7 @@ TclGL_glGetMinmaxCmd(
     int reset;
     int format;
     int types;
+    int byteArrayLength5;
     int *values;
 
     glResult = 0;
@@ -15149,7 +15320,7 @@ TclGL_glGetMinmaxCmd(
 	return TCL_ERROR;
     }
     types = (GLenum)Tcl_GetHashValue(hPtr); 
-    values = (void *)Tcl_GetByteArrayFromObj(objv[5], NULL);
+    values = (void *)Tcl_GetByteArrayFromObj(objv[5], &byteArrayLength5);
     glGetMinmax((GLenum)target, (GLboolean )reset, (GLenum)format, (GLenum)types, (GLvoid *)values);
     return GetGLError(interp, infoPtr);
 }
@@ -15175,6 +15346,7 @@ TclGL_glGetMinmaxParameterfvCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -15199,7 +15371,7 @@ TclGL_glGetMinmaxParameterfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetMinmaxParameterfv((GLenum)target, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -15225,6 +15397,7 @@ TclGL_glGetMinmaxParameterivCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -15249,7 +15422,7 @@ TclGL_glGetMinmaxParameterivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetMinmaxParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -15278,6 +15451,7 @@ TclGL_glConvolutionFilter1DCmd(
     int width;
     int format;
     int type;
+    int byteArrayLength6;
     int *image;
 
     glResult = 0;
@@ -15315,7 +15489,7 @@ TclGL_glConvolutionFilter1DCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    image = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
+    image = (void *)Tcl_GetByteArrayFromObj(objv[6], &byteArrayLength6);
     glConvolutionFilter1D((GLenum)target, (GLenum)internalformat, (GLsizei )width, (GLenum)format, (GLenum)type, (GLvoid *)image);
     return GetGLError(interp, infoPtr);
 }
@@ -15345,6 +15519,7 @@ TclGL_glConvolutionFilter2DCmd(
     int height;
     int format;
     int type;
+    int byteArrayLength7;
     int *image;
 
     glResult = 0;
@@ -15383,7 +15558,7 @@ TclGL_glConvolutionFilter2DCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    image = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
+    image = (void *)Tcl_GetByteArrayFromObj(objv[7], &byteArrayLength7);
     glConvolutionFilter2D((GLenum)target, (GLenum)internalformat, (GLsizei )width, (GLsizei )height, (GLenum)format, (GLenum)type, (GLvoid *)image);
     return GetGLError(interp, infoPtr);
 }
@@ -15459,6 +15634,7 @@ TclGL_glConvolutionParameterfvCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -15483,7 +15659,7 @@ TclGL_glConvolutionParameterfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glConvolutionParameterfv((GLenum)target, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -15559,6 +15735,7 @@ TclGL_glConvolutionParameterivCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -15583,7 +15760,7 @@ TclGL_glConvolutionParameterivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glConvolutionParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -15720,6 +15897,7 @@ TclGL_glGetConvolutionFilterCmd(
     int target;
     int format;
     int type;
+    int byteArrayLength4;
     int *image;
 
     glResult = 0;
@@ -15750,7 +15928,7 @@ TclGL_glGetConvolutionFilterCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    image = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
+    image = (void *)Tcl_GetByteArrayFromObj(objv[4], &byteArrayLength4);
     glGetConvolutionFilter((GLenum)target, (GLenum)format, (GLenum)type, (GLvoid *)image);
     return GetGLError(interp, infoPtr);
 }
@@ -15776,6 +15954,7 @@ TclGL_glGetConvolutionParameterfvCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     double *params;
 
     glResult = 0;
@@ -15800,7 +15979,7 @@ TclGL_glGetConvolutionParameterfvCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetConvolutionParameterfv((GLenum)target, (GLenum)pname, (void *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -15826,6 +16005,7 @@ TclGL_glGetConvolutionParameterivCmd(
     int glResult;
     int target;
     int pname;
+    int byteArrayLength3;
     int *params;
 
     glResult = 0;
@@ -15850,7 +16030,7 @@ TclGL_glGetConvolutionParameterivCmd(
 	return TCL_ERROR;
     }
     pname = (GLenum)Tcl_GetHashValue(hPtr); 
-    params = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    params = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetConvolutionParameteriv((GLenum)target, (GLenum)pname, (GLint *)params);
     return GetGLError(interp, infoPtr);
 }
@@ -15880,7 +16060,9 @@ TclGL_glSeparableFilter2DCmd(
     int height;
     int format;
     int type;
+    int byteArrayLength7;
     int *row;
+    int byteArrayLength8;
     int *column;
 
     glResult = 0;
@@ -15919,8 +16101,8 @@ TclGL_glSeparableFilter2DCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    row = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
-    column = (void *)Tcl_GetByteArrayFromObj(objv[8], NULL);
+    row = (void *)Tcl_GetByteArrayFromObj(objv[7], &byteArrayLength7);
+    column = (void *)Tcl_GetByteArrayFromObj(objv[8], &byteArrayLength8);
     glSeparableFilter2D((GLenum)target, (GLenum)internalformat, (GLsizei )width, (GLsizei )height, (GLenum)format, (GLenum)type, (GLvoid *)row, (GLvoid *)column);
     return GetGLError(interp, infoPtr);
 }
@@ -15947,8 +16129,11 @@ TclGL_glGetSeparableFilterCmd(
     int target;
     int format;
     int type;
+    int byteArrayLength4;
     int *row;
+    int byteArrayLength5;
     int *column;
+    int byteArrayLength6;
     int *span;
 
     glResult = 0;
@@ -15979,9 +16164,9 @@ TclGL_glGetSeparableFilterCmd(
 	return TCL_ERROR;
     }
     type = (GLenum)Tcl_GetHashValue(hPtr); 
-    row = (void *)Tcl_GetByteArrayFromObj(objv[4], NULL);
-    column = (void *)Tcl_GetByteArrayFromObj(objv[5], NULL);
-    span = (void *)Tcl_GetByteArrayFromObj(objv[6], NULL);
+    row = (void *)Tcl_GetByteArrayFromObj(objv[4], &byteArrayLength4);
+    column = (void *)Tcl_GetByteArrayFromObj(objv[5], &byteArrayLength5);
+    span = (void *)Tcl_GetByteArrayFromObj(objv[6], &byteArrayLength6);
     glGetSeparableFilter((GLenum)target, (GLenum)format, (GLenum)type, (GLvoid *)row, (GLvoid *)column, (GLvoid *)span);
     return GetGLError(interp, infoPtr);
 }
@@ -16093,6 +16278,7 @@ TclGL_glCompressedTexImage1DCmd(
     int width;
     int border;
     int imageSize;
+    int byteArrayLength7;
     int *data;
 
     glResult = 0;
@@ -16121,7 +16307,7 @@ TclGL_glCompressedTexImage1DCmd(
     Tcl_GetIntFromObj(interp, objv[4], &width);
     Tcl_GetIntFromObj(interp, objv[5], &border);
     Tcl_GetIntFromObj(interp, objv[6], &imageSize);
-    data = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
+    data = (void *)Tcl_GetByteArrayFromObj(objv[7], &byteArrayLength7);
     glCompressedTexImage1D((GLenum)target, (GLint )level, (GLenum)internalformat, (GLsizei )width, (GLint )border, (GLsizei )imageSize, (GLvoid *)data);
     return GetGLError(interp, infoPtr);
 }
@@ -16152,6 +16338,7 @@ TclGL_glCompressedTexImage2DCmd(
     int height;
     int border;
     int imageSize;
+    int byteArrayLength8;
     int *data;
 
     glResult = 0;
@@ -16181,7 +16368,7 @@ TclGL_glCompressedTexImage2DCmd(
     Tcl_GetIntFromObj(interp, objv[5], &height);
     Tcl_GetIntFromObj(interp, objv[6], &border);
     Tcl_GetIntFromObj(interp, objv[7], &imageSize);
-    data = (void *)Tcl_GetByteArrayFromObj(objv[8], NULL);
+    data = (void *)Tcl_GetByteArrayFromObj(objv[8], &byteArrayLength8);
     glCompressedTexImage2D((GLenum)target, (GLint )level, (GLenum)internalformat, (GLsizei )width, (GLsizei )height, (GLint )border, (GLsizei )imageSize, (GLvoid *)data);
     return GetGLError(interp, infoPtr);
 }
@@ -16213,6 +16400,7 @@ TclGL_glCompressedTexImage3DCmd(
     int depth;
     int border;
     int imageSize;
+    int byteArrayLength9;
     int *data;
 
     glResult = 0;
@@ -16243,7 +16431,7 @@ TclGL_glCompressedTexImage3DCmd(
     Tcl_GetIntFromObj(interp, objv[6], &depth);
     Tcl_GetIntFromObj(interp, objv[7], &border);
     Tcl_GetIntFromObj(interp, objv[8], &imageSize);
-    data = (void *)Tcl_GetByteArrayFromObj(objv[9], NULL);
+    data = (void *)Tcl_GetByteArrayFromObj(objv[9], &byteArrayLength9);
     glCompressedTexImage3D((GLenum)target, (GLint )level, (GLenum)internalformat, (GLsizei )width, (GLsizei )height, (GLsizei )depth, (GLint )border, (GLsizei )imageSize, (GLvoid *)data);
     return GetGLError(interp, infoPtr);
 }
@@ -16273,6 +16461,7 @@ TclGL_glCompressedTexSubImage1DCmd(
     int width;
     int format;
     int imageSize;
+    int byteArrayLength7;
     int *data;
 
     glResult = 0;
@@ -16301,7 +16490,7 @@ TclGL_glCompressedTexSubImage1DCmd(
     }
     format = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[6], &imageSize);
-    data = (void *)Tcl_GetByteArrayFromObj(objv[7], NULL);
+    data = (void *)Tcl_GetByteArrayFromObj(objv[7], &byteArrayLength7);
     glCompressedTexSubImage1D((GLenum)target, (GLint )level, (GLint )xoffset, (GLsizei )width, (GLenum)format, (GLsizei )imageSize, (GLvoid *)data);
     return GetGLError(interp, infoPtr);
 }
@@ -16333,6 +16522,7 @@ TclGL_glCompressedTexSubImage2DCmd(
     int height;
     int format;
     int imageSize;
+    int byteArrayLength9;
     int *data;
 
     glResult = 0;
@@ -16363,7 +16553,7 @@ TclGL_glCompressedTexSubImage2DCmd(
     }
     format = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[8], &imageSize);
-    data = (void *)Tcl_GetByteArrayFromObj(objv[9], NULL);
+    data = (void *)Tcl_GetByteArrayFromObj(objv[9], &byteArrayLength9);
     glCompressedTexSubImage2D((GLenum)target, (GLint )level, (GLint )xoffset, (GLint )yoffset, (GLsizei )width, (GLsizei )height, (GLenum)format, (GLsizei )imageSize, (GLvoid *)data);
     return GetGLError(interp, infoPtr);
 }
@@ -16397,6 +16587,7 @@ TclGL_glCompressedTexSubImage3DCmd(
     int depth;
     int format;
     int imageSize;
+    int byteArrayLength11;
     int *data;
 
     glResult = 0;
@@ -16429,7 +16620,7 @@ TclGL_glCompressedTexSubImage3DCmd(
     }
     format = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[10], &imageSize);
-    data = (void *)Tcl_GetByteArrayFromObj(objv[11], NULL);
+    data = (void *)Tcl_GetByteArrayFromObj(objv[11], &byteArrayLength11);
     glCompressedTexSubImage3D((GLenum)target, (GLint )level, (GLint )xoffset, (GLint )yoffset, (GLint )zoffset, (GLsizei )width, (GLsizei )height, (GLsizei )depth, (GLenum)format, (GLsizei )imageSize, (GLvoid *)data);
     return GetGLError(interp, infoPtr);
 }
@@ -16455,6 +16646,7 @@ TclGL_glGetCompressedTexImageCmd(
     int glResult;
     int target;
     int lod;
+    int byteArrayLength3;
     int *img;
 
     glResult = 0;
@@ -16474,7 +16666,7 @@ TclGL_glGetCompressedTexImageCmd(
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
     Tcl_GetIntFromObj(interp, objv[2], &lod);
-    img = (void *)Tcl_GetByteArrayFromObj(objv[3], NULL);
+    img = (void *)Tcl_GetByteArrayFromObj(objv[3], &byteArrayLength3);
     glGetCompressedTexImage((GLenum)target, (GLint )lod, (GLvoid *)img);
     return GetGLError(interp, infoPtr);
 }
@@ -16542,6 +16734,7 @@ TclGL_glMultiTexCoord1dvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -16560,7 +16753,7 @@ TclGL_glMultiTexCoord1dvCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord1dv((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -16628,6 +16821,7 @@ TclGL_glMultiTexCoord1fvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -16646,7 +16840,7 @@ TclGL_glMultiTexCoord1fvCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord1fv((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -16714,6 +16908,7 @@ TclGL_glMultiTexCoord1ivCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -16732,7 +16927,7 @@ TclGL_glMultiTexCoord1ivCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord1iv((GLenum)target, (GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -16800,6 +16995,7 @@ TclGL_glMultiTexCoord1svCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -16818,7 +17014,7 @@ TclGL_glMultiTexCoord1svCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord1sv((GLenum)target, (GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -16888,6 +17084,7 @@ TclGL_glMultiTexCoord2dvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -16906,7 +17103,7 @@ TclGL_glMultiTexCoord2dvCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord2dv((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -16976,6 +17173,7 @@ TclGL_glMultiTexCoord2fvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -16994,7 +17192,7 @@ TclGL_glMultiTexCoord2fvCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord2fv((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17064,6 +17262,7 @@ TclGL_glMultiTexCoord2ivCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -17082,7 +17281,7 @@ TclGL_glMultiTexCoord2ivCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord2iv((GLenum)target, (GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17152,6 +17351,7 @@ TclGL_glMultiTexCoord2svCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -17170,7 +17370,7 @@ TclGL_glMultiTexCoord2svCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord2sv((GLenum)target, (GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17242,6 +17442,7 @@ TclGL_glMultiTexCoord3dvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -17260,7 +17461,7 @@ TclGL_glMultiTexCoord3dvCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord3dv((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17332,6 +17533,7 @@ TclGL_glMultiTexCoord3fvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -17350,7 +17552,7 @@ TclGL_glMultiTexCoord3fvCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord3fv((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17422,6 +17624,7 @@ TclGL_glMultiTexCoord3ivCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -17440,7 +17643,7 @@ TclGL_glMultiTexCoord3ivCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord3iv((GLenum)target, (GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17512,6 +17715,7 @@ TclGL_glMultiTexCoord3svCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -17530,7 +17734,7 @@ TclGL_glMultiTexCoord3svCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord3sv((GLenum)target, (GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17604,6 +17808,7 @@ TclGL_glMultiTexCoord4dvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -17622,7 +17827,7 @@ TclGL_glMultiTexCoord4dvCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord4dv((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17696,6 +17901,7 @@ TclGL_glMultiTexCoord4fvCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -17714,7 +17920,7 @@ TclGL_glMultiTexCoord4fvCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord4fv((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17788,6 +17994,7 @@ TclGL_glMultiTexCoord4ivCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -17806,7 +18013,7 @@ TclGL_glMultiTexCoord4ivCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord4iv((GLenum)target, (GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17880,6 +18087,7 @@ TclGL_glMultiTexCoord4svCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -17898,7 +18106,7 @@ TclGL_glMultiTexCoord4svCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord4sv((GLenum)target, (GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18222,6 +18430,7 @@ TclGL_glMultiTexCoord1dvARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -18240,7 +18449,7 @@ TclGL_glMultiTexCoord1dvARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord1dvARB((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18308,6 +18517,7 @@ TclGL_glMultiTexCoord1fvARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -18326,7 +18536,7 @@ TclGL_glMultiTexCoord1fvARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord1fvARB((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18394,6 +18604,7 @@ TclGL_glMultiTexCoord1ivARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -18412,7 +18623,7 @@ TclGL_glMultiTexCoord1ivARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord1ivARB((GLenum)target, (GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18480,6 +18691,7 @@ TclGL_glMultiTexCoord1svARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -18498,7 +18710,7 @@ TclGL_glMultiTexCoord1svARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord1svARB((GLenum)target, (GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18568,6 +18780,7 @@ TclGL_glMultiTexCoord2dvARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -18586,7 +18799,7 @@ TclGL_glMultiTexCoord2dvARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord2dvARB((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18656,6 +18869,7 @@ TclGL_glMultiTexCoord2fvARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -18674,7 +18888,7 @@ TclGL_glMultiTexCoord2fvARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord2fvARB((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18744,6 +18958,7 @@ TclGL_glMultiTexCoord2ivARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -18762,7 +18977,7 @@ TclGL_glMultiTexCoord2ivARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord2ivARB((GLenum)target, (GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18832,6 +19047,7 @@ TclGL_glMultiTexCoord2svARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -18850,7 +19066,7 @@ TclGL_glMultiTexCoord2svARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord2svARB((GLenum)target, (GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18922,6 +19138,7 @@ TclGL_glMultiTexCoord3dvARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -18940,7 +19157,7 @@ TclGL_glMultiTexCoord3dvARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord3dvARB((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19012,6 +19229,7 @@ TclGL_glMultiTexCoord3fvARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -19030,7 +19248,7 @@ TclGL_glMultiTexCoord3fvARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord3fvARB((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19102,6 +19320,7 @@ TclGL_glMultiTexCoord3ivARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -19120,7 +19339,7 @@ TclGL_glMultiTexCoord3ivARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord3ivARB((GLenum)target, (GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19192,6 +19411,7 @@ TclGL_glMultiTexCoord3svARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -19210,7 +19430,7 @@ TclGL_glMultiTexCoord3svARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord3svARB((GLenum)target, (GLshort *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19284,6 +19504,7 @@ TclGL_glMultiTexCoord4dvARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -19302,7 +19523,7 @@ TclGL_glMultiTexCoord4dvARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord4dvARB((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19376,6 +19597,7 @@ TclGL_glMultiTexCoord4fvARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     double *v;
 
     glResult = 0;
@@ -19394,7 +19616,7 @@ TclGL_glMultiTexCoord4fvARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord4fvARB((GLenum)target, (void *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19468,6 +19690,7 @@ TclGL_glMultiTexCoord4ivARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -19486,7 +19709,7 @@ TclGL_glMultiTexCoord4ivARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord4ivARB((GLenum)target, (GLint *)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19560,6 +19783,7 @@ TclGL_glMultiTexCoord4svARBCmd(
     TclGLInfo *infoPtr;
     int glResult;
     int target;
+    int byteArrayLength2;
     int *v;
 
     glResult = 0;
@@ -19578,7 +19802,7 @@ TclGL_glMultiTexCoord4svARBCmd(
 	return TCL_ERROR;
     }
     target = (GLenum)Tcl_GetHashValue(hPtr); 
-    v = (void *)Tcl_GetByteArrayFromObj(objv[2], NULL);
+    v = (void *)Tcl_GetByteArrayFromObj(objv[2], &byteArrayLength2);
     glMultiTexCoord4svARB((GLenum)target, (GLshort *)v);
     return GetGLError(interp, infoPtr);
 }

@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.1 2007/10/31 09:32:53 wiede Exp $
+ * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.2 2007/10/31 20:40:10 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -19,7 +19,9 @@ Tcl_ObjCmdProc TclGL_DefaultCmd;
 Tcl_ObjCmdProc TclGL_UnknownCmd;
 Tcl_ObjCmdProc TclGL_Define2Str;
 Tcl_ObjCmdProc TclGL_Str2Define;
+Tcl_ObjCmdProc TclGL_MakeIntVector;
 Tcl_ObjCmdProc TclGL_MakeFloatVector;
+Tcl_ObjCmdProc TclGL_MakeDoubleVector;
 #include "tclGLProcNames.c"
 
 typedef struct GLMethod {
@@ -32,7 +34,9 @@ static GLMethod GLMethodList[] = {
 #include "tclGLMethodNames.c"
     { "glDefine2Str", "<define value>", TclGL_Define2Str },
     { "glStr2Define", "<define string>", TclGL_Str2Define },
+    { "makeIntVector", "<list>", TclGL_MakeIntVector },
     { "makeFloatVector", "<list>", TclGL_MakeFloatVector },
+    { "makeDoubleVector", "<list>", TclGL_MakeDoubleVector },
     /*
      *  Add an error handler to support all of the usual inquiries
      *  for the "info" command in the global namespace.
@@ -52,7 +56,9 @@ static const struct NameProcMap glCmds2[] = {
     { "::ntk::gl::GL::unknown", TclGL_UnknownCmd },
     { "::ntk::gl::GL::glDefine2Str", TclGL_Define2Str },
     { "::ntk::gl::GL::glStr2Define", TclGL_Str2Define },
+    { "::ntk::gl::GL::makeIntVector", TclGL_MakeIntVector },
     { "::ntk::gl::GL::makeFloatVector", TclGL_MakeFloatVector },
+    { "::ntk::gl::GL::makeDoubleVector", TclGL_MakeDoubleVector },
     /*
      *  Add an error handler
      */
@@ -304,6 +310,48 @@ TclGL_Str2Define(
 
 /*
  * ------------------------------------------------------------------------
+ *  TclGL_MakeIntVector()
+ *
+ *  convert a list of ints into a Tcl_ByteArrayObj
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+TclGL_MakeIntVector(
+    ClientData clientData,  /* infoPtr */
+    Tcl_Interp *interp,      /* current interpreter */
+    int objc,                /* number of arguments */
+    Tcl_Obj *CONST objv[])   /* argument objects */
+{
+    Tcl_Obj *objPtr;
+    TclGLInfo *infoPtr;
+    int *intVec;
+    int intVal;
+    const char **argv;
+    int argc;
+    int i;
+
+    infoPtr = (TclGLInfo *)clientData;
+    TclGLShowArgs(1, "TclGL_MakeIntVector", objc, objv);
+    if (objc != 2) {
+        Tcl_AppendResult(interp,
+                "wrong # args: should be \"ntk makeIntVector list\"",
+                NULL);
+        return TCL_ERROR;
+    }
+    Tcl_SplitList(interp, Tcl_GetString(objv[1]), &argc, &argv);
+    intVec = (int *)ckalloc(sizeof(int)*argc);
+    for(i=0;i<argc;i++) {
+        intVal = atoi(argv[i]);
+	intVec[i] = intVal;
+    }
+    objPtr = Tcl_NewByteArrayObj((unsigned char *)intVec, sizeof(int)*argc);
+    Tcl_AppendResult(interp, Tcl_GetString(objPtr), NULL);
+    return TCL_OK;;
+}
+
+/*
+ * ------------------------------------------------------------------------
  *  TclGL_MakeFloatVector()
  *
  *  convert a list of floats into a Tcl_ByteArrayObj
@@ -340,6 +388,49 @@ TclGL_MakeFloatVector(
 	floatVec[i] = floatVal;
     }
     objPtr = Tcl_NewByteArrayObj((unsigned char *)floatVec, sizeof(float)*argc);
+    Tcl_AppendResult(interp, Tcl_GetString(objPtr), NULL);
+    return TCL_OK;;
+}
+
+
+/*
+ * ------------------------------------------------------------------------
+ *  TclGL_MakeDoubleVector()
+ *
+ *  convert a list of doubles into a Tcl_ByteArrayObj
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+TclGL_MakeDoubleVector(
+    ClientData clientData,  /* infoPtr */
+    Tcl_Interp *interp,      /* current interpreter */
+    int objc,                /* number of arguments */
+    Tcl_Obj *CONST objv[])   /* argument objects */
+{
+    Tcl_Obj *objPtr;
+    TclGLInfo *infoPtr;
+    double *doubleVec;
+    double doubleVal;
+    const char **argv;
+    int argc;
+    int i;
+
+    infoPtr = (TclGLInfo *)clientData;
+    TclGLShowArgs(1, "TclGL_MakeDoubleVector", objc, objv);
+    if (objc != 2) {
+        Tcl_AppendResult(interp,
+                "wrong # args: should be \"ntk makeDoubleVector list\"",
+                NULL);
+        return TCL_ERROR;
+    }
+    Tcl_SplitList(interp, Tcl_GetString(objv[1]), &argc, &argv);
+    doubleVec = (double *)ckalloc(sizeof(double)*argc);
+    for(i=0;i<argc;i++) {
+        doubleVal = atof(argv[i]);
+	doubleVec[i] = doubleVal;
+    }
+    objPtr = Tcl_NewByteArrayObj((unsigned char *)doubleVec, sizeof(double)*argc);
     Tcl_AppendResult(interp, Tcl_GetString(objPtr), NULL);
     return TCL_OK;;
 }

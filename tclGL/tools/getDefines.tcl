@@ -55,8 +55,7 @@ set enumPart {    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objv[%s]
     }
     %s = (GLenum)Tcl_GetHashValue(hPtr); }
 
-set bitfieldPart {
-    int value;
+set bitfieldPart {    int value;
     int isEnd;
     char *cp;
     char *ep;
@@ -96,11 +95,20 @@ set bitfieldPart {
 	    break;
 	}
     }
-    %s = value;
-}
+    %s = value; }
+
+set checkByteArrayLength {    if (%s * %s * %s != byteArrayLength%d) {
+	char buf[100];
+	sprintf(buf, "%%d*%%d*%%d instead of %%d", %s , %s , %s, byteArrayLength%d);
+        Tcl_AppendResult(interp, "bad byteArrayLength for param \"", %s,
+	        "\" should be: ", buf, NULL);
+	return TCL_ERROR;
+    }}
 
 set openCurly "{"
 set closeCurly "}"
+
+set specParamCode(glDrawPixels,5) [list width height 16 5 width height 16 5 pixels]
 
 set lineNo 0
 set numFuncs 0
@@ -239,6 +247,7 @@ puts stderr "444!$entry!"
 		        continue
 		    }
 		    if {$ptype2 ne "void"} {
+			set haveByteArray 0
 			set myVarType "int"
 			set startStr ""
                         if {$ptype1 != ""} {
@@ -269,9 +278,10 @@ puts stderr "444!$entry!"
 			        set notYet 1
 puts stderr "NOYvoid!$name!$entry!"
 			    } else {
-			        set getParam "    $pname = (void *)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
-			    append paramCallInfos "${callSep}(${myType}${starSep}$star)$pname"
-			    set callSep ", "
+				set haveByteArray 1
+			        set getParam "    $pname = (void *)Tcl_GetByteArrayFromObj(objv\[$paramNum\], &byteArrayLength$paramNum);"
+			        append paramCallInfos "${callSep}(${myType}${starSep}$star)$pname"
+			        set callSep ", "
 			    }
                           }
                         GLbyte {
@@ -324,7 +334,8 @@ puts stderr "NOYvoid!$name!$entry!"
 			    if {$star eq ""} {
 			        set getParam "    Tcl_GetBooleanFromObj(interp, objv\[$paramNum\], &$pname);"
 			    } else {
-			        set getParam "    $pname = (void *)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
+				set haveByteArray 1
+			        set getParam "    $pname = (void *)Tcl_GetByteArrayFromObj(objv\[$paramNum\], &byteArrayLength$paramNum);"
 			    }
 			    append paramCallInfos "${callSep}(${myType}${starSep}$star)$pname"
 			    set callSep ", "
@@ -339,7 +350,8 @@ puts stderr "NOYvoid!$name!$entry!"
 			    if {$star eq ""} {
 			        set getParam "    Tcl_GetIntFromObj(interp, objv\[$paramNum\], &$pname);"
 			    } else {
-			        set getParam "    $pname = (void *)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
+				set haveByteArray 1
+			        set getParam "    $pname = (void *)Tcl_GetByteArrayFromObj(objv\[$paramNum\], &byteArrayLength$paramNum);"
 			    }
 			    append paramCallInfos "${callSep}(${myType}${starSep}$star)$pname"
 			    set callSep ", "
@@ -352,18 +364,16 @@ puts stderr "NOYvoid!$name!$entry!"
 			        set getParam "    Tcl_GetDoubleFromObj(interp, objv\[$paramNum], &$pname);"
 			    } else {
 				set myType "void"
-			        set getParam "    $pname = (void *)Tcl_GetByteArrayFromObj(objv\[$paramNum\], NULL);"
+				set haveByteArray 1
+			        set getParam "    $pname = (void *)Tcl_GetByteArrayFromObj(objv\[$paramNum\], &byteArrayLength$paramNum);"
 			    }
 			    append paramCallInfos "${callSep}(${myType}${starSep}$star)$pname"
 			    set callSep ", "
 			  }
 			}
                         if {$myType != ""} {
-			    set init " = 0"
-			    switch $myType {
-			    double {
-			        set init " = 0.0"
-			      }
+			    if {$haveByteArray} {
+		                lappend funcVarDecls "    int byteArrayLength$paramNum;"
 			    }
 		            lappend funcVarDecls "    ${myVarType}${starSep}${star}$pname;"
 		            lappend getParamInfos $getParam
@@ -408,6 +418,17 @@ puts stderr "NOT YET !$name!"
                     lappend funcLst "    return TCL_OK;"
 		} else {
 		    lappend funcLst [join $getParamInfos \n]
+		    set i 0
+		    while {$i <= $paramNum} {
+if {$name eq "glDrawPixels"} {
+    puts stderr "GLDP!$i![info exists specParamCode($name,$i)]!"
+}
+		        if {[info exists specParamCode($name,$i)]} {
+                            set cmd [concat [list format $checkByteArrayLength] [set specParamCode($name,$i)]]
+		            lappend funcLst [uplevel 0 $cmd]
+		        }
+		        incr i
+		    }
 		    lappend funcLst "    ${name}(${paramCallInfos});"
 		    lappend funcLst "    return GetGLError(interp, infoPtr);"
 		}
