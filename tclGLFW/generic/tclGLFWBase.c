@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLFWBase.c,v 1.1.2.1 2007/10/31 09:26:14 wiede Exp $
+ * RCS: @(#) $Id: tclGLFWBase.c,v 1.1.2.2 2007/10/31 16:06:24 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -65,9 +65,7 @@ Initialize (
     TclGLFW_InitCommands(interp, infoPtr);
 
     glfwInit();
-    int major, minor, rev;
-    glfwGetVersion(&major, &minor, &rev);
-fprintf(stderr, "GLFW version!%d!%d!%d!\n", major, minor, rev);
+    glfwGetVersion(&infoPtr->major, &infoPtr->minor, &infoPtr->rev);
 
     Tcl_SetVar(interp, "::ntk::glfw::version", TCL_GLFW_VERSION,
             TCL_NAMESPACE_ONLY);

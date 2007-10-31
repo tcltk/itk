@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLFWInt.h,v 1.1.2.2 2007/10/31 13:52:27 wiede Exp $
+ * RCS: @(#) $Id: tclGLFWInt.h,v 1.1.2.3 2007/10/31 16:06:25 wiede Exp $
  */
 
 #include <string.h>
@@ -73,6 +73,9 @@ typedef struct TclGLFWWindow {
 
 typedef struct TclGLFWInfo {
     int version;
+    int major;
+    int minor;
+    int rev;
     int numWindows;
     TclGLFWWindow *currWindow;
     Tcl_HashTable windowHandles;

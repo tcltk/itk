@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLFWCmd.c,v 1.1.2.4 2007/10/31 15:40:51 wiede Exp $
+ * RCS: @(#) $Id: tclGLFWCmd.c,v 1.1.2.5 2007/10/31 16:06:24 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -44,9 +44,6 @@ Tcl_ObjCmdProc TclGLFW_UnknownCmd;
 Tcl_ObjCmdProc TclGLFW_WaitEventsCmd;
 Tcl_ObjCmdProc TclGLFW_DrawMegaimageCmd;
 Tcl_ObjCmdProc TclGLFW_glDrawPixelsCmd;
-Tcl_ObjCmdProc TclGLFW_glClearColorCmd;
-Tcl_ObjCmdProc TclGLFW_glClearCmd;
-Tcl_ObjCmdProc TclGLFW_glFlushCmd;
 
 typedef struct GLFWMethod {
     char* name;              /* method name */
@@ -88,10 +85,6 @@ static GLFWMethod GLFWMethodList[] = {
     { "waitEvents", "", TclGLFW_WaitEventsCmd },
     { "glDrawPixels", "width height <pixel-list>", TclGLFW_glDrawPixelsCmd },
     { "drawMegaimage", "width height <pixel-list>", TclGLFW_DrawMegaimageCmd },
-    { "glClearColor", "redVal greenVal blueVal alphaVal",
-            TclGLFW_glClearColorCmd },
-    { "glClear", "", TclGLFW_glClearCmd },
-    { "glFlush", "", TclGLFW_glFlushCmd },
     /*
      *  Add an error handler to support all of the usual inquiries
      *  for the "info" command in the global namespace.
@@ -141,9 +134,6 @@ static const struct NameProcMap glfwCmds2[] = {
     { "::ntk::glfw::GLFW::unknown", TclGLFW_UnknownCmd },
     { "::ntk::glfw::GLFW::glDrawPixels", TclGLFW_glDrawPixelsCmd },
     { "::ntk::glfw::GLFW::drawMegaimage", TclGLFW_DrawMegaimageCmd },
-    { "::ntk::glfw::GLFW::glClearColor", TclGLFW_glClearColorCmd },
-    { "::ntk::glfw::GLFW::glClear", TclGLFW_glClearCmd },
-    { "::ntk::glfw::GLFW::glFlush", TclGLFW_glFlushCmd },
     /*
      *  Add an error handler
      */
@@ -151,6 +141,7 @@ static const struct NameProcMap glfwCmds2[] = {
     { NULL, NULL }
 };
 
+static Tcl_Interp *_interp;
 /*
  * ------------------------------------------------------------------------
  *  TclGLFW_InitCommands()
@@ -170,6 +161,8 @@ TclGLFW_InitCommands (
     Tcl_Command cmd;
     int i;
 
+    /* TEMPORARY !! */
+    _interp = interp;
     /*
      * Build the ensemble used to implement [ntk glfw].
      */
@@ -254,7 +247,6 @@ TclGLFW_UnknownCmd(
     return TCL_ERROR;
 }
 
-static Tcl_Interp *_interp;
 
 /*
  * ------------------------------------------------------------------------
@@ -272,6 +264,7 @@ TclGLFW_InitCmd(
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
 {
+    /* NO LONGER NEEDED, call to glfwInit is done when loading package */
     TclGLFWShowArgs(1, "TclGLFW_InitCmd", objc, objv);
     if (objc != 1) {
 	Tcl_AppendResult(interp,
@@ -1562,125 +1555,6 @@ TclGLFW_glDrawPixelsCmd(
     ckfree((char *)rowv);
     glDrawPixels(width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
     ckfree((char *)data);
-    return result;
-}
-
-/*
- * ------------------------------------------------------------------------
- *  TclGLFW_glClearColorCmd()
- *
- *  Handles clearing of color buffer
- *
- *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
- * ------------------------------------------------------------------------
- */
-/* ARGSUSED */
-int
-TclGLFW_glClearColorCmd(
-    ClientData clientData, /* infoPtr */
-    Tcl_Interp *interp,    /* current interpreter */
-    int objc,              /* number of arguments */
-    Tcl_Obj *CONST objv[]) /* argument objects */
-{
-    TclGLFWInfo *infoPtr;
-    double redVal;
-    double greenVal;
-    double blueVal;
-    double alphaVal;
-    int result;
-
-    infoPtr = (TclGLFWInfo *)clientData;
-    result = TCL_OK;
-    TclGLFWShowArgs(1, "TclGLFW_glClearColorCmd", objc, objv);
-    if (objc != 5) {
-	Tcl_AppendResult(interp,
-	        "wrong # args: should be \"ntk glfw glClearColor red green blue alpha\"",
-	        NULL);
-        return TCL_ERROR;
-    }
-    Tcl_GetDoubleFromObj(interp, objv[1], &redVal);
-    Tcl_GetDoubleFromObj(interp, objv[2], &greenVal);
-    Tcl_GetDoubleFromObj(interp, objv[3], &blueVal);
-    Tcl_GetDoubleFromObj(interp, objv[4], &alphaVal);
-    glClearColor((GLfloat)redVal, (GLfloat)greenVal, (GLfloat)blueVal,
-            (GLfloat)alphaVal);
-    return result;
-}
-
-/*
- * ------------------------------------------------------------------------
- *  TclGLFW_glClearCmd()
- *
- *  Handles drawing of a pixel area with rgba values
- *
- *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
- * ------------------------------------------------------------------------
- */
-/* ARGSUSED */
-int
-TclGLFW_glClearCmd(
-    ClientData clientData, /* infoPtr */
-    Tcl_Interp *interp,    /* current interpreter */
-    int objc,              /* number of arguments */
-    Tcl_Obj *CONST objv[]) /* argument objects */
-{
-    TclGLFWInfo *infoPtr;
-    const char *token;
-    int param;
-    int result;
-
-    infoPtr = (TclGLFWInfo *)clientData;
-    result = TCL_OK;
-    TclGLFWShowArgs(1, "TclGLFW_glClearCmd", objc, objv);
-    if (objc != 2) {
-	Tcl_AppendResult(interp,
-	        "wrong # args: should be \"ntk glfw glClear value\"",
-	        NULL);
-        return TCL_ERROR;
-    }
-    token = Tcl_GetString(objv[1]);
-/* FIX ME !! */
-//    param = TclGLFWGlKey2Define(token);
-param = GL_COLOR_BUFFER_BIT;    
-    if (param < 0) {
-        Tcl_AppendResult(interp, "bad param in glClear: \"", token,
-	        "\"", NULL);
-        return TCL_ERROR;
-    }
-    glClear(param);
-    return result;
-}
-
-/*
- * ------------------------------------------------------------------------
- *  TclGLFW_glFlushCmd()
- *
- *  Handles flush the buffers
- *
- *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
- * ------------------------------------------------------------------------
- */
-/* ARGSUSED */
-int
-TclGLFW_glFlushCmd(
-    ClientData clientData, /* infoPtr */
-    Tcl_Interp *interp,    /* current interpreter */
-    int objc,              /* number of arguments */
-    Tcl_Obj *CONST objv[]) /* argument objects */
-{
-    TclGLFWInfo *infoPtr;
-    int result;
-
-    infoPtr = (TclGLFWInfo *)clientData;
-    result = TCL_OK;
-    TclGLFWShowArgs(1, "TclGLFW_glFlushCmd", objc, objv);
-    if (objc != 1) {
-	Tcl_AppendResult(interp,
-	        "wrong # args: should be \"ntk glfw glFlush\"",
-	        NULL);
-        return TCL_ERROR;
-    }
-    glFlush();
     return result;
 }
 
