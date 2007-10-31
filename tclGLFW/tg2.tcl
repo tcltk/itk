@@ -28,30 +28,26 @@ puts stderr "win!$win!"
 ::ntk::glfw::GLFW setWindowTitle "Hallo Arnulf"
 set running 1
 puts stderr "start!"
-set modes [::ntk::glfw::GLFW getVideoModes]
-puts stderr "modes![join $modes \n]!"
-set dmode [::ntk::glfw::GLFW getDesktopMode]
-puts stderr "dmode!$dmode!"
-proc DispatchKey {key state} {
-    puts stderr "DispatchKey!$key!$state!"
+proc DispatchKey {key state keyVal} {
+    puts stderr "DispatchKey!$key!$state!$keyVal"
 }
 proc DispatchMousePos {x y} {
-    puts stderr "DispatchMousePos!$x!$y!"
+#    puts stderr "DispatchMousePos!$x!$y!"
 }
 proc DispatchMouseButton {num state} {
-    puts stderr "DispatchMouseButton!$num!$state!"
+#    puts stderr "DispatchMouseButton!$num!$state!"
 }
 proc DispatchMouseWheel {where} {
-    puts stderr "DispatchMouseWheel!$where!"
+#    puts stderr "DispatchMouseWheel!$where!"
 }
 proc DispatchWindowSize {width height} {
-    puts stderr "DispatchWindowSize!$width!$height!"
+#    puts stderr "DispatchWindowSize!$width!$height!"
 }
 proc DispatchWindowRefresh {} {
-    puts stderr "DispatchWindowRefresh!"
+#    puts stderr "DispatchWindowRefresh!"
 }
 proc DispatchWindowClose {} {
-    puts stderr "DispatchWindowClose!"
+#    puts stderr "DispatchWindowClose!"
 }
 ::ntk::glfw::GLFW enable GLFW_STICKY_KEYS
 ::ntk::glfw::GLFW enable GLFW_KEY_REPEAT
@@ -79,9 +75,20 @@ proc Draw {} {
         ::ntk::glfw::GLFW terminate
         exit 0
     }
-    after 5 [list Draw]
 }
-after 5 [list Draw]
+
+proc WaitEvents {} {
+    set isOpened [::ntk::glfw::GLFW getWindowParam GLFW_OPENED]
+    if {!$isOpened} {
+        ::ntk::glfw::GLFW terminate
+        exit 0
+    }
+    ::ntk::glfw::GLFW waitEvents
+    set ::afterWaitId [after 50 [list WaitEvents]]
+}
+
+Draw
+WaitEvents
 set xx 1
 vwait xx
 ::ntk::glfw::GLFW terminate

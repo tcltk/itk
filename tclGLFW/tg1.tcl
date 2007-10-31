@@ -30,11 +30,11 @@ puts stderr "modes![join $modes \n]!"
 set dmode [::ntk::glfw::GLFW getDesktopMode]
 puts stderr "dmode!$dmode!"
 }
-proc DispatchKey {key state} {
-    puts stderr "DispatchKey!$key!$state!"
+proc DispatchKey {key state keyVal} {
+    puts stderr "DispatchKey!$key!$state![format %c $key]!$keyVal!"
 }
 proc DispatchMousePos {x y} {
-    puts stderr "DispatchMousePos!$x!$y!"
+#    puts stderr "DispatchMousePos!$x!$y!"
 }
 proc DispatchMouseButton {num state} {
     puts stderr "DispatchMouseButton!$num!$state!"
@@ -70,15 +70,21 @@ proc Draw {} {
     ::ntk::glfw::GLFW glDrawPixels 50 50 $lst
     ::ntk::glfw::GLFW swapBuffers
     ::ntk::glfw::GLFW glFlush
+}
+proc WaitEvents {} {
     set isOpened [::ntk::glfw::GLFW getWindowParam GLFW_OPENED]
     if {!$isOpened} {
         ::ntk::glfw::GLFW terminate
         exit 0
     }
-    after 5 [list Draw]
+    ::ntk::glfw::GLFW waitEvents
+    set ::afterWaitId [after 50 [list WaitEvents]]
 }
-after 5 [list Draw]
+
+Draw
+WaitEvents
 set xx 1
 vwait xx
+after cancel $::afterWaitId
 ::ntk::glfw::GLFW terminate
 exit 0

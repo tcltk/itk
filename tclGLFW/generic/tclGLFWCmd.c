@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLFWCmd.c,v 1.1.2.3 2007/10/31 13:52:25 wiede Exp $
+ * RCS: @(#) $Id: tclGLFWCmd.c,v 1.1.2.4 2007/10/31 15:40:51 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -41,8 +41,9 @@ Tcl_ObjCmdProc TclGLFW_EnableCmd;
 Tcl_ObjCmdProc TclGLFW_DisableCmd;
 Tcl_ObjCmdProc TclGLFW_DefaultCmd;
 Tcl_ObjCmdProc TclGLFW_UnknownCmd;
-Tcl_ObjCmdProc TclGLFW_glDrawPixelsCmd;
+Tcl_ObjCmdProc TclGLFW_WaitEventsCmd;
 Tcl_ObjCmdProc TclGLFW_DrawMegaimageCmd;
+Tcl_ObjCmdProc TclGLFW_glDrawPixelsCmd;
 Tcl_ObjCmdProc TclGLFW_glClearColorCmd;
 Tcl_ObjCmdProc TclGLFW_glClearCmd;
 Tcl_ObjCmdProc TclGLFW_glFlushCmd;
@@ -82,7 +83,9 @@ static GLFWMethod GLFWMethodList[] = {
             TclGLFW_SetWindowRefreshCallbackCmd },
     { "setWindowcloseCallback", "functionName",
             TclGLFW_SetWindowCloseCallbackCmd },
-    { "setMouseWheelCallback", "??", TclGLFW_SetMouseWheelCallbackCmd },
+    { "setMouseWheelCallback", "functionName",
+            TclGLFW_SetMouseWheelCallbackCmd },
+    { "waitEvents", "", TclGLFW_WaitEventsCmd },
     { "glDrawPixels", "width height <pixel-list>", TclGLFW_glDrawPixelsCmd },
     { "drawMegaimage", "width height <pixel-list>", TclGLFW_DrawMegaimageCmd },
     { "glClearColor", "redVal greenVal blueVal alphaVal",
@@ -134,6 +137,7 @@ static const struct NameProcMap glfwCmds2[] = {
             TclGLFW_SetWindowRefreshCallbackCmd },
     { "::ntk::glfw::GLFW::setWindowCloseCallback",
             TclGLFW_SetWindowCloseCallbackCmd },
+    { "::ntk::glfw::GLFW::waitEvents", TclGLFW_WaitEventsCmd },
     { "::ntk::glfw::GLFW::unknown", TclGLFW_UnknownCmd },
     { "::ntk::glfw::GLFW::glDrawPixels", TclGLFW_glDrawPixelsCmd },
     { "::ntk::glfw::GLFW::drawMegaimage", TclGLFW_DrawMegaimageCmd },
@@ -959,6 +963,7 @@ void DispatchKey(
     Tcl_ListObjAppendElement (_interp, listPtr, winPtr->keyCallback);
     Tcl_ListObjAppendElement(_interp, listPtr, keyPtr);
     Tcl_ListObjAppendElement(_interp, listPtr, statePtr);
+    Tcl_ListObjAppendElement(_interp, listPtr, objPtr);
 //fprintf(stderr, "CALL!%s!\n", Tcl_GetString(listPtr));
     result = Tcl_GlobalEvalObj (_interp, listPtr);
     Tcl_DecrRefCount (listPtr);
@@ -985,7 +990,6 @@ void DispatchMousePos(
     TclGLFWInfo *infoPtr;
     int result;
 
-fprintf(stderr, "DispatchMousePos\n");
     infoPtr = Tcl_GetAssocData(_interp, TCL_GLFW_INTERP_DATA, NULL);
     winPtr = infoPtr->currWindow;
     listPtr = Tcl_NewListObj(0, NULL);
@@ -1001,7 +1005,6 @@ fprintf(stderr, "DispatchMousePos\n");
     Tcl_DecrRefCount (xPtr);
     Tcl_DecrRefCount (yPtr);
     Tcl_DecrRefCount (listPtr);
-fprintf(stderr, "DispatchMousePos END\n");
 }
 
 /*
@@ -1469,6 +1472,31 @@ TclGLFW_DefaultCmd(
     TclGLFWShowArgs(0, "TclGLFW_DefaultCmd", objc, objv);
 //    TclGLFW_GetEnsembleUsageForObj(interp, objv[0], resultPtr);
     return result;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  TclGLFW_WaitEventsCmd()
+ *
+ *  Handles waiting for new window and input events
+ *
+ *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+TclGLFW_WaitEventsCmd(
+    ClientData clientData, /* infoPtr */
+    Tcl_Interp *interp,    /* current interpreter */
+    int objc,              /* number of arguments */
+    Tcl_Obj *CONST objv[]) /* argument objects */
+{
+    TclGLFWInfo *infoPtr;
+
+    infoPtr = (TclGLFWInfo *)clientData;
+    TclGLFWShowArgs(1, "TclGLFW_WaitEventsCmd", objc, objv);
+    glfwWaitEvents();
+    return TCL_OK;
 }
 
 #include <GL/gl.h>
