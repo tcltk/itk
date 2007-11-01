@@ -18,7 +18,7 @@
  * and package require command has to look for the right one dependent on the
  * platform
  *
- * RCS: @(#) $Id: tclGLMWFWWindow.c,v 1.1.2.3 2007/11/01 19:51:36 wiede Exp $
+ * RCS: @(#) $Id: tclGLMWFWWindow.c,v 1.1.2.4 2007/11/01 20:35:41 wiede Exp $
  */
 
 #include "tclGLMWFWInt.h"
@@ -268,6 +268,7 @@ glmwfwOpenWindow(
     winPtr = (GLMWFWWindow *)ckalloc(sizeof(GLMWFWWindow));
     memset(winPtr, 0, sizeof(GLMWFWWindow));
     winPtr->handlePtr = Tcl_NewStringObj(buf, -1);
+    winPtr->infoPtr = infoPtr;
     Tcl_IncrRefCount(winPtr->handlePtr);
     hPtr = Tcl_CreateHashEntry(&infoPtr->windows,
             (char *)winPtr->handlePtr, &isNew);
@@ -305,7 +306,7 @@ glmwfwOpenWindow(
     winPtr->Fullscreen     = (mode == GLMWFW_FULLSCREEN ? 1 : 0);
 
     /* Platform specific window opening routine */
-    if (!glmwfwPlatformOpenWindow(width, height, redbits, greenbits,
+    if (!_glmwfwPlatformOpenWindow(winPtr, width, height, redbits, greenbits,
             bluebits, alphabits, depthbits, stencilbits, mode,
 	    &winPtr->Hints)) {
         return NULL;

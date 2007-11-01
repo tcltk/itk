@@ -1,5 +1,6 @@
 lappend auto_path .
 package require TclGL
+package require TclGLMWFWX
 package require TclGLMWFW
 
 source tg_util.tcl
@@ -24,14 +25,14 @@ foreach i {1 2 3 4 5 6 7 8 9 10} {
 }
 set lst [::ntk::gl::GL makeFloatVector $lst]
 
-set win [::ntk::glfw::GLMWFW openWindow 500 400]
-::ntk::glfw::GLMWFW setWindowTitle "Hallo Arnulf"
+set win [::ntk::glmwfw::GLMWFW openWindow 500 400]
+::ntk::glmwfw::GLMWFW setWindowTitle $win "Hallo Arnulf"
 tgInit $win
 
 if {0} {
-    set modes [::ntk::glfw::GLMWFW getVideoModes]
+    set modes [::ntk::glmwfw::GLMWFW getVideoModes]
     puts stderr "modes![join $modes \n]!"
-    set dmode [::ntk::glfw::GLMWFW getDesktopMode]
+    set dmode [::ntk::glmwfw::GLMWFW getDesktopMode]
     puts stderr "dmode!$dmode!"
 }
 
@@ -41,7 +42,7 @@ proc Draw {} {
     ::ntk::gl::GL glClearColor 0.25 0.0 0.0 0.0
     ::ntk::gl::GL glClear GL_COLOR_BUFFER_BIT
     ::ntk::gl::GL glDrawPixels 50 50 GL_RGBA GL_FLOAT $lst
-    ::ntk::glfw::GLMWFW swapBuffers
+    ::ntk::glmwfw::GLMWFW swapBuffers $::win 
     ::ntk::gl::GL glFlush
 }
 
@@ -51,5 +52,5 @@ WaitEvents
 set xx 1
 vwait xx
 after cancel $::afterWaitId
-::ntk::glfw::GLMWFW terminate
+::ntk::glmwfw::GLMWFW terminate
 exit 0

@@ -894,6 +894,10 @@ int _glmwfwPlatformOpenWindow( GLMWFWWindow *winPtr, int width, int height, int 
     XEvent      event;
     Atom protocols[2];
 
+    winPtr->platformWindow = (_GLMWFWPlatformWindow *)
+            ckalloc(sizeof(_GLMWFWPlatformWindow));
+    winPtr->input.platformInput = (_GLMWFWPlatformInput *)
+            ckalloc(sizeof(_GLMWFWPlatformInput));
     // Clear platform specific GLMWFW window state
     winPtr->platformWindow->VI               = NULL;
     winPtr->platformWindow->CX               = (GLXContext)0;

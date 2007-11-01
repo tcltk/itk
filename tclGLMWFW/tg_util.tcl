@@ -21,12 +21,12 @@ proc DispatchWindowClose {} {
 }
 
 proc WaitEvents {} {
-    set isOpened [::ntk::glmwfw::GLMWFW getWindowParam GLMWFW_OPENED]
+    set isOpened [::ntk::glmwfw::GLMWFW getWindowParam $::win GLMWFW_OPENED]
     if {!$isOpened} {
         ::ntk::glmwfw::GLMWFW terminate
         exit 0
     }
-    ::ntk::glmwfw::GLMWFW waitEvents
+    ::ntk::glmwfw::GLMWFW waitEvents $::win
     set ::afterWaitId [after 50 [list WaitEvents]]
 }
 

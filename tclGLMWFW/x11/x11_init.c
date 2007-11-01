@@ -176,11 +176,11 @@ int _glmwfwPlatformInit( void )
 // Close window and kill all threads
 //========================================================================
 
-int _glmwfwPlatformTerminate( GLMWFWWindow *winPtr )
+int _glmwfwPlatformTerminate( TclGLMWFWInfo *infoPtr )
 {
 
     // Close OpenGL window
-    glmwfwCloseWindow(winPtr);
+    glmwfwCloseWindow(infoPtr->currWindow);
 
     // Terminate display
     _glmwfwTerminateDisplay();

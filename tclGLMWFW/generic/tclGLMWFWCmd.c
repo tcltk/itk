@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLMWFWCmd.c,v 1.1.2.2 2007/11/01 15:09:25 wiede Exp $
+ * RCS: @(#) $Id: tclGLMWFWCmd.c,v 1.1.2.3 2007/11/01 20:35:41 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -298,7 +298,7 @@ TclGLMWFW_TerminateCmd(
 	        NULL);
         return TCL_ERROR;
     }
-    glmwfwTerminate();
+    glmwfwTerminate(infoPtr);
     FOREACH_HASH_VALUE(winPtr, &infoPtr->windows) {
         Tcl_DecrRefCount(winPtr->handlePtr);
 	ckfree((char *)winPtr);

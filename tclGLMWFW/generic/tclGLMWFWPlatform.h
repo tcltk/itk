@@ -1,6 +1,6 @@
-int glmwfwPlatformOpenWindow(int width, int height, int redbits, int greenbits,
-        int bluebits, int alphabits, int depthbits, int stencilbits, int mode,
-	GLMWFWHints *hints);
+int _glmwfwPlatformOpenWindow(GLMWFWWindow *winPtr, int width, int height,
+        int redbits, int greenbits, int bluebits, int alphabits,
+	int depthbits, int stencilbits, int mode, GLMWFWHints *hints);
 int _glmwfwPlatformRefreshWindowParams(GLMWFWWindow *winPtr);
 int _glmwfwPlatformCloseWindow(GLMWFWWindow *winPtr);
 int _glmwfwPlatformSetWindowTitle(GLMWFWWindow *winPtr, const char *title);
@@ -21,7 +21,7 @@ int _glmwfwPlatformSetMouseCursorPos(GLMWFWWindow *winPtr, int width,
 int _glmwfwPlatformEnableSystemKeys(GLMWFWWindow *winPtr);
 int _glmwfwPlatformDisableSystemKeys(GLMWFWWindow *winPtr);
 int _glmwfwPlatformInit(void);
-int _glmwfwPlatformTerminate(GLMWFWWindow *winPtr);
+int _glmwfwPlatformTerminate(TclGLMWFWInfo *infoPtr);
 int _glmwfwPlatformGetVideoModes(GLMWFWvidmode *list, int maxcount);
 int _glmwfwPlatformGetDesktopMode(GLMWFWvidmode *mode);
 int _glmwfwPlatformExtensionSupported(GLMWFWWindow *winPtr,

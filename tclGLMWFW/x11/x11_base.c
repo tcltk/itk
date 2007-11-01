@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: x11_base.c,v 1.1.2.1 2007/11/01 18:24:06 wiede Exp $
+ * RCS: @(#) $Id: x11_base.c,v 1.1.2.2 2007/11/01 20:35:42 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -38,12 +38,12 @@ Initialize (
         return TCL_ERROR;
     }
 
-    return Tcl_PkgProvideEx(interp, "TclGLMWFWX11", TCL_GLMWFW_VERSION, &tclGLMWFWStubAPI);
+    return Tcl_PkgProvideEx(interp, "TclGLMWFWX", TCL_GLMWFW_VERSION, &tclGLMWFWStubAPI);
 }
 
 /*
  * ------------------------------------------------------------------------
- *  Tclglmwfwx11_Init()
+ *  Tclglmwfwx_Init()
  *
  *  Invoked whenever a new INTERPRETER is created to install the
  *  tclGLMWFW package.  Usually invoked within Tcl_AppInit() at
@@ -57,7 +57,7 @@ Initialize (
  */
 
 int
-Tclglmwfwx11_Init (
+Tclglmwfwx_Init (
     Tcl_Interp *interp)
 {
     if (Initialize(interp) != TCL_OK) {
@@ -69,7 +69,7 @@ Tclglmwfwx11_Init (
 
 /*
  * ------------------------------------------------------------------------
- *  Tclglmwfwx11_SafeInit()
+ *  Tclglmwfwx_SafeInit()
  *
  *  Invoked whenever a new SAFE INTERPRETER is created to install
  *  the tclGLMWFW package.
@@ -82,7 +82,7 @@ Tclglmwfwx11_Init (
  */
 
 int
-Tclglmwfwx11_SafeInit (
+Tclglmwfwx_SafeInit (
     Tcl_Interp *interp)
 {
     if (Initialize(interp) != TCL_OK) {
