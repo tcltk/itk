@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLMWFWInt.h,v 1.1.2.2 2007/11/01 15:09:25 wiede Exp $
+ * RCS: @(#) $Id: tclGLMWFWInt.h,v 1.1.2.3 2007/11/01 16:14:37 wiede Exp $
  */
 
 #include <string.h>
@@ -204,8 +204,8 @@ MODULE_SCOPE Tcl_Obj * TclGLMWFWDefine2Key(int value);
  */
 
 /* GLMWFW initialization, termination and version querying */
-MODULE_SCOPE int   glmwfwInit(void);
-MODULE_SCOPE void  glmwfwTerminate(void);
+MODULE_SCOPE int glmwfwInit(void);
+MODULE_SCOPE int glmwfwTerminate(void);
 
 /* Window handling */
 MODULE_SCOPE GLMWFWWindow *glmwfwOpenWindow(TclGLMWFWInfo *infoPtr,
@@ -234,57 +234,57 @@ MODULE_SCOPE int glmwfwSetWindowRefreshCallback(GLMWFWWindow *winPtr,
         GLMWFWwindowrefreshfun cbfun);
 
 /* Video mode functions */
-MODULE_SCOPE int   glmwfwGetVideoModes(TclGLMWFWInfo *infoPtr,
+MODULE_SCOPE int glmwfwGetVideoModes(TclGLMWFWInfo *infoPtr,
         GLMWFWvidmode *list, int maxcount);
-MODULE_SCOPE void  glmwfwGetDesktopMode(TclGLMWFWInfo *infoPtr,
+MODULE_SCOPE int glmwfwGetDesktopMode(TclGLMWFWInfo *infoPtr,
         GLMWFWvidmode *mode);
 
 /* Input handling */
-MODULE_SCOPE int  glmwfwPollEvents(GLMWFWWindow *winPtr);
-MODULE_SCOPE int  glmwfwWaitEvents(GLMWFWWindow *winPtr);
-MODULE_SCOPE int   glmwfwGetKey(GLMWFWWindow *winPtr, int key);
-MODULE_SCOPE int   glmwfwGetMouseButton(GLMWFWWindow *winPtr, int button);
-MODULE_SCOPE void  glmwfwGetMousePos(GLMWFWWindow *winPtr, int *xpos,
+MODULE_SCOPE int glmwfwPollEvents(GLMWFWWindow *winPtr);
+MODULE_SCOPE int glmwfwWaitEvents(GLMWFWWindow *winPtr);
+MODULE_SCOPE int glmwfwGetKey(GLMWFWWindow *winPtr, int key);
+MODULE_SCOPE int glmwfwGetMouseButton(GLMWFWWindow *winPtr, int button);
+MODULE_SCOPE int glmwfwGetMousePos(GLMWFWWindow *winPtr, int *xpos,
         int *ypos);
-MODULE_SCOPE void  glmwfwSetMousePos(GLMWFWWindow *winPtr,
+MODULE_SCOPE int glmwfwSetMousePos(GLMWFWWindow *winPtr,
         int xpos, int ypos);
-MODULE_SCOPE int   glmwfwGetMouseWheel(GLMWFWWindow *winPtr);
-MODULE_SCOPE void  glmwfwSetMouseWheel(GLMWFWWindow *winPtr, int pos);
-MODULE_SCOPE void  glmwfwSetKeyCallback(GLMWFWWindow *winPtr,
+MODULE_SCOPE int glmwfwGetMouseWheel(GLMWFWWindow *winPtr);
+MODULE_SCOPE int glmwfwSetMouseWheel(GLMWFWWindow *winPtr, int pos);
+MODULE_SCOPE int glmwfwSetKeyCallback(GLMWFWWindow *winPtr,
         GLMWFWkeyfun cbfun);
-MODULE_SCOPE void  glmwfwSetCharCallback(GLMWFWWindow *winPtr,
+MODULE_SCOPE int glmwfwSetCharCallback(GLMWFWWindow *winPtr,
         GLMWFWcharfun cbfun);
-MODULE_SCOPE void  glmwfwSetMouseButtonCallback(GLMWFWWindow *winPtr,
+MODULE_SCOPE int glmwfwSetMouseButtonCallback(GLMWFWWindow *winPtr,
         GLMWFWmousebuttonfun cbfun);
-MODULE_SCOPE void  glmwfwSetMousePosCallback(GLMWFWWindow *winPtr,
+MODULE_SCOPE int glmwfwSetMousePosCallback(GLMWFWWindow *winPtr,
         GLMWFWmouseposfun cbfun);
-MODULE_SCOPE void  glmwfwSetMouseWheelCallback(GLMWFWWindow *winPtr,
+MODULE_SCOPE int glmwfwSetMouseWheelCallback(GLMWFWWindow *winPtr,
         GLMWFWmousewheelfun cbfun);
 
 /* Joystick input */
-MODULE_SCOPE int  glmwfwGetJoystickParam(GLMWFWWindow *winPtr, int joy,
+MODULE_SCOPE int glmwfwGetJoystickParam(GLMWFWWindow *winPtr, int joy,
         int param);
-MODULE_SCOPE int  glmwfwGetJoystickPos(GLMWFWWindow *winPtr, int joy,
+MODULE_SCOPE int glmwfwGetJoystickPos(GLMWFWWindow *winPtr, int joy,
         float *pos, int numaxes);
-MODULE_SCOPE int  glmwfwGetJoystickButtons(GLMWFWWindow *winPtr, int joy,
+MODULE_SCOPE int glmwfwGetJoystickButtons(GLMWFWWindow *winPtr, int joy,
         unsigned char *buttons, int numbuttons);
 
 /* Time */
-MODULE_SCOPE double  glmwfwGetTime(void);
-MODULE_SCOPE void    glmwfwSetTime(double time);
-MODULE_SCOPE void    glmwfwSleep(double time);
+MODULE_SCOPE double glmwfwGetTime(void);
+MODULE_SCOPE void glmwfwSetTime(double time);
+MODULE_SCOPE void glmwfwSleep(double time);
 
 /* Extension support */
-MODULE_SCOPE int    glmwfwExtensionSupported(TclGLMWFWInfo *infoPtr,
+MODULE_SCOPE int  glmwfwExtensionSupported(TclGLMWFWInfo *infoPtr,
         const char *extension);
-MODULE_SCOPE void*  glmwfwGetProcAddress(TclGLMWFWInfo *infoPtr,
+MODULE_SCOPE void* glmwfwGetProcAddress(TclGLMWFWInfo *infoPtr,
         const char *procname);
-MODULE_SCOPE void   glmwfwGetGLVersion(TclGLMWFWInfo *infoPtr, int *major,
+MODULE_SCOPE void  glmwfwGetGLVersion(TclGLMWFWInfo *infoPtr, int *major,
         int *minor, int *rev);
 
 /* Enable/disable functions */
-MODULE_SCOPE void  glmwfwEnable(GLMWFWWindow *winPtr, int token);
-MODULE_SCOPE void  glmwfwDisable(GLMWFWWindow *winPtr, int token);
+MODULE_SCOPE int glmwfwEnable(GLMWFWWindow *winPtr, int token);
+MODULE_SCOPE int glmwfwDisable(GLMWFWWindow *winPtr, int token);
 
 MODULE_SCOPE void _glmwfwInputKey(GLMWFWWindow *winPtr, int key, int action);
 MODULE_SCOPE void _glmwfwInputMouseClick(GLMWFWWindow *winPtr, int button,

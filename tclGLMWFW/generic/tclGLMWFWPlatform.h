@@ -12,11 +12,24 @@ int _glmwfwPlatformRestoreWindow(GLMWFWWindow *winPtr);
 int _glmwfwPlatformSwapInterval(GLMWFWWindow *winPtr, int interval);
 int _glmwfwPlatformPollEvents(GLMWFWWindow *winPtr);
 int _glmwfwPlatformWaitEvents(GLMWFWWindow *winPtr);
-int _glfwPlatformShowMouseCursor(GLMWFWWindow *winPtr);
-int _glfwPlatformSetMouseCursorPos(GLMWFWWindow *winPtr, int CenterPosX,
+int _glmwfwPlatformShowMouseCursor(GLMWFWWindow *winPtr);
+int _glmwfwPlatformSetMouseCursorPos(GLMWFWWindow *winPtr, int CenterPosX,
         int CenterPosY);
-int _glfwPlatformHideMouseCursor(GLMWFWWindow *winPtr);
-int _glfwPlatformSetMouseCursorPos(GLMWFWWindow *winPtr, int width, int height);
-int _glfwPlatformEnableSystemKeys(GLMWFWWindow *winPtr);
-int _glfwPlatformDisableSystemKeys(GLMWFWWindow *winPtr);
-
+int _glmwfwPlatformHideMouseCursor(GLMWFWWindow *winPtr);
+int _glmwfwPlatformSetMouseCursorPos(GLMWFWWindow *winPtr, int width,
+        int height);
+int _glmwfwPlatformEnableSystemKeys(GLMWFWWindow *winPtr);
+int _glmwfwPlatformDisableSystemKeys(GLMWFWWindow *winPtr);
+int _glmwfwPlatformInit(void);
+int _glmwfwPlatformTerminate(void);
+int _glmwfwPlatformGetVideoModes(GLMWFWvidmode *list, int maxcount);
+int _glmwfwPlatformGetDesktopMode(GLMWFWvidmode *mode);
+int _glmwfwPlatformExtensionSupported(GLMWFWWindow *winPtr,
+        const char *extension);
+void *_glmwfwPlatformGetProcAddress(GLMWFWWindow *winPtr,
+        const char *procname);
+int _glmwfwPlatformGetJoystickParam(GLMWFWWindow *winPtr, int joy, int param);
+int _glmwfwPlatformGetJoystickPos(GLMWFWWindow *winPtr, int joy, float *pos,
+        int numaxes);
+int _glmwfwPlatformGetJoystickButtons(GLMWFWWindow *winPtr, int joy,
+        unsigned char *buttons, int numbuttons);

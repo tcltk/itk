@@ -1,4 +1,7 @@
-PKG_OBJECTS = tclGLMWFWBase.o tclGLMWFWCmd.o tclGLMWFWUtil.o tclGLMWFWStubInit.o tclGLMWFWMaps.o tclGLMWFWWindow.o tclGLMWFWEnable.o tclGLMWFWInput.o
+PKG_OBJECTS = tclGLMWFWBase.o tclGLMWFWCmd.o tclGLMWFWUtil.o \
+    tclGLMWFWStubInit.o tclGLMWFWMaps.o tclGLMWFWWindow.o tclGLMWFWEnable.o \
+    tclGLMWFWInput.o tclGLMWFWInit.o tclGLMWFWFullscreen.o tclGLMWFWGlext.o \
+    tclGLMWFWJoystick.o
 PKG_STUB_OBJECTS= 
 PKG_HEADERS= generic/tclGLMWFW.h generic/tclGLMWFWInt.h
 PKG_LIB_FILE=libTclGLMWFW0.1.so
@@ -150,6 +153,14 @@ tclGLMWFWWindow.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h
 tclGLMWFWEnable.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h
 
 tclGLMWFWInput.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h
+
+tclGLMWFWInit.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h
+
+tclGLMWFWFullScreen.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h
+
+tclGLMWFWGlext.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h
+
+tclGLMWFWJoystick.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h
 
 
 #========================================================================

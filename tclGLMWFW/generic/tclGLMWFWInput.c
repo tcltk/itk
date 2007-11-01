@@ -18,7 +18,7 @@
  * and package require command has to look for the right one dependent on the
  * platform
  *
- * RCS: @(#) $Id: tclGLMWFWInput.c,v 1.1.2.1 2007/11/01 15:07:59 wiede Exp $
+ * RCS: @(#) $Id: tclGLMWFWInput.c,v 1.1.2.2 2007/11/01 16:14:36 wiede Exp $
  */
 
 #include "tclGLMWFWInt.h"
@@ -26,12 +26,12 @@
 
 /*
  *========================================================================
- * glfwGetKey()
+ * glmwfwGetKey()
  *========================================================================
  */
 
 int
-glfwGetKey(
+glmwfwGetKey(
     GLMWFWWindow *winPtr,
     int key)
 {
@@ -56,12 +56,12 @@ glfwGetKey(
 
 /*
  *========================================================================
- * glfwGetMouseButton()
+ * glmwfwGetMouseButton()
  *========================================================================
  */
 
 int
-glfwGetMouseButton(
+glmwfwGetMouseButton(
     GLMWFWWindow *winPtr,
     int button)
 {
@@ -83,11 +83,11 @@ glfwGetMouseButton(
 
 
 //========================================================================
-// glfwGetMousePos()
+// glmwfwGetMousePos()
 //========================================================================
 
 int
-glfwGetMousePos(
+glmwfwGetMousePos(
     GLMWFWWindow *winPtr,
     int *xpos,
     int *ypos)
@@ -108,12 +108,12 @@ glfwGetMousePos(
 
 /*
  *========================================================================
- * glfwSetMousePos()
+ * glmwfwSetMousePos()
  *========================================================================
  */
 
 int
-glfwSetMousePos(
+glmwfwSetMousePos(
     GLMWFWWindow *winPtr,
     int xpos,
     int ypos)
@@ -136,18 +136,18 @@ glfwSetMousePos(
         return TCL_OK;
     }
     /* Update physical cursor position */
-    _glfwPlatformSetMouseCursorPos(winPtr, xpos, ypos);
+    _glmwfwPlatformSetMouseCursorPos(winPtr, xpos, ypos);
    return TCL_OK;
 }
 
 /*
  *========================================================================
- * glfwGetMouseWheel()
+ * glmwfwGetMouseWheel()
  *========================================================================
  */
 
 int
-glfwGetMouseWheel(
+glmwfwGetMouseWheel(
     GLMWFWWindow *winPtr)
 {
     /* Is GLMWFW initialized? */
@@ -160,12 +160,12 @@ glfwGetMouseWheel(
 
 /*
  *========================================================================
- * glfwSetMouseWheel()
+ * glmwfwSetMouseWheel()
  *========================================================================
  */
 
 int
-glfwSetMouseWheel(
+glmwfwSetMouseWheel(
     GLMWFWWindow *winPtr,
     int pos)
 {
@@ -180,12 +180,12 @@ glfwSetMouseWheel(
 
 /*
  *========================================================================
-  *glfwSetKeyCallback() - Set callback function for keyboard input
+  *glmwfwSetKeyCallback() - Set callback function for keyboard input
  *========================================================================
  */
 
 int
-glfwSetKeyCallback(
+glmwfwSetKeyCallback(
     GLMWFWWindow *winPtr,
     GLMWFWkeyfun cbfun)
 {
@@ -200,12 +200,12 @@ glfwSetKeyCallback(
 
 /*
  *========================================================================
- * glfwSetCharCallback() - Set callback function for character input
+ * glmwfwSetCharCallback() - Set callback function for character input
  *========================================================================
  */
 
 int
-glfwSetCharCallback(
+glmwfwSetCharCallback(
     GLMWFWWindow *winPtr,
     GLMWFWcharfun cbfun)
 {
@@ -220,12 +220,12 @@ glfwSetCharCallback(
 
 /*
  *========================================================================
- * glfwSetMouseButtonCallback() - Set callback function for mouse clicks
+ * glmwfwSetMouseButtonCallback() - Set callback function for mouse clicks
  *========================================================================
  */
 
 int
-glfwSetMouseButtonCallback(
+glmwfwSetMouseButtonCallback(
     GLMWFWWindow *winPtr,
     GLMWFWmousebuttonfun cbfun)
 {
@@ -240,12 +240,12 @@ glfwSetMouseButtonCallback(
 
 /*
  *========================================================================
- * glfwSetMousePosCallback() - Set callback function for mouse moves
+ * glmwfwSetMousePosCallback() - Set callback function for mouse moves
  *========================================================================
  */
 
 int
-glfwSetMousePosCallback(
+glmwfwSetMousePosCallback(
     GLMWFWWindow *winPtr,
     GLMWFWmouseposfun cbfun)
 {
@@ -266,12 +266,12 @@ glfwSetMousePosCallback(
 
 /*
  *========================================================================
- * glfwSetMouseWheelCallback() - Set callback function for mouse wheel
+ * glmwfwSetMouseWheelCallback() - Set callback function for mouse wheel
  *========================================================================
  */
 
 int
-glfwSetMouseWheelCallback(
+glmwfwSetMouseWheelCallback(
     GLMWFWWindow *winPtr,
     GLMWFWmousewheelfun cbfun)
 {

@@ -18,7 +18,7 @@
  * and package require command has to look for the right one dependent on the
  * platform
  *
- * RCS: @(#) $Id: tclGLMWFWEnable.c,v 1.1.2.1 2007/11/01 14:33:29 wiede Exp $
+ * RCS: @(#) $Id: tclGLMWFWEnable.c,v 1.1.2.2 2007/11/01 16:14:36 wiede Exp $
  */
 
 #include "tclGLMWFWInt.h"
@@ -37,7 +37,7 @@
  */
 
 static int
-_glfwEnableMouseCursor(
+_glmwfwEnableMouseCursor(
     GLMWFWWindow *winPtr)
 {
     int CenterPosX;
@@ -48,14 +48,14 @@ _glfwEnableMouseCursor(
     }
 
     /* Show mouse cursor */
-    _glfwPlatformShowMouseCursor(winPtr);
+    _glmwfwPlatformShowMouseCursor(winPtr);
 
     CenterPosX = winPtr->Width / 2;
     CenterPosY = winPtr->Height / 2;
 
     if (CenterPosX != winPtr->input.MousePosX ||
             CenterPosY != winPtr->input.MousePosY) {
-	_glfwPlatformSetMouseCursorPos(winPtr, CenterPosX, CenterPosY);
+	_glmwfwPlatformSetMouseCursorPos(winPtr, CenterPosX, CenterPosY);
 	winPtr->input.MousePosX = CenterPosX;
 	winPtr->input.MousePosY = CenterPosY;
 	if (winPtr->mouseposfun) {
@@ -75,7 +75,7 @@ _glfwEnableMouseCursor(
  */
 
 static int
-_glfwDisableMouseCursor(
+_glmwfwDisableMouseCursor(
     GLMWFWWindow *winPtr)
 {
     if (!winPtr->Opened || winPtr->MouseLock )
@@ -84,10 +84,10 @@ _glfwDisableMouseCursor(
     }
 
     /* Hide mouse cursor */
-    _glfwPlatformHideMouseCursor(winPtr);
+    _glmwfwPlatformHideMouseCursor(winPtr);
 
     /* Move cursor to the middle of the window */
-    _glfwPlatformSetMouseCursorPos(winPtr, winPtr->Width>>1, winPtr->Height>>1);
+    _glmwfwPlatformSetMouseCursorPos(winPtr, winPtr->Width>>1, winPtr->Height>>1);
     /* From now on the mouse is locked */
     winPtr->MouseLock = GL_TRUE;
     return TCL_OK;
@@ -95,13 +95,13 @@ _glfwDisableMouseCursor(
 
 /*
  *========================================================================
- * _glfwEnableStickyKeys() - Enable sticky keys
- * _glfwDisableStickyKeys() - Disable sticky keys
+ * _glmwfwEnableStickyKeys() - Enable sticky keys
+ * _glmwfwDisableStickyKeys() - Disable sticky keys
  *========================================================================
  */
 
 static int
-_glfwEnableStickyKeys(
+_glmwfwEnableStickyKeys(
     GLMWFWWindow *winPtr)
 {
     winPtr->input.StickyKeys = 1;
@@ -109,7 +109,7 @@ _glfwEnableStickyKeys(
 }
 
 static int
-_glfwDisableStickyKeys(
+_glmwfwDisableStickyKeys(
     GLMWFWWindow *winPtr)
 {
     int i;
@@ -127,13 +127,13 @@ _glfwDisableStickyKeys(
 
 /*
  *========================================================================
- * _glfwEnableStickyMouseButtons() - Enable sticky mouse buttons
- * _glfwDisableStickyMouseButtons() - Disable sticky mouse buttons
+ * _glmwfwEnableStickyMouseButtons() - Enable sticky mouse buttons
+ * _glmwfwDisableStickyMouseButtons() - Disable sticky mouse buttons
  *========================================================================
  */
 
 static int
-_glfwEnableStickyMouseButtons(
+_glmwfwEnableStickyMouseButtons(
     GLMWFWWindow *winPtr)
 {
     winPtr->input.StickyMouseButtons = 1;
@@ -141,7 +141,7 @@ _glfwEnableStickyMouseButtons(
 }
 
 static int
-_glfwDisableStickyMouseButtons(
+_glmwfwDisableStickyMouseButtons(
     GLMWFWWindow *winPtr)
 {
     int i;
@@ -159,32 +159,32 @@ _glfwDisableStickyMouseButtons(
 
 /*
  *========================================================================
- * _glfwEnableSystemKeys() - Enable system keys
- * _glfwDisableSystemKeys() - Disable system keys
+ * _glmwfwEnableSystemKeys() - Enable system keys
+ * _glmwfwDisableSystemKeys() - Disable system keys
  *========================================================================
  */
 
 static int
-_glfwEnableSystemKeys(
+_glmwfwEnableSystemKeys(
     GLMWFWWindow *winPtr)
 {
     if (!winPtr->SysKeysDisabled) {
         return TCL_OK;
     }
-    _glfwPlatformEnableSystemKeys(winPtr);
+    _glmwfwPlatformEnableSystemKeys(winPtr);
     /* Indicate that system keys are no longer disabled */
     winPtr->SysKeysDisabled = GL_FALSE;
     return TCL_OK;
 }
 
 static int
-_glfwDisableSystemKeys(
+_glmwfwDisableSystemKeys(
     GLMWFWWindow *winPtr)
 {
     if (winPtr->SysKeysDisabled) {
         return TCL_OK;
     }
-    _glfwPlatformDisableSystemKeys(winPtr);
+    _glmwfwPlatformDisableSystemKeys(winPtr);
     /* Indicate that system keys are now disabled */
     winPtr->SysKeysDisabled = GL_TRUE;
     return TCL_OK;
@@ -192,13 +192,13 @@ _glfwDisableSystemKeys(
 
 /*
  *========================================================================
- * _glfwEnableKeyRepeat() - Enable key repeat
- * _glfwDisableKeyRepeat() - Disable key repeat
+ * _glmwfwEnableKeyRepeat() - Enable key repeat
+ * _glmwfwDisableKeyRepeat() - Disable key repeat
  *========================================================================
  */
 
 static int
-_glfwEnableKeyRepeat(
+_glmwfwEnableKeyRepeat(
     GLMWFWWindow *winPtr)
 {
     winPtr->input.KeyRepeat = 1;
@@ -206,7 +206,7 @@ _glfwEnableKeyRepeat(
 }
 
 static int
-_glfwDisableKeyRepeat(
+_glmwfwDisableKeyRepeat(
     GLMWFWWindow *winPtr)
 {
     winPtr->input.KeyRepeat = 0;
@@ -215,13 +215,13 @@ _glfwDisableKeyRepeat(
 
 /*
  *========================================================================
- * _glfwEnableAutoPollEvents() - Enable automatic event polling
- * _glfwDisableAutoPollEvents() - Disable automatic event polling
+ * _glmwfwEnableAutoPollEvents() - Enable automatic event polling
+ * _glmwfwDisableAutoPollEvents() - Disable automatic event polling
  *========================================================================
  */
 
 static int
-_glfwEnableAutoPollEvents(
+_glmwfwEnableAutoPollEvents(
     GLMWFWWindow *winPtr)
 {
     winPtr->AutoPollEvents = 1;
@@ -229,7 +229,7 @@ _glfwEnableAutoPollEvents(
 }
 
 static int
-_glfwDisableAutoPollEvents(
+_glmwfwDisableAutoPollEvents(
     GLMWFWWindow *winPtr)
 {
     winPtr->AutoPollEvents = 0;
@@ -244,33 +244,33 @@ _glfwDisableAutoPollEvents(
 
 /*
  *========================================================================
- * glfwEnable() - Enable certain GLMWFW/window/system functions.
+ * glmwfwEnable() - Enable certain GLMWFW/window/system functions.
  *========================================================================
  */
 
 int
-glfwEnable(
+glmwfwEnable(
     GLMWFWWindow *winPtr,
     int token)
 {
     switch (token) {
     case GLMWFW_MOUSE_CURSOR:
-        _glfwEnableMouseCursor(winPtr);
+        _glmwfwEnableMouseCursor(winPtr);
         break;
     case GLMWFW_STICKY_KEYS:
-        _glfwEnableStickyKeys(winPtr);
+        _glmwfwEnableStickyKeys(winPtr);
         break;
     case GLMWFW_STICKY_MOUSE_BUTTONS:
-        _glfwEnableStickyMouseButtons(winPtr);
+        _glmwfwEnableStickyMouseButtons(winPtr);
         break;
     case GLMWFW_SYSTEM_KEYS:
-        _glfwEnableSystemKeys(winPtr);
+        _glmwfwEnableSystemKeys(winPtr);
         break;
     case GLMWFW_KEY_REPEAT:
-        _glfwEnableKeyRepeat(winPtr);
+        _glmwfwEnableKeyRepeat(winPtr);
         break;
     case GLMWFW_AUTO_POLL_EVENTS:
-        _glfwEnableAutoPollEvents(winPtr);
+        _glmwfwEnableAutoPollEvents(winPtr);
         break;
     default:
         break;
@@ -280,33 +280,33 @@ glfwEnable(
 
 /*
  *========================================================================
- * glfwDisable() - Disable certain GLMWFW/window/system functions.
+ * glmwfwDisable() - Disable certain GLMWFW/window/system functions.
  *========================================================================
  */
 
 int
-glfwDisable(
+glmwfwDisable(
     GLMWFWWindow *winPtr,
     int token)
 {
     switch (token) {
     case GLMWFW_MOUSE_CURSOR:
-        _glfwDisableMouseCursor(winPtr);
+        _glmwfwDisableMouseCursor(winPtr);
         break;
     case GLMWFW_STICKY_KEYS:
-        _glfwDisableStickyKeys(winPtr);
+        _glmwfwDisableStickyKeys(winPtr);
         break;
     case GLMWFW_STICKY_MOUSE_BUTTONS:
-        _glfwDisableStickyMouseButtons(winPtr);
+        _glmwfwDisableStickyMouseButtons(winPtr);
         break;
     case GLMWFW_SYSTEM_KEYS:
-        _glfwDisableSystemKeys(winPtr);
+        _glmwfwDisableSystemKeys(winPtr);
         break;
     case GLMWFW_KEY_REPEAT:
-        _glfwDisableKeyRepeat(winPtr);
+        _glmwfwDisableKeyRepeat(winPtr);
         break;
     case GLMWFW_AUTO_POLL_EVENTS:
-        _glfwDisableAutoPollEvents(winPtr);
+        _glmwfwDisableAutoPollEvents(winPtr);
         break;
     default:
         break;
