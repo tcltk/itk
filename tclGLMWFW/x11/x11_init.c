@@ -180,7 +180,7 @@ int _glmwfwPlatformTerminate( TclGLMWFWInfo *infoPtr )
 {
 
     // Close OpenGL window
-    glmwfwCloseWindow(infoPtr->currWindow);
+    infoPtr->closeWindow(infoPtr->currWindow);
 
     // Terminate display
     _glmwfwTerminateDisplay();

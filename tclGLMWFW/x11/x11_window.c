@@ -596,7 +596,7 @@ static int _glmwfwGetNextEvent( GLMWFWWindow *winPtr )
         case KeyPress:
 	{
             // Translate and report key press
-            _glmwfwInputKey( winPtr, _glmwfwTranslateKey( event.xkey.keycode ), GLMWFW_PRESS );
+            winPtr->infoPtr->inputKey( winPtr, _glmwfwTranslateKey( event.xkey.keycode ), GLMWFW_PRESS );
 
 #ifdef NOTDEF
             // Translate and report character input
@@ -629,7 +629,7 @@ static int _glmwfwGetNextEvent( GLMWFWWindow *winPtr )
             }
 
             // Translate and report key release
-            _glmwfwInputKey( winPtr, _glmwfwTranslateKey( event.xkey.keycode ), GLMWFW_RELEASE );
+            winPtr->infoPtr->inputKey( winPtr, _glmwfwTranslateKey( event.xkey.keycode ), GLMWFW_RELEASE );
 
 #ifdef NOTDEF
             // Translate and report character input
@@ -646,15 +646,15 @@ static int _glmwfwGetNextEvent( GLMWFWWindow *winPtr )
 	{
             if( event.xbutton.button == Button1 )
             {
-                _glmwfwInputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_LEFT, GLMWFW_PRESS );
+                winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_LEFT, GLMWFW_PRESS );
             }
             else if( event.xbutton.button == Button2 )
             {
-                _glmwfwInputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_MIDDLE, GLMWFW_PRESS );
+                winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_MIDDLE, GLMWFW_PRESS );
             }
             else if( event.xbutton.button == Button3 )
             {
-                _glmwfwInputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_RIGHT, GLMWFW_PRESS );
+                winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_RIGHT, GLMWFW_PRESS );
             }
 
             // XFree86 3.3.2 and later translates mouse wheel up/down into
@@ -683,17 +683,17 @@ static int _glmwfwGetNextEvent( GLMWFWWindow *winPtr )
 	{
             if( event.xbutton.button == Button1 )
             {
-                _glmwfwInputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_LEFT,
+                winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_LEFT,
                                       GLMWFW_RELEASE );
             }
             else if( event.xbutton.button == Button2 )
             {
-                _glmwfwInputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_MIDDLE,
+                winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_MIDDLE,
                                       GLMWFW_RELEASE );
             }
             else if( event.xbutton.button == Button3 )
             {
-                _glmwfwInputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_RIGHT,
+                winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_RIGHT,
                                       GLMWFW_RELEASE );
             }
             break;
@@ -1666,7 +1666,7 @@ int _glmwfwPlatformPollEvents( GLMWFWWindow *winPtr )
 
         // Window is not active
         winPtr->Active = GL_FALSE;
-	_glmwfwInputDeactivation(winPtr);
+	winPtr->infoPtr->inputDeactivation(winPtr);
     }
 
     // Was there a window close request?
@@ -1677,7 +1677,7 @@ int _glmwfwPlatformPollEvents( GLMWFWWindow *winPtr )
     }
     if( winclosed )
     {
-        glmwfwCloseWindow(winPtr);
+        winPtr->infoPtr->closeWindow(winPtr);
     }
     return TCL_OK;
 }

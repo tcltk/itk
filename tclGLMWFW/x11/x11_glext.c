@@ -48,7 +48,7 @@ int _glmwfwPlatformExtensionSupported( GLMWFWWindow *winPtr, const char *extensi
                                                             winPtr->platformWindow->Scrn );
     if( extensions != NULL )
     {
-        if( _glmwfwStringInExtensionString( extension, extensions ) )
+        if( winPtr->infoPtr->stringInExtensionString( extension, extensions ) )
         {
             return GL_TRUE;
         }

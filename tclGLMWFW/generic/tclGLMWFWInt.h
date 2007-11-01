@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLMWFWInt.h,v 1.1.2.6 2007/11/01 20:35:41 wiede Exp $
+ * RCS: @(#) $Id: tclGLMWFWInt.h,v 1.1.2.7 2007/11/01 21:16:17 wiede Exp $
  */
 
 #include <string.h>
@@ -103,14 +103,20 @@ typedef struct GLMWFWHints{
 } GLMWFWHints;
 
 /* Function pointer types */
-typedef void (* GLMWFWwindowsizefun)(struct GLMWFWWindow *winPtr, int,int);
-typedef int  (* GLMWFWwindowclosefun)(struct GLMWFWWindow *winPtr);
-typedef void (* GLMWFWwindowrefreshfun)(struct GLMWFWWindow *winPtr);
-typedef void (* GLMWFWmousebuttonfun)(struct GLMWFWWindow *winPtr, int,int);
-typedef void (* GLMWFWmouseposfun)(struct GLMWFWWindow *winPtr, int,int);
-typedef void (* GLMWFWmousewheelfun)(struct GLMWFWWindow *winPtr, int);
-typedef void (* GLMWFWkeyfun)(struct GLMWFWWindow *winPtr, int,int);
-typedef void (* GLMWFWcharfun)(struct GLMWFWWindow *winPtr, int,int);
+typedef int (* GLMWFWStringInExtensionString)(const char *, const GLubyte *);
+typedef void (* GLMWFWInputDeactivation)(struct GLMWFWWindow *);
+typedef int (* GLMWFWCloseWindow)(struct GLMWFWWindow *);
+typedef void (* GLMWFWInputKey)(struct GLMWFWWindow *, int, int);
+typedef void (* GLMWFWInputMouseClick)(struct GLMWFWWindow *, int, int);
+
+typedef void (* GLMWFWwindowsizefun)(struct GLMWFWWindow *, int,int);
+typedef int  (* GLMWFWwindowclosefun)(struct GLMWFWWindow *);
+typedef void (* GLMWFWwindowrefreshfun)(struct GLMWFWWindow *);
+typedef void (* GLMWFWmousebuttonfun)(struct GLMWFWWindow *, int,int);
+typedef void (* GLMWFWmouseposfun)(struct GLMWFWWindow *, int,int);
+typedef void (* GLMWFWmousewheelfun)(struct GLMWFWWindow *, int);
+typedef void (* GLMWFWkeyfun)(struct GLMWFWWindow *, int,int);
+typedef void (* GLMWFWcharfun)(struct GLMWFWWindow *, int,int);
 
 typedef struct GLMWFWWindow {
     Tcl_Obj *handlePtr;
@@ -171,6 +177,15 @@ typedef struct TclGLMWFWInfo {
     Tcl_HashTable windows;
     Tcl_Interp *interp;
     GLMWFWHints hints;
+
+    /* these are the functions which a called from the platform specific
+     * packages. We need to have function pointers, so the platform specific
+     * package can be loaded before the main package */
+    GLMWFWStringInExtensionString stringInExtensionString;
+    GLMWFWInputDeactivation inputDeactivation;
+    GLMWFWCloseWindow closeWindow;
+    GLMWFWInputKey inputKey;
+    GLMWFWInputMouseClick inputMouseClick;
 } TclGLMWFWInfo;
 
 /* The video mode structure used by glfwGetVideoModes() */

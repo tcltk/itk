@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLMWFWBase.c,v 1.1.2.1 2007/11/01 14:05:14 wiede Exp $
+ * RCS: @(#) $Id: tclGLMWFWBase.c,v 1.1.2.2 2007/11/01 21:16:17 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -56,6 +56,11 @@ Initialize (
     infoPtr->version = TCL_GLMWFW_INFO_VERSION;
     infoPtr->numWindows = 0;
     infoPtr->interp = interp;
+    infoPtr->stringInExtensionString = _glmwfwStringInExtensionString;
+    infoPtr->inputDeactivation = _glmwfwInputDeactivation;
+    infoPtr->closeWindow = glmwfwCloseWindow;
+    infoPtr->inputKey = _glmwfwInputKey;
+    infoPtr->inputMouseClick = _glmwfwInputMouseClick;
     Tcl_InitObjHashTable(&infoPtr->windows);
 
     Tcl_SetAssocData(interp, TCL_GLMWFW_INTERP_DATA,
