@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLMWFWInt.h,v 1.1.2.4 2007/11/01 16:26:21 wiede Exp $
+ * RCS: @(#) $Id: tclGLMWFWInt.h,v 1.1.2.5 2007/11/01 19:51:36 wiede Exp $
  */
 
 #include <string.h>
@@ -64,7 +64,8 @@ struct TclGLMWFWInfo;
  *------------------------------------------------------------------------
  */
 
-struct GLMWFWplatformInput;
+struct _GLMWFWPlatformInput;
+struct _GLMWFWPlatformWindow;
 
 typedef struct GLMWFWInput {
     /* Mouse status */
@@ -81,7 +82,7 @@ typedef struct GLMWFWInput {
     int  StickyKeys;
     int  StickyMouseButtons;
     int  KeyRepeat;
-    struct GLMWFWplatformInput *platformInput;
+    struct _GLMWFWPlatformInput *platformInput;
 } GLMWFWInput;
 
 /*
@@ -152,14 +153,15 @@ typedef struct GLMWFWWindow {
     int       GreenBits;
     int       BlueBits;
     int       AlphaBits;
-    GLMWFWHints hints;
+    GLMWFWHints Hints;
 
     /* Extensions & OpenGL version */
     int       Has_GL_SGIS_generate_mipmap;
     int       Has_GL_ARB_texture_non_power_of_two;
-    int       GLVerMajor,GLVerMinor;
+    int       GLVerMajor;
+    int       GLVerMinor;
 
-
+    struct _GLMWFWPlatformWindow *platformWindow;
 } GLMWFWWindow;
 
 typedef struct TclGLMWFWInfo {
@@ -288,3 +290,6 @@ MODULE_SCOPE int glmwfwDisable(GLMWFWWindow *winPtr, int token);
 MODULE_SCOPE void _glmwfwInputKey(GLMWFWWindow *winPtr, int key, int action);
 MODULE_SCOPE void _glmwfwInputMouseClick(GLMWFWWindow *winPtr, int button,
         int action);
+MODULE_SCOPE void _glmwfwInputDeactivation(GLMWFWWindow *winPtr);
+MODULE_SCOPE int _glmwfwStringInExtensionString(const char *string,
+        const GLubyte *extensions);

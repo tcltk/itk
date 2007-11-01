@@ -18,7 +18,7 @@
  * and package require command has to look for the right one dependent on the
  * platform
  *
- * RCS: @(#) $Id: tclGLMWFWWindow.c,v 1.1.2.2 2007/11/01 15:09:25 wiede Exp $
+ * RCS: @(#) $Id: tclGLMWFWWindow.c,v 1.1.2.3 2007/11/01 19:51:36 wiede Exp $
  */
 
 #include "tclGLMWFWInt.h"
@@ -40,15 +40,15 @@ void
 _glmwfwClearWindowHints(
     GLMWFWWindow *winPtr)
 {
-    winPtr->hints.RefreshRate    = 0;
-    winPtr->hints.AccumRedBits   = 0;
-    winPtr->hints.AccumGreenBits = 0;
-    winPtr->hints.AccumBlueBits  = 0;
-    winPtr->hints.AccumAlphaBits = 0;
-    winPtr->hints.AuxBuffers     = 0;
-    winPtr->hints.Stereo         = 0;
-    winPtr->hints.WindowNoResize = 0;
-    winPtr->hints.Samples        = 0;
+    winPtr->Hints.RefreshRate    = 0;
+    winPtr->Hints.AccumRedBits   = 0;
+    winPtr->Hints.AccumGreenBits = 0;
+    winPtr->Hints.AccumBlueBits  = 0;
+    winPtr->Hints.AccumAlphaBits = 0;
+    winPtr->Hints.AuxBuffers     = 0;
+    winPtr->Hints.Stereo         = 0;
+    winPtr->Hints.WindowNoResize = 0;
+    winPtr->Hints.Samples        = 0;
 }
 
 /*
@@ -307,7 +307,7 @@ glmwfwOpenWindow(
     /* Platform specific window opening routine */
     if (!glmwfwPlatformOpenWindow(width, height, redbits, greenbits,
             bluebits, alphabits, depthbits, stencilbits, mode,
-	    &winPtr->hints)) {
+	    &winPtr->Hints)) {
         return NULL;
     }
 
@@ -350,31 +350,31 @@ glmwfwOpenWindowHint(
 {
     switch (target) {
     case GLMWFW_REFRESH_RATE:
-        winPtr->hints.RefreshRate = hint;
+        winPtr->Hints.RefreshRate = hint;
         break;
     case GLMWFW_ACCUM_RED_BITS:
-        winPtr->hints.AccumRedBits = hint;
+        winPtr->Hints.AccumRedBits = hint;
         break;
     case GLMWFW_ACCUM_GREEN_BITS:
-        winPtr->hints.AccumGreenBits = hint;
+        winPtr->Hints.AccumGreenBits = hint;
         break;
     case GLMWFW_ACCUM_BLUE_BITS:
-        winPtr->hints.AccumBlueBits = hint;
+        winPtr->Hints.AccumBlueBits = hint;
         break;
     case GLMWFW_ACCUM_ALPHA_BITS:
-        winPtr->hints.AccumAlphaBits = hint;
+        winPtr->Hints.AccumAlphaBits = hint;
         break;
     case GLMWFW_AUX_BUFFERS:
-        winPtr->hints.AuxBuffers = hint;
+        winPtr->Hints.AuxBuffers = hint;
         break;
     case GLMWFW_STEREO:
-        winPtr->hints.Stereo = hint;
+        winPtr->Hints.Stereo = hint;
         break;
     case GLMWFW_WINDOW_NO_RESIZE:
-        winPtr->hints.WindowNoResize = hint;
+        winPtr->Hints.WindowNoResize = hint;
         break;
     case GLMWFW_FSAA_SAMPLES:
-        winPtr->hints.Samples = hint;
+        winPtr->Hints.Samples = hint;
         break;
     default:
         break;
@@ -621,23 +621,23 @@ glmwfwGetWindowParam(
     case GLMWFW_STENCIL_BITS:
         return winPtr->StencilBits;
     case GLMWFW_ACCUM_RED_BITS:
-        return winPtr->hints.AccumRedBits;
+        return winPtr->Hints.AccumRedBits;
     case GLMWFW_ACCUM_GREEN_BITS:
-        return winPtr->hints.AccumGreenBits;
+        return winPtr->Hints.AccumGreenBits;
     case GLMWFW_ACCUM_BLUE_BITS:
-        return winPtr->hints.AccumBlueBits;
+        return winPtr->Hints.AccumBlueBits;
     case GLMWFW_ACCUM_ALPHA_BITS:
-        return winPtr->hints.AccumAlphaBits;
+        return winPtr->Hints.AccumAlphaBits;
     case GLMWFW_AUX_BUFFERS:
-        return winPtr->hints.AuxBuffers;
+        return winPtr->Hints.AuxBuffers;
     case GLMWFW_STEREO:
-        return winPtr->hints.Stereo;
+        return winPtr->Hints.Stereo;
     case GLMWFW_REFRESH_RATE:
-        return winPtr->hints.RefreshRate;
+        return winPtr->Hints.RefreshRate;
     case GLMWFW_WINDOW_NO_RESIZE:
-        return winPtr->hints.WindowNoResize;
+        return winPtr->Hints.WindowNoResize;
     case GLMWFW_FSAA_SAMPLES:
-        return winPtr->hints.Samples;
+        return winPtr->Hints.Samples;
     default:
         return 0;
     }

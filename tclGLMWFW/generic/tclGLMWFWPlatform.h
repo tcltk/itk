@@ -21,7 +21,7 @@ int _glmwfwPlatformSetMouseCursorPos(GLMWFWWindow *winPtr, int width,
 int _glmwfwPlatformEnableSystemKeys(GLMWFWWindow *winPtr);
 int _glmwfwPlatformDisableSystemKeys(GLMWFWWindow *winPtr);
 int _glmwfwPlatformInit(void);
-int _glmwfwPlatformTerminate(void);
+int _glmwfwPlatformTerminate(GLMWFWWindow *winPtr);
 int _glmwfwPlatformGetVideoModes(GLMWFWvidmode *list, int maxcount);
 int _glmwfwPlatformGetDesktopMode(GLMWFWvidmode *mode);
 int _glmwfwPlatformExtensionSupported(GLMWFWWindow *winPtr,
