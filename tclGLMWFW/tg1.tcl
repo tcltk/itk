@@ -36,18 +36,25 @@ if {0} {
     puts stderr "dmode!$dmode!"
 }
 
-proc Draw {} {
+proc Draw {win} {
     upvar lst lst
 
     ::ntk::gl::GL glClearColor 0.25 0.0 0.0 0.0
     ::ntk::gl::GL glClear GL_COLOR_BUFFER_BIT
     ::ntk::gl::GL glDrawPixels 50 50 GL_RGBA GL_FLOAT $lst
-    ::ntk::glmwfw::GLMWFW swapBuffers $::win 
+    ::ntk::glmwfw::GLMWFW swapBuffers $win 
     ::ntk::gl::GL glFlush
 }
 
-Draw
-WaitEvents
+Draw $win
+
+set win2 [::ntk::glmwfw::GLMWFW openWindow 400 300]
+puts stderr "WIN2!$win2!"
+::ntk::glmwfw::GLMWFW setWindowTitle $win2 "Hallo Arnulf 2"
+tgInit $win2
+Draw $win2
+
+WaitEvents $win2
 
 set xx 1
 vwait xx
