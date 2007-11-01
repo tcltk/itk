@@ -1,4 +1,4 @@
-PKG_OBJECTS = x11_base.o x11_window.o 
+PKG_OBJECTS = x11_base.o x11_window.o  x11_fullscreen.o x11_keysym2unicode.o x11_joystick.o x11_enable.o x11_glext.o x11_init.o x11_time.o
 PKG_STUB_OBJECTS= 
 PKG_HEADERS= x11/platform.h
 PKG_LIB_FILE=libTclGLMWFWX11.0.1.so
@@ -141,6 +141,20 @@ $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
 x11_base.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h platform.h
 
 x11_window.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h platform.h
+
+x11_fullscreen.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h platform.h
+
+x11_keysym2unicode.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h platform.h
+
+x11_joystick.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h platform.h
+
+x11_enable.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h platform.h
+
+x11_glext.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h platform.h
+
+x11_init.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h platform.h
+
+x11_time.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h platform.h
 
 
 

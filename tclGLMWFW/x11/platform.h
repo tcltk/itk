@@ -253,8 +253,8 @@ void _glmwfwInitTimer( void );
 
 // Fullscreen support
 int  _glmwfwGetClosestVideoMode( int screen, int *width, int *height, int *rate );
-void _glmwfwSetVideoModeMODE( int screen, int mode, int rate );
-void _glmwfwSetVideoMode( int screen, int *width, int *height, int *rate );
+void _glmwfwSetVideoModeMODE( GLMWFWWindow *winPtr, int screen, int mode, int rate );
+void _glmwfwSetVideoMode( GLMWFWWindow *winPtr, int screen, int *width, int *height, int *rate );
 
 // Cursor handling
 Cursor _glmwfwCreateNULLCursor( Display *display, Window root );

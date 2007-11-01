@@ -947,7 +947,7 @@ int _glmwfwPlatformOpenWindow( GLMWFWWindow *winPtr, int width, int height, int 
     if( mode == GLMWFW_FULLSCREEN )
     {
         // Change video mode
-        _glmwfwSetVideoMode( winPtr->platformWindow->Scrn, &winPtr->Width,
+        _glmwfwSetVideoMode( winPtr, winPtr->platformWindow->Scrn, &winPtr->Width,
                            &winPtr->Height, &winPtr->Hints.RefreshRate );
 
         // Remember old screen saver settings
@@ -1250,7 +1250,7 @@ int _glmwfwPlatformSetWindowSize( GLMWFWWindow *winPtr, int width, int height )
     if( winPtr->Fullscreen )
     {
         // Change video mode (keeping current rate)
-        _glmwfwSetVideoModeMODE( winPtr->platformWindow->Scrn, mode, winPtr->Hints.RefreshRate );
+        _glmwfwSetVideoModeMODE( winPtr, winPtr->platformWindow->Scrn, mode, winPtr->Hints.RefreshRate );
 
         // Clear the front buffer to black (avoid ugly desktop remains in
         // our OpenGL window)
@@ -1357,7 +1357,7 @@ int _glmwfwPlatformRestoreWindow( GLMWFWWindow *winPtr )
     // In fullscreen mode, change back video mode to user selected mode
     if( winPtr->Fullscreen )
     {
-        _glmwfwSetVideoMode( winPtr->platformWindow->Scrn,
+        _glmwfwSetVideoMode( winPtr, winPtr->platformWindow->Scrn,
 	                   &winPtr->Width, &winPtr->Height, &winPtr->Hints.RefreshRate );
     }
 
@@ -1597,7 +1597,7 @@ int _glmwfwPlatformPollEvents( GLMWFWWindow *winPtr )
         if( winPtr->Fullscreen )
         {
             // Change back video mode to user selected mode
-            _glmwfwSetVideoMode( winPtr->platformWindow->Scrn, &winPtr->Width,
+            _glmwfwSetVideoMode( winPtr, winPtr->platformWindow->Scrn, &winPtr->Width,
                                &winPtr->Height, &winPtr->Hints.RefreshRate );
 
             // Disable window manager decorations
