@@ -12,3 +12,11 @@ int _glmwfwPlatformRestoreWindow(GLMWFWWindow *winPtr);
 int _glmwfwPlatformSwapInterval(GLMWFWWindow *winPtr, int interval);
 int _glmwfwPlatformPollEvents(GLMWFWWindow *winPtr);
 int _glmwfwPlatformWaitEvents(GLMWFWWindow *winPtr);
+int _glfwPlatformShowMouseCursor(GLMWFWWindow *winPtr);
+int _glfwPlatformSetMouseCursorPos(GLMWFWWindow *winPtr, int CenterPosX,
+        int CenterPosY);
+int _glfwPlatformHideMouseCursor(GLMWFWWindow *winPtr);
+int _glfwPlatformSetMouseCursorPos(GLMWFWWindow *winPtr, int width, int height);
+int _glfwPlatformEnableSystemKeys(GLMWFWWindow *winPtr);
+int _glfwPlatformDisableSystemKeys(GLMWFWWindow *winPtr);
+

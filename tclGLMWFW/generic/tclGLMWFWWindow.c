@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * This work is derived from/based on GLMWFW - An OpenGL framework version 2.6
+ * This work is derived from/based on GLFW - An OpenGL framework version 2.6
  * by Camilla Berglund http://glmwfw.sourceforge.net
  *
  * It is adapted for use in Tcl environment. Instead of one window
@@ -18,7 +18,7 @@
  * and package require command has to look for the right one dependent on the
  * platform
  *
- * RCS: @(#) $Id: tclGLMWFWWindow.c,v 1.1.2.1 2007/11/01 14:05:20 wiede Exp $
+ * RCS: @(#) $Id: tclGLMWFWWindow.c,v 1.1.2.2 2007/11/01 15:09:25 wiede Exp $
  */
 
 #include "tclGLMWFWInt.h"

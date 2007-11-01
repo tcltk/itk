@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLMWFWInt.h,v 1.1.2.1 2007/11/01 14:05:15 wiede Exp $
+ * RCS: @(#) $Id: tclGLMWFWInt.h,v 1.1.2.2 2007/11/01 15:09:25 wiede Exp $
  */
 
 #include <string.h>
@@ -124,7 +124,7 @@ typedef struct GLMWFWWindow {
     Tcl_Obj *mousePosCallback;
     GLMWFWmouseposfun mouseposfun;
     Tcl_Obj *mouseWheelCallback;
-    GLMWFWmousewheelfun *mousewheelfun;
+    GLMWFWmousewheelfun mousewheelfun;
     Tcl_Obj *keyCallback;
     GLMWFWkeyfun keyfun;
     Tcl_Obj *charCallback;
