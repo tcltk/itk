@@ -28,6 +28,19 @@
 //
 //========================================================================
 
+/*
+ * This file contains the C-implemented part of 
+ * a Tcl interface to the GLFW X11 OpenGL library
+ * This is a modified version of the original version adapted for use with Tcl
+ *
+ * Copyright (c) 2007 by Arnulf P. Wiedemann
+ *
+ * See the file "license.terms" for information on usage and redistribution of
+ * this file, and for a DISCLAIMER OF ALL WARRANTIES.
+ *
+ * RCS: @(#) $Id: x11_init.c,v 1.1.2.4 2007/11/01 22:01:28 wiede Exp $
+ */
+
 #include "platform.h"
 
 
