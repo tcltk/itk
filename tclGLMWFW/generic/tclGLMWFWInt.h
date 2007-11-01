@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLMWFWInt.h,v 1.1.2.3 2007/11/01 16:14:37 wiede Exp $
+ * RCS: @(#) $Id: tclGLMWFWInt.h,v 1.1.2.4 2007/11/01 16:26:21 wiede Exp $
  */
 
 #include <string.h>
@@ -270,9 +270,8 @@ MODULE_SCOPE int glmwfwGetJoystickButtons(GLMWFWWindow *winPtr, int joy,
         unsigned char *buttons, int numbuttons);
 
 /* Time */
-MODULE_SCOPE double glmwfwGetTime(void);
-MODULE_SCOPE void glmwfwSetTime(double time);
-MODULE_SCOPE void glmwfwSleep(double time);
+MODULE_SCOPE double glmwfwGetTime(TclGLMWFWInfo *infoPtr);
+MODULE_SCOPE void glmwfwSetTime(TclGLMWFWInfo *infoPtr, double time);
 
 /* Extension support */
 MODULE_SCOPE int  glmwfwExtensionSupported(TclGLMWFWInfo *infoPtr,

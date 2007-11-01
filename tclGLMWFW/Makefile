@@ -1,7 +1,7 @@
 PKG_OBJECTS = tclGLMWFWBase.o tclGLMWFWCmd.o tclGLMWFWUtil.o \
     tclGLMWFWStubInit.o tclGLMWFWMaps.o tclGLMWFWWindow.o tclGLMWFWEnable.o \
     tclGLMWFWInput.o tclGLMWFWInit.o tclGLMWFWFullscreen.o tclGLMWFWGlext.o \
-    tclGLMWFWJoystick.o
+    tclGLMWFWJoystick.o tclGLMWFWTime.o
 PKG_STUB_OBJECTS= 
 PKG_HEADERS= generic/tclGLMWFW.h generic/tclGLMWFWInt.h
 PKG_LIB_FILE=libTclGLMWFW0.1.so
@@ -161,6 +161,8 @@ tclGLMWFWFullScreen.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h
 tclGLMWFWGlext.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h
 
 tclGLMWFWJoystick.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h
+
+tclGLMWFWTime.o: $(GENERIC_DIR)/tclGLMWFWInt.h $(GENERIC_DIR)/tclGLMWFW.h
 
 
 #========================================================================

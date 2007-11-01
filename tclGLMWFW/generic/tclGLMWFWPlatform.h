@@ -33,3 +33,5 @@ int _glmwfwPlatformGetJoystickPos(GLMWFWWindow *winPtr, int joy, float *pos,
         int numaxes);
 int _glmwfwPlatformGetJoystickButtons(GLMWFWWindow *winPtr, int joy,
         unsigned char *buttons, int numbuttons);
+double _glmwfwPlatformGetTime(GLMWFWWindow *winPtr);
+void _glmwfwPlatformSetTime(GLMWFWWindow *winPtr, double time);
