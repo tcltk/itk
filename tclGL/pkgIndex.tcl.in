@@ -1,0 +1,2 @@
+if {[catch {package present Tcl }]} return
+package ifneeded tclGL 0.1  [list load [file join $dir libtclGL0.1.so] tclGL] 

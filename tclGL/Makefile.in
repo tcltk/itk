@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile,v 1.1.2.2 2007/11/02 17:24:23 wiede Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.1.2.1 2007/11/02 17:24:23 wiede Exp $
 
 #========================================================================
 # Add additional lines to handle any additional AC_SUBST cases that
@@ -35,48 +35,48 @@
 # $(srcdir) or in the generic, win or unix subdirectory.
 #========================================================================
 
-PKG_SOURCES	=  tclGLBase.c tclGLCmd.c tclGLStubInit.c tclGLUtil.c
-PKG_OBJECTS	=  tclGLBase.o tclGLCmd.o tclGLStubInit.o tclGLUtil.o
+PKG_SOURCES	= @PKG_SOURCES@
+PKG_OBJECTS	= @PKG_OBJECTS@
 
-PKG_STUB_SOURCES = 
-PKG_STUB_OBJECTS = 
+PKG_STUB_SOURCES = @PKG_STUB_SOURCES@
+PKG_STUB_OBJECTS = @PKG_STUB_OBJECTS@
 
 #========================================================================
 # PKG_TCL_SOURCES identifies Tcl runtime files that are associated with
 # this package that need to be installed, if any.
 #========================================================================
 
-PKG_TCL_SOURCES = 
+PKG_TCL_SOURCES = @PKG_TCL_SOURCES@
 
 #========================================================================
 # This is a list of public header files to be installed, if any.
 #========================================================================
 
-PKG_HEADERS	= 
+PKG_HEADERS	= @PKG_HEADERS@
 
 #========================================================================
 # "PKG_LIB_FILE" refers to the library (dynamic or static as per
 # configuration options) composed of the named objects.
 #========================================================================
 
-PKG_LIB_FILE	= libTclGL0.1.so
-PKG_STUB_LIB_FILE = libTclGLstub0.1.a
+PKG_LIB_FILE	= @PKG_LIB_FILE@
+PKG_STUB_LIB_FILE = @PKG_STUB_LIB_FILE@
 
 lib_BINARIES	= $(PKG_LIB_FILE)
 BINARIES	= $(lib_BINARIES) pkgIndex.tcl
 
-SHELL		= /bin/sh
+SHELL		= @SHELL@
 
-srcdir		= .
-prefix		= /home/arnulf
-exec_prefix	= /home/arnulf
+srcdir		= @srcdir@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
 
-bindir		= ${exec_prefix}/bin
-libdir		= ${exec_prefix}/lib
-includedir	= ${prefix}/include
+bindir		= @bindir@
+libdir		= @libdir@
+includedir	= @includedir@
 datarootdir     = @datarootdir@
-datadir		= ${prefix}/share
-mandir		= ${prefix}/man
+datadir		= @datadir@
+mandir		= @mandir@
 
 DESTDIR		=
 
@@ -87,37 +87,37 @@ pkgincludedir	= $(includedir)/$(PKG_DIR)
 
 top_builddir	= .
 
-INSTALL		= /usr/bin/install -c
-INSTALL_PROGRAM	= ${INSTALL}
-INSTALL_DATA	= ${INSTALL} -m 644
-INSTALL_SCRIPT	= ${INSTALL}
+INSTALL		= @INSTALL@
+INSTALL_PROGRAM	= @INSTALL_PROGRAM@
+INSTALL_DATA	= @INSTALL_DATA@
+INSTALL_SCRIPT	= @INSTALL_SCRIPT@
 
-PACKAGE_NAME	= TclGL
-PACKAGE_VERSION	= 0.1
-CC		= gcc
-CFLAGS_DEFAULT	= -O2 -fomit-frame-pointer
-CFLAGS_WARNING	= -Wall -Wno-implicit-int
-EXEEXT		= 
-LDFLAGS_DEFAULT	=  -Wl,--export-dynamic 
-MAKE_LIB	= ${SHLIB_LD} -o $@ $(PKG_OBJECTS) ${SHLIB_LD_LIBS} 
-MAKE_SHARED_LIB	= ${SHLIB_LD} -o $@ $(PKG_OBJECTS) ${SHLIB_LD_LIBS}
-MAKE_STATIC_LIB	= ${STLIB_LD} $@ $(PKG_OBJECTS)
-MAKE_STUB_LIB	= ${STLIB_LD} $@ $(PKG_STUB_OBJECTS)
-OBJEXT		= o
-RANLIB		= :
-RANLIB_STUB	= ranlib
-SHLIB_CFLAGS	= -fPIC
-SHLIB_LD	= ${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}
-SHLIB_LD_LIBS	= ${LIBS} -L/home/arnulf/SOURCES/tclOO/head/unix -ltclstub8.5
-STLIB_LD	= ${AR} cr
-#TCL_DEFS	= -DPACKAGE_NAME=\"tcl\" -DPACKAGE_TARNAME=\"tcl\" -DPACKAGE_VERSION=\"8.5\" -DPACKAGE_STRING=\"tcl\ 8.5\" -DPACKAGE_BUGREPORT=\"\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_LIMITS_H=1 -DHAVE_SYS_PARAM_H=1 -DTCL_CFGVAL_ENCODING=\"iso8859-1\" -DMODULE_SCOPE=extern\ __attribute__\(\(__visibility__\(\"hidden\"\)\)\) -DPEEK_XCLOSEIM=1 -DTCL_SHLIB_EXT=\".so\" -DTCL_CFG_DEBUG=1 -DTCL_TOMMATH=1 -DMP_PREC=4 -D_LARGEFILE64_SOURCE=1 -DTCL_WIDE_INT_TYPE=long\ long -DHAVE_STRUCT_STAT64=1 -DHAVE_OPEN64=1 -DHAVE_LSEEK64=1 -DHAVE_TYPE_OFF64_T=1 -DHAVE_GETCWD=1 -DHAVE_OPENDIR=1 -DHAVE_STRTOL=1 -DHAVE_STRTOLL=1 -DHAVE_STRTOULL=1 -DHAVE_TMPNAM=1 -DHAVE_WAITPID=1 -DUSE_TERMIOS=1 -DHAVE_SYS_TIME_H=1 -DTIME_WITH_SYS_TIME=1 -DHAVE_STRUCT_TM_TM_ZONE=1 -DHAVE_TM_ZONE=1 -DHAVE_GMTIME_R=1 -DHAVE_LOCALTIME_R=1 -DHAVE_MKTIME=1 -DHAVE_TM_GMTOFF=1 -DHAVE_TIMEZONE_VAR=1 -DHAVE_STRUCT_STAT_ST_BLKSIZE=1 -DHAVE_ST_BLKSIZE=1 -DHAVE_INTPTR_T=1 -DHAVE_UINTPTR_T=1 -DHAVE_SIGNED_CHAR=1 -DHAVE_LANGINFO=1 -DHAVE_SYS_IOCTL_H=1 -DTCL_UNLOAD_DLLS=1 
-TCL_BIN_DIR	= /home/arnulf/SOURCES/tclOO/head/unix
-TCL_SRC_DIR	= /home/arnulf/SOURCES/tclOO/head
+PACKAGE_NAME	= @PACKAGE_NAME@
+PACKAGE_VERSION	= @PACKAGE_VERSION@
+CC		= @CC@
+CFLAGS_DEFAULT	= @CFLAGS_DEFAULT@
+CFLAGS_WARNING	= @CFLAGS_WARNING@
+EXEEXT		= @EXEEXT@
+LDFLAGS_DEFAULT	= @LDFLAGS_DEFAULT@
+MAKE_LIB	= @MAKE_LIB@
+MAKE_SHARED_LIB	= @MAKE_SHARED_LIB@
+MAKE_STATIC_LIB	= @MAKE_STATIC_LIB@
+MAKE_STUB_LIB	= @MAKE_STUB_LIB@
+OBJEXT		= @OBJEXT@
+RANLIB		= @RANLIB@
+RANLIB_STUB	= @RANLIB_STUB@
+SHLIB_CFLAGS	= @SHLIB_CFLAGS@
+SHLIB_LD	= @SHLIB_LD@
+SHLIB_LD_LIBS	= @SHLIB_LD_LIBS@
+STLIB_LD	= @STLIB_LD@
+#TCL_DEFS	= @TCL_DEFS@
+TCL_BIN_DIR	= @TCL_BIN_DIR@
+TCL_SRC_DIR	= @TCL_SRC_DIR@
 #TK_BIN_DIR	= @TK_BIN_DIR@
 #TK_SRC_DIR	= @TK_SRC_DIR@
 
 # Not used, but retained for reference of what libs Tcl required
-#TCL_LIBS	= ${DL_LIBS} ${LIBS} ${MATH_LIBS}
+#TCL_LIBS	= @TCL_LIBS@
 
 #========================================================================
 # TCLLIBPATH seeds the auto_path in Tcl's init.tcl so we can test our
@@ -129,41 +129,41 @@ TCL_SRC_DIR	= /home/arnulf/SOURCES/tclOO/head
 EXTRA_PATH	= $(top_builddir):$(TCL_BIN_DIR)
 #EXTRA_PATH	= $(top_builddir):$(TCL_BIN_DIR):$(TK_BIN_DIR)
 TCLLIBPATH	= $(top_builddir)
-TCLSH_ENV	= TCL_LIBRARY=`echo $(TCL_SRC_DIR)/library`
-PKG_ENV		= LD_LIBRARY_PATH="$(EXTRA_PATH):$(LD_LIBRARY_PATH)" \
+TCLSH_ENV	= TCL_LIBRARY=`@CYGPATH@ $(TCL_SRC_DIR)/library`
+PKG_ENV		= @LD_LIBRARY_PATH_VAR@="$(EXTRA_PATH):$(@LD_LIBRARY_PATH_VAR@)" \
 		  PATH="$(EXTRA_PATH):$(PATH)" \
 		  TCLLIBPATH="$(TCLLIBPATH)"
 
-TCLSH_PROG	= /home/arnulf/SOURCES/tclOO/head/unix/tclsh
+TCLSH_PROG	= @TCLSH_PROG@
 TCLSH   	= $(PKG_ENV) $(TCLSH_ENV) $(TCLSH_PROG)
 
-#WISH_ENV	= TK_LIBRARY=`echo $(TK_SRC_DIR)/library`
+#WISH_ENV	= TK_LIBRARY=`@CYGPATH@ $(TK_SRC_DIR)/library`
 #WISH_PROG	= @WISH_PROG@
 #WISH   	= $(PKG_ENV) $(TCLSH_ENV) $(WISH_ENV) $(WISH_PROG)
 
-SHARED_BUILD	= 1
+SHARED_BUILD	= @SHARED_BUILD@
 
-INCLUDES	=  -I"/home/arnulf/SOURCES/tclOO/head/generic"
-#INCLUDES	=  -I"/home/arnulf/SOURCES/tclOO/head/generic" @TK_INCLUDES@ @TK_XINCLUDES@
+INCLUDES	= @PKG_INCLUDES@ @TCL_INCLUDES@
+#INCLUDES	= @PKG_INCLUDES@ @TCL_INCLUDES@ @TK_INCLUDES@ @TK_XINCLUDES@
 
-PKG_CFLAGS	=  
+PKG_CFLAGS	= @PKG_CFLAGS@
 
 # TCL_DEFS is not strictly need here, but if you remove it, then you
 # must make sure that configure.in checks for the necessary components
 # that your library may use.  TCL_DEFS can actually be a problem if
 # you do not compile with a similar machine setup as the Tcl core was
 # compiled with.
-#DEFS		= $(TCL_DEFS) -DPACKAGE_NAME=\"TclGL\" -DPACKAGE_TARNAME=\"tclgl\" -DPACKAGE_VERSION=\"0.1\" -DPACKAGE_STRING=\"TclGL\ 0.1\" -DPACKAGE_BUGREPORT=\"\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_LIMITS_H=1 -DHAVE_SYS_PARAM_H=1 -DUSE_THREAD_ALLOC=1 -D_REENTRANT=1 -D_THREAD_SAFE=1 -DTCL_THREADS=1 -D_LARGEFILE64_SOURCE=1 -DTCL_WIDE_INT_TYPE=long\ long -DHAVE_STRUCT_STAT64=1 -DHAVE_OPEN64=1 -DHAVE_LSEEK64=1 -DHAVE_TYPE_OFF64_T=1 -DUSE_TCL_STUBS=1  $(PKG_CFLAGS)
-DEFS		= -DPACKAGE_NAME=\"TclGL\" -DPACKAGE_TARNAME=\"tclgl\" -DPACKAGE_VERSION=\"0.1\" -DPACKAGE_STRING=\"TclGL\ 0.1\" -DPACKAGE_BUGREPORT=\"\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_LIMITS_H=1 -DHAVE_SYS_PARAM_H=1 -DUSE_THREAD_ALLOC=1 -D_REENTRANT=1 -D_THREAD_SAFE=1 -DTCL_THREADS=1 -D_LARGEFILE64_SOURCE=1 -DTCL_WIDE_INT_TYPE=long\ long -DHAVE_STRUCT_STAT64=1 -DHAVE_OPEN64=1 -DHAVE_LSEEK64=1 -DHAVE_TYPE_OFF64_T=1 -DUSE_TCL_STUBS=1  $(PKG_CFLAGS)
+#DEFS		= $(TCL_DEFS) @DEFS@ $(PKG_CFLAGS)
+DEFS		= @DEFS@ $(PKG_CFLAGS)
 
 # Move pkgIndex.tcl to 'BINARIES' var if it is generated in the Makefile
 CONFIG_CLEAN_FILES = Makefile 
-CLEANFILES	= pkgIndex.tcl
+CLEANFILES	= @CLEANFILES@
 
-CPPFLAGS	= 
-LIBS		=  -L/usr/X11/lib -lGLU -lGL -lX11 -lXrandr -lm 
-AR		= ar
-CFLAGS		=  -pipe ${CFLAGS_DEFAULT} ${CFLAGS_WARNING} ${SHLIB_CFLAGS} 
+CPPFLAGS	= @CPPFLAGS@
+LIBS		= @PKG_LIBS@ @LIBS@
+AR		= @AR@
+CFLAGS		= @CFLAGS@
 COMPILE		= $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 
 #========================================================================
@@ -235,7 +235,7 @@ install-doc: doc
 	done
 
 test: binaries libraries
-	$(TCLSH) `echo $(srcdir)/tests/all.tcl` $(TESTFLAGS)
+	$(TCLSH) `@CYGPATH@ $(srcdir)/tests/all.tcl` $(TESTFLAGS)
 
 shell: binaries libraries
 	@$(TCLSH) $(SCRIPT)
@@ -273,17 +273,17 @@ $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
 # you will have to modify the paths to reflect this:
 #
 # sample.$(OBJEXT): $(srcdir)/generic/sample.c
-# 	$(COMPILE) -c `echo $(srcdir)/generic/sample.c` -o $@
+# 	$(COMPILE) -c `@CYGPATH@ $(srcdir)/generic/sample.c` -o $@
 #
 # Setting the VPATH variable to a list of paths will cause the makefile
 # to look into these paths when resolving .c to .obj dependencies.
 # As necessary, add $(srcdir):$(srcdir)/compat:....
 #========================================================================
 
-VPATH = $(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win
+VPATH = $(srcdir):$(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win
 
-.c.o:
-	$(COMPILE) -c `echo $<` -o $@
+.c.@OBJEXT@:
+	$(COMPILE) -c `@CYGPATH@ $<` -o $@
 
 #========================================================================
 # Distribution creation
