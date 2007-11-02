@@ -3,7 +3,7 @@ dnl	This file is an input file used by the GNU "autoconf" program to
 dnl	generate the file "configure", which is run during Tcl installation
 dnl	to configure the system for the local environment.
 #
-# RCS: @(#) $Id: configure.in,v 1.1.2.1 2007/11/02 19:11:09 wiede Exp $
+# RCS: @(#) $Id: configure.in,v 1.1.2.2 2007/11/02 19:28:30 wiede Exp $
 
 #-----------------------------------------------------------------------
 # Sample configure.in for Tcl Extensions.  The only places you should
@@ -19,7 +19,7 @@ dnl	to configure the system for the local environment.
 # so you can encode the package version directly into the source files.
 #-----------------------------------------------------------------------
 
-AC_INIT([GlmwfwX11], [0.1])
+AC_INIT([GlmwfwWin32], [0.1])
 
 #--------------------------------------------------------------------
 # Call TEA_INIT as the first TEA_ macro to set up initial vars.
@@ -71,10 +71,11 @@ TEA_SETUP_COMPILER
 # and PKG_TCL_SOURCES.
 #-----------------------------------------------------------------------
 
-TEA_ADD_SOURCES([x11_base.c x11_enable.c x11_fullscreen.c x11_glext.c x11_init.c x11_joystick.c x11_keysym2unicode.c x11_time.c x11_window.c])
+TEA_ADD_SOURCES([win32_base.c win32_enable.c win32_fullscreen.c win32_glext.c \
+win32_init.c win32_joystick.c win32_time.c win32_window.c])
 TEA_ADD_HEADERS([])
 TEA_ADD_INCLUDES([-I../glmwfw/generic])
-TEA_ADD_LIBS([-L/usr/X11/lib -lGLU -lGL -lX11 -lXrandr -lm])
+TEA_ADD_LIBS([-lGLU -lGL -lm])
 TEA_ADD_CFLAGS([-DGLMWFW_DEBUG])
 TEA_ADD_STUB_SOURCES([])
 TEA_ADD_TCL_SOURCES([])

@@ -28,7 +28,7 @@
 //
 //========================================================================
 
-#include "internal.h"
+#include "platform.h"
 
 
 
@@ -742,30 +742,30 @@ static LRESULT CALLBACK _glmwfwWindowCallback( HWND hWnd, UINT uMsg,
                 NewMouseX = (int)((short)LOWORD(lParam));
                 NewMouseY = (int)((short)HIWORD(lParam));
 
-                if( NewMouseX != _glmwfwInput.OldMouseX ||
-                    NewMouseY != _glmwfwInput.OldMouseY )
+                if( NewMouseX != winPtr->input.platformInput->OldMouseX ||
+                    NewMouseY != winPtr->input.platformInput->OldMouseY )
                 {
                     if( winPtr->MouseLock )
                     {
-                        _glmwfwInput.MousePosX += NewMouseX -
-                                                _glmwfwInput.OldMouseX;
-                        _glmwfwInput.MousePosY += NewMouseY -
-                                                _glmwfwInput.OldMouseY;
+                        winPtr->input.MousePosX += NewMouseX -
+                                                winPtr->input.platformInput->OldMouseX;
+                        winPtr->input.MousePosY += NewMouseY -
+                                                winPtr->input.platformInput->OldMouseY;
                     }
                     else
                     {
-                        _glmwfwInput.MousePosX = NewMouseX;
-                        _glmwfwInput.MousePosY = NewMouseY;
+                        winPtr->input.MousePosX = NewMouseX;
+                        winPtr->input.MousePosY = NewMouseY;
                     }
-                    _glmwfwInput.OldMouseX = NewMouseX;
-                    _glmwfwInput.OldMouseY = NewMouseY;
-                    _glmwfwInput.MouseMoved = GL_TRUE;
+                    winPtr->input.platformInput->OldMouseX = NewMouseX;
+                    winPtr->input.platformInput->OldMouseY = NewMouseY;
+                    winPtr->input.MouseMoved = GL_TRUE;
     
                     // Call user callback function
                     if( winPtr->mouseposfun )
                     {
-                        winPtr->mouseposfun( winPtr, _glmwfwInput.MousePosX,
-                                                   _glmwfwInput.MousePosY );
+                        winPtr->mouseposfun( winPtr, winPtr->input.MousePosX,
+                                                   winPtr->input.MousePosY );
                     }
                 }
             }
@@ -779,10 +779,10 @@ static LRESULT CALLBACK _glmwfwWindowCallback( HWND hWnd, UINT uMsg,
             if( _glmwfwLibrary.Sys.WinVer != _GLMWFW_WIN_95 )
             {
                 WheelDelta = (((int)wParam) >> 16) / WHEEL_DELTA;
-                _glmwfwInput.WheelPos += WheelDelta;
+                winPtr->input.WheelPos += WheelDelta;
                 if( winPtr->mousewheelfun )
                 {
-                    winPtr->mousewheelfun( winPtr, _glmwfwInput.WheelPos );
+                    winPtr->mousewheelfun( winPtr, winPtr->input.WheelPos );
                 }
                 return 0;
             }
@@ -1050,8 +1050,8 @@ static int _glmwfwCreateWindow( GlmwfwWindow *winPtr, int redbits, int greenbits
     // Initialize mouse position
     GetCursorPos( &pos );
     ScreenToClient( winPtr->platformWindow->Wnd, &pos );
-    _glmwfwInput.OldMouseX = _glmwfwInput.MousePosX = pos.x;
-    _glmwfwInput.OldMouseY = _glmwfwInput.MousePosY = pos.y;
+    winPtr->input.platformInput->OldMouseX = winPtr->input.MousePosX = pos.x;
+    winPtr->input.platformInput->OldMouseY = winPtr->input.MousePosY = pos.y;
 
     return GL_TRUE;
 }
@@ -1583,16 +1583,16 @@ int _glmwfwPlatformPollEvents( GlmwfwWindow *winPtr )
 
     // Flag: mouse was not moved (will be changed by _glmwfwGetNextEvent if
     // there was a mouse move event)
-    _glmwfwInput.MouseMoved = GL_FALSE;
+    winPtr->input.MouseMoved = GL_FALSE;
     if( winPtr->MouseLock )
     {
-        _glmwfwInput.OldMouseX = winPtr->Width/2;
-        _glmwfwInput.OldMouseY = winPtr->Height/2;
+        winPtr->input.platformInput->OldMouseX = winPtr->Width/2;
+        winPtr->input.platformInput->OldMouseY = winPtr->Height/2;
     }
     else
     {
-        _glmwfwInput.OldMouseX = _glmwfwInput.MousePosX;
-        _glmwfwInput.OldMouseY = _glmwfwInput.MousePosY;
+        winPtr->input.platformInput->OldMouseX = winPtr->input.MousePosX;
+        winPtr->input.platformInput->OldMouseY = winPtr->input.MousePosY;
     }
 
     // Check for new window messages
@@ -1626,18 +1626,18 @@ int _glmwfwPlatformPollEvents( GlmwfwWindow *winPtr )
 
         // See if this differs from our belief of what has happened
         // (we only have to check for lost key up events)
-        if( !lshift_down && _glmwfwInput.Key[ GLMWFW_KEY_LSHIFT ] == 1 )
+        if( !lshift_down && winPtr->input.Key[ GLMWFW_KEY_LSHIFT ] == 1 )
         {
             _glmwfwInputKey( GLMWFW_KEY_LSHIFT, GLMWFW_RELEASE );
         }
-        if( !rshift_down && _glmwfwInput.Key[ GLMWFW_KEY_RSHIFT ] == 1 )
+        if( !rshift_down && winPtr->input.Key[ GLMWFW_KEY_RSHIFT ] == 1 )
         {
             _glmwfwInputKey( GLMWFW_KEY_RSHIFT, GLMWFW_RELEASE );
         }
     }
 
     // Did we have mouse movement in locked cursor mode?
-    if( _glmwfwInput.MouseMoved && winPtr->MouseLock )
+    if( winPtr->input.MouseMoved && winPtr->MouseLock )
     {
         _glmwfwPlatformSetMouseCursorPos( winPtr, winPtr->Width / 2,
                                         winPtr->Height / 2 );
