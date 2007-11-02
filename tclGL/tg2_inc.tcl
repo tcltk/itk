@@ -20,36 +20,36 @@ proc DispatchWindowRefresh {} {
 proc DispatchWindowClose {} {
 #    puts stderr "DispatchWindowClose!"
 }
-::ntk::glfw::GLFW enable GLFW_STICKY_KEYS
-::ntk::glfw::GLFW enable GLFW_KEY_REPEAT
-::ntk::glfw::GLFW enable GLFW_MOUSE_CURSOR
-::ntk::glfw::GLFW setKeyCallback $win DispatchKey
-::ntk::glfw::GLFW setMousePosCallback $win DispatchMousePos
-::ntk::glfw::GLFW setMouseButtonCallback $win DispatchMouseButton
-::ntk::glfw::GLFW setMouseWheelCallback $win DispatchMouseWheel
-::ntk::glfw::GLFW setWindowSizeCallback $win DispatchWindowSize
-::ntk::glfw::GLFW setWindowRefreshCallback $win DispatchWindowRefresh
-::ntk::glfw::GLFW setWindowCloseCallback $win DispatchWindowClose
+::ntk::glmwfw::Glmwfw enable GLMWFW_STICKY_KEYS
+::ntk::glmwfw::Glmwfw enable GLMWFW_KEY_REPEAT
+::ntk::glmwfw::Glmwfw enable GLMWFW_MOUSE_CURSOR
+::ntk::glmwfw::Glmwfw setKeyCallback $win DispatchKey
+::ntk::glmwfw::Glmwfw setMousePosCallback $win DispatchMousePos
+::ntk::glmwfw::Glmwfw setMouseButtonCallback $win DispatchMouseButton
+::ntk::glmwfw::Glmwfw setMouseWheelCallback $win DispatchMouseWheel
+::ntk::glmwfw::Glmwfw setWindowSizeCallback $win DispatchWindowSize
+::ntk::glmwfw::Glmwfw setWindowRefreshCallback $win DispatchWindowRefresh
+::ntk::glmwfw::Glmwfw setWindowCloseCallback $win DispatchWindowClose
 
-proc Draw {} {
+proc Draw {win} {
     upvar lst lst
     upvar data data
 
-    ::ntk::glfw::GLFW glClearColor 0.55 0.55 0.55 0.0
-    ::ntk::glfw::GLFW glClear GL_COLOR_BUFFER_BIT
+    ::ntk::gl::GL glClearColor 0.55 0.55 0.55 0.0
+    ::ntk::gl::GL glClear GL_COLOR_BUFFER_BIT
     testRender
-    ::ntk::glfw::GLFW swapBuffers
-    ::ntk::glfw::GLFW glFlush
-    set isOpened [::ntk::glfw::GLFW getWindowParam GLFW_OPENED]
+    ::ntk::glmwfw::Glmwfw swapBuffers $win
+    ::ntk::gl::GL glFlush
+    set isOpened [::ntk::glmwfw::Glmwfw getWindowParam $win GLMWFW_OPENED]
     if {!$isOpened} {
-        ::ntk::glfw::GLFW terminate
+        ::ntk::glmwfw::Glmwfw terminate
         exit 0
     }
-    after 5 [list Draw]
+    after 5 [list Draw $win]
 }
-after 5 [list Draw]
+after 5 [list Draw $win]
 set xx 1
 vwait xx
-::ntk::glfw::GLFW terminate
+::ntk::glmwfw::Glmwfw terminate
 exit 0
 

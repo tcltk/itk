@@ -1,6 +1,7 @@
 package require math
 package require TclGL
-package require TclGLFW
+package require GlmwfwX11
+package require Glmwfw
 
 set M_PI 3.14159265358979323846
 
@@ -74,8 +75,8 @@ proc testRender {} {
     ::ntk::gl::GL glPopMatrix
 }
 
-::ntk::glfw::GLFW init
-set win [::ntk::glfw::GLFW openWindow 500 400]
-::ntk::glfw::GLFW setWindowTitle "Arnulf's torus Demo"
+::ntk::glmwfw::Glmwfw init
+set win [::ntk::glmwfw::Glmwfw openWindow 500 400]
+::ntk::glmwfw::Glmwfw setWindowTitle $win "Arnulf's torus Demo"
 
 source tg2_inc.tcl
