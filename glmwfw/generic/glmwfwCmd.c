@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.1 2007/11/02 16:29:39 wiede Exp $
+ * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.2 2007/11/02 16:53:05 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -42,7 +42,9 @@ Tcl_ObjCmdProc Glmwfw_DisableCmd;
 Tcl_ObjCmdProc Glmwfw_DefaultCmd;
 Tcl_ObjCmdProc Glmwfw_UnknownCmd;
 Tcl_ObjCmdProc Glmwfw_WaitEventsCmd;
+#ifdef NOTDEF
 Tcl_ObjCmdProc Glmwfw_DrawMegaimageCmd;
+#endif
 
 typedef struct GlmwfwMethod {
     char* name;              /* method name */
@@ -82,7 +84,9 @@ static GlmwfwMethod GlmwfwMethodList[] = {
     { "setMouseWheelCallback", "functionName",
             Glmwfw_SetMouseWheelCallbackCmd },
     { "waitEvents", "", Glmwfw_WaitEventsCmd },
+#ifdef NOTDEF
     { "drawMegaimage", "width height <pixel-list>", Glmwfw_DrawMegaimageCmd },
+#endif
     /*
      *  Add an error handler to support all of the usual inquiries
      *  for the "info" command in the global namespace.
@@ -130,7 +134,9 @@ static const struct NameProcMap glmwfwCmds2[] = {
             Glmwfw_SetWindowCloseCallbackCmd },
     { "::ntk::glmwfw::Glmwfw::waitEvents", Glmwfw_WaitEventsCmd },
     { "::ntk::glmwfw::Glmwfw::unknown", Glmwfw_UnknownCmd },
+#ifdef NOTDEF
     { "::ntk::glmwfw::Glmwfw::drawMegaimage", Glmwfw_DrawMegaimageCmd },
+#endif
     /*
      *  Add an error handler
      */
@@ -1541,6 +1547,7 @@ Glmwfw_WaitEventsCmd(
     glmwfwWaitEvents(infoPtr->currWindow);
     return TCL_OK;
 }
+#ifdef NOTDEF
 
 #include "megaimage_shared.h"
 /*
@@ -1583,3 +1590,4 @@ Glmwfw_DrawMegaimageCmd(
             GL_RGBA, GL_UNSIGNED_BYTE, data);
     return result;
 }
+#endif
