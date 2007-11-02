@@ -1,0 +1,2 @@
+if {[catch {package present Tcl }]} return
+package ifneeded Glmwfw 0.1  [list load [file join $dir libGlmwfw0.1.so] Glmwfw] 
