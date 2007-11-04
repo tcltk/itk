@@ -38,7 +38,7 @@ set spin 0.0
 lappend callbacks spin
 
 display $win
-WaitEvents $win
+after 50 [list handleCallbacks $win]
 
 set xx 1
 vwait xx
