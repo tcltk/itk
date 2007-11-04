@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.2 2007/10/31 20:40:10 wiede Exp $
+ * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.3 2007/11/04 18:32:37 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -19,6 +19,7 @@ Tcl_ObjCmdProc TclGL_DefaultCmd;
 Tcl_ObjCmdProc TclGL_UnknownCmd;
 Tcl_ObjCmdProc TclGL_Define2Str;
 Tcl_ObjCmdProc TclGL_Str2Define;
+Tcl_ObjCmdProc TclGL_MakeUnsignedByteVector;
 Tcl_ObjCmdProc TclGL_MakeIntVector;
 Tcl_ObjCmdProc TclGL_MakeFloatVector;
 Tcl_ObjCmdProc TclGL_MakeDoubleVector;
@@ -35,6 +36,7 @@ static GLMethod GLMethodList[] = {
     { "glDefine2Str", "<define value>", TclGL_Define2Str },
     { "glStr2Define", "<define string>", TclGL_Str2Define },
     { "makeIntVector", "<list>", TclGL_MakeIntVector },
+    { "makeUnsignedByteVector", "<list>", TclGL_MakeUnsignedByteVector },
     { "makeFloatVector", "<list>", TclGL_MakeFloatVector },
     { "makeDoubleVector", "<list>", TclGL_MakeDoubleVector },
     /*
@@ -57,6 +59,7 @@ static const struct NameProcMap glCmds2[] = {
     { "::ntk::gl::GL::glDefine2Str", TclGL_Define2Str },
     { "::ntk::gl::GL::glStr2Define", TclGL_Str2Define },
     { "::ntk::gl::GL::makeIntVector", TclGL_MakeIntVector },
+    { "::ntk::gl::GL::makeUnsignedByteVector", TclGL_MakeUnsignedByteVector },
     { "::ntk::gl::GL::makeFloatVector", TclGL_MakeFloatVector },
     { "::ntk::gl::GL::makeDoubleVector", TclGL_MakeDoubleVector },
     /*
@@ -304,6 +307,49 @@ TclGL_Str2Define(
     Tcl_Obj *objPtr;
     sprintf(buf, "0x%08x", (int)Tcl_GetHashValue(hPtr));
     objPtr = Tcl_NewStringObj(buf, -1);
+    Tcl_AppendResult(interp, Tcl_GetString(objPtr), NULL);
+    return TCL_OK;;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  TclGL_MakeUnisgnedByteVector()
+ *
+ *  convert a list of ints into a Tcl_ByteArrayObj
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+TclGL_MakeUnsignedByteVector(
+    ClientData clientData,  /* infoPtr */
+    Tcl_Interp *interp,      /* current interpreter */
+    int objc,                /* number of arguments */
+    Tcl_Obj *CONST objv[])   /* argument objects */
+{
+    Tcl_Obj *objPtr;
+    TclGLInfo *infoPtr;
+    unsigned char *uCharVec;
+    unsigned char uCharVal;
+    const char **argv;
+    int argc;
+    int i;
+
+    infoPtr = (TclGLInfo *)clientData;
+    TclGLShowArgs(1, "TclGL_MakeUnsignedByteVector", objc, objv);
+    if (objc != 2) {
+        Tcl_AppendResult(interp,
+                "wrong # args: should be \"ntk makeUnsignedByteVector list\"",
+                NULL);
+        return TCL_ERROR;
+    }
+    Tcl_SplitList(interp, Tcl_GetString(objv[1]), &argc, &argv);
+    uCharVec = (unsigned char *)ckalloc(sizeof(unsigned char)*argc);
+    for(i=0;i<argc;i++) {
+        uCharVal = atoi(argv[i]);
+	uCharVec[i] = uCharVal;
+    }
+    objPtr = Tcl_NewByteArrayObj((unsigned char *)uCharVec,
+            sizeof(unsigned char)*argc);
     Tcl_AppendResult(interp, Tcl_GetString(objPtr), NULL);
     return TCL_OK;;
 }

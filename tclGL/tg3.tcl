@@ -22,11 +22,21 @@ proc display {win} {
     ::ntk::gl::GL glEnable GL_LINE_STIPPLE
 
     ::ntk::gl::GL glLineStipple 1 0x0101
-    drawOneLine 0.50 0.25 0.75 0.25
+    drawOneLine 0.25 0.25 0.50 0.25
     ::ntk::gl::GL glLineStipple 1 0x00ff
-    drawOneLine 0.25 0.25 0.55 0.25
+    drawOneLine 0.50 0.25 0.75 0.25
     ::ntk::gl::GL glLineStipple 1 0x1c47
     drawOneLine 0.75 0.25 0.95 0.25
+
+    ::ntk::gl::GL glLineWidth 5.0
+    ::ntk::gl::GL glLineStipple 1 0x0101
+    drawOneLine 0.25 0.10 0.50 0.10
+    ::ntk::gl::GL glLineStipple 1 0x00ff
+    drawOneLine 0.50 0.11 0.75 0.11
+    ::ntk::gl::GL glLineStipple 1 0x1c47
+    drawOneLine 0.75 0.12 0.95 0.12
+    ::ntk::gl::GL glLineWidth 1.0
+
     ::ntk::gl::GL glDisable GL_LINE_STIPPLE
     ::ntk::gl::GL glFlush
     ::ntk::glmwfw::Glmwfw swapBuffers $win 
@@ -38,11 +48,9 @@ proc _reshape {w h} {
     ::ntk::gl::GL glLoadIdentity
 }
 
-::ntk::glmwfw::Glmwfw init
 set win [::ntk::glmwfw::Glmwfw openWindow 500 400]
 ::ntk::glmwfw::Glmwfw setWindowTitle $win "Hallo Arnulf"
 source tg3_inc.tcl
-#tgInit $win
 
 init
 

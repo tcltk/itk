@@ -26,7 +26,6 @@ proc spin {win} {
     }
 }
 
-::ntk::glmwfw::Glmwfw init
 set win [::ntk::glmwfw::Glmwfw openWindow 500 400]
 ::ntk::glmwfw::Glmwfw setWindowTitle $win "Hallo Arnulf"
 source tg_util.tcl
