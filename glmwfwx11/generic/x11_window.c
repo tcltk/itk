@@ -38,7 +38,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: x11_window.c,v 1.1.2.1 2007/11/02 15:53:12 wiede Exp $
+ * RCS: @(#) $Id: x11_window.c,v 1.1.2.2 2007/11/04 08:49:43 wiede Exp $
  */
 
 #include "platform.h"
@@ -592,30 +592,29 @@ static int _glmwfwTranslateChar( XKeyEvent *event )
 
 
 //========================================================================
-// Get next X event (called by glmwfwPollEvents)
+// Handle next X event (called by _glmwfwGetNextEvent and event_handler)
 //========================================================================
 
-static int _glmwfwGetNextEvent( GlmwfwWindow *winPtr )
+int _glmwfwHandleNextEvent(
+    GlmwfwWindow *winPtr,
+    XEvent *event)
 {
-    XEvent event, next_event;
-
-    // Pull next event from event queue
-    XNextEvent( _glmwfwLibrary.Dpy, &event );
+    XEvent next_event;
 
     // Handle certain window messages
-    switch( event.type )
+    switch( event->type )
     {
         // Is a key being pressed?
         case KeyPress:
 	{
             // Translate and report key press
-            winPtr->infoPtr->inputKey( winPtr, _glmwfwTranslateKey( event.xkey.keycode ), GLMWFW_PRESS );
+            winPtr->infoPtr->inputKey( winPtr, _glmwfwTranslateKey( event->xkey.keycode ), GLMWFW_PRESS );
 
 #ifdef NOTDEF
             // Translate and report character input
             if( winPtr->platformWindow->charfun )
             {
-                _glmwfwInputChar( winPtr, _glmwfwTranslateChar( &event.xkey ), GLMWFW_PRESS );
+                _glmwfwInputChar( winPtr, _glmwfwTranslateChar( &event->xkey ), GLMWFW_PRESS );
             }
 #endif
             break;
@@ -632,9 +631,9 @@ static int _glmwfwGetNextEvent( GlmwfwWindow *winPtr )
             {
                 XPeekEvent( _glmwfwLibrary.Dpy, &next_event );
                 if( next_event.type == KeyPress &&
-                    next_event.xkey.window == event.xkey.window &&
-                    next_event.xkey.keycode == event.xkey.keycode &&
-                    next_event.xkey.time == event.xkey.time )
+                    next_event.xkey.window == event->xkey.window &&
+                    next_event.xkey.keycode == event->xkey.keycode &&
+                    next_event.xkey.time == event->xkey.time )
                 {
                     // Do not report anything for this event
                     break;
@@ -642,13 +641,13 @@ static int _glmwfwGetNextEvent( GlmwfwWindow *winPtr )
             }
 
             // Translate and report key release
-            winPtr->infoPtr->inputKey( winPtr, _glmwfwTranslateKey( event.xkey.keycode ), GLMWFW_RELEASE );
+            winPtr->infoPtr->inputKey( winPtr, _glmwfwTranslateKey( event->xkey.keycode ), GLMWFW_RELEASE );
 
 #ifdef NOTDEF
             // Translate and report character input
             if( winPtr->platformWindow->charfunc )
             {
-                _glmwfwInputChar( winPtr, _glmwfwTranslateChar( &event.xkey ), GLMWFW_RELEASE );
+                _glmwfwInputChar( winPtr, _glmwfwTranslateChar( &event->xkey ), GLMWFW_RELEASE );
             }
 #endif
             break;
@@ -657,22 +656,22 @@ static int _glmwfwGetNextEvent( GlmwfwWindow *winPtr )
         // Were any of the mouse-buttons pressed?
         case ButtonPress:
 	{
-            if( event.xbutton.button == Button1 )
+            if( event->xbutton.button == Button1 )
             {
                 winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_LEFT, GLMWFW_PRESS );
             }
-            else if( event.xbutton.button == Button2 )
+            else if( event->xbutton.button == Button2 )
             {
                 winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_MIDDLE, GLMWFW_PRESS );
             }
-            else if( event.xbutton.button == Button3 )
+            else if( event->xbutton.button == Button3 )
             {
                 winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_RIGHT, GLMWFW_PRESS );
             }
 
             // XFree86 3.3.2 and later translates mouse wheel up/down into
             // mouse button 4 & 5 presses
-            else if( event.xbutton.button == Button4 )
+            else if( event->xbutton.button == Button4 )
             {
                 winPtr->input.WheelPos++;  // To verify: is this up or down?
                 if( winPtr->mousewheelfun )
@@ -680,7 +679,7 @@ static int _glmwfwGetNextEvent( GlmwfwWindow *winPtr )
                     winPtr->mousewheelfun( winPtr, winPtr->input.WheelPos );
                 }
             }
-            else if( event.xbutton.button == Button5 )
+            else if( event->xbutton.button == Button5 )
             {
                 winPtr->input.WheelPos--;
                 if( winPtr->mousewheelfun )
@@ -694,17 +693,17 @@ static int _glmwfwGetNextEvent( GlmwfwWindow *winPtr )
         // Were any of the mouse-buttons released?
         case ButtonRelease:
 	{
-            if( event.xbutton.button == Button1 )
+            if( event->xbutton.button == Button1 )
             {
                 winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_LEFT,
                                       GLMWFW_RELEASE );
             }
-            else if( event.xbutton.button == Button2 )
+            else if( event->xbutton.button == Button2 )
             {
                 winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_MIDDLE,
                                       GLMWFW_RELEASE );
             }
-            else if( event.xbutton.button == Button3 )
+            else if( event->xbutton.button == Button3 )
             {
                 winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_RIGHT,
                                       GLMWFW_RELEASE );
@@ -715,23 +714,23 @@ static int _glmwfwGetNextEvent( GlmwfwWindow *winPtr )
         // Was the mouse moved?
         case MotionNotify:
 	{
-            if( event.xmotion.x != winPtr->input.platformInput->CursorPosX ||
-                event.xmotion.y != winPtr->input.platformInput->CursorPosY )
+            if( event->xmotion.x != winPtr->input.platformInput->CursorPosX ||
+                event->xmotion.y != winPtr->input.platformInput->CursorPosY )
             {
                 if( winPtr->MouseLock )
                 {
-                    winPtr->input.MousePosX += event.xmotion.x -
+                    winPtr->input.MousePosX += event->xmotion.x -
                                             winPtr->input.platformInput->CursorPosX;
-                    winPtr->input.MousePosY += event.xmotion.y -
+                    winPtr->input.MousePosY += event->xmotion.y -
                                             winPtr->input.platformInput->CursorPosY;
                 }
                 else
                 {
-                    winPtr->input.MousePosX = event.xmotion.x;
-                    winPtr->input.MousePosY = event.xmotion.y;
+                    winPtr->input.MousePosX = event->xmotion.x;
+                    winPtr->input.MousePosY = event->xmotion.y;
                 }
-                winPtr->input.platformInput->CursorPosX = event.xmotion.x;
-                winPtr->input.platformInput->CursorPosY = event.xmotion.y;
+                winPtr->input.platformInput->CursorPosX = event->xmotion.x;
+                winPtr->input.platformInput->CursorPosY = event->xmotion.y;
                 winPtr->input.platformInput->MouseMoved = GL_TRUE;
 
                 // Call user callback function
@@ -747,11 +746,11 @@ static int _glmwfwGetNextEvent( GlmwfwWindow *winPtr )
         // Was the window resized?
         case ConfigureNotify:
 	{
-            if( event.xconfigure.width != winPtr->Width ||
-                event.xconfigure.height != winPtr->Height )
+            if( event->xconfigure.width != winPtr->Width ||
+                event->xconfigure.height != winPtr->Height )
             {
-                winPtr->Width = event.xconfigure.width;
-                winPtr->Height = event.xconfigure.height;
+                winPtr->Width = event->xconfigure.width;
+                winPtr->Height = event->xconfigure.height;
                 if( winPtr->windowsizefun )
                 {
                     winPtr->windowsizefun( winPtr, winPtr->Width,
@@ -764,16 +763,16 @@ static int _glmwfwGetNextEvent( GlmwfwWindow *winPtr )
         // Was the window closed by the window manager?
         case ClientMessage:
 	{
-            if( (Atom) event.xclient.data.l[ 0 ] == winPtr->platformWindow->WMDeleteWindow )
+            if( (Atom) event->xclient.data.l[ 0 ] == winPtr->platformWindow->WMDeleteWindow )
             {
                 return GL_TRUE;
             }
 
-	    if( (Atom) event.xclient.data.l[ 0 ] == winPtr->platformWindow->WMPing )
+	    if( (Atom) event->xclient.data.l[ 0 ] == winPtr->platformWindow->WMPing )
 	    {
 		XSendEvent( _glmwfwLibrary.Dpy,
 			    RootWindow( _glmwfwLibrary.Dpy, winPtr->platformWindow->VI->screen ),
-			    False, SubstructureNotifyMask | SubstructureRedirectMask, &event );
+			    False, SubstructureNotifyMask | SubstructureRedirectMask, event );
 	    }
             break;
 	}
@@ -816,7 +815,7 @@ static int _glmwfwGetNextEvent( GlmwfwWindow *winPtr )
         default:
 	{
 #if defined( _GLMWFW_HAS_XRANDR )
-	    switch( event.type - _glmwfwLibrary.XRandR.EventBase )
+	    switch( event->type - _glmwfwLibrary.XRandR.EventBase )
 	    {
 		case RRScreenChangeNotify:
 		{
@@ -832,6 +831,19 @@ static int _glmwfwGetNextEvent( GlmwfwWindow *winPtr )
 
     // The window was not destroyed
     return GL_FALSE;
+}
+
+//========================================================================
+// Get next X event (called by glmwfwPollEvents)
+//========================================================================
+
+static int _glmwfwGetNextEvent( GlmwfwWindow *winPtr )
+{
+    XEvent event;
+
+    // Pull next event from event queue
+    XNextEvent( _glmwfwLibrary.Dpy, &event );
+    return _glmwfwHandleNextEvent(winPtr, &event);
 }
 
 
@@ -886,7 +898,6 @@ static void _glmwfwInitGLXExtensions( GlmwfwWindow *winPtr )
         winPtr->platformWindow->SwapInterval = NULL;
     }
 }
-
 
 
 //************************************************************************
