@@ -2,15 +2,17 @@ package require TclGL
 package require GlmwfwX11
 package require Glmwfw
 
+set xoff 0.1
+set yoff 0.02
 set vertices [::ntk::gl::GL makeFloatVector [list \
-0.0 0.2 \
-0.4 0.3 \
-0.4 0.95 \
-0.0 0.8 \
-0.35 0.0 \
-0.75 0.2 \
-0.75 0.8 \
-0.35 0.65]]
+[expr {0.0+$xoff}] [expr {0.2+$yoff}] \
+[expr {0.4+$xoff}] [expr {0.33+$yoff}] \
+[expr {0.4+$xoff}] [expr {0.93+$yoff}] \
+[expr {0.0+$xoff}] [expr {0.8+$yoff}] \
+[expr {0.35+$xoff}] [expr {0.0+$yoff}] \
+[expr {0.75+$xoff}] [expr {0.2+$yoff}] \
+[expr {0.75+$xoff}] [expr {0.8+$yoff}] \
+[expr {0.35+$xoff}] [expr {0.65+$yoff}]]]
 
 set colors [::ntk::gl::GL makeFloatVector [list \
 1.0 0.2 0.2 \
@@ -32,6 +34,7 @@ set topIndices [::ntk::gl::GL makeUnsignedByteVector [list 2 3 7 6]]
 proc init {} {
     ::ntk::gl::GL glClearColor 0.55 0.55 0.55 0.0
     ::ntk::gl::GL glShadeModel GL_FLAT
+    ::ntk::gl::GL glOrtho 0.0 1.0 0.0 1.0 -1.0 1.0
 puts stderr "init done"
 }
 
