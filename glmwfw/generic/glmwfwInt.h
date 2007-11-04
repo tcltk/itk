@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwInt.h,v 1.1.2.2 2007/11/04 08:51:24 wiede Exp $
+ * RCS: @(#) $Id: glmwfwInt.h,v 1.1.2.3 2007/11/04 13:25:30 wiede Exp $
  */
 
 #include <string.h>
@@ -110,7 +110,7 @@ typedef void (* glmwfwInputKeyT)(struct GlmwfwWindow *, int, int);
 typedef void (* glmwfwInputMouseClickT)(struct GlmwfwWindow *, int, int);
 
 typedef void (* glmwfwwindowsizefun)(struct GlmwfwWindow *, int,int);
-typedef int  (* glmwfwwindowclosefun)(struct GlmwfwWindow *);
+typedef int (* glmwfwwindowclosefun)(struct GlmwfwWindow *);
 typedef void (* glmwfwwindowrefreshfun)(struct GlmwfwWindow *);
 typedef void (* glmwfwmousebuttonfun)(struct GlmwfwWindow *, int,int);
 typedef void (* glmwfwmouseposfun)(struct GlmwfwWindow *, int,int);
@@ -152,6 +152,8 @@ typedef struct GlmwfwWindow {
     int       Iconified;       /* Window iconified flag */
     int       Width;           /* Window width */
     int       Height;          /* Window heigth */
+    int       xRoot;           /* absolute x value of Window on display */
+    int       yRoot;           /* absolute y value of Window on display */
     int       Accelerated;     /* GL_TRUE if window is HW accelerated */
     int       DepthBits;
     int       StencilBits;

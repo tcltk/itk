@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.3 2007/11/04 08:51:24 wiede Exp $
+ * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.4 2007/11/04 13:25:29 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -1151,6 +1151,7 @@ void DispatchWindowSize(
     Tcl_Obj *listPtr;
     int result;
 
+fprintf(stderr, "INTERNAL DispatchWindowSize\n");
     listPtr = Tcl_NewListObj(0, NULL);
     Tcl_IncrRefCount (listPtr);
     widthPtr = Tcl_NewIntObj (width);
@@ -1197,20 +1198,20 @@ void DispatchWindowRefresh(
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-void DispatchWindowClose(
-    GlmwfwWindow *winPtr,
-    int width,
-    int height)
+int DispatchWindowClose(
+    GlmwfwWindow *winPtr)
 {
     Tcl_Obj *listPtr;
     int result;
 
+fprintf(stderr, "INTERNAL DispatchWindowClose\n");
     listPtr = Tcl_NewListObj(0, NULL);
     Tcl_IncrRefCount (listPtr);
     Tcl_ListObjAppendElement (winPtr->infoPtr->interp, listPtr,
             winPtr->windowCloseCallback);
     result = Tcl_GlobalEvalObj (winPtr->infoPtr->interp, listPtr);
     Tcl_DecrRefCount (listPtr);
+    return GL_TRUE;
 }
 
 /*
@@ -1496,7 +1497,7 @@ Glmwfw_SetWindowCloseCallbackCmd(
     winPtr = Tcl_GetHashValue(hPtr);
     winPtr->windowCloseCallback = objv[2];
     Tcl_IncrRefCount(winPtr->windowCloseCallback);
-    glmwfwSetWindowSizeCallback(winPtr, DispatchWindowClose);
+    glmwfwSetWindowCloseCallback(winPtr, DispatchWindowClose);
     return TCL_OK;
 }
 
