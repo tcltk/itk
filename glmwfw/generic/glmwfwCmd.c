@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.2 2007/11/02 16:53:05 wiede Exp $
+ * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.3 2007/11/04 08:51:24 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -264,7 +264,11 @@ Glmwfw_InitCmd(
     int objc,              /* number of arguments */
     Tcl_Obj *CONST objv[]) /* argument objects */
 {
+    GlmwfwInfo *infoPtr;
+
     /* NO LONGER NEEDED, call to glmwfwInit is done when loading package */
+fprintf(stderr, "glmwfwInit NO LONGER NEEDED!!\n");
+    infoPtr = (GlmwfwInfo *)clientData;
     GlmwfwShowArgs(1, "Glmwfw_InitCmd", objc, objv);
     if (objc != 1) {
 	Tcl_AppendResult(interp,
@@ -272,7 +276,7 @@ Glmwfw_InitCmd(
 	        NULL);
         return TCL_ERROR;
     }
-    glmwfwInit();
+    glmwfwInit(infoPtr);
     return TCL_OK;
 }
 

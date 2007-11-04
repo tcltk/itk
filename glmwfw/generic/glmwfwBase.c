@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwBase.c,v 1.1.2.1 2007/11/02 16:29:38 wiede Exp $
+ * RCS: @(#) $Id: glmwfwBase.c,v 1.1.2.2 2007/11/04 08:51:23 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -70,7 +70,7 @@ Initialize (
 
     Glmwfw_InitCommands(interp, infoPtr);
 
-    glmwfwInit();
+    glmwfwInit(infoPtr);
     Tcl_SetVar(interp, "::ntk::glmwfw::version", GLMWFW_VERSION,
             TCL_NAMESPACE_ONLY);
     Tcl_SetVar(interp, "::ntk::glmwfw::patchLevel", GLMWFW_PATCH_LEVEL,

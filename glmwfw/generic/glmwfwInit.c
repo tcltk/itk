@@ -18,7 +18,7 @@
  * and package require command has to look for the right one dependent on the
  * platform
  *
- * RCS: @(#) $Id: glmwfwInit.c,v 1.1.2.1 2007/11/02 16:29:39 wiede Exp $
+ * RCS: @(#) $Id: glmwfwInit.c,v 1.1.2.2 2007/11/04 08:51:24 wiede Exp $
  */
 
 #include "glmwfwInt.h"
@@ -38,10 +38,10 @@
 
 int
 glmwfwInit(
-    void)
+    GlmwfwInfo *infoPtr)
 {
     /* Platform specific initialization */
-    if (!_glmwfwPlatformInit()) {
+    if (!_glmwfwPlatformInit(infoPtr)) {
         return GL_FALSE;
     }
     return GL_TRUE;

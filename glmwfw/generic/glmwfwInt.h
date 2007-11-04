@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwInt.h,v 1.1.2.1 2007/11/02 16:29:39 wiede Exp $
+ * RCS: @(#) $Id: glmwfwInt.h,v 1.1.2.2 2007/11/04 08:51:24 wiede Exp $
  */
 
 #include <string.h>
@@ -220,7 +220,7 @@ MODULE_SCOPE Tcl_Obj * GlmwfwDefine2Key(int value);
  */
 
 /* GLMWFW initialization, termination and version querying */
-MODULE_SCOPE int glmwfwInit(void);
+MODULE_SCOPE int glmwfwInit(GlmwfwInfo *infoPtr);
 MODULE_SCOPE int glmwfwTerminate(GlmwfwInfo *infoPtr);
 
 /* Window handling */

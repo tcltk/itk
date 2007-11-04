@@ -16,7 +16,8 @@ foreach i {1 2 3 4 5 6 7 8 9 10} {
     set lst2 [concat $lst2 $lst1]
 }
 set lst [list]
-foreach i {1 2 3 4 5 6 7 8 9 10} {
+#foreach i {1 2 3 4 5 6 7 8 9 10} 
+foreach i {1} {
     set lst [concat $lst $lst2]
     set lst [concat $lst $lst2]
     set lst [concat $lst $lst2]
@@ -41,7 +42,7 @@ proc Draw {win} {
 
     ::ntk::gl::GL glClearColor 0.25 0.0 0.0 0.0
     ::ntk::gl::GL glClear GL_COLOR_BUFFER_BIT
-    ::ntk::gl::GL glDrawPixels 50 50 GL_RGBA GL_FLOAT $lst
+    ::ntk::gl::GL glDrawPixels 50 5 GL_RGBA GL_FLOAT $lst
     ::ntk::glmwfw::Glmwfw swapBuffers $win 
     ::ntk::gl::GL glFlush
 }
@@ -54,7 +55,7 @@ puts stderr "WIN2!$win2!"
 tgInit $win2
 Draw $win2
 
-WaitEvents $win2
+#WaitEvents $win2
 
 set xx 1
 vwait xx
