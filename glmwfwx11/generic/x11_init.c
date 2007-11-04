@@ -38,7 +38,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: x11_init.c,v 1.1.2.2 2007/11/04 08:49:42 wiede Exp $
+ * RCS: @(#) $Id: x11_init.c,v 1.1.2.3 2007/11/04 13:26:59 wiede Exp $
  */
 
 #include "platform.h"
@@ -92,131 +92,6 @@ void _glmwfwTerminate_atexit( void )
     glmwfwTerminate(winPtr);
 #endif
 }
-
-/* ARNULF */
-static void
-dispatch_event(GlmwfwInfo *infoPtr, XEvent *xe) {
-    GlmwfwWindow *winPtr;
-
-    winPtr = infoPtr->currWindow;
-fprintf(stderr, "dispatch_event!%p!0x%08x\n", winPtr, xe->type);
-    switch (xe->type) {
-    case ButtonPress: {
-        XButtonEvent *xbutton = &xe->xbutton;
-fprintf(stderr, "ButtonPress:!0x%08x!0x%08x\n", xbutton->button, xe->type);
-fprintf(stderr, "y:%d!x:%d!x_root:%d!y_root:%d!window:%p!root:%p!subwindow:%p!\n", xbutton->x, xbutton->y, xbutton->x_root, xbutton->y_root, xbutton->window, xbutton->root, xbutton->subwindow);
-      }
-      break;
-    case ButtonRelease: {
-//        XButtonEvent *xbutton = &xe->xbutton;
-      }
-      break;
-    case ClientMessage: {
-fprintf(stderr, "ClientMessage:\n");
-      }
-      break;
-    case ConfigureNotify: {
-fprintf(stderr, "ConfigureNotify:\n");
-      }
-      break;
-    case DestroyNotify: {
-fprintf(stderr, "DestroyNotify:\n");
-      }
-      break;
-    case Expose: {
-fprintf(stderr, "Expose:\n");
-      }
-      break;
-    case NoExpose: {
-fprintf(stderr, "NoExpose:\n");
-      }
-      break;
-    case KeyPress: {
-fprintf(stderr, "KeyPress:\n");
-      }
-      break;
-    case KeyRelease: {
-fprintf(stderr, "KeyRelease:\n");
-      }
-      break;
-    case VisibilityNotify: {
-fprintf(stderr, "VisibilityNotify:\n");
-      }
-      break;
-    case MotionNotify: {
-fprintf(stderr, "MotionNotify:\n");
-      }
-      break;
-    case EnterNotify: {
-fprintf(stderr, "EnterNotify:\n");
-      }
-      break;
-    case LeaveNotify: {
-fprintf(stderr, "LeaveNotify:\n");
-      }
-      break;
-    case PropertyNotify: {
-fprintf(stderr, "PropertyNotify:\n");
-      }
-      break;
-    case CreateNotify: {
-fprintf(stderr, "CreateNotify:\n");
-      }
-      break;
-      break;
-    case MapNotify: {
-fprintf(stderr, "MapNotify:\n");
-      }
-      break;
-    case UnmapNotify: {
-fprintf(stderr, "UnmapNotify:\n");
-      }
-      break;
-    case SelectionClear: {
-fprintf(stderr, "SelectionClear:\n");
-      }
-      break;
-    case SelectionRequest: {
-fprintf(stderr, "SelectionRequest:\n");
-      }
-      break;
-    case ResizeRequest: {
-fprintf(stderr, "ResizeRequest:\n");
-      }
-      break;
-    case FocusIn: {
-fprintf(stderr, "FocusIn:\n");
-      }
-    case FocusOut: {
-fprintf(stderr, "FocusOut:\n");
-      }
-      break;
-    default: {
-fprintf(stderr, "default:\n");
-      }
-      break;
-    }
-}
-static void
-event_handler (ClientData cdata, int mask) {
-    GlmwfwInfo *infoPtr;
-    XEvent xe;
-
-    infoPtr = (GlmwfwInfo *) cdata;
-
-again:
-    while (XPending (_glmwfwLibrary.Dpy)) {
-        XNextEvent (_glmwfwLibrary.Dpy, &xe);
-	_glmwfwHandleNextEvent(infoPtr->currWindow, &xe);
-        dispatch_event (infoPtr, &xe);
-    }
-    XSync (_glmwfwLibrary.Dpy, 0);
-    if (XPending (_glmwfwLibrary.Dpy)) {
-        goto again;
-    }
-}
-
-/* ARNULF END */
 
 
 //========================================================================

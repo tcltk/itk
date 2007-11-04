@@ -12,12 +12,15 @@ proc DispatchMouseWheel {where} {
 }
 proc DispatchWindowSize {width height} {
     puts stderr "DispatchWindowSize!$width!$height!"
+    ::ntk::glmwfw::Glmwfw setWindowSize $width $height
 }
 proc DispatchWindowRefresh {} {
     puts stderr "DispatchWindowRefresh!"
 }
 proc DispatchWindowClose {} {
     puts stderr "DispatchWindowClose!"
+    ::ntk::glmwfw::Glmwfw terminate
+    exit 0
 }
 
 set callbacks [list]

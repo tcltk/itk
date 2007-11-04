@@ -266,6 +266,6 @@ void _glmwfwTerminateJoysticks( void );
 // Unicode support
 long _glmwfwKeySym2Unicode( KeySym keysym );
 
-int _glmwfwHandleNextEvent( GlmwfwWindow *winPtr, XEvent *event);
+void event_handler (ClientData cdata, int mask);
 
 #endif // _platform_h_
