@@ -38,7 +38,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: x11_window.c,v 1.1.2.3 2007/11/04 13:26:59 wiede Exp $
+ * RCS: @(#) $Id: x11_window.c,v 1.1.2.4 2007/11/04 13:31:31 wiede Exp $
  */
 
 #include "platform.h"
@@ -590,157 +590,6 @@ static int _glmwfwTranslateChar( XKeyEvent *event )
 }
 #endif
 
-/* ARNULF */
-static int
-dispatch_event(
-    GlmwfwInfo *infoPtr,
-    XEvent *xe)
-{
-    GlmwfwWindow *winPtr;
-    int result;
-
-    result = _glmwfwHandleNextEvent(infoPtr->currWindow, xe);
-if (result != 0) {
-fprintf(stderr, "_glmwfwHandleNextEvent:result!%d\n");
-}
-    winPtr = infoPtr->currWindow;
-//fprintf(stderr, "dispatch_event!%p!0x%08x\n", winPtr, xe->type);
-    switch (xe->type) {
-    case ButtonPress: {
-        XButtonEvent *xbutton = &xe->xbutton;
-fprintf(stderr, "ButtonPress:!0x%08x!0x%08x\n", xbutton->button, xe->type);
-fprintf(stderr, "x:%d!y:%d!x_root:%d!y_root:%d!window:0x%08x!\n", xbutton->x, xbutton->y, xbutton->x_root, xbutton->y_root, xbutton->window);
-fprintf(stderr, "RR!%d!%d!%d!%d!\n", winPtr->xRoot, winPtr->yRoot, xbutton->x_root-xbutton->x,xbutton->y_root-xbutton->y);
-      }
-      break;
-    case ButtonRelease: {
-//        XButtonEvent *xbutton = &xe->xbutton;
-      }
-      break;
-    case ClientMessage: {
-        XClientMessageEvent * c_event = (XClientMessageEvent *)xe;
-fprintf(stderr, "ClientMessage message_type:0x%08x\n", c_event->message_type);
-fprintf(stderr, "ClientMessage format:0x%08x!0x%08x!0x%08x!0x%08x!0x%08x!0x%08x!\n", c_event->format, xe->xclient.data.l[0], winPtr->platformWindow->WMDeleteWindow,xe->xclient.data.l[1], xe->xclient.data.l[2], xe->xclient.data.l[3] );
-            if( (Atom) xe->xclient.data.l[0] == winPtr->platformWindow->WMDeleteWindow ) {
-fprintf(stderr, "DELETE WINDOW\n");
-                winPtr->infoPtr->closeWindow(winPtr);
-            }
-      }
-      break;
-    case ConfigureNotify: {
-fprintf(stderr, "ConfigureNotify:\n");
-      }
-      break;
-    case DestroyNotify: {
-fprintf(stderr, "DestroyNotify:\n");
-      }
-      break;
-    case Expose: {
-fprintf(stderr, "Expose:\n");
-      }
-      break;
-    case NoExpose: {
-fprintf(stderr, "NoExpose:\n");
-      }
-      break;
-    case KeyPress: {
-fprintf(stderr, "KeyPress:\n");
-      }
-      break;
-    case KeyRelease: {
-fprintf(stderr, "KeyRelease:\n");
-      }
-      break;
-    case VisibilityNotify: {
-fprintf(stderr, "VisibilityNotify:\n");
-      }
-      break;
-    case MotionNotify: {
-fprintf(stderr, "MotionNotify:\n");
-      }
-      break;
-    case EnterNotify: {
-fprintf(stderr, "EnterNotify:\n");
-      }
-      break;
-    case LeaveNotify: {
-fprintf(stderr, "LeaveNotify:\n");
-      }
-      break;
-    case PropertyNotify: {
-fprintf(stderr, "PropertyNotify:\n");
-      }
-      break;
-    case CreateNotify: {
-fprintf(stderr, "CreateNotify:\n");
-      }
-      break;
-    case MapNotify: {
-fprintf(stderr, "MapNotify:\n");
-      }
-      break;
-    case UnmapNotify: {
-fprintf(stderr, "UnmapNotify:\n");
-      }
-      break;
-    case SelectionClear: {
-fprintf(stderr, "SelectionClear:\n");
-      }
-      break;
-    case SelectionRequest: {
-fprintf(stderr, "SelectionRequest:\n");
-      }
-      break;
-    case ResizeRequest: {
-fprintf(stderr, "ResizeRequest:\n");
-      }
-      break;
-    case FocusIn: {
-fprintf(stderr, "FocusIn:\n");
-      }
-    case FocusOut: {
-fprintf(stderr, "FocusOut:\n");
-      }
-      break;
-    default: {
-fprintf(stderr, "default:\n");
-      }
-      break;
-    }
-    return result;
-}
-
-void
-event_handler (
-    ClientData cdata,
-    int mask)
-{
-    GlmwfwInfo *infoPtr;
-    XEvent xe;
-    int result;
-    int allResult;
-
-    infoPtr = (GlmwfwInfo *) cdata;
-
-    allResult = 0;
-again:
-    while (XPending (_glmwfwLibrary.Dpy)) {
-        XNextEvent (_glmwfwLibrary.Dpy, &xe);
-        result = dispatch_event (infoPtr, &xe);
-        allResult += result;
-    }
-    XSync (_glmwfwLibrary.Dpy, 0);
-    if (XPending (_glmwfwLibrary.Dpy)) {
-        goto again;
-    }
-    if (!infoPtr->currWindow->Opened) {
-fprintf(stderr, "Call windowclosefun %d\n", allResult);
-        infoPtr->currWindow->windowclosefun(infoPtr->currWindow);
-    }
-}
-
-/* ARNULF END */
-
 //========================================================================
 // Handle next X event (called by _glmwfwGetNextEvent and event_handler)
 //========================================================================
@@ -950,6 +799,157 @@ fprintf(stderr, "111 DestroyNotify:\n");
     // The window was not destroyed
     return GL_FALSE;
 }
+
+/* ARNULF */
+static int
+dispatch_event(
+    GlmwfwInfo *infoPtr,
+    XEvent *xe)
+{
+    GlmwfwWindow *winPtr;
+    int result;
+
+    result = _glmwfwHandleNextEvent(infoPtr->currWindow, xe);
+if (result != 0) {
+fprintf(stderr, "_glmwfwHandleNextEvent:result!%d\n", result);
+}
+    winPtr = infoPtr->currWindow;
+//fprintf(stderr, "dispatch_event!%p!0x%08x\n", winPtr, xe->type);
+    switch (xe->type) {
+    case ButtonPress: {
+        XButtonEvent *xbutton = &xe->xbutton;
+fprintf(stderr, "ButtonPress:!0x%08x!0x%08x\n", xbutton->button, xe->type);
+fprintf(stderr, "x:%d!y:%d!x_root:%d!y_root:%d!window:0x%08x!\n", xbutton->x, xbutton->y, xbutton->x_root, xbutton->y_root, (unsigned int)xbutton->window);
+fprintf(stderr, "RR!%d!%d!%d!%d!\n", winPtr->xRoot, winPtr->yRoot, xbutton->x_root-xbutton->x,xbutton->y_root-xbutton->y);
+      }
+      break;
+    case ButtonRelease: {
+//        XButtonEvent *xbutton = &xe->xbutton;
+      }
+      break;
+    case ClientMessage: {
+        XClientMessageEvent * c_event = (XClientMessageEvent *)xe;
+fprintf(stderr, "ClientMessage message_type:0x%08x\n", (unsigned int)c_event->message_type);
+fprintf(stderr, "ClientMessage format:0x%08x!0x%08x!0x%08x!0x%08x!0x%08x!0x%08x!\n", c_event->format, (unsigned int)xe->xclient.data.l[0], (unsigned int)winPtr->platformWindow->WMDeleteWindow,(unsigned int)xe->xclient.data.l[1], (unsigned int)xe->xclient.data.l[2], (unsigned int)xe->xclient.data.l[3] );
+            if( (Atom) xe->xclient.data.l[0] == winPtr->platformWindow->WMDeleteWindow ) {
+fprintf(stderr, "DELETE WINDOW\n");
+                winPtr->infoPtr->closeWindow(winPtr);
+            }
+      }
+      break;
+    case ConfigureNotify: {
+fprintf(stderr, "ConfigureNotify:\n");
+      }
+      break;
+    case DestroyNotify: {
+fprintf(stderr, "DestroyNotify:\n");
+      }
+      break;
+    case Expose: {
+fprintf(stderr, "Expose:\n");
+      }
+      break;
+    case NoExpose: {
+fprintf(stderr, "NoExpose:\n");
+      }
+      break;
+    case KeyPress: {
+fprintf(stderr, "KeyPress:\n");
+      }
+      break;
+    case KeyRelease: {
+fprintf(stderr, "KeyRelease:\n");
+      }
+      break;
+    case VisibilityNotify: {
+fprintf(stderr, "VisibilityNotify:\n");
+      }
+      break;
+    case MotionNotify: {
+fprintf(stderr, "MotionNotify:\n");
+      }
+      break;
+    case EnterNotify: {
+fprintf(stderr, "EnterNotify:\n");
+      }
+      break;
+    case LeaveNotify: {
+fprintf(stderr, "LeaveNotify:\n");
+      }
+      break;
+    case PropertyNotify: {
+fprintf(stderr, "PropertyNotify:\n");
+      }
+      break;
+    case CreateNotify: {
+fprintf(stderr, "CreateNotify:\n");
+      }
+      break;
+    case MapNotify: {
+fprintf(stderr, "MapNotify:\n");
+      }
+      break;
+    case UnmapNotify: {
+fprintf(stderr, "UnmapNotify:\n");
+      }
+      break;
+    case SelectionClear: {
+fprintf(stderr, "SelectionClear:\n");
+      }
+      break;
+    case SelectionRequest: {
+fprintf(stderr, "SelectionRequest:\n");
+      }
+      break;
+    case ResizeRequest: {
+fprintf(stderr, "ResizeRequest:\n");
+      }
+      break;
+    case FocusIn: {
+fprintf(stderr, "FocusIn:\n");
+      }
+    case FocusOut: {
+fprintf(stderr, "FocusOut:\n");
+      }
+      break;
+    default: {
+fprintf(stderr, "default:\n");
+      }
+      break;
+    }
+    return result;
+}
+
+void
+event_handler (
+    ClientData cdata,
+    int mask)
+{
+    GlmwfwInfo *infoPtr;
+    XEvent xe;
+    int result;
+    int allResult;
+
+    infoPtr = (GlmwfwInfo *) cdata;
+
+    allResult = 0;
+again:
+    while (XPending (_glmwfwLibrary.Dpy)) {
+        XNextEvent (_glmwfwLibrary.Dpy, &xe);
+        result = dispatch_event (infoPtr, &xe);
+        allResult += result;
+    }
+    XSync (_glmwfwLibrary.Dpy, 0);
+    if (XPending (_glmwfwLibrary.Dpy)) {
+        goto again;
+    }
+    if (!infoPtr->currWindow->Opened) {
+fprintf(stderr, "Call windowclosefun %d\n", allResult);
+        infoPtr->currWindow->windowclosefun(infoPtr->currWindow);
+    }
+}
+
+/* ARNULF END */
 
 //========================================================================
 // Get next X event (called by glmwfwPollEvents)
