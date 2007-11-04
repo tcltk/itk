@@ -12,7 +12,7 @@ proc DispatchMouseWheel {where} {
 }
 proc DispatchWindowSize {width height} {
     puts stderr "DispatchWindowSize!$width!$height!"
-    ::ntk::glmwfw::Glmwfw setWindowSize $width $height
+    ::ntk::glmwfw::Glmwfw setWindowSize $::win $width $height
 }
 proc DispatchWindowRefresh {} {
     puts stderr "DispatchWindowRefresh!"
