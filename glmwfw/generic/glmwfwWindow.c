@@ -18,7 +18,7 @@
  * and package require command has to look for the right one dependent on the
  * platform
  *
- * RCS: @(#) $Id: glmwfwWindow.c,v 1.1.2.2 2007/11/04 13:25:30 wiede Exp $
+ * RCS: @(#) $Id: glmwfwWindow.c,v 1.1.2.3 2007/11/04 16:21:32 wiede Exp $
  */
 
 #include "glmwfwInt.h"
@@ -399,7 +399,6 @@ glmwfwCloseWindow(
     /* Close window */
     _glmwfwPlatformCloseWindow(winPtr);
 
-fprintf(stderr, "glmwfwCloseWindow\n");
     /* Window is no longer opened */
     winPtr->Opened = GL_FALSE;
     return TCL_OK;
@@ -455,7 +454,7 @@ glmwfwSetWindowSize(
     int height)
 {
     /* Is Glmwfw initialized? */
-    if (!winPtr->Opened || winPtr->Iconified ) {
+    if (!winPtr->Opened || winPtr->Iconified) {
         return TCL_OK;
     }
 
@@ -721,7 +720,6 @@ int
 glmwfwPollEvents(
     GlmwfwWindow *winPtr)
 {
-fprintf(stderr, "INTERNAL glmwfwPollEvents\n");
     /* Is Glmwfw initialized? */
     if (!winPtr->Opened) {
         return TCL_OK;
