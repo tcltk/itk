@@ -143,7 +143,7 @@ while {[gets stdin line] >= 0} {
 	regsub -all {[-]} $comment {_} comment
 	regsub -all {,} $comment {_} comment
         set commentLineNo $lineNo
-#puts stderr "comment!$commentLineNo!$comment!"
+puts stderr "comment!$commentLineNo!$comment!"
     } else {
         if {[regexp {^#define GL_(.*)$} $line -> defineStr]} {
 	    if {$commentLineNo == [expr {$lineNo - 1}]} {
@@ -259,7 +259,7 @@ puts stderr "444!$entry!"
                             set myType "GLenum"
                             set getParam [format $enumPart $paramNum \
 			            $paramNum $pname]
-			    append paramCallInfos "${callSep}(GLenum)$pname"
+			    append paramCallInfos "${callSep}($myType)$pname"
 			    set callSep ", "
 			  }
                         GLboolean {
