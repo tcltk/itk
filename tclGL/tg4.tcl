@@ -37,7 +37,8 @@ tgInit $win
 init
 
 display $win
-WaitEvents $win
+#WaitEvents $win
+after 5000
 
 set xx 1
 vwait xx

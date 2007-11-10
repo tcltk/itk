@@ -12,7 +12,16 @@ proc DispatchMouseWheel {where} {
 }
 proc DispatchWindowSize {width height} {
     puts stderr "DispatchWindowSize!$width!$height!"
-    ::ntk::glmwfw::Glmwfw setWindowSize $::win $width $height
+#    ::ntk::glmwfw::Glmwfw setWindowSize $::win $width $height
+#    ::ntk::gl::GL glMatrixMode GL_PROJECTION
+#    ::ntk::gl::GL glLoadIdentity
+#    ::ntk::gl::GL glViewport 0 0 $width $height
+#    ::ntk::gl::GL gluOrtho2D 0.0 1.0 0.0 1.0
+#    ::ntk::gl::GL glMatrixMode GL_MODELVIEW
+#    ::ntk::gl::GL glLoadIdentity
+    ::ntk::gl::GL glFlush
+    display $::win
+#    ::ntk::glmwfw::Glmwfw swapBuffers $::win
 }
 proc DispatchWindowRefresh {} {
     puts stderr "DispatchWindowRefresh!"

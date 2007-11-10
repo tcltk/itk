@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile,v 1.1.2.2 2007/11/02 17:24:23 wiede Exp $
+# RCS: @(#) $Id: Makefile,v 1.1.2.3 2007/11/10 18:39:34 wiede Exp $
 
 #========================================================================
 # Add additional lines to handle any additional AC_SUBST cases that
@@ -35,8 +35,8 @@
 # $(srcdir) or in the generic, win or unix subdirectory.
 #========================================================================
 
-PKG_SOURCES	=  tclGLBase.c tclGLCmd.c tclGLStubInit.c tclGLUtil.c
-PKG_OBJECTS	=  tclGLBase.o tclGLCmd.o tclGLStubInit.o tclGLUtil.o
+PKG_SOURCES	=  tclGLBase.c tclGLCmd.c tclGLextCmd.c tclGLStubInit.c tclGLUtil.c
+PKG_OBJECTS	=  tclGLBase.o tclGLCmd.o tclGLextCmd.o tclGLStubInit.o tclGLUtil.o
 
 PKG_STUB_SOURCES = 
 PKG_STUB_OBJECTS = 
@@ -419,7 +419,7 @@ pkgIndex.tcl: Makefile
 	@( \
 	echo 'if {[catch {package present Tcl $(TCL_VERSION_REQ)}]} return'; \
 	echo 'package ifneeded $(PACKAGE_NAME) $(PACKAGE_VERSION) \
-	    [list load [file join $$dir $(PKG_LIB_FILE)] tclGL] ';  \
+	    [list load [file join $$dir $(PKG_LIB_FILE)] $(PACKAGE_NAME)] ';  \
 	) > pkgIndex.tcl
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status

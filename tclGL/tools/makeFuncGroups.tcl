@@ -30,6 +30,8 @@ set initPart {
 
 
 proc handleParams {paramInfo} {
+    upvar name funcName
+
     set paramNo -1
     set usageStr ""
     set paramDecls ""
@@ -124,7 +126,7 @@ proc handleParams {paramInfo} {
 		# to be fixed != 0!!
                 lappend paramDecls "    int paramLength$paramNo = 0;"
 	        set paramCheckDone 1
-puts stderr "NOT YET!$entry!"
+puts stderr "NOT YET!$funcName!$entry!"
 	    }
 	}
         if {!$paramCheckDone} {
