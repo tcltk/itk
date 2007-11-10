@@ -9,11 +9,12 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.3 2007/11/04 18:32:37 wiede Exp $
+ * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.4 2007/11/10 18:26:20 wiede Exp $
  */
 
 #include <stdlib.h>
 #include "tclGLInt.h"
+#include "tclGLFuncSizes.h"
 
 Tcl_ObjCmdProc TclGL_DefaultCmd;
 Tcl_ObjCmdProc TclGL_UnknownCmd;
@@ -26,47 +27,33 @@ Tcl_ObjCmdProc TclGL_MakeDoubleVector;
 #include "tclGLProcNames.c"
 
 typedef struct GLMethod {
-    char* name;              /* method name */
-    char* usage;             /* string describing usage */
+    char *commandName;       /* the command name with the namespace prefix */
+    char *usage;             /* string describing usage */
     Tcl_ObjCmdProc *proc;    /* implementation C proc */
 } GLMethod;
 
 static GLMethod GLMethodList[] = {
-#include "tclGLMethodNames.c"
-    { "glDefine2Str", "<define value>", TclGL_Define2Str },
-    { "glStr2Define", "<define string>", TclGL_Str2Define },
-    { "makeIntVector", "<list>", TclGL_MakeIntVector },
-    { "makeUnsignedByteVector", "<list>", TclGL_MakeUnsignedByteVector },
-    { "makeFloatVector", "<list>", TclGL_MakeFloatVector },
-    { "makeDoubleVector", "<list>", TclGL_MakeDoubleVector },
+#include "tclGLMethodInfos.c"
+    { "::ntk::gl::GL::unknown",
+            "", TclGL_UnknownCmd },
+    { "::ntk::gl::GL::define2Str",
+            "<define value>", TclGL_Define2Str },
+    { "::ntk::gl::GL::str2Define",
+            "<define string>", TclGL_Str2Define },
+    { "::ntk::gl::GL::makeIntVector",
+            "<list>", TclGL_MakeIntVector },
+    { "::ntk::gl::GL::makeUnsignedByteVector",
+            "<list>", TclGL_MakeUnsignedByteVector },
+    { "::ntk::gl::GL::makeFloatVector",
+            "<list>", TclGL_MakeFloatVector },
+    { "::ntk::gl::GL::makeDoubleVector",
+            "<list>", TclGL_MakeDoubleVector },
     /*
      *  Add an error handler to support all of the usual inquiries
      *  for the "info" command in the global namespace.
      */
-    { "@error", "", TclGL_DefaultCmd },
+    { "::ntk::gl::GL::@error", "", TclGL_DefaultCmd },
     { NULL, NULL, NULL }
-};
-
-struct NameProcMap { const char *name; Tcl_ObjCmdProc *proc; };
-
-/*
- * List of commands that are used to implement the [ntk glfw] subcommands.
- */
-
-static const struct NameProcMap glCmds2[] = {
-#include "tclGLCmdNames.c"
-    { "::ntk::gl::GL::unknown", TclGL_UnknownCmd },
-    { "::ntk::gl::GL::glDefine2Str", TclGL_Define2Str },
-    { "::ntk::gl::GL::glStr2Define", TclGL_Str2Define },
-    { "::ntk::gl::GL::makeIntVector", TclGL_MakeIntVector },
-    { "::ntk::gl::GL::makeUnsignedByteVector", TclGL_MakeUnsignedByteVector },
-    { "::ntk::gl::GL::makeFloatVector", TclGL_MakeFloatVector },
-    { "::ntk::gl::GL::makeDoubleVector", TclGL_MakeDoubleVector },
-    /*
-     *  Add an error handler
-     */
-    { "::ntk::gl::GL::@error", TclGL_DefaultCmd },
-    { NULL, NULL }
 };
 
 /*
@@ -150,9 +137,9 @@ TclGL_InitCommands (
     cmd = Tcl_CreateEnsemble(interp, nsPtr->fullName, nsPtr,
         TCL_ENSEMBLE_PREFIX);
     Tcl_Export(interp, nsPtr, "[a-z]*", 1);
-    for (i=0 ; glCmds2[i].name!=NULL ; i++) {
-        Tcl_CreateObjCommand(interp, glCmds2[i].name,
-                glCmds2[i].proc, infoPtr, NULL);
+    for (i=0 ; GLMethodList[i].commandName!=NULL ; i++) {
+        Tcl_CreateObjCommand(interp, GLMethodList[i].commandName,
+                GLMethodList[i].proc, infoPtr, NULL);
     }
     Tcl_Obj *ensObjPtr = Tcl_NewStringObj("::ntk::gl::GL", -1);
     Tcl_IncrRefCount(ensObjPtr);
@@ -177,32 +164,303 @@ TclGL_InitCommands (
 void
 TclGLGetUsage(
     Tcl_Interp *interp,
+    TclGLInfo *infoPtr,
     Tcl_Obj *objPtr)       /* returns: summary of usage info */
 {
+    TclGLFunc *funcPtr;
     char *spaces = "  ";
-    int isOpenEnded = 0;
-
+    const char *cp;
     int i;
 
-    for (i=0; GLMethodList[i].name != NULL; i++) {
-        if (*GLMethodList[i].name == '@'
-	        && strcmp(GLMethodList[i].name,"@error") == 0) {
-            isOpenEnded = 1;
-        } else {
-            Tcl_AppendToObj(objPtr, spaces, -1);
-            Tcl_AppendToObj(objPtr, "ntk ", -1);
-            Tcl_AppendToObj(objPtr, GLMethodList[i].name, -1);
-	    if (strlen(GLMethodList[i].usage) > 0) {
-              Tcl_AppendToObj(objPtr, " ", -1);
-              Tcl_AppendToObj(objPtr, GLMethodList[i].usage, -1);
+    for (i=0; GLMethodList[i].commandName != NULL; i++) {
+        Tcl_AppendToObj(objPtr, spaces, -1);
+        Tcl_AppendToObj(objPtr, "ntk ", -1);
+        Tcl_AppendToObj(objPtr, GLMethodList[i].commandName, -1);
+	if (GLMethodList[i].usage == NULL) {
+	    if (i < TCL_NUM_GL_FUNCS) {
+	        funcPtr = infoPtr->funcv[i];
+		cp = strrchr(GLMethodList[i].commandName, ':');
+		if (cp == NULL) {
+		   cp = GLMethodList[i].commandName;
+		} else {
+		   cp++;
+		}
+		Tcl_AppendToObj(objPtr, " ", -1);
+		Tcl_AppendToObj(objPtr, cp, -1);
+		Tcl_AppendToObj(objPtr, " ", -1);
+		Tcl_AppendToObj(objPtr, Tcl_GetString(funcPtr->usagePtr), -1);
 	    }
-            spaces = "\n  ";
+	} else {
+            if (strlen(GLMethodList[i].usage) > 0) {
+                Tcl_AppendToObj(objPtr, " ", -1);
+                Tcl_AppendToObj(objPtr, GLMethodList[i].usage, -1);
+	    }
         }
+        spaces = "\n  ";
     }
-    if (isOpenEnded) {
-        Tcl_AppendToObj(objPtr,
-            "\n...and others described on the man page", -1);
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  CheckNumParams()
+ *
+ *  check if number of params is correct and return error message if not
+ *  check if function is loadable if not yet available
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+void (*glXGetProcAddressARB(const GLubyte *procName))();
+
+int
+CheckNumParams(
+    Tcl_Interp *interp,
+    TclGLInfo *infoPtr,
+    int funcNo,
+    int objc,
+    int numParams)
+{
+    TclGLFunc *funcPtr;
+
+    if (funcNo >= TCL_NUM_GL_FUNCS) {
+	char buf1[50];
+	char buf2[50];
+	sprintf(buf1, "%d", funcNo);
+	sprintf(buf2, "%d", TCL_NUM_GL_FUNCS);
+        Tcl_AppendResult(interp,
+	        "func function number:", buf1, " max:", buf2, NULL);
+        return TCL_ERROR;
     }
+    funcPtr = infoPtr->funcv[funcNo];
+    if (objc != numParams+1) {
+        Tcl_AppendResult(interp,
+                "wrong # args: should be \"ntk ",
+		Tcl_GetString(funcPtr->funcNamePtr), " ", 
+		Tcl_GetString(funcPtr->usagePtr), "\"", NULL);
+        return TCL_ERROR;
+    }
+    if (funcPtr->funcPtr == NULL) {
+        if (funcPtr->flags & TCL_GL_FUNC_NOT_AVAILABLE) {
+            Tcl_AppendResult(interp, "function \"",
+	            Tcl_GetString(funcPtr->funcNamePtr),
+		    "\" cannot be loaded", NULL);
+            return TCL_ERROR;
+	} else {
+	    if (!(funcPtr->flags & TCL_GL_FUNC_LOADED)) {
+	        funcPtr->funcPtr = glXGetProcAddressARB(
+		        (const GLubyte *)Tcl_GetString(funcPtr->funcNamePtr));
+	        if (funcPtr->funcPtr == NULL) {
+		    funcPtr->flags &= ~TCL_GL_FUNC_AVAILABLE;
+		    funcPtr->flags |= TCL_GL_FUNC_NOT_AVAILABLE;
+                    Tcl_AppendResult(interp, "function \"",
+	                    Tcl_GetString(funcPtr->funcNamePtr),
+		            "\" cannot be loaded", NULL);
+                    return TCL_ERROR;
+		} else {
+		    funcPtr->flags |= TCL_GL_FUNC_LOADED;
+		}
+	    }
+	}
+    }
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  GetDoubleParam()
+ *
+ *  the get a double parameter from objv[x] parameter
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+GetDoubleParam(
+    Tcl_Interp *interp,
+    TclGLInfo *infoPtr,
+    Tcl_Obj *objPtr,
+    double *dPtr)
+{
+    if (Tcl_GetDoubleFromObj(interp, objPtr, dPtr) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  GetIntParam()
+ *
+ *  the get an int parameter from objv[x] parameter
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+GetIntParam(
+    Tcl_Interp *interp,
+    TclGLInfo *infoPtr,
+    Tcl_Obj *objPtr,
+    int *iPtr)
+{
+    if (Tcl_GetIntFromObj(interp, objPtr, iPtr) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  GetBooleanParam()
+ *
+ *  the get a boolean parameter from objv[x] parameter
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+GetBooleanParam(
+    Tcl_Interp *interp,
+    TclGLInfo *infoPtr,
+    Tcl_Obj *objPtr,
+    int *iPtr)
+{
+    if (Tcl_GetBooleanFromObj(interp, objPtr, iPtr) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  GetEnumParam()
+ *
+ *  the get a enum parameter from objv[x] parameter
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+GetEnumParam(
+    Tcl_Interp *interp,
+    TclGLInfo *infoPtr,
+    Tcl_Obj *objPtr,
+    int *iPtr)
+{
+    Tcl_HashEntry *hPtr;
+
+    hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objPtr);
+    if (hPtr == NULL) {
+        Tcl_AppendResult(interp, "no such define \"",
+	        Tcl_GetString(objPtr), "\"", NULL);
+        return TCL_ERROR;
+    }
+    *iPtr = (int)Tcl_GetHashValue(hPtr);
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  GetBitfieldParam()
+ *
+ *  the get a bitfield parameter from objv[x] parameter
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+GetBitfieldParam(
+    Tcl_Interp *interp,
+    TclGLInfo *infoPtr,
+    Tcl_Obj *objPtr,
+    int *iPtr)
+{
+    Tcl_HashEntry *hPtr;
+    Tcl_Obj *objPtr2;
+    const char *cp;
+    const char *ep;
+    const char *token;
+    int isEnd;
+    int value;
+
+    token = Tcl_GetString(objPtr);
+    isEnd = 0;
+    value = 0;
+    cp = token;
+    while (1) {
+        if (strstr(cp, "|") == NULL) {
+	    isEnd = 1;
+	}
+	while (*cp == ' ') {
+	    cp++;
+	}
+	ep = cp;
+	while ((*ep != '\0') && (*ep != '|')) {
+	    ep++;
+	}
+	if (*ep != '\0') {
+	    ep--;
+	}
+	objPtr2 = Tcl_NewStringObj(cp, ep-cp);
+	Tcl_IncrRefCount(objPtr2);
+	if (*ep == '\0') {
+	    isEnd = 1;
+	}
+	cp = ep+2;
+        hPtr = Tcl_FindHashEntry(&infoPtr->glDefines, (char *)objPtr2);
+	Tcl_DecrRefCount(objPtr2);
+        if (hPtr == NULL) {
+            Tcl_AppendResult(interp, "no such define \"", \
+	            Tcl_GetString(objPtr),"\"", NULL);
+	    return TCL_ERROR;
+        }
+        value |= (GLenum)Tcl_GetHashValue(hPtr);
+        if (isEnd) {
+	    break;
+	}
+    }
+    *iPtr = value;
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  GetPtrInParam()
+ *
+ *  the get a pointer in parameter from objv[x] parameter
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+GetPtrInParam(
+    Tcl_Interp *interp,
+    TclGLInfo *infoPtr,
+    Tcl_Obj *objPtr,
+    void **vPtr,
+    int *lgthPtr)
+{
+    *vPtr = (void *)Tcl_GetByteArrayFromObj(objPtr, lgthPtr);
+    if (*vPtr == NULL) {
+        return TCL_ERROR;
+    }
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  GetPtrOutParam()
+ *
+ *  the set a pointer out parameter in objv[x] parameter
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+SetPtrOutParam(
+    Tcl_Interp *interp,
+    TclGLInfo *infoPtr,
+    Tcl_Obj *objPtr,
+    int lgth,
+    void *vPtr)
+{
+    Tcl_Obj *objPtr2;
+
+    objPtr2 = Tcl_NewByteArrayObj((unsigned char *)vPtr, lgth);
+    Tcl_SetObjResult(interp, objPtr2);
+    return TCL_OK;
 }
 
 /*
@@ -215,20 +473,22 @@ TclGLGetUsage(
 /* ARGSUSED */
 int
 TclGL_UnknownCmd(
-    ClientData dummy,        /* not used */
+    ClientData clientData,   /* infoPtr */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *CONST objv[])   /* argument objects */
 {
+    TclGLInfo *infoPtr;
     int result;
 
+    infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_UnknownCmd", objc, objv);
     result = TCL_ERROR;
     /* produce usage message */
     Tcl_Obj *objPtr = Tcl_NewStringObj("unknown command: \"", -1);
     Tcl_AppendToObj(objPtr, Tcl_GetString(objv[2]), -1);
     Tcl_AppendToObj(objPtr, "\" should be one of...\n", -1);
-    TclGLGetUsage(interp, objPtr);
+    TclGLGetUsage(interp, infoPtr, objPtr);
     Tcl_SetResult(interp, Tcl_GetString(objPtr), TCL_DYNAMIC);
     return TCL_ERROR;
 }
@@ -480,8 +740,6 @@ TclGL_MakeDoubleVector(
     Tcl_AppendResult(interp, Tcl_GetString(objPtr), NULL);
     return TCL_OK;;
 }
-
-static Tcl_Interp *_interp;
 
 /*
  * ------------------------------------------------------------------------
@@ -506,7 +764,6 @@ TclGL_InitCmd(
 	        NULL);
         return TCL_ERROR;
     }
-    _interp = interp;
     return TCL_OK;
 }
 
@@ -534,6 +791,26 @@ TclGL_DefaultCmd(
     result = TCL_ERROR;
     TclGLShowArgs(0, "TclGL_DefaultCmd", objc, objv);
     return result;
+}
+/*
+ * ------------------------------------------------------------------------
+ *  TclGL_CallGlFunction()
+ *
+ *  Handles the call of a GL function
+ *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+TclGL_CallGlFunction(
+    int funcNo,            /* the internal number of the function */
+    ClientData clientData, /* infoPtr */
+    Tcl_Interp *interp,    /* current interpreter */
+    int objc,              /* number of arguments */
+    Tcl_Obj *CONST objv[]) /* argument objects */
+{
+    TclGLShowArgs(0, "TclGL_CallGlFunction", objc, objv);
+    return TCL_OK;
 }
 
 #include <GL/gl.h>
