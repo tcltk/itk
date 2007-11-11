@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLInt.h,v 1.1.2.2 2007/11/10 18:26:22 wiede Exp $
+ * RCS: @(#) $Id: tclGLInt.h,v 1.1.2.3 2007/11/11 00:54:14 wiede Exp $
  */
 
 #include <string.h>
@@ -93,6 +93,7 @@ typedef struct TclGLDefine {
 #define TCL_GLclampf 		0x100000
 #define TCL_GLdouble 		0x200000
 #define TCL_GLclampd 		0x400000
+#define TCL_GLptr 		0x800000
 
 typedef struct TclGLParam {
     int flags;
@@ -132,6 +133,8 @@ typedef struct TclGLInfo {
     Tcl_HashTable **funcGroupHashTables;
     Tcl_HashTable **typedefGroupHashTables;
     TclGLFunc **funcv;
+    Tcl_HashTable glExtensions;
+    int extensionsInitted;
 } TclGLInfo;
 
 #ifdef TCL_GL_DEBUG
@@ -144,3 +147,24 @@ MODULE_SCOPE void TclGLShowArgs(int level, const char *str, int objc,
 
 MODULE_SCOPE int TclGL_InitCommands(Tcl_Interp *interp, TclGLInfo *infoPtr);
 MODULE_SCOPE int TclGLext_InitCommands(Tcl_Interp *interp, TclGLInfo *infoPtr);
+MODULE_SCOPE int CheckNumParams(Tcl_Interp *interp, TclGLInfo *infoPtr,
+        int funcNo, int objc, int numParams);
+MODULE_SCOPE int GetDoubleParam(Tcl_Interp *interp, TclGLInfo *infoPtr,
+        Tcl_Obj *objPtr, double *dPtr);
+MODULE_SCOPE int GetDoubleParam(Tcl_Interp *interp, TclGLInfo *infoPtr,
+        Tcl_Obj *objPtr, double *dPtr);
+MODULE_SCOPE int GetIntParam(Tcl_Interp *interp, TclGLInfo *infoPtr,
+        Tcl_Obj *objPtr, int *iPtr);
+MODULE_SCOPE int GetBooleanParam(Tcl_Interp *interp, TclGLInfo *infoPtr,
+        Tcl_Obj *objPtr, int *iPtr);
+MODULE_SCOPE int GetEnumParam(Tcl_Interp *interp, TclGLInfo *infoPtr,
+        Tcl_Obj *objPtr, int *iPtr);
+MODULE_SCOPE int GetBitfieldParam(Tcl_Interp *interp, TclGLInfo *infoPtr,
+        Tcl_Obj *objPtr, int *iPtr);
+MODULE_SCOPE int GetPtrInParam(Tcl_Interp *interp, TclGLInfo *infoPtr,
+        Tcl_Obj *objPtr, void **vPtr, int *lgthPtr);
+MODULE_SCOPE int SetPtrOutParam(Tcl_Interp *interp, TclGLInfo *infoPtr,
+        Tcl_Obj *objPtr, int lgth, void *vPtr);
+MODULE_SCOPE int GetPtrPtrInParam(Tcl_Interp *interp, TclGLInfo *infoPtr,
+        Tcl_Obj *objPtr, void ***vPtr, int *lgthPtr);
+

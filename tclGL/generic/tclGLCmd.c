@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.4 2007/11/10 18:26:20 wiede Exp $
+ * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.5 2007/11/11 00:54:12 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -168,8 +168,8 @@ TclGLGetUsage(
     Tcl_Obj *objPtr)       /* returns: summary of usage info */
 {
     TclGLFunc *funcPtr;
-    char *spaces = "  ";
     const char *cp;
+    char *spaces = "  ";
     int i;
 
     for (i=0; GLMethodList[i].commandName != NULL; i++) {
@@ -220,6 +220,13 @@ CheckNumParams(
     int numParams)
 {
     TclGLFunc *funcPtr;
+    Tcl_HashEntry *hPtr;
+    Tcl_Obj *objPtr;
+    const char **argv;
+    const unsigned char *ucp;
+    int argc;
+    int isNew;
+    int i;
 
     if (funcNo >= TCL_NUM_GL_FUNCS) {
 	char buf1[50];
@@ -246,6 +253,33 @@ CheckNumParams(
             return TCL_ERROR;
 	} else {
 	    if (!(funcPtr->flags & TCL_GL_FUNC_LOADED)) {
+                if (!infoPtr->extensionsInitted) {
+                    ucp = glGetString(GL_EXTENSIONS);
+		    if (ucp != NULL) {
+                        Tcl_SplitList(NULL, (const char *)ucp, &argc, &argv);
+                        for (i=0;i<argc;i++) {
+                             objPtr = Tcl_NewStringObj(argv[i], -1);
+	                     Tcl_IncrRefCount(objPtr);
+	                     hPtr = Tcl_CreateHashEntry(&infoPtr->glExtensions,
+			             (char *)objPtr, &isNew);
+                        }
+                        ckfree((char *)argv);
+		    } else {
+fprintf(stderr, "cannot init extensions\n");
+		    }
+		    infoPtr->extensionsInitted = 1;
+		}
+//fprintf(stderr, "check for function!%s!%s!\n", Tcl_GetString(funcPtr->funcNamePtr), Tcl_GetString(funcPtr->funcGroupNamePtr));
+                if (strncmp(Tcl_GetString(funcPtr->funcGroupNamePtr), "GL_", 3) == 0) {
+		    hPtr = Tcl_FindHashEntry(&infoPtr->glExtensions,
+		            (char *)funcPtr->funcGroupNamePtr);
+		    if (hPtr == NULL) {
+		        fprintf(stderr,
+			        "WARNING! Extension \"%s\" for function \"%s\" is not available\n",
+				Tcl_GetString(funcPtr->funcGroupNamePtr),
+				Tcl_GetString(funcPtr->funcNamePtr));
+		    }
+		}
 	        funcPtr->funcPtr = glXGetProcAddressARB(
 		        (const GLubyte *)Tcl_GetString(funcPtr->funcNamePtr));
 	        if (funcPtr->funcPtr == NULL) {
@@ -442,7 +476,30 @@ GetPtrInParam(
 
 /*
  * ------------------------------------------------------------------------
- *  GetPtrOutParam()
+ *  GetPtrPtrInParam()
+ *
+ *  the get a pointer in parameter from objv[x] parameter
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+GetPtrPtrInParam(
+    Tcl_Interp *interp,
+    TclGLInfo *infoPtr,
+    Tcl_Obj *objPtr,
+    void ***vPtr,
+    int *lgthPtr)
+{
+    *vPtr = (void *)Tcl_GetByteArrayFromObj(objPtr, lgthPtr);
+    if (*vPtr == NULL) {
+        return TCL_ERROR;
+    }
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  SetPtrOutParam()
  *
  *  the set a pointer out parameter in objv[x] parameter
  * ------------------------------------------------------------------------

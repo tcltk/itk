@@ -1078,7 +1078,7 @@ TclGL_glIsEnabledCmd(
     int glResult;
     int cap;
     TclGLFunc *funcPtr;
-    GLboolean retVal;
+     GLboolean retVal;
 
     glResult = 0;
     hPtr = NULL;
@@ -1512,7 +1512,7 @@ TclGL_glRenderModeCmd(
     int glResult;
     int mode;
     TclGLFunc *funcPtr;
-    GLint retVal;
+     GLint retVal;
 
     glResult = 0;
     hPtr = NULL;
@@ -1552,7 +1552,7 @@ TclGL_glGetErrorCmd(
     int glResult;
 
     TclGLFunc *funcPtr;
-    GLenum retVal;
+     GLenum retVal;
     const char *enumStr;
 
     glResult = 0;
@@ -1574,6 +1574,46 @@ TclGL_glGetErrorCmd(
     }
     enumStr = (const char *)Tcl_GetHashValue(hPtr);
     Tcl_SetObjResult(interp, Tcl_NewStringObj(enumStr, -1));
+    return GetGLError(interp, infoPtr);
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  TclGL_glGetStringCmd()
+ *
+ *  Handles the OpenGL glGetString command
+ *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+
+int
+TclGL_glGetStringCmd(
+    ClientData clientData, /* infoPtr */
+    Tcl_Interp *interp,    /* current interpreter */
+    int objc,              /* number of arguments */
+    Tcl_Obj *CONST objv[]) /* argument objects */
+{
+    Tcl_HashEntry *hPtr;
+    TclGLInfo *infoPtr;
+    int glResult;
+    int name;
+    TclGLFunc *funcPtr;
+    const GLubyte *retVal;
+
+    glResult = 0;
+    hPtr = NULL;
+    infoPtr = (TclGLInfo *)clientData;
+    TclGLShowArgs(1, "TclGL_glGetStringCmd", objc, objv);
+    if (CheckNumParams(interp, infoPtr, 39, objc, 1) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (GetEnumParam(interp, infoPtr, objv[1], &name) != TCL_OK) {
+        return TCL_ERROR;
+    } 
+    funcPtr = infoPtr->funcv[39];
+    retVal = ((GLfunction__constGLubyte_star_int)funcPtr->funcPtr)((GLenum)name);
+    Tcl_SetObjResult(interp, Tcl_NewStringObj((const char *)retVal, -1));
     return GetGLError(interp, infoPtr);
 }
 
@@ -1604,10 +1644,10 @@ TclGL_glFinishCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glFinishCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 39, objc, 0) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 40, objc, 0) != TCL_OK) {
         return TCL_ERROR;
     }
-    funcPtr = infoPtr->funcv[39];
+    funcPtr = infoPtr->funcv[40];
     ((GLfunction_void_)funcPtr->funcPtr)();
     return GetGLError(interp, infoPtr);
 }
@@ -1639,10 +1679,10 @@ TclGL_glFlushCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glFlushCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 40, objc, 0) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 41, objc, 0) != TCL_OK) {
         return TCL_ERROR;
     }
-    funcPtr = infoPtr->funcv[40];
+    funcPtr = infoPtr->funcv[41];
     ((GLfunction_void_)funcPtr->funcPtr)();
     return GetGLError(interp, infoPtr);
 }
@@ -1675,7 +1715,7 @@ TclGL_glHintCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glHintCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 41, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 42, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -1684,7 +1724,7 @@ TclGL_glHintCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &mode) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[41];
+    funcPtr = infoPtr->funcv[42];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLenum)target, (GLenum)mode);
     return GetGLError(interp, infoPtr);
 }
@@ -1716,13 +1756,13 @@ TclGL_glClearDepthCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glClearDepthCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 42, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 43, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &depth) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[42];
+    funcPtr = infoPtr->funcv[43];
     ((GLfunction_void_double)funcPtr->funcPtr)((GLclampd)depth);
     return GetGLError(interp, infoPtr);
 }
@@ -1754,13 +1794,13 @@ TclGL_glDepthFuncCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glDepthFuncCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 43, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 44, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &func) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[43];
+    funcPtr = infoPtr->funcv[44];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLenum)func);
     return GetGLError(interp, infoPtr);
 }
@@ -1792,13 +1832,13 @@ TclGL_glDepthMaskCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glDepthMaskCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 44, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 45, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &flag) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[44];
+    funcPtr = infoPtr->funcv[45];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLboolean)flag);
     return GetGLError(interp, infoPtr);
 }
@@ -1831,7 +1871,7 @@ TclGL_glDepthRangeCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glDepthRangeCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 45, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 46, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &near_val) != TCL_OK) {
@@ -1840,7 +1880,7 @@ TclGL_glDepthRangeCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &far_val) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[45];
+    funcPtr = infoPtr->funcv[46];
     ((GLfunction_void_double_double)funcPtr->funcPtr)((GLclampd)near_val, (GLclampd)far_val);
     return GetGLError(interp, infoPtr);
 }
@@ -1875,7 +1915,7 @@ TclGL_glClearAccumCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glClearAccumCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 46, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 47, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -1890,7 +1930,7 @@ TclGL_glClearAccumCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &alpha) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[46];
+    funcPtr = infoPtr->funcv[47];
     ((GLfunction_void_float_float_float_float)funcPtr->funcPtr)((GLfloat)red, (GLfloat)green, (GLfloat)blue, (GLfloat)alpha);
     return GetGLError(interp, infoPtr);
 }
@@ -1923,7 +1963,7 @@ TclGL_glAccumCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glAccumCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 47, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 48, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &op) != TCL_OK) {
@@ -1932,7 +1972,7 @@ TclGL_glAccumCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &value) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[47];
+    funcPtr = infoPtr->funcv[48];
     ((GLfunction_void_int_float)funcPtr->funcPtr)((GLenum)op, (GLfloat)value);
     return GetGLError(interp, infoPtr);
 }
@@ -1964,13 +2004,13 @@ TclGL_glMatrixModeCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMatrixModeCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 48, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 49, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &mode) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[48];
+    funcPtr = infoPtr->funcv[49];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLenum)mode);
     return GetGLError(interp, infoPtr);
 }
@@ -2007,7 +2047,7 @@ TclGL_glOrthoCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glOrthoCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 49, objc, 6) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 50, objc, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &left) != TCL_OK) {
@@ -2028,7 +2068,7 @@ TclGL_glOrthoCmd(
     if (GetDoubleParam(interp, infoPtr, objv[6], &far_val) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[49];
+    funcPtr = infoPtr->funcv[50];
     ((GLfunction_void_double_double_double_double_double_double)funcPtr->funcPtr)((GLdouble)left, (GLdouble)right, (GLdouble)bottom, (GLdouble)top, (GLdouble)near_val, (GLdouble)far_val);
     return GetGLError(interp, infoPtr);
 }
@@ -2065,7 +2105,7 @@ TclGL_glFrustumCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glFrustumCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 50, objc, 6) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 51, objc, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &left) != TCL_OK) {
@@ -2086,7 +2126,7 @@ TclGL_glFrustumCmd(
     if (GetDoubleParam(interp, infoPtr, objv[6], &far_val) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[50];
+    funcPtr = infoPtr->funcv[51];
     ((GLfunction_void_double_double_double_double_double_double)funcPtr->funcPtr)((GLdouble)left, (GLdouble)right, (GLdouble)bottom, (GLdouble)top, (GLdouble)near_val, (GLdouble)far_val);
     return GetGLError(interp, infoPtr);
 }
@@ -2121,7 +2161,7 @@ TclGL_glViewportCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glViewportCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 51, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 52, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -2136,7 +2176,7 @@ TclGL_glViewportCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &height) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[51];
+    funcPtr = infoPtr->funcv[52];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLint)x, (GLint)y, (GLsizei)width, (GLsizei)height);
     return GetGLError(interp, infoPtr);
 }
@@ -2168,10 +2208,10 @@ TclGL_glPushMatrixCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPushMatrixCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 52, objc, 0) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 53, objc, 0) != TCL_OK) {
         return TCL_ERROR;
     }
-    funcPtr = infoPtr->funcv[52];
+    funcPtr = infoPtr->funcv[53];
     ((GLfunction_void_)funcPtr->funcPtr)();
     return GetGLError(interp, infoPtr);
 }
@@ -2203,10 +2243,10 @@ TclGL_glPopMatrixCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPopMatrixCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 53, objc, 0) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 54, objc, 0) != TCL_OK) {
         return TCL_ERROR;
     }
-    funcPtr = infoPtr->funcv[53];
+    funcPtr = infoPtr->funcv[54];
     ((GLfunction_void_)funcPtr->funcPtr)();
     return GetGLError(interp, infoPtr);
 }
@@ -2238,10 +2278,10 @@ TclGL_glLoadIdentityCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLoadIdentityCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 54, objc, 0) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 55, objc, 0) != TCL_OK) {
         return TCL_ERROR;
     }
-    funcPtr = infoPtr->funcv[54];
+    funcPtr = infoPtr->funcv[55];
     ((GLfunction_void_)funcPtr->funcPtr)();
     return GetGLError(interp, infoPtr);
 }
@@ -2274,13 +2314,13 @@ TclGL_glLoadMatrixdCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLoadMatrixdCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 55, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 56, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &m, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[55];
+    funcPtr = infoPtr->funcv[56];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)m);
     return GetGLError(interp, infoPtr);
 }
@@ -2313,13 +2353,13 @@ TclGL_glLoadMatrixfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLoadMatrixfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 56, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 57, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &m, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[56];
+    funcPtr = infoPtr->funcv[57];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)m);
     return GetGLError(interp, infoPtr);
 }
@@ -2352,13 +2392,13 @@ TclGL_glMultMatrixdCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultMatrixdCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 57, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 58, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &m, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[57];
+    funcPtr = infoPtr->funcv[58];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)m);
     return GetGLError(interp, infoPtr);
 }
@@ -2391,13 +2431,13 @@ TclGL_glMultMatrixfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultMatrixfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 58, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 59, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &m, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[58];
+    funcPtr = infoPtr->funcv[59];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)m);
     return GetGLError(interp, infoPtr);
 }
@@ -2432,7 +2472,7 @@ TclGL_glRotatedCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRotatedCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 59, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 60, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &angle) != TCL_OK) {
@@ -2447,7 +2487,7 @@ TclGL_glRotatedCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[59];
+    funcPtr = infoPtr->funcv[60];
     ((GLfunction_void_double_double_double_double)funcPtr->funcPtr)((GLdouble)angle, (GLdouble)x, (GLdouble)y, (GLdouble)z);
     return GetGLError(interp, infoPtr);
 }
@@ -2482,7 +2522,7 @@ TclGL_glRotatefCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRotatefCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 60, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 61, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &angle) != TCL_OK) {
@@ -2497,7 +2537,7 @@ TclGL_glRotatefCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[60];
+    funcPtr = infoPtr->funcv[61];
     ((GLfunction_void_float_float_float_float)funcPtr->funcPtr)((GLfloat)angle, (GLfloat)x, (GLfloat)y, (GLfloat)z);
     return GetGLError(interp, infoPtr);
 }
@@ -2531,7 +2571,7 @@ TclGL_glScaledCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glScaledCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 61, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 62, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -2543,7 +2583,7 @@ TclGL_glScaledCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[61];
+    funcPtr = infoPtr->funcv[62];
     ((GLfunction_void_double_double_double)funcPtr->funcPtr)((GLdouble)x, (GLdouble)y, (GLdouble)z);
     return GetGLError(interp, infoPtr);
 }
@@ -2577,7 +2617,7 @@ TclGL_glScalefCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glScalefCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 62, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 63, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -2589,7 +2629,7 @@ TclGL_glScalefCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[62];
+    funcPtr = infoPtr->funcv[63];
     ((GLfunction_void_float_float_float)funcPtr->funcPtr)((GLfloat)x, (GLfloat)y, (GLfloat)z);
     return GetGLError(interp, infoPtr);
 }
@@ -2623,7 +2663,7 @@ TclGL_glTranslatedCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTranslatedCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 63, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 64, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -2635,7 +2675,7 @@ TclGL_glTranslatedCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[63];
+    funcPtr = infoPtr->funcv[64];
     ((GLfunction_void_double_double_double)funcPtr->funcPtr)((GLdouble)x, (GLdouble)y, (GLdouble)z);
     return GetGLError(interp, infoPtr);
 }
@@ -2669,7 +2709,7 @@ TclGL_glTranslatefCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTranslatefCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 64, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 65, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -2681,7 +2721,7 @@ TclGL_glTranslatefCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[64];
+    funcPtr = infoPtr->funcv[65];
     ((GLfunction_void_float_float_float)funcPtr->funcPtr)((GLfloat)x, (GLfloat)y, (GLfloat)z);
     return GetGLError(interp, infoPtr);
 }
@@ -2708,19 +2748,19 @@ TclGL_glIsListCmd(
     int glResult;
     int list;
     TclGLFunc *funcPtr;
-    GLboolean retVal;
+     GLboolean retVal;
 
     glResult = 0;
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glIsListCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 65, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 66, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &list) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[65];
+    funcPtr = infoPtr->funcv[66];
     retVal = ((GLfunction_GLboolean_int)funcPtr->funcPtr)((GLuint)list);
     Tcl_SetObjResult(interp, Tcl_NewBooleanObj((int)retVal));
     return GetGLError(interp, infoPtr);
@@ -2754,7 +2794,7 @@ TclGL_glDeleteListsCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glDeleteListsCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 66, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 67, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &list) != TCL_OK) {
@@ -2763,7 +2803,7 @@ TclGL_glDeleteListsCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &range) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[66];
+    funcPtr = infoPtr->funcv[67];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLuint)list, (GLsizei)range);
     return GetGLError(interp, infoPtr);
 }
@@ -2790,19 +2830,19 @@ TclGL_glGenListsCmd(
     int glResult;
     int range;
     TclGLFunc *funcPtr;
-    GLuint retVal;
+     GLuint retVal;
 
     glResult = 0;
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGenListsCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 67, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 68, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &range) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[67];
+    funcPtr = infoPtr->funcv[68];
     retVal = ((GLfunction_GLuint_int)funcPtr->funcPtr)((GLsizei)range);
     Tcl_SetObjResult(interp, Tcl_NewIntObj((int)retVal));
     return GetGLError(interp, infoPtr);
@@ -2836,7 +2876,7 @@ TclGL_glNewListCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glNewListCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 68, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 69, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &list) != TCL_OK) {
@@ -2845,7 +2885,7 @@ TclGL_glNewListCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &mode) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[68];
+    funcPtr = infoPtr->funcv[69];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLuint)list, (GLenum)mode);
     return GetGLError(interp, infoPtr);
 }
@@ -2877,10 +2917,10 @@ TclGL_glEndListCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEndListCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 69, objc, 0) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 70, objc, 0) != TCL_OK) {
         return TCL_ERROR;
     }
-    funcPtr = infoPtr->funcv[69];
+    funcPtr = infoPtr->funcv[70];
     ((GLfunction_void_)funcPtr->funcPtr)();
     return GetGLError(interp, infoPtr);
 }
@@ -2912,13 +2952,13 @@ TclGL_glCallListCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCallListCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 70, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 71, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &list) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[70];
+    funcPtr = infoPtr->funcv[71];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLuint)list);
     return GetGLError(interp, infoPtr);
 }
@@ -2953,7 +2993,7 @@ TclGL_glCallListsCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCallListsCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 71, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 72, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &n) != TCL_OK) {
@@ -2965,7 +3005,7 @@ TclGL_glCallListsCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &lists, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[71];
+    funcPtr = infoPtr->funcv[72];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLsizei)n, (GLenum)type, (GLvoid*)lists);
     return GetGLError(interp, infoPtr);
 }
@@ -2997,13 +3037,13 @@ TclGL_glListBaseCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glListBaseCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 72, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 73, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &base) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[72];
+    funcPtr = infoPtr->funcv[73];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLuint)base);
     return GetGLError(interp, infoPtr);
 }
@@ -3036,13 +3076,13 @@ TclGL_glBeginCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glBeginCmd", objc, objv);
     infoPtr->noGLGetError = 1;
-    if (CheckNumParams(interp, infoPtr, 73, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 74, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &mode) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[73];
+    funcPtr = infoPtr->funcv[74];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLenum)mode);
     return GetGLError(interp, infoPtr);
 }
@@ -3075,10 +3115,10 @@ TclGL_glEndCmd(
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEndCmd", objc, objv);
     infoPtr->noGLGetError = 0;
-    if (CheckNumParams(interp, infoPtr, 74, objc, 0) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 75, objc, 0) != TCL_OK) {
         return TCL_ERROR;
     }
-    funcPtr = infoPtr->funcv[74];
+    funcPtr = infoPtr->funcv[75];
     ((GLfunction_void_)funcPtr->funcPtr)();
     return GetGLError(interp, infoPtr);
 }
@@ -3111,7 +3151,7 @@ TclGL_glVertex2dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex2dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 75, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 76, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -3120,7 +3160,7 @@ TclGL_glVertex2dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &y) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[75];
+    funcPtr = infoPtr->funcv[76];
     ((GLfunction_void_double_double)funcPtr->funcPtr)((GLdouble)x, (GLdouble)y);
     return GetGLError(interp, infoPtr);
 }
@@ -3153,7 +3193,7 @@ TclGL_glVertex2fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex2fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 76, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 77, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -3162,7 +3202,7 @@ TclGL_glVertex2fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &y) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[76];
+    funcPtr = infoPtr->funcv[77];
     ((GLfunction_void_float_float)funcPtr->funcPtr)((GLfloat)x, (GLfloat)y);
     return GetGLError(interp, infoPtr);
 }
@@ -3195,7 +3235,7 @@ TclGL_glVertex2iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex2iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 77, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 78, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -3204,7 +3244,7 @@ TclGL_glVertex2iCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &y) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[77];
+    funcPtr = infoPtr->funcv[78];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLint)x, (GLint)y);
     return GetGLError(interp, infoPtr);
 }
@@ -3237,7 +3277,7 @@ TclGL_glVertex2sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex2sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 78, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 79, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -3246,7 +3286,7 @@ TclGL_glVertex2sCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &y) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[78];
+    funcPtr = infoPtr->funcv[79];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLshort)x, (GLshort)y);
     return GetGLError(interp, infoPtr);
 }
@@ -3280,7 +3320,7 @@ TclGL_glVertex3dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex3dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 79, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 80, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -3292,7 +3332,7 @@ TclGL_glVertex3dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[79];
+    funcPtr = infoPtr->funcv[80];
     ((GLfunction_void_double_double_double)funcPtr->funcPtr)((GLdouble)x, (GLdouble)y, (GLdouble)z);
     return GetGLError(interp, infoPtr);
 }
@@ -3326,7 +3366,7 @@ TclGL_glVertex3fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex3fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 80, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 81, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -3338,7 +3378,7 @@ TclGL_glVertex3fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[80];
+    funcPtr = infoPtr->funcv[81];
     ((GLfunction_void_float_float_float)funcPtr->funcPtr)((GLfloat)x, (GLfloat)y, (GLfloat)z);
     return GetGLError(interp, infoPtr);
 }
@@ -3372,7 +3412,7 @@ TclGL_glVertex3iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex3iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 81, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 82, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -3384,7 +3424,7 @@ TclGL_glVertex3iCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[81];
+    funcPtr = infoPtr->funcv[82];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLint)x, (GLint)y, (GLint)z);
     return GetGLError(interp, infoPtr);
 }
@@ -3418,7 +3458,7 @@ TclGL_glVertex3sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex3sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 82, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 83, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -3430,7 +3470,7 @@ TclGL_glVertex3sCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[82];
+    funcPtr = infoPtr->funcv[83];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLshort)x, (GLshort)y, (GLshort)z);
     return GetGLError(interp, infoPtr);
 }
@@ -3465,7 +3505,7 @@ TclGL_glVertex4dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex4dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 83, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 84, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -3480,7 +3520,7 @@ TclGL_glVertex4dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &w) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[83];
+    funcPtr = infoPtr->funcv[84];
     ((GLfunction_void_double_double_double_double)funcPtr->funcPtr)((GLdouble)x, (GLdouble)y, (GLdouble)z, (GLdouble)w);
     return GetGLError(interp, infoPtr);
 }
@@ -3515,7 +3555,7 @@ TclGL_glVertex4fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex4fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 84, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 85, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -3530,7 +3570,7 @@ TclGL_glVertex4fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &w) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[84];
+    funcPtr = infoPtr->funcv[85];
     ((GLfunction_void_float_float_float_float)funcPtr->funcPtr)((GLfloat)x, (GLfloat)y, (GLfloat)z, (GLfloat)w);
     return GetGLError(interp, infoPtr);
 }
@@ -3565,7 +3605,7 @@ TclGL_glVertex4iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex4iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 85, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 86, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -3580,7 +3620,7 @@ TclGL_glVertex4iCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &w) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[85];
+    funcPtr = infoPtr->funcv[86];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLint)x, (GLint)y, (GLint)z, (GLint)w);
     return GetGLError(interp, infoPtr);
 }
@@ -3615,7 +3655,7 @@ TclGL_glVertex4sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex4sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 86, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 87, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -3630,7 +3670,7 @@ TclGL_glVertex4sCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &w) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[86];
+    funcPtr = infoPtr->funcv[87];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLshort)x, (GLshort)y, (GLshort)z, (GLshort)w);
     return GetGLError(interp, infoPtr);
 }
@@ -3663,13 +3703,13 @@ TclGL_glVertex2dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex2dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 87, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 88, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[87];
+    funcPtr = infoPtr->funcv[88];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3702,13 +3742,13 @@ TclGL_glVertex2fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex2fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 88, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 89, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[88];
+    funcPtr = infoPtr->funcv[89];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3741,13 +3781,13 @@ TclGL_glVertex2ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex2ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 89, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 90, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[89];
+    funcPtr = infoPtr->funcv[90];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3780,13 +3820,13 @@ TclGL_glVertex2svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex2svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 90, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 91, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[90];
+    funcPtr = infoPtr->funcv[91];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3819,13 +3859,13 @@ TclGL_glVertex3dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex3dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 91, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 92, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[91];
+    funcPtr = infoPtr->funcv[92];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3858,13 +3898,13 @@ TclGL_glVertex3fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex3fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 92, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 93, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[92];
+    funcPtr = infoPtr->funcv[93];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3897,13 +3937,13 @@ TclGL_glVertex3ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex3ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 93, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 94, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[93];
+    funcPtr = infoPtr->funcv[94];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3936,13 +3976,13 @@ TclGL_glVertex3svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex3svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 94, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 95, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[94];
+    funcPtr = infoPtr->funcv[95];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -3975,13 +4015,13 @@ TclGL_glVertex4dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex4dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 95, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 96, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[95];
+    funcPtr = infoPtr->funcv[96];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4014,13 +4054,13 @@ TclGL_glVertex4fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex4fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 96, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 97, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[96];
+    funcPtr = infoPtr->funcv[97];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4053,13 +4093,13 @@ TclGL_glVertex4ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex4ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 97, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 98, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[97];
+    funcPtr = infoPtr->funcv[98];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4092,13 +4132,13 @@ TclGL_glVertex4svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertex4svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 98, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 99, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[98];
+    funcPtr = infoPtr->funcv[99];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4132,7 +4172,7 @@ TclGL_glNormal3bCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glNormal3bCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 99, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 100, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &nx) != TCL_OK) {
@@ -4144,7 +4184,7 @@ TclGL_glNormal3bCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &nz) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[99];
+    funcPtr = infoPtr->funcv[100];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLbyte)nx, (GLbyte)ny, (GLbyte)nz);
     return GetGLError(interp, infoPtr);
 }
@@ -4178,7 +4218,7 @@ TclGL_glNormal3dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glNormal3dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 100, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 101, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &nx) != TCL_OK) {
@@ -4190,7 +4230,7 @@ TclGL_glNormal3dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &nz) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[100];
+    funcPtr = infoPtr->funcv[101];
     ((GLfunction_void_double_double_double)funcPtr->funcPtr)((GLdouble)nx, (GLdouble)ny, (GLdouble)nz);
     return GetGLError(interp, infoPtr);
 }
@@ -4224,7 +4264,7 @@ TclGL_glNormal3fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glNormal3fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 101, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 102, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &nx) != TCL_OK) {
@@ -4236,7 +4276,7 @@ TclGL_glNormal3fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &nz) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[101];
+    funcPtr = infoPtr->funcv[102];
     ((GLfunction_void_float_float_float)funcPtr->funcPtr)((GLfloat)nx, (GLfloat)ny, (GLfloat)nz);
     return GetGLError(interp, infoPtr);
 }
@@ -4270,7 +4310,7 @@ TclGL_glNormal3iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glNormal3iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 102, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 103, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &nx) != TCL_OK) {
@@ -4282,7 +4322,7 @@ TclGL_glNormal3iCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &nz) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[102];
+    funcPtr = infoPtr->funcv[103];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLint)nx, (GLint)ny, (GLint)nz);
     return GetGLError(interp, infoPtr);
 }
@@ -4316,7 +4356,7 @@ TclGL_glNormal3sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glNormal3sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 103, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 104, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &nx) != TCL_OK) {
@@ -4328,7 +4368,7 @@ TclGL_glNormal3sCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &nz) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[103];
+    funcPtr = infoPtr->funcv[104];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLshort)nx, (GLshort)ny, (GLshort)nz);
     return GetGLError(interp, infoPtr);
 }
@@ -4361,13 +4401,13 @@ TclGL_glNormal3bvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glNormal3bvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 104, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 105, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[104];
+    funcPtr = infoPtr->funcv[105];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLbyte*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4400,13 +4440,13 @@ TclGL_glNormal3dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glNormal3dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 105, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 106, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[105];
+    funcPtr = infoPtr->funcv[106];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4439,13 +4479,13 @@ TclGL_glNormal3fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glNormal3fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 106, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 107, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[106];
+    funcPtr = infoPtr->funcv[107];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4478,13 +4518,13 @@ TclGL_glNormal3ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glNormal3ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 107, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 108, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[107];
+    funcPtr = infoPtr->funcv[108];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4517,13 +4557,13 @@ TclGL_glNormal3svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glNormal3svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 108, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 109, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[108];
+    funcPtr = infoPtr->funcv[109];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -4555,13 +4595,13 @@ TclGL_glIndexdCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glIndexdCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 109, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 110, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &c) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[109];
+    funcPtr = infoPtr->funcv[110];
     ((GLfunction_void_double)funcPtr->funcPtr)((GLdouble)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4593,13 +4633,13 @@ TclGL_glIndexfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glIndexfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 110, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 111, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &c) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[110];
+    funcPtr = infoPtr->funcv[111];
     ((GLfunction_void_float)funcPtr->funcPtr)((GLfloat)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4631,13 +4671,13 @@ TclGL_glIndexiCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glIndexiCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 111, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 112, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &c) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[111];
+    funcPtr = infoPtr->funcv[112];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLint)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4669,13 +4709,13 @@ TclGL_glIndexsCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glIndexsCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 112, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 113, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &c) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[112];
+    funcPtr = infoPtr->funcv[113];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLshort)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4707,13 +4747,13 @@ TclGL_glIndexubCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glIndexubCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 113, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 114, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &c) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[113];
+    funcPtr = infoPtr->funcv[114];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLubyte)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4746,13 +4786,13 @@ TclGL_glIndexdvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glIndexdvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 114, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 115, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &c, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[114];
+    funcPtr = infoPtr->funcv[115];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4785,13 +4825,13 @@ TclGL_glIndexfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glIndexfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 115, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 116, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &c, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[115];
+    funcPtr = infoPtr->funcv[116];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4824,13 +4864,13 @@ TclGL_glIndexivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glIndexivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 116, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 117, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &c, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[116];
+    funcPtr = infoPtr->funcv[117];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4863,13 +4903,13 @@ TclGL_glIndexsvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glIndexsvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 117, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 118, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &c, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[117];
+    funcPtr = infoPtr->funcv[118];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4902,13 +4942,13 @@ TclGL_glIndexubvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glIndexubvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 118, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 119, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &c, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[118];
+    funcPtr = infoPtr->funcv[119];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLubyte*)c);
     return GetGLError(interp, infoPtr);
 }
@@ -4942,7 +4982,7 @@ TclGL_glColor3bCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3bCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 119, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 120, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -4954,7 +4994,7 @@ TclGL_glColor3bCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &blue) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[119];
+    funcPtr = infoPtr->funcv[120];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLbyte)red, (GLbyte)green, (GLbyte)blue);
     return GetGLError(interp, infoPtr);
 }
@@ -4988,7 +5028,7 @@ TclGL_glColor3dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 120, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 121, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5000,7 +5040,7 @@ TclGL_glColor3dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &blue) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[120];
+    funcPtr = infoPtr->funcv[121];
     ((GLfunction_void_double_double_double)funcPtr->funcPtr)((GLdouble)red, (GLdouble)green, (GLdouble)blue);
     return GetGLError(interp, infoPtr);
 }
@@ -5034,7 +5074,7 @@ TclGL_glColor3fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 121, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 122, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5046,7 +5086,7 @@ TclGL_glColor3fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &blue) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[121];
+    funcPtr = infoPtr->funcv[122];
     ((GLfunction_void_float_float_float)funcPtr->funcPtr)((GLfloat)red, (GLfloat)green, (GLfloat)blue);
     return GetGLError(interp, infoPtr);
 }
@@ -5080,7 +5120,7 @@ TclGL_glColor3iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 122, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 123, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5092,7 +5132,7 @@ TclGL_glColor3iCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &blue) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[122];
+    funcPtr = infoPtr->funcv[123];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLint)red, (GLint)green, (GLint)blue);
     return GetGLError(interp, infoPtr);
 }
@@ -5126,7 +5166,7 @@ TclGL_glColor3sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 123, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 124, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5138,7 +5178,7 @@ TclGL_glColor3sCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &blue) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[123];
+    funcPtr = infoPtr->funcv[124];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLshort)red, (GLshort)green, (GLshort)blue);
     return GetGLError(interp, infoPtr);
 }
@@ -5172,7 +5212,7 @@ TclGL_glColor3ubCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3ubCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 124, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 125, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5184,7 +5224,7 @@ TclGL_glColor3ubCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &blue) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[124];
+    funcPtr = infoPtr->funcv[125];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLubyte)red, (GLubyte)green, (GLubyte)blue);
     return GetGLError(interp, infoPtr);
 }
@@ -5218,7 +5258,7 @@ TclGL_glColor3uiCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3uiCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 125, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 126, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5230,7 +5270,7 @@ TclGL_glColor3uiCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &blue) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[125];
+    funcPtr = infoPtr->funcv[126];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLuint)red, (GLuint)green, (GLuint)blue);
     return GetGLError(interp, infoPtr);
 }
@@ -5264,7 +5304,7 @@ TclGL_glColor3usCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3usCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 126, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 127, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5276,7 +5316,7 @@ TclGL_glColor3usCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &blue) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[126];
+    funcPtr = infoPtr->funcv[127];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLushort)red, (GLushort)green, (GLushort)blue);
     return GetGLError(interp, infoPtr);
 }
@@ -5311,7 +5351,7 @@ TclGL_glColor4bCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4bCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 127, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 128, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5326,7 +5366,7 @@ TclGL_glColor4bCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &alpha) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[127];
+    funcPtr = infoPtr->funcv[128];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLbyte)red, (GLbyte)green, (GLbyte)blue, (GLbyte)alpha);
     return GetGLError(interp, infoPtr);
 }
@@ -5361,7 +5401,7 @@ TclGL_glColor4dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 128, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 129, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5376,7 +5416,7 @@ TclGL_glColor4dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &alpha) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[128];
+    funcPtr = infoPtr->funcv[129];
     ((GLfunction_void_double_double_double_double)funcPtr->funcPtr)((GLdouble)red, (GLdouble)green, (GLdouble)blue, (GLdouble)alpha);
     return GetGLError(interp, infoPtr);
 }
@@ -5411,7 +5451,7 @@ TclGL_glColor4fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 129, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 130, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5426,7 +5466,7 @@ TclGL_glColor4fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &alpha) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[129];
+    funcPtr = infoPtr->funcv[130];
     ((GLfunction_void_float_float_float_float)funcPtr->funcPtr)((GLfloat)red, (GLfloat)green, (GLfloat)blue, (GLfloat)alpha);
     return GetGLError(interp, infoPtr);
 }
@@ -5461,7 +5501,7 @@ TclGL_glColor4iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 130, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 131, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5476,7 +5516,7 @@ TclGL_glColor4iCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &alpha) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[130];
+    funcPtr = infoPtr->funcv[131];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLint)red, (GLint)green, (GLint)blue, (GLint)alpha);
     return GetGLError(interp, infoPtr);
 }
@@ -5511,7 +5551,7 @@ TclGL_glColor4sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 131, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 132, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5526,7 +5566,7 @@ TclGL_glColor4sCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &alpha) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[131];
+    funcPtr = infoPtr->funcv[132];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLshort)red, (GLshort)green, (GLshort)blue, (GLshort)alpha);
     return GetGLError(interp, infoPtr);
 }
@@ -5561,7 +5601,7 @@ TclGL_glColor4ubCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4ubCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 132, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 133, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5576,7 +5616,7 @@ TclGL_glColor4ubCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &alpha) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[132];
+    funcPtr = infoPtr->funcv[133];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLubyte)red, (GLubyte)green, (GLubyte)blue, (GLubyte)alpha);
     return GetGLError(interp, infoPtr);
 }
@@ -5611,7 +5651,7 @@ TclGL_glColor4uiCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4uiCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 133, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 134, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5626,7 +5666,7 @@ TclGL_glColor4uiCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &alpha) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[133];
+    funcPtr = infoPtr->funcv[134];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLuint)red, (GLuint)green, (GLuint)blue, (GLuint)alpha);
     return GetGLError(interp, infoPtr);
 }
@@ -5661,7 +5701,7 @@ TclGL_glColor4usCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4usCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 134, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 135, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -5676,7 +5716,7 @@ TclGL_glColor4usCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &alpha) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[134];
+    funcPtr = infoPtr->funcv[135];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLushort)red, (GLushort)green, (GLushort)blue, (GLushort)alpha);
     return GetGLError(interp, infoPtr);
 }
@@ -5709,13 +5749,13 @@ TclGL_glColor3bvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3bvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 135, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 136, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[135];
+    funcPtr = infoPtr->funcv[136];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLbyte*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5748,13 +5788,13 @@ TclGL_glColor3dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 136, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 137, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[136];
+    funcPtr = infoPtr->funcv[137];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5787,13 +5827,13 @@ TclGL_glColor3fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 137, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 138, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[137];
+    funcPtr = infoPtr->funcv[138];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5826,13 +5866,13 @@ TclGL_glColor3ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 138, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 139, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[138];
+    funcPtr = infoPtr->funcv[139];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5865,13 +5905,13 @@ TclGL_glColor3svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 139, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 140, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[139];
+    funcPtr = infoPtr->funcv[140];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5904,13 +5944,13 @@ TclGL_glColor3ubvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3ubvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 140, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 141, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[140];
+    funcPtr = infoPtr->funcv[141];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLubyte*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5943,13 +5983,13 @@ TclGL_glColor3uivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3uivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 141, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 142, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[141];
+    funcPtr = infoPtr->funcv[142];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLuint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -5982,13 +6022,13 @@ TclGL_glColor3usvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor3usvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 142, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 143, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[142];
+    funcPtr = infoPtr->funcv[143];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLushort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6021,13 +6061,13 @@ TclGL_glColor4bvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4bvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 143, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 144, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[143];
+    funcPtr = infoPtr->funcv[144];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLbyte*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6060,13 +6100,13 @@ TclGL_glColor4dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 144, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 145, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[144];
+    funcPtr = infoPtr->funcv[145];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6099,13 +6139,13 @@ TclGL_glColor4fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 145, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 146, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[145];
+    funcPtr = infoPtr->funcv[146];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6138,13 +6178,13 @@ TclGL_glColor4ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 146, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 147, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[146];
+    funcPtr = infoPtr->funcv[147];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6177,13 +6217,13 @@ TclGL_glColor4svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 147, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 148, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[147];
+    funcPtr = infoPtr->funcv[148];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6216,13 +6256,13 @@ TclGL_glColor4ubvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4ubvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 148, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 149, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[148];
+    funcPtr = infoPtr->funcv[149];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLubyte*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6255,13 +6295,13 @@ TclGL_glColor4uivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4uivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 149, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 150, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[149];
+    funcPtr = infoPtr->funcv[150];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLuint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6294,13 +6334,13 @@ TclGL_glColor4usvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColor4usvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 150, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 151, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[150];
+    funcPtr = infoPtr->funcv[151];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLushort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -6332,13 +6372,13 @@ TclGL_glTexCoord1dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord1dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 151, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 152, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[151];
+    funcPtr = infoPtr->funcv[152];
     ((GLfunction_void_double)funcPtr->funcPtr)((GLdouble)s);
     return GetGLError(interp, infoPtr);
 }
@@ -6370,13 +6410,13 @@ TclGL_glTexCoord1fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord1fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 152, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 153, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[152];
+    funcPtr = infoPtr->funcv[153];
     ((GLfunction_void_float)funcPtr->funcPtr)((GLfloat)s);
     return GetGLError(interp, infoPtr);
 }
@@ -6408,13 +6448,13 @@ TclGL_glTexCoord1iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord1iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 153, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 154, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[153];
+    funcPtr = infoPtr->funcv[154];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLint)s);
     return GetGLError(interp, infoPtr);
 }
@@ -6446,13 +6486,13 @@ TclGL_glTexCoord1sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord1sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 154, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 155, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[154];
+    funcPtr = infoPtr->funcv[155];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLshort)s);
     return GetGLError(interp, infoPtr);
 }
@@ -6485,7 +6525,7 @@ TclGL_glTexCoord2dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord2dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 155, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 156, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
@@ -6494,7 +6534,7 @@ TclGL_glTexCoord2dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &t) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[155];
+    funcPtr = infoPtr->funcv[156];
     ((GLfunction_void_double_double)funcPtr->funcPtr)((GLdouble)s, (GLdouble)t);
     return GetGLError(interp, infoPtr);
 }
@@ -6527,7 +6567,7 @@ TclGL_glTexCoord2fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord2fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 156, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 157, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
@@ -6536,7 +6576,7 @@ TclGL_glTexCoord2fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &t) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[156];
+    funcPtr = infoPtr->funcv[157];
     ((GLfunction_void_float_float)funcPtr->funcPtr)((GLfloat)s, (GLfloat)t);
     return GetGLError(interp, infoPtr);
 }
@@ -6569,7 +6609,7 @@ TclGL_glTexCoord2iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord2iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 157, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 158, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
@@ -6578,7 +6618,7 @@ TclGL_glTexCoord2iCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &t) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[157];
+    funcPtr = infoPtr->funcv[158];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLint)s, (GLint)t);
     return GetGLError(interp, infoPtr);
 }
@@ -6611,7 +6651,7 @@ TclGL_glTexCoord2sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord2sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 158, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 159, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
@@ -6620,7 +6660,7 @@ TclGL_glTexCoord2sCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &t) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[158];
+    funcPtr = infoPtr->funcv[159];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLshort)s, (GLshort)t);
     return GetGLError(interp, infoPtr);
 }
@@ -6654,7 +6694,7 @@ TclGL_glTexCoord3dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord3dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 159, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 160, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
@@ -6666,7 +6706,7 @@ TclGL_glTexCoord3dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &r) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[159];
+    funcPtr = infoPtr->funcv[160];
     ((GLfunction_void_double_double_double)funcPtr->funcPtr)((GLdouble)s, (GLdouble)t, (GLdouble)r);
     return GetGLError(interp, infoPtr);
 }
@@ -6700,7 +6740,7 @@ TclGL_glTexCoord3fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord3fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 160, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 161, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
@@ -6712,7 +6752,7 @@ TclGL_glTexCoord3fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &r) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[160];
+    funcPtr = infoPtr->funcv[161];
     ((GLfunction_void_float_float_float)funcPtr->funcPtr)((GLfloat)s, (GLfloat)t, (GLfloat)r);
     return GetGLError(interp, infoPtr);
 }
@@ -6746,7 +6786,7 @@ TclGL_glTexCoord3iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord3iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 161, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 162, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
@@ -6758,7 +6798,7 @@ TclGL_glTexCoord3iCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &r) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[161];
+    funcPtr = infoPtr->funcv[162];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLint)s, (GLint)t, (GLint)r);
     return GetGLError(interp, infoPtr);
 }
@@ -6792,7 +6832,7 @@ TclGL_glTexCoord3sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord3sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 162, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 163, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
@@ -6804,7 +6844,7 @@ TclGL_glTexCoord3sCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &r) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[162];
+    funcPtr = infoPtr->funcv[163];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLshort)s, (GLshort)t, (GLshort)r);
     return GetGLError(interp, infoPtr);
 }
@@ -6839,7 +6879,7 @@ TclGL_glTexCoord4dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord4dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 163, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 164, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
@@ -6854,7 +6894,7 @@ TclGL_glTexCoord4dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &q) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[163];
+    funcPtr = infoPtr->funcv[164];
     ((GLfunction_void_double_double_double_double)funcPtr->funcPtr)((GLdouble)s, (GLdouble)t, (GLdouble)r, (GLdouble)q);
     return GetGLError(interp, infoPtr);
 }
@@ -6889,7 +6929,7 @@ TclGL_glTexCoord4fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord4fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 164, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 165, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
@@ -6904,7 +6944,7 @@ TclGL_glTexCoord4fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &q) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[164];
+    funcPtr = infoPtr->funcv[165];
     ((GLfunction_void_float_float_float_float)funcPtr->funcPtr)((GLfloat)s, (GLfloat)t, (GLfloat)r, (GLfloat)q);
     return GetGLError(interp, infoPtr);
 }
@@ -6939,7 +6979,7 @@ TclGL_glTexCoord4iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord4iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 165, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 166, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
@@ -6954,7 +6994,7 @@ TclGL_glTexCoord4iCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &q) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[165];
+    funcPtr = infoPtr->funcv[166];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLint)s, (GLint)t, (GLint)r, (GLint)q);
     return GetGLError(interp, infoPtr);
 }
@@ -6989,7 +7029,7 @@ TclGL_glTexCoord4sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord4sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 166, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 167, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
@@ -7004,7 +7044,7 @@ TclGL_glTexCoord4sCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &q) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[166];
+    funcPtr = infoPtr->funcv[167];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLshort)s, (GLshort)t, (GLshort)r, (GLshort)q);
     return GetGLError(interp, infoPtr);
 }
@@ -7037,13 +7077,13 @@ TclGL_glTexCoord1dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord1dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 167, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 168, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[167];
+    funcPtr = infoPtr->funcv[168];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7076,13 +7116,13 @@ TclGL_glTexCoord1fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord1fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 168, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 169, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[168];
+    funcPtr = infoPtr->funcv[169];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7115,13 +7155,13 @@ TclGL_glTexCoord1ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord1ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 169, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 170, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[169];
+    funcPtr = infoPtr->funcv[170];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7154,13 +7194,13 @@ TclGL_glTexCoord1svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord1svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 170, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 171, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[170];
+    funcPtr = infoPtr->funcv[171];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7193,13 +7233,13 @@ TclGL_glTexCoord2dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord2dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 171, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 172, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[171];
+    funcPtr = infoPtr->funcv[172];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7232,13 +7272,13 @@ TclGL_glTexCoord2fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord2fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 172, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 173, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[172];
+    funcPtr = infoPtr->funcv[173];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7271,13 +7311,13 @@ TclGL_glTexCoord2ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord2ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 173, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 174, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[173];
+    funcPtr = infoPtr->funcv[174];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7310,13 +7350,13 @@ TclGL_glTexCoord2svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord2svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 174, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 175, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[174];
+    funcPtr = infoPtr->funcv[175];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7349,13 +7389,13 @@ TclGL_glTexCoord3dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord3dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 175, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 176, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[175];
+    funcPtr = infoPtr->funcv[176];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7388,13 +7428,13 @@ TclGL_glTexCoord3fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord3fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 176, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 177, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[176];
+    funcPtr = infoPtr->funcv[177];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7427,13 +7467,13 @@ TclGL_glTexCoord3ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord3ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 177, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 178, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[177];
+    funcPtr = infoPtr->funcv[178];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7466,13 +7506,13 @@ TclGL_glTexCoord3svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord3svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 178, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 179, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[178];
+    funcPtr = infoPtr->funcv[179];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7505,13 +7545,13 @@ TclGL_glTexCoord4dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord4dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 179, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 180, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[179];
+    funcPtr = infoPtr->funcv[180];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7544,13 +7584,13 @@ TclGL_glTexCoord4fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord4fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 180, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 181, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[180];
+    funcPtr = infoPtr->funcv[181];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7583,13 +7623,13 @@ TclGL_glTexCoord4ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord4ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 181, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 182, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[181];
+    funcPtr = infoPtr->funcv[182];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7622,13 +7662,13 @@ TclGL_glTexCoord4svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoord4svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 182, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 183, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[182];
+    funcPtr = infoPtr->funcv[183];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -7661,7 +7701,7 @@ TclGL_glRasterPos2dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos2dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 183, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 184, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -7670,7 +7710,7 @@ TclGL_glRasterPos2dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &y) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[183];
+    funcPtr = infoPtr->funcv[184];
     ((GLfunction_void_double_double)funcPtr->funcPtr)((GLdouble)x, (GLdouble)y);
     return GetGLError(interp, infoPtr);
 }
@@ -7703,7 +7743,7 @@ TclGL_glRasterPos2fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos2fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 184, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 185, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -7712,7 +7752,7 @@ TclGL_glRasterPos2fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &y) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[184];
+    funcPtr = infoPtr->funcv[185];
     ((GLfunction_void_float_float)funcPtr->funcPtr)((GLfloat)x, (GLfloat)y);
     return GetGLError(interp, infoPtr);
 }
@@ -7745,7 +7785,7 @@ TclGL_glRasterPos2iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos2iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 185, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 186, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -7754,7 +7794,7 @@ TclGL_glRasterPos2iCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &y) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[185];
+    funcPtr = infoPtr->funcv[186];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLint)x, (GLint)y);
     return GetGLError(interp, infoPtr);
 }
@@ -7787,7 +7827,7 @@ TclGL_glRasterPos2sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos2sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 186, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 187, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -7796,7 +7836,7 @@ TclGL_glRasterPos2sCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &y) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[186];
+    funcPtr = infoPtr->funcv[187];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLshort)x, (GLshort)y);
     return GetGLError(interp, infoPtr);
 }
@@ -7830,7 +7870,7 @@ TclGL_glRasterPos3dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos3dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 187, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 188, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -7842,7 +7882,7 @@ TclGL_glRasterPos3dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[187];
+    funcPtr = infoPtr->funcv[188];
     ((GLfunction_void_double_double_double)funcPtr->funcPtr)((GLdouble)x, (GLdouble)y, (GLdouble)z);
     return GetGLError(interp, infoPtr);
 }
@@ -7876,7 +7916,7 @@ TclGL_glRasterPos3fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos3fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 188, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 189, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -7888,7 +7928,7 @@ TclGL_glRasterPos3fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[188];
+    funcPtr = infoPtr->funcv[189];
     ((GLfunction_void_float_float_float)funcPtr->funcPtr)((GLfloat)x, (GLfloat)y, (GLfloat)z);
     return GetGLError(interp, infoPtr);
 }
@@ -7922,7 +7962,7 @@ TclGL_glRasterPos3iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos3iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 189, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 190, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -7934,7 +7974,7 @@ TclGL_glRasterPos3iCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[189];
+    funcPtr = infoPtr->funcv[190];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLint)x, (GLint)y, (GLint)z);
     return GetGLError(interp, infoPtr);
 }
@@ -7968,7 +8008,7 @@ TclGL_glRasterPos3sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos3sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 190, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 191, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -7980,7 +8020,7 @@ TclGL_glRasterPos3sCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &z) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[190];
+    funcPtr = infoPtr->funcv[191];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLshort)x, (GLshort)y, (GLshort)z);
     return GetGLError(interp, infoPtr);
 }
@@ -8015,7 +8055,7 @@ TclGL_glRasterPos4dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos4dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 191, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 192, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -8030,7 +8070,7 @@ TclGL_glRasterPos4dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &w) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[191];
+    funcPtr = infoPtr->funcv[192];
     ((GLfunction_void_double_double_double_double)funcPtr->funcPtr)((GLdouble)x, (GLdouble)y, (GLdouble)z, (GLdouble)w);
     return GetGLError(interp, infoPtr);
 }
@@ -8065,7 +8105,7 @@ TclGL_glRasterPos4fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos4fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 192, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 193, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -8080,7 +8120,7 @@ TclGL_glRasterPos4fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &w) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[192];
+    funcPtr = infoPtr->funcv[193];
     ((GLfunction_void_float_float_float_float)funcPtr->funcPtr)((GLfloat)x, (GLfloat)y, (GLfloat)z, (GLfloat)w);
     return GetGLError(interp, infoPtr);
 }
@@ -8115,7 +8155,7 @@ TclGL_glRasterPos4iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos4iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 193, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 194, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -8130,7 +8170,7 @@ TclGL_glRasterPos4iCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &w) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[193];
+    funcPtr = infoPtr->funcv[194];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLint)x, (GLint)y, (GLint)z, (GLint)w);
     return GetGLError(interp, infoPtr);
 }
@@ -8165,7 +8205,7 @@ TclGL_glRasterPos4sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos4sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 194, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 195, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -8180,7 +8220,7 @@ TclGL_glRasterPos4sCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &w) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[194];
+    funcPtr = infoPtr->funcv[195];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLshort)x, (GLshort)y, (GLshort)z, (GLshort)w);
     return GetGLError(interp, infoPtr);
 }
@@ -8213,13 +8253,13 @@ TclGL_glRasterPos2dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos2dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 195, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 196, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[195];
+    funcPtr = infoPtr->funcv[196];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8252,13 +8292,13 @@ TclGL_glRasterPos2fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos2fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 196, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 197, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[196];
+    funcPtr = infoPtr->funcv[197];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8291,13 +8331,13 @@ TclGL_glRasterPos2ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos2ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 197, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 198, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[197];
+    funcPtr = infoPtr->funcv[198];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8330,13 +8370,13 @@ TclGL_glRasterPos2svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos2svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 198, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 199, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[198];
+    funcPtr = infoPtr->funcv[199];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8369,13 +8409,13 @@ TclGL_glRasterPos3dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos3dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 199, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 200, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[199];
+    funcPtr = infoPtr->funcv[200];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8408,13 +8448,13 @@ TclGL_glRasterPos3fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos3fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 200, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 201, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[200];
+    funcPtr = infoPtr->funcv[201];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8447,13 +8487,13 @@ TclGL_glRasterPos3ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos3ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 201, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 202, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[201];
+    funcPtr = infoPtr->funcv[202];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8486,13 +8526,13 @@ TclGL_glRasterPos3svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos3svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 202, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 203, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[202];
+    funcPtr = infoPtr->funcv[203];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8525,13 +8565,13 @@ TclGL_glRasterPos4dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos4dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 203, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 204, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[203];
+    funcPtr = infoPtr->funcv[204];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8564,13 +8604,13 @@ TclGL_glRasterPos4fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos4fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 204, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 205, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[204];
+    funcPtr = infoPtr->funcv[205];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8603,13 +8643,13 @@ TclGL_glRasterPos4ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos4ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 205, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 206, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[205];
+    funcPtr = infoPtr->funcv[206];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8642,13 +8682,13 @@ TclGL_glRasterPos4svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRasterPos4svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 206, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 207, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[206];
+    funcPtr = infoPtr->funcv[207];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -8683,7 +8723,7 @@ TclGL_glRectdCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRectdCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 207, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 208, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x1) != TCL_OK) {
@@ -8698,7 +8738,7 @@ TclGL_glRectdCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &y2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[207];
+    funcPtr = infoPtr->funcv[208];
     ((GLfunction_void_double_double_double_double)funcPtr->funcPtr)((GLdouble)x1, (GLdouble)y1, (GLdouble)x2, (GLdouble)y2);
     return GetGLError(interp, infoPtr);
 }
@@ -8733,7 +8773,7 @@ TclGL_glRectfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRectfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 208, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 209, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &x1) != TCL_OK) {
@@ -8748,7 +8788,7 @@ TclGL_glRectfCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &y2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[208];
+    funcPtr = infoPtr->funcv[209];
     ((GLfunction_void_float_float_float_float)funcPtr->funcPtr)((GLfloat)x1, (GLfloat)y1, (GLfloat)x2, (GLfloat)y2);
     return GetGLError(interp, infoPtr);
 }
@@ -8783,7 +8823,7 @@ TclGL_glRectiCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRectiCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 209, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 210, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x1) != TCL_OK) {
@@ -8798,7 +8838,7 @@ TclGL_glRectiCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &y2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[209];
+    funcPtr = infoPtr->funcv[210];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLint)x1, (GLint)y1, (GLint)x2, (GLint)y2);
     return GetGLError(interp, infoPtr);
 }
@@ -8833,7 +8873,7 @@ TclGL_glRectsCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRectsCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 210, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 211, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x1) != TCL_OK) {
@@ -8848,7 +8888,7 @@ TclGL_glRectsCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &y2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[210];
+    funcPtr = infoPtr->funcv[211];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLshort)x1, (GLshort)y1, (GLshort)x2, (GLshort)y2);
     return GetGLError(interp, infoPtr);
 }
@@ -8883,7 +8923,7 @@ TclGL_glRectdvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRectdvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 211, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 212, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v1, &paramLength0) != TCL_OK) {
@@ -8892,7 +8932,7 @@ TclGL_glRectdvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v2, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[211];
+    funcPtr = infoPtr->funcv[212];
     ((GLfunction_void_voidPtr_voidPtr)funcPtr->funcPtr)((GLdouble*)v1, (GLdouble*)v2);
     return GetGLError(interp, infoPtr);
 }
@@ -8927,7 +8967,7 @@ TclGL_glRectfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRectfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 212, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 213, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v1, &paramLength0) != TCL_OK) {
@@ -8936,7 +8976,7 @@ TclGL_glRectfvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v2, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[212];
+    funcPtr = infoPtr->funcv[213];
     ((GLfunction_void_voidPtr_voidPtr)funcPtr->funcPtr)((GLfloat*)v1, (GLfloat*)v2);
     return GetGLError(interp, infoPtr);
 }
@@ -8971,7 +9011,7 @@ TclGL_glRectivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRectivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 213, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 214, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v1, &paramLength0) != TCL_OK) {
@@ -8980,7 +9020,7 @@ TclGL_glRectivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v2, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[213];
+    funcPtr = infoPtr->funcv[214];
     ((GLfunction_void_voidPtr_voidPtr)funcPtr->funcPtr)((GLint*)v1, (GLint*)v2);
     return GetGLError(interp, infoPtr);
 }
@@ -9015,7 +9055,7 @@ TclGL_glRectsvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glRectsvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 214, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 215, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &v1, &paramLength0) != TCL_OK) {
@@ -9024,7 +9064,7 @@ TclGL_glRectsvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v2, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[214];
+    funcPtr = infoPtr->funcv[215];
     ((GLfunction_void_voidPtr_voidPtr)funcPtr->funcPtr)((GLshort*)v1, (GLshort*)v2);
     return GetGLError(interp, infoPtr);
 }
@@ -9060,7 +9100,7 @@ TclGL_glVertexPointerCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glVertexPointerCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 215, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 216, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &size) != TCL_OK) {
@@ -9075,7 +9115,7 @@ TclGL_glVertexPointerCmd(
     if (GetPtrInParam(interp, infoPtr, objv[4], &ptr, &paramLength3) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[215];
+    funcPtr = infoPtr->funcv[216];
     ((GLfunction_void_int_int_int_voidPtr)funcPtr->funcPtr)((GLint)size, (GLenum)type, (GLsizei)stride, (GLvoid*)ptr);
     return GetGLError(interp, infoPtr);
 }
@@ -9110,7 +9150,7 @@ TclGL_glNormalPointerCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glNormalPointerCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 216, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 217, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &type) != TCL_OK) {
@@ -9122,7 +9162,7 @@ TclGL_glNormalPointerCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &ptr, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[216];
+    funcPtr = infoPtr->funcv[217];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)type, (GLsizei)stride, (GLvoid*)ptr);
     return GetGLError(interp, infoPtr);
 }
@@ -9158,7 +9198,7 @@ TclGL_glColorPointerCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColorPointerCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 217, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 218, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &size) != TCL_OK) {
@@ -9173,7 +9213,7 @@ TclGL_glColorPointerCmd(
     if (GetPtrInParam(interp, infoPtr, objv[4], &ptr, &paramLength3) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[217];
+    funcPtr = infoPtr->funcv[218];
     ((GLfunction_void_int_int_int_voidPtr)funcPtr->funcPtr)((GLint)size, (GLenum)type, (GLsizei)stride, (GLvoid*)ptr);
     return GetGLError(interp, infoPtr);
 }
@@ -9208,7 +9248,7 @@ TclGL_glIndexPointerCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glIndexPointerCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 218, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 219, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &type) != TCL_OK) {
@@ -9220,7 +9260,7 @@ TclGL_glIndexPointerCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &ptr, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[218];
+    funcPtr = infoPtr->funcv[219];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)type, (GLsizei)stride, (GLvoid*)ptr);
     return GetGLError(interp, infoPtr);
 }
@@ -9256,7 +9296,7 @@ TclGL_glTexCoordPointerCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexCoordPointerCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 219, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 220, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &size) != TCL_OK) {
@@ -9271,7 +9311,7 @@ TclGL_glTexCoordPointerCmd(
     if (GetPtrInParam(interp, infoPtr, objv[4], &ptr, &paramLength3) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[219];
+    funcPtr = infoPtr->funcv[220];
     ((GLfunction_void_int_int_int_voidPtr)funcPtr->funcPtr)((GLint)size, (GLenum)type, (GLsizei)stride, (GLvoid*)ptr);
     return GetGLError(interp, infoPtr);
 }
@@ -9305,7 +9345,7 @@ TclGL_glEdgeFlagPointerCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEdgeFlagPointerCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 220, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 221, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &stride) != TCL_OK) {
@@ -9314,7 +9354,7 @@ TclGL_glEdgeFlagPointerCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &ptr, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[220];
+    funcPtr = infoPtr->funcv[221];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLsizei)stride, (GLvoid*)ptr);
     return GetGLError(interp, infoPtr);
 }
@@ -9348,13 +9388,13 @@ TclGL_glGetPointervCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetPointervCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 221, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 222, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[221];
+    funcPtr = infoPtr->funcv[222];
     ((GLfunction_void_int_voidPtrPtr)funcPtr->funcPtr)((GLenum)pname, (GLvoid**)params);
     if (SetPtrOutParam(interp, infoPtr, objv[2], paramLength1, params) != TCL_OK) {
         return TCL_ERROR;
@@ -9389,13 +9429,13 @@ TclGL_glArrayElementCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glArrayElementCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 222, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 223, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &i) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[222];
+    funcPtr = infoPtr->funcv[223];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLint)i);
     return GetGLError(interp, infoPtr);
 }
@@ -9429,7 +9469,7 @@ TclGL_glDrawArraysCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glDrawArraysCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 223, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 224, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &mode) != TCL_OK) {
@@ -9441,7 +9481,7 @@ TclGL_glDrawArraysCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &count) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[223];
+    funcPtr = infoPtr->funcv[224];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)mode, (GLint)first, (GLsizei)count);
     return GetGLError(interp, infoPtr);
 }
@@ -9477,7 +9517,7 @@ TclGL_glDrawElementsCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glDrawElementsCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 224, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 225, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &mode) != TCL_OK) {
@@ -9492,7 +9532,7 @@ TclGL_glDrawElementsCmd(
     if (GetPtrInParam(interp, infoPtr, objv[4], &indices, &paramLength3) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[224];
+    funcPtr = infoPtr->funcv[225];
     ((GLfunction_void_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)mode, (GLsizei)count, (GLenum)type, (GLvoid*)indices);
     return GetGLError(interp, infoPtr);
 }
@@ -9527,7 +9567,7 @@ TclGL_glInterleavedArraysCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glInterleavedArraysCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 225, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 226, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &format) != TCL_OK) {
@@ -9539,7 +9579,7 @@ TclGL_glInterleavedArraysCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &pointer, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[225];
+    funcPtr = infoPtr->funcv[226];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)format, (GLsizei)stride, (GLvoid*)pointer);
     return GetGLError(interp, infoPtr);
 }
@@ -9571,13 +9611,13 @@ TclGL_glShadeModelCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glShadeModelCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 226, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 227, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &mode) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[226];
+    funcPtr = infoPtr->funcv[227];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLenum)mode);
     return GetGLError(interp, infoPtr);
 }
@@ -9611,7 +9651,7 @@ TclGL_glLightfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLightfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 227, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 228, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &light) != TCL_OK) {
@@ -9623,7 +9663,7 @@ TclGL_glLightfCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[227];
+    funcPtr = infoPtr->funcv[228];
     ((GLfunction_void_int_int_float)funcPtr->funcPtr)((GLenum)light, (GLenum)pname, (GLfloat)param);
     return GetGLError(interp, infoPtr);
 }
@@ -9657,7 +9697,7 @@ TclGL_glLightiCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLightiCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 228, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 229, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &light) != TCL_OK) {
@@ -9669,7 +9709,7 @@ TclGL_glLightiCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[228];
+    funcPtr = infoPtr->funcv[229];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)light, (GLenum)pname, (GLint)param);
     return GetGLError(interp, infoPtr);
 }
@@ -9704,7 +9744,7 @@ TclGL_glLightfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLightfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 229, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 230, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &light) != TCL_OK) {
@@ -9716,7 +9756,7 @@ TclGL_glLightfvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[229];
+    funcPtr = infoPtr->funcv[230];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)light, (GLenum)pname, (GLfloat*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -9751,7 +9791,7 @@ TclGL_glLightivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLightivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 230, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 231, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &light) != TCL_OK) {
@@ -9763,7 +9803,7 @@ TclGL_glLightivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[230];
+    funcPtr = infoPtr->funcv[231];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)light, (GLenum)pname, (GLint*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -9798,7 +9838,7 @@ TclGL_glGetLightfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetLightfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 231, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 232, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &light) != TCL_OK) {
@@ -9807,7 +9847,7 @@ TclGL_glGetLightfvCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[231];
+    funcPtr = infoPtr->funcv[232];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)light, (GLenum)pname, (GLfloat*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -9845,7 +9885,7 @@ TclGL_glGetLightivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetLightivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 232, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 233, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &light) != TCL_OK) {
@@ -9854,7 +9894,7 @@ TclGL_glGetLightivCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[232];
+    funcPtr = infoPtr->funcv[233];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)light, (GLenum)pname, (GLint*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -9890,7 +9930,7 @@ TclGL_glLightModelfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLightModelfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 233, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 234, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &pname) != TCL_OK) {
@@ -9899,7 +9939,7 @@ TclGL_glLightModelfCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[233];
+    funcPtr = infoPtr->funcv[234];
     ((GLfunction_void_int_float)funcPtr->funcPtr)((GLenum)pname, (GLfloat)param);
     return GetGLError(interp, infoPtr);
 }
@@ -9932,7 +9972,7 @@ TclGL_glLightModeliCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLightModeliCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 234, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 235, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &pname) != TCL_OK) {
@@ -9941,7 +9981,7 @@ TclGL_glLightModeliCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[234];
+    funcPtr = infoPtr->funcv[235];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLenum)pname, (GLint)param);
     return GetGLError(interp, infoPtr);
 }
@@ -9975,7 +10015,7 @@ TclGL_glLightModelfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLightModelfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 235, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 236, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &pname) != TCL_OK) {
@@ -9984,7 +10024,7 @@ TclGL_glLightModelfvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &params, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[235];
+    funcPtr = infoPtr->funcv[236];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)pname, (GLfloat*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -10018,7 +10058,7 @@ TclGL_glLightModelivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLightModelivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 236, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 237, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &pname) != TCL_OK) {
@@ -10027,7 +10067,7 @@ TclGL_glLightModelivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &params, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[236];
+    funcPtr = infoPtr->funcv[237];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)pname, (GLint*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -10061,7 +10101,7 @@ TclGL_glMaterialfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMaterialfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 237, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 238, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &face) != TCL_OK) {
@@ -10073,7 +10113,7 @@ TclGL_glMaterialfCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[237];
+    funcPtr = infoPtr->funcv[238];
     ((GLfunction_void_int_int_float)funcPtr->funcPtr)((GLenum)face, (GLenum)pname, (GLfloat)param);
     return GetGLError(interp, infoPtr);
 }
@@ -10107,7 +10147,7 @@ TclGL_glMaterialiCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMaterialiCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 238, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 239, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &face) != TCL_OK) {
@@ -10119,7 +10159,7 @@ TclGL_glMaterialiCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[238];
+    funcPtr = infoPtr->funcv[239];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)face, (GLenum)pname, (GLint)param);
     return GetGLError(interp, infoPtr);
 }
@@ -10154,7 +10194,7 @@ TclGL_glMaterialfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMaterialfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 239, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 240, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &face) != TCL_OK) {
@@ -10166,7 +10206,7 @@ TclGL_glMaterialfvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[239];
+    funcPtr = infoPtr->funcv[240];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)face, (GLenum)pname, (GLfloat*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -10201,7 +10241,7 @@ TclGL_glMaterialivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMaterialivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 240, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 241, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &face) != TCL_OK) {
@@ -10213,7 +10253,7 @@ TclGL_glMaterialivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[240];
+    funcPtr = infoPtr->funcv[241];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)face, (GLenum)pname, (GLint*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -10248,7 +10288,7 @@ TclGL_glGetMaterialfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetMaterialfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 241, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 242, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &face) != TCL_OK) {
@@ -10257,7 +10297,7 @@ TclGL_glGetMaterialfvCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[241];
+    funcPtr = infoPtr->funcv[242];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)face, (GLenum)pname, (GLfloat*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -10295,7 +10335,7 @@ TclGL_glGetMaterialivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetMaterialivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 242, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 243, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &face) != TCL_OK) {
@@ -10304,7 +10344,7 @@ TclGL_glGetMaterialivCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[242];
+    funcPtr = infoPtr->funcv[243];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)face, (GLenum)pname, (GLint*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -10340,7 +10380,7 @@ TclGL_glColorMaterialCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColorMaterialCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 243, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 244, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &face) != TCL_OK) {
@@ -10349,7 +10389,7 @@ TclGL_glColorMaterialCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &mode) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[243];
+    funcPtr = infoPtr->funcv[244];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLenum)face, (GLenum)mode);
     return GetGLError(interp, infoPtr);
 }
@@ -10382,7 +10422,7 @@ TclGL_glPixelZoomCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPixelZoomCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 244, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 245, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &xfactor) != TCL_OK) {
@@ -10391,7 +10431,7 @@ TclGL_glPixelZoomCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &yfactor) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[244];
+    funcPtr = infoPtr->funcv[245];
     ((GLfunction_void_float_float)funcPtr->funcPtr)((GLfloat)xfactor, (GLfloat)yfactor);
     return GetGLError(interp, infoPtr);
 }
@@ -10424,7 +10464,7 @@ TclGL_glPixelStorefCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPixelStorefCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 245, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 246, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &pname) != TCL_OK) {
@@ -10433,7 +10473,7 @@ TclGL_glPixelStorefCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[245];
+    funcPtr = infoPtr->funcv[246];
     ((GLfunction_void_int_float)funcPtr->funcPtr)((GLenum)pname, (GLfloat)param);
     return GetGLError(interp, infoPtr);
 }
@@ -10466,7 +10506,7 @@ TclGL_glPixelStoreiCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPixelStoreiCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 246, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 247, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &pname) != TCL_OK) {
@@ -10475,7 +10515,7 @@ TclGL_glPixelStoreiCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[246];
+    funcPtr = infoPtr->funcv[247];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLenum)pname, (GLint)param);
     return GetGLError(interp, infoPtr);
 }
@@ -10508,7 +10548,7 @@ TclGL_glPixelTransferfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPixelTransferfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 247, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 248, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &pname) != TCL_OK) {
@@ -10517,7 +10557,7 @@ TclGL_glPixelTransferfCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[247];
+    funcPtr = infoPtr->funcv[248];
     ((GLfunction_void_int_float)funcPtr->funcPtr)((GLenum)pname, (GLfloat)param);
     return GetGLError(interp, infoPtr);
 }
@@ -10550,7 +10590,7 @@ TclGL_glPixelTransferiCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPixelTransferiCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 248, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 249, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &pname) != TCL_OK) {
@@ -10559,7 +10599,7 @@ TclGL_glPixelTransferiCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[248];
+    funcPtr = infoPtr->funcv[249];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLenum)pname, (GLint)param);
     return GetGLError(interp, infoPtr);
 }
@@ -10594,7 +10634,7 @@ TclGL_glPixelMapfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPixelMapfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 249, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 250, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &map) != TCL_OK) {
@@ -10606,7 +10646,7 @@ TclGL_glPixelMapfvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &values, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[249];
+    funcPtr = infoPtr->funcv[250];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)map, (GLsizei)mapsize, (GLfloat*)values);
     return GetGLError(interp, infoPtr);
 }
@@ -10641,7 +10681,7 @@ TclGL_glPixelMapuivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPixelMapuivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 250, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 251, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &map) != TCL_OK) {
@@ -10653,7 +10693,7 @@ TclGL_glPixelMapuivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &values, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[250];
+    funcPtr = infoPtr->funcv[251];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)map, (GLsizei)mapsize, (GLuint*)values);
     return GetGLError(interp, infoPtr);
 }
@@ -10688,7 +10728,7 @@ TclGL_glPixelMapusvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPixelMapusvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 251, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 252, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &map) != TCL_OK) {
@@ -10700,7 +10740,7 @@ TclGL_glPixelMapusvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &values, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[251];
+    funcPtr = infoPtr->funcv[252];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)map, (GLsizei)mapsize, (GLushort*)values);
     return GetGLError(interp, infoPtr);
 }
@@ -10734,13 +10774,13 @@ TclGL_glGetPixelMapfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetPixelMapfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 252, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 253, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &map) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[252];
+    funcPtr = infoPtr->funcv[253];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)map, (GLfloat*)values);
     if (SetPtrOutParam(interp, infoPtr, objv[2], paramLength1, values) != TCL_OK) {
         return TCL_ERROR;
@@ -10777,13 +10817,13 @@ TclGL_glGetPixelMapuivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetPixelMapuivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 253, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 254, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &map) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[253];
+    funcPtr = infoPtr->funcv[254];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)map, (GLuint*)values);
     if (SetPtrOutParam(interp, infoPtr, objv[2], paramLength1, values) != TCL_OK) {
         return TCL_ERROR;
@@ -10820,13 +10860,13 @@ TclGL_glGetPixelMapusvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetPixelMapusvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 254, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 255, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &map) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[254];
+    funcPtr = infoPtr->funcv[255];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)map, (GLushort*)values);
     if (SetPtrOutParam(interp, infoPtr, objv[2], paramLength1, values) != TCL_OK) {
         return TCL_ERROR;
@@ -10868,7 +10908,7 @@ TclGL_glBitmapCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glBitmapCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 255, objc, 7) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 256, objc, 7) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &width) != TCL_OK) {
@@ -10892,7 +10932,7 @@ TclGL_glBitmapCmd(
     if (GetPtrInParam(interp, infoPtr, objv[7], &bitmap, &paramLength6) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[255];
+    funcPtr = infoPtr->funcv[256];
     ((GLfunction_void_int_int_float_float_float_float_voidPtr)funcPtr->funcPtr)((GLsizei)width, (GLsizei)height, (GLfloat)xorig, (GLfloat)yorig, (GLfloat)xmove, (GLfloat)ymove, (GLubyte*)bitmap);
     return GetGLError(interp, infoPtr);
 }
@@ -10931,7 +10971,7 @@ TclGL_glReadPixelsCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glReadPixelsCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 256, objc, 7) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 257, objc, 7) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -10952,7 +10992,7 @@ TclGL_glReadPixelsCmd(
     if (GetEnumParam(interp, infoPtr, objv[6], &type) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[256];
+    funcPtr = infoPtr->funcv[257];
     ((GLfunction_void_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLint)x, (GLint)y, (GLsizei)width, (GLsizei)height, (GLenum)format, (GLenum)type, (GLvoid*)pixels);
     if (SetPtrOutParam(interp, infoPtr, objv[7], paramLength6, pixels) != TCL_OK) {
         return TCL_ERROR;
@@ -10992,7 +11032,7 @@ TclGL_glDrawPixelsCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glDrawPixelsCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 257, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 258, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &width) != TCL_OK) {
@@ -11010,7 +11050,7 @@ TclGL_glDrawPixelsCmd(
     if (GetPtrInParam(interp, infoPtr, objv[5], &pixels, &paramLength4) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[257];
+    funcPtr = infoPtr->funcv[258];
     ((GLfunction_void_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLsizei)width, (GLsizei)height, (GLenum)format, (GLenum)type, (GLvoid*)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -11046,7 +11086,7 @@ TclGL_glCopyPixelsCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCopyPixelsCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 258, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 259, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &x) != TCL_OK) {
@@ -11064,7 +11104,7 @@ TclGL_glCopyPixelsCmd(
     if (GetEnumParam(interp, infoPtr, objv[5], &type) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[258];
+    funcPtr = infoPtr->funcv[259];
     ((GLfunction_void_int_int_int_int_int)funcPtr->funcPtr)((GLint)x, (GLint)y, (GLsizei)width, (GLsizei)height, (GLenum)type);
     return GetGLError(interp, infoPtr);
 }
@@ -11098,7 +11138,7 @@ TclGL_glStencilFuncCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glStencilFuncCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 259, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 260, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &func) != TCL_OK) {
@@ -11110,7 +11150,7 @@ TclGL_glStencilFuncCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &mask) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[259];
+    funcPtr = infoPtr->funcv[260];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)func, (GLint)ref, (GLuint)mask);
     return GetGLError(interp, infoPtr);
 }
@@ -11142,13 +11182,13 @@ TclGL_glStencilMaskCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glStencilMaskCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 260, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 261, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &mask) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[260];
+    funcPtr = infoPtr->funcv[261];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLuint)mask);
     return GetGLError(interp, infoPtr);
 }
@@ -11182,7 +11222,7 @@ TclGL_glStencilOpCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glStencilOpCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 261, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 262, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &fail) != TCL_OK) {
@@ -11194,7 +11234,7 @@ TclGL_glStencilOpCmd(
     if (GetEnumParam(interp, infoPtr, objv[3], &zpass) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[261];
+    funcPtr = infoPtr->funcv[262];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)fail, (GLenum)zfail, (GLenum)zpass);
     return GetGLError(interp, infoPtr);
 }
@@ -11226,13 +11266,13 @@ TclGL_glClearStencilCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glClearStencilCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 262, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 263, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &s) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[262];
+    funcPtr = infoPtr->funcv[263];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLint)s);
     return GetGLError(interp, infoPtr);
 }
@@ -11266,7 +11306,7 @@ TclGL_glTexGendCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexGendCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 263, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 264, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &coord) != TCL_OK) {
@@ -11278,7 +11318,7 @@ TclGL_glTexGendCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[263];
+    funcPtr = infoPtr->funcv[264];
     ((GLfunction_void_int_int_double)funcPtr->funcPtr)((GLenum)coord, (GLenum)pname, (GLdouble)param);
     return GetGLError(interp, infoPtr);
 }
@@ -11312,7 +11352,7 @@ TclGL_glTexGenfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexGenfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 264, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 265, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &coord) != TCL_OK) {
@@ -11324,7 +11364,7 @@ TclGL_glTexGenfCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[264];
+    funcPtr = infoPtr->funcv[265];
     ((GLfunction_void_int_int_float)funcPtr->funcPtr)((GLenum)coord, (GLenum)pname, (GLfloat)param);
     return GetGLError(interp, infoPtr);
 }
@@ -11358,7 +11398,7 @@ TclGL_glTexGeniCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexGeniCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 265, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 266, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &coord) != TCL_OK) {
@@ -11370,7 +11410,7 @@ TclGL_glTexGeniCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[265];
+    funcPtr = infoPtr->funcv[266];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)coord, (GLenum)pname, (GLint)param);
     return GetGLError(interp, infoPtr);
 }
@@ -11405,7 +11445,7 @@ TclGL_glTexGendvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexGendvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 266, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 267, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &coord) != TCL_OK) {
@@ -11417,7 +11457,7 @@ TclGL_glTexGendvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[266];
+    funcPtr = infoPtr->funcv[267];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)coord, (GLenum)pname, (GLdouble*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11452,7 +11492,7 @@ TclGL_glTexGenfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexGenfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 267, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 268, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &coord) != TCL_OK) {
@@ -11464,7 +11504,7 @@ TclGL_glTexGenfvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[267];
+    funcPtr = infoPtr->funcv[268];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)coord, (GLenum)pname, (GLfloat*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11499,7 +11539,7 @@ TclGL_glTexGenivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexGenivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 268, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 269, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &coord) != TCL_OK) {
@@ -11511,7 +11551,7 @@ TclGL_glTexGenivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[268];
+    funcPtr = infoPtr->funcv[269];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)coord, (GLenum)pname, (GLint*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11546,7 +11586,7 @@ TclGL_glGetTexGendvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetTexGendvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 269, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 270, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &coord) != TCL_OK) {
@@ -11555,7 +11595,7 @@ TclGL_glGetTexGendvCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[269];
+    funcPtr = infoPtr->funcv[270];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)coord, (GLenum)pname, (GLdouble*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -11593,7 +11633,7 @@ TclGL_glGetTexGenfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetTexGenfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 270, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 271, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &coord) != TCL_OK) {
@@ -11602,7 +11642,7 @@ TclGL_glGetTexGenfvCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[270];
+    funcPtr = infoPtr->funcv[271];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)coord, (GLenum)pname, (GLfloat*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -11640,7 +11680,7 @@ TclGL_glGetTexGenivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetTexGenivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 271, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 272, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &coord) != TCL_OK) {
@@ -11649,7 +11689,7 @@ TclGL_glGetTexGenivCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[271];
+    funcPtr = infoPtr->funcv[272];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)coord, (GLenum)pname, (GLint*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -11686,7 +11726,7 @@ TclGL_glTexEnvfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexEnvfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 272, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 273, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -11698,7 +11738,7 @@ TclGL_glTexEnvfCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[272];
+    funcPtr = infoPtr->funcv[273];
     ((GLfunction_void_int_int_float)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLfloat)param);
     return GetGLError(interp, infoPtr);
 }
@@ -11732,7 +11772,7 @@ TclGL_glTexEnviCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexEnviCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 273, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 274, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -11744,7 +11784,7 @@ TclGL_glTexEnviCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[273];
+    funcPtr = infoPtr->funcv[274];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLint)param);
     return GetGLError(interp, infoPtr);
 }
@@ -11779,7 +11819,7 @@ TclGL_glTexEnvfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexEnvfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 274, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 275, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -11791,7 +11831,7 @@ TclGL_glTexEnvfvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[274];
+    funcPtr = infoPtr->funcv[275];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLfloat*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11826,7 +11866,7 @@ TclGL_glTexEnvivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexEnvivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 275, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 276, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -11838,7 +11878,7 @@ TclGL_glTexEnvivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[275];
+    funcPtr = infoPtr->funcv[276];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLint*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -11873,7 +11913,7 @@ TclGL_glGetTexEnvfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetTexEnvfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 276, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 277, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -11882,7 +11922,7 @@ TclGL_glGetTexEnvfvCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[276];
+    funcPtr = infoPtr->funcv[277];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLfloat*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -11920,7 +11960,7 @@ TclGL_glGetTexEnvivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetTexEnvivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 277, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 278, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -11929,7 +11969,7 @@ TclGL_glGetTexEnvivCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[277];
+    funcPtr = infoPtr->funcv[278];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLint*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -11966,7 +12006,7 @@ TclGL_glTexParameterfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexParameterfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 278, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 279, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -11978,7 +12018,7 @@ TclGL_glTexParameterfCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[278];
+    funcPtr = infoPtr->funcv[279];
     ((GLfunction_void_int_int_float)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLfloat)param);
     return GetGLError(interp, infoPtr);
 }
@@ -12012,7 +12052,7 @@ TclGL_glTexParameteriCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexParameteriCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 279, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 280, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12024,7 +12064,7 @@ TclGL_glTexParameteriCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[279];
+    funcPtr = infoPtr->funcv[280];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLint)param);
     return GetGLError(interp, infoPtr);
 }
@@ -12059,7 +12099,7 @@ TclGL_glTexParameterfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexParameterfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 280, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 281, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12071,7 +12111,7 @@ TclGL_glTexParameterfvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[280];
+    funcPtr = infoPtr->funcv[281];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLfloat*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -12106,7 +12146,7 @@ TclGL_glTexParameterivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexParameterivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 281, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 282, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12118,7 +12158,7 @@ TclGL_glTexParameterivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[281];
+    funcPtr = infoPtr->funcv[282];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLint*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -12153,7 +12193,7 @@ TclGL_glGetTexParameterfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetTexParameterfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 282, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 283, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12162,7 +12202,7 @@ TclGL_glGetTexParameterfvCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[282];
+    funcPtr = infoPtr->funcv[283];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLfloat*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -12200,7 +12240,7 @@ TclGL_glGetTexParameterivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetTexParameterivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 283, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 284, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12209,7 +12249,7 @@ TclGL_glGetTexParameterivCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[283];
+    funcPtr = infoPtr->funcv[284];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLint*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -12248,7 +12288,7 @@ TclGL_glGetTexLevelParameterfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetTexLevelParameterfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 284, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 285, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12260,7 +12300,7 @@ TclGL_glGetTexLevelParameterfvCmd(
     if (GetEnumParam(interp, infoPtr, objv[3], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[284];
+    funcPtr = infoPtr->funcv[285];
     ((GLfunction_void_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLenum)pname, (GLfloat*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[4], paramLength3, params) != TCL_OK) {
         return TCL_ERROR;
@@ -12299,7 +12339,7 @@ TclGL_glGetTexLevelParameterivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetTexLevelParameterivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 285, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 286, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12311,7 +12351,7 @@ TclGL_glGetTexLevelParameterivCmd(
     if (GetEnumParam(interp, infoPtr, objv[3], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[285];
+    funcPtr = infoPtr->funcv[286];
     ((GLfunction_void_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLenum)pname, (GLint*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[4], paramLength3, params) != TCL_OK) {
         return TCL_ERROR;
@@ -12354,7 +12394,7 @@ TclGL_glTexImage1DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexImage1DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 286, objc, 8) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 287, objc, 8) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12381,7 +12421,7 @@ TclGL_glTexImage1DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[8], &pixels, &paramLength7) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[286];
+    funcPtr = infoPtr->funcv[287];
     ((GLfunction_void_int_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLint)internalFormat, (GLsizei)width, (GLint)border, (GLenum)format, (GLenum)type, (GLvoid*)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -12422,7 +12462,7 @@ TclGL_glTexImage2DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexImage2DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 287, objc, 9) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 288, objc, 9) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12452,7 +12492,7 @@ TclGL_glTexImage2DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[9], &pixels, &paramLength8) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[287];
+    funcPtr = infoPtr->funcv[288];
     ((GLfunction_void_int_int_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLint)internalFormat, (GLsizei)width, (GLsizei)height, (GLint)border, (GLenum)format, (GLenum)type, (GLvoid*)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -12489,7 +12529,7 @@ TclGL_glGetTexImageCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetTexImageCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 288, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 289, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12504,7 +12544,7 @@ TclGL_glGetTexImageCmd(
     if (GetEnumParam(interp, infoPtr, objv[4], &type) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[288];
+    funcPtr = infoPtr->funcv[289];
     ((GLfunction_void_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLenum)format, (GLenum)type, (GLvoid*)pixels);
     if (SetPtrOutParam(interp, infoPtr, objv[5], paramLength4, pixels) != TCL_OK) {
         return TCL_ERROR;
@@ -12541,13 +12581,13 @@ TclGL_glGenTexturesCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGenTexturesCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 289, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 290, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &n) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[289];
+    funcPtr = infoPtr->funcv[290];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLsizei)n, (GLuint*)textures);
     if (SetPtrOutParam(interp, infoPtr, objv[2], paramLength1, textures) != TCL_OK) {
         return TCL_ERROR;
@@ -12584,7 +12624,7 @@ TclGL_glDeleteTexturesCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glDeleteTexturesCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 290, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 291, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &n) != TCL_OK) {
@@ -12593,7 +12633,7 @@ TclGL_glDeleteTexturesCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &textures, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[290];
+    funcPtr = infoPtr->funcv[291];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLsizei)n, (GLuint*)textures);
     return GetGLError(interp, infoPtr);
 }
@@ -12626,7 +12666,7 @@ TclGL_glBindTextureCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glBindTextureCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 291, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 292, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12635,7 +12675,7 @@ TclGL_glBindTextureCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &texture) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[291];
+    funcPtr = infoPtr->funcv[292];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLenum)target, (GLuint)texture);
     return GetGLError(interp, infoPtr);
 }
@@ -12671,7 +12711,7 @@ TclGL_glPrioritizeTexturesCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPrioritizeTexturesCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 292, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 293, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &n) != TCL_OK) {
@@ -12683,8 +12723,58 @@ TclGL_glPrioritizeTexturesCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &priorities, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[292];
+    funcPtr = infoPtr->funcv[293];
     ((GLfunction_void_int_voidPtr_voidPtr)funcPtr->funcPtr)((GLsizei)n, (GLuint*)textures, (GLclampf*)priorities);
+    return GetGLError(interp, infoPtr);
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  TclGL_glAreTexturesResidentCmd()
+ *
+ *  Handles the OpenGL glAreTexturesResident command
+ *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+
+int
+TclGL_glAreTexturesResidentCmd(
+    ClientData clientData, /* infoPtr */
+    Tcl_Interp *interp,    /* current interpreter */
+    int objc,              /* number of arguments */
+    Tcl_Obj *CONST objv[]) /* argument objects */
+{
+    Tcl_HashEntry *hPtr;
+    TclGLInfo *infoPtr;
+    int glResult;
+    int n;
+    void *textures;
+    int paramLength1;
+    void *residences = NULL;
+    int paramLength2 = 0;
+    TclGLFunc *funcPtr;
+     GLboolean retVal;
+
+    glResult = 0;
+    hPtr = NULL;
+    infoPtr = (TclGLInfo *)clientData;
+    TclGLShowArgs(1, "TclGL_glAreTexturesResidentCmd", objc, objv);
+    if (CheckNumParams(interp, infoPtr, 294, objc, 3) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (GetIntParam(interp, infoPtr, objv[1], &n) != TCL_OK) {
+        return TCL_ERROR;
+    } 
+    if (GetPtrInParam(interp, infoPtr, objv[2], &textures, &paramLength1) != TCL_OK) {
+        return TCL_ERROR;
+    } 
+    funcPtr = infoPtr->funcv[294];
+    retVal = ((GLfunction_GLboolean_int_voidPtr_voidPtr)funcPtr->funcPtr)((GLsizei)n, (GLuint*)textures, (GLboolean*)residences);
+    Tcl_SetObjResult(interp, Tcl_NewBooleanObj((int)retVal));
+    if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, residences) != TCL_OK) {
+        return TCL_ERROR;
+    } 
     return GetGLError(interp, infoPtr);
 }
 
@@ -12710,19 +12800,19 @@ TclGL_glIsTextureCmd(
     int glResult;
     int texture;
     TclGLFunc *funcPtr;
-    GLboolean retVal;
+     GLboolean retVal;
 
     glResult = 0;
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glIsTextureCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 293, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 295, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &texture) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[293];
+    funcPtr = infoPtr->funcv[295];
     retVal = ((GLfunction_GLboolean_int)funcPtr->funcPtr)((GLuint)texture);
     Tcl_SetObjResult(interp, Tcl_NewBooleanObj((int)retVal));
     return GetGLError(interp, infoPtr);
@@ -12762,7 +12852,7 @@ TclGL_glTexSubImage1DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexSubImage1DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 294, objc, 7) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 296, objc, 7) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12786,7 +12876,7 @@ TclGL_glTexSubImage1DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[7], &pixels, &paramLength6) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[294];
+    funcPtr = infoPtr->funcv[296];
     ((GLfunction_void_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLint)xoffset, (GLsizei)width, (GLenum)format, (GLenum)type, (GLvoid*)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -12827,7 +12917,7 @@ TclGL_glTexSubImage2DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexSubImage2DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 295, objc, 9) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 297, objc, 9) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12857,7 +12947,7 @@ TclGL_glTexSubImage2DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[9], &pixels, &paramLength8) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[295];
+    funcPtr = infoPtr->funcv[297];
     ((GLfunction_void_int_int_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLint)xoffset, (GLint)yoffset, (GLsizei)width, (GLsizei)height, (GLenum)format, (GLenum)type, (GLvoid*)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -12895,7 +12985,7 @@ TclGL_glCopyTexImage1DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCopyTexImage1DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 296, objc, 7) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 298, objc, 7) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12919,7 +13009,7 @@ TclGL_glCopyTexImage1DCmd(
     if (GetIntParam(interp, infoPtr, objv[7], &border) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[296];
+    funcPtr = infoPtr->funcv[298];
     ((GLfunction_void_int_int_int_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLenum)internalformat, (GLint)x, (GLint)y, (GLsizei)width, (GLint)border);
     return GetGLError(interp, infoPtr);
 }
@@ -12958,7 +13048,7 @@ TclGL_glCopyTexImage2DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCopyTexImage2DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 297, objc, 8) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 299, objc, 8) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -12985,7 +13075,7 @@ TclGL_glCopyTexImage2DCmd(
     if (GetIntParam(interp, infoPtr, objv[8], &border) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[297];
+    funcPtr = infoPtr->funcv[299];
     ((GLfunction_void_int_int_int_int_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLenum)internalformat, (GLint)x, (GLint)y, (GLsizei)width, (GLsizei)height, (GLint)border);
     return GetGLError(interp, infoPtr);
 }
@@ -13022,7 +13112,7 @@ TclGL_glCopyTexSubImage1DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCopyTexSubImage1DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 298, objc, 6) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 300, objc, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -13043,7 +13133,7 @@ TclGL_glCopyTexSubImage1DCmd(
     if (GetIntParam(interp, infoPtr, objv[6], &width) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[298];
+    funcPtr = infoPtr->funcv[300];
     ((GLfunction_void_int_int_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLint)xoffset, (GLint)x, (GLint)y, (GLsizei)width);
     return GetGLError(interp, infoPtr);
 }
@@ -13082,7 +13172,7 @@ TclGL_glCopyTexSubImage2DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCopyTexSubImage2DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 299, objc, 8) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 301, objc, 8) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -13109,7 +13199,7 @@ TclGL_glCopyTexSubImage2DCmd(
     if (GetIntParam(interp, infoPtr, objv[8], &height) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[299];
+    funcPtr = infoPtr->funcv[301];
     ((GLfunction_void_int_int_int_int_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLint)xoffset, (GLint)yoffset, (GLint)x, (GLint)y, (GLsizei)width, (GLsizei)height);
     return GetGLError(interp, infoPtr);
 }
@@ -13147,7 +13237,7 @@ TclGL_glMap1dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMap1dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 300, objc, 6) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 302, objc, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -13168,7 +13258,7 @@ TclGL_glMap1dCmd(
     if (GetPtrInParam(interp, infoPtr, objv[6], &points, &paramLength5) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[300];
+    funcPtr = infoPtr->funcv[302];
     ((GLfunction_void_int_double_double_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLdouble)u1, (GLdouble)u2, (GLint)stride, (GLint)order, (GLdouble*)points);
     return GetGLError(interp, infoPtr);
 }
@@ -13206,7 +13296,7 @@ TclGL_glMap1fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMap1fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 301, objc, 6) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 303, objc, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -13227,7 +13317,7 @@ TclGL_glMap1fCmd(
     if (GetPtrInParam(interp, infoPtr, objv[6], &points, &paramLength5) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[301];
+    funcPtr = infoPtr->funcv[303];
     ((GLfunction_void_int_float_float_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLfloat)u1, (GLfloat)u2, (GLint)stride, (GLint)order, (GLfloat*)points);
     return GetGLError(interp, infoPtr);
 }
@@ -13269,7 +13359,7 @@ TclGL_glMap2dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMap2dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 302, objc, 10) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 304, objc, 10) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -13302,7 +13392,7 @@ TclGL_glMap2dCmd(
     if (GetPtrInParam(interp, infoPtr, objv[10], &points, &paramLength9) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[302];
+    funcPtr = infoPtr->funcv[304];
     ((GLfunction_void_int_double_double_int_int_double_double_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLdouble)u1, (GLdouble)u2, (GLint)ustride, (GLint)uorder, (GLdouble)v1, (GLdouble)v2, (GLint)vstride, (GLint)vorder, (GLdouble*)points);
     return GetGLError(interp, infoPtr);
 }
@@ -13344,7 +13434,7 @@ TclGL_glMap2fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMap2fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 303, objc, 10) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 305, objc, 10) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -13377,7 +13467,7 @@ TclGL_glMap2fCmd(
     if (GetPtrInParam(interp, infoPtr, objv[10], &points, &paramLength9) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[303];
+    funcPtr = infoPtr->funcv[305];
     ((GLfunction_void_int_float_float_int_int_float_float_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLfloat)u1, (GLfloat)u2, (GLint)ustride, (GLint)uorder, (GLfloat)v1, (GLfloat)v2, (GLint)vstride, (GLint)vorder, (GLfloat*)points);
     return GetGLError(interp, infoPtr);
 }
@@ -13412,7 +13502,7 @@ TclGL_glGetMapdvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetMapdvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 304, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 306, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -13421,7 +13511,7 @@ TclGL_glGetMapdvCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &query) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[304];
+    funcPtr = infoPtr->funcv[306];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)query, (GLdouble*)v);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, v) != TCL_OK) {
         return TCL_ERROR;
@@ -13459,7 +13549,7 @@ TclGL_glGetMapfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetMapfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 305, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 307, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -13468,7 +13558,7 @@ TclGL_glGetMapfvCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &query) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[305];
+    funcPtr = infoPtr->funcv[307];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)query, (GLfloat*)v);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, v) != TCL_OK) {
         return TCL_ERROR;
@@ -13506,7 +13596,7 @@ TclGL_glGetMapivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetMapivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 306, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 308, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -13515,7 +13605,7 @@ TclGL_glGetMapivCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &query) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[306];
+    funcPtr = infoPtr->funcv[308];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)query, (GLint*)v);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, v) != TCL_OK) {
         return TCL_ERROR;
@@ -13550,13 +13640,13 @@ TclGL_glEvalCoord1dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEvalCoord1dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 307, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 309, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &u) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[307];
+    funcPtr = infoPtr->funcv[309];
     ((GLfunction_void_double)funcPtr->funcPtr)((GLdouble)u);
     return GetGLError(interp, infoPtr);
 }
@@ -13588,13 +13678,13 @@ TclGL_glEvalCoord1fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEvalCoord1fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 308, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 310, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &u) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[308];
+    funcPtr = infoPtr->funcv[310];
     ((GLfunction_void_float)funcPtr->funcPtr)((GLfloat)u);
     return GetGLError(interp, infoPtr);
 }
@@ -13627,13 +13717,13 @@ TclGL_glEvalCoord1dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEvalCoord1dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 309, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 311, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &u, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[309];
+    funcPtr = infoPtr->funcv[311];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)u);
     return GetGLError(interp, infoPtr);
 }
@@ -13666,13 +13756,13 @@ TclGL_glEvalCoord1fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEvalCoord1fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 310, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 312, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &u, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[310];
+    funcPtr = infoPtr->funcv[312];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)u);
     return GetGLError(interp, infoPtr);
 }
@@ -13705,7 +13795,7 @@ TclGL_glEvalCoord2dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEvalCoord2dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 311, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 313, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &u) != TCL_OK) {
@@ -13714,7 +13804,7 @@ TclGL_glEvalCoord2dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &v) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[311];
+    funcPtr = infoPtr->funcv[313];
     ((GLfunction_void_double_double)funcPtr->funcPtr)((GLdouble)u, (GLdouble)v);
     return GetGLError(interp, infoPtr);
 }
@@ -13747,7 +13837,7 @@ TclGL_glEvalCoord2fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEvalCoord2fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 312, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 314, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &u) != TCL_OK) {
@@ -13756,7 +13846,7 @@ TclGL_glEvalCoord2fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &v) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[312];
+    funcPtr = infoPtr->funcv[314];
     ((GLfunction_void_float_float)funcPtr->funcPtr)((GLfloat)u, (GLfloat)v);
     return GetGLError(interp, infoPtr);
 }
@@ -13789,13 +13879,13 @@ TclGL_glEvalCoord2dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEvalCoord2dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 313, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 315, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &u, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[313];
+    funcPtr = infoPtr->funcv[315];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLdouble*)u);
     return GetGLError(interp, infoPtr);
 }
@@ -13828,13 +13918,13 @@ TclGL_glEvalCoord2fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEvalCoord2fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 314, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 316, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetPtrInParam(interp, infoPtr, objv[1], &u, &paramLength0) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[314];
+    funcPtr = infoPtr->funcv[316];
     ((GLfunction_void_voidPtr)funcPtr->funcPtr)((GLfloat*)u);
     return GetGLError(interp, infoPtr);
 }
@@ -13868,7 +13958,7 @@ TclGL_glMapGrid1dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMapGrid1dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 315, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 317, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &un) != TCL_OK) {
@@ -13880,7 +13970,7 @@ TclGL_glMapGrid1dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &u2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[315];
+    funcPtr = infoPtr->funcv[317];
     ((GLfunction_void_int_double_double)funcPtr->funcPtr)((GLint)un, (GLdouble)u1, (GLdouble)u2);
     return GetGLError(interp, infoPtr);
 }
@@ -13914,7 +14004,7 @@ TclGL_glMapGrid1fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMapGrid1fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 316, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 318, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &un) != TCL_OK) {
@@ -13926,7 +14016,7 @@ TclGL_glMapGrid1fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &u2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[316];
+    funcPtr = infoPtr->funcv[318];
     ((GLfunction_void_int_float_float)funcPtr->funcPtr)((GLint)un, (GLfloat)u1, (GLfloat)u2);
     return GetGLError(interp, infoPtr);
 }
@@ -13963,7 +14053,7 @@ TclGL_glMapGrid2dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMapGrid2dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 317, objc, 6) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 319, objc, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &un) != TCL_OK) {
@@ -13984,7 +14074,7 @@ TclGL_glMapGrid2dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[6], &v2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[317];
+    funcPtr = infoPtr->funcv[319];
     ((GLfunction_void_int_double_double_int_double_double)funcPtr->funcPtr)((GLint)un, (GLdouble)u1, (GLdouble)u2, (GLint)vn, (GLdouble)v1, (GLdouble)v2);
     return GetGLError(interp, infoPtr);
 }
@@ -14021,7 +14111,7 @@ TclGL_glMapGrid2fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMapGrid2fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 318, objc, 6) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 320, objc, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &un) != TCL_OK) {
@@ -14042,7 +14132,7 @@ TclGL_glMapGrid2fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[6], &v2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[318];
+    funcPtr = infoPtr->funcv[320];
     ((GLfunction_void_int_float_float_int_float_float)funcPtr->funcPtr)((GLint)un, (GLfloat)u1, (GLfloat)u2, (GLint)vn, (GLfloat)v1, (GLfloat)v2);
     return GetGLError(interp, infoPtr);
 }
@@ -14074,13 +14164,13 @@ TclGL_glEvalPoint1Cmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEvalPoint1Cmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 319, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 321, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &i) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[319];
+    funcPtr = infoPtr->funcv[321];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLint)i);
     return GetGLError(interp, infoPtr);
 }
@@ -14113,7 +14203,7 @@ TclGL_glEvalPoint2Cmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEvalPoint2Cmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 320, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 322, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &i) != TCL_OK) {
@@ -14122,7 +14212,7 @@ TclGL_glEvalPoint2Cmd(
     if (GetIntParam(interp, infoPtr, objv[2], &j) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[320];
+    funcPtr = infoPtr->funcv[322];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLint)i, (GLint)j);
     return GetGLError(interp, infoPtr);
 }
@@ -14156,7 +14246,7 @@ TclGL_glEvalMesh1Cmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEvalMesh1Cmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 321, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 323, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &mode) != TCL_OK) {
@@ -14168,7 +14258,7 @@ TclGL_glEvalMesh1Cmd(
     if (GetIntParam(interp, infoPtr, objv[3], &i2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[321];
+    funcPtr = infoPtr->funcv[323];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)mode, (GLint)i1, (GLint)i2);
     return GetGLError(interp, infoPtr);
 }
@@ -14204,7 +14294,7 @@ TclGL_glEvalMesh2Cmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glEvalMesh2Cmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 322, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 324, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &mode) != TCL_OK) {
@@ -14222,7 +14312,7 @@ TclGL_glEvalMesh2Cmd(
     if (GetIntParam(interp, infoPtr, objv[5], &j2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[322];
+    funcPtr = infoPtr->funcv[324];
     ((GLfunction_void_int_int_int_int_int)funcPtr->funcPtr)((GLenum)mode, (GLint)i1, (GLint)i2, (GLint)j1, (GLint)j2);
     return GetGLError(interp, infoPtr);
 }
@@ -14255,7 +14345,7 @@ TclGL_glFogfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glFogfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 323, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 325, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &pname) != TCL_OK) {
@@ -14264,7 +14354,7 @@ TclGL_glFogfCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[323];
+    funcPtr = infoPtr->funcv[325];
     ((GLfunction_void_int_float)funcPtr->funcPtr)((GLenum)pname, (GLfloat)param);
     return GetGLError(interp, infoPtr);
 }
@@ -14297,7 +14387,7 @@ TclGL_glFogiCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glFogiCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 324, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 326, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &pname) != TCL_OK) {
@@ -14306,7 +14396,7 @@ TclGL_glFogiCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &param) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[324];
+    funcPtr = infoPtr->funcv[326];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLenum)pname, (GLint)param);
     return GetGLError(interp, infoPtr);
 }
@@ -14340,7 +14430,7 @@ TclGL_glFogfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glFogfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 325, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 327, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &pname) != TCL_OK) {
@@ -14349,7 +14439,7 @@ TclGL_glFogfvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &params, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[325];
+    funcPtr = infoPtr->funcv[327];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)pname, (GLfloat*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -14383,7 +14473,7 @@ TclGL_glFogivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glFogivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 326, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 328, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &pname) != TCL_OK) {
@@ -14392,7 +14482,7 @@ TclGL_glFogivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &params, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[326];
+    funcPtr = infoPtr->funcv[328];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)pname, (GLint*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -14427,7 +14517,7 @@ TclGL_glFeedbackBufferCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glFeedbackBufferCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 327, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 329, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &size) != TCL_OK) {
@@ -14436,7 +14526,7 @@ TclGL_glFeedbackBufferCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &type) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[327];
+    funcPtr = infoPtr->funcv[329];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLsizei)size, (GLenum)type, (GLfloat*)buffer);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, buffer) != TCL_OK) {
         return TCL_ERROR;
@@ -14471,13 +14561,13 @@ TclGL_glPassThroughCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPassThroughCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 328, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 330, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &token) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[328];
+    funcPtr = infoPtr->funcv[330];
     ((GLfunction_void_float)funcPtr->funcPtr)((GLfloat)token);
     return GetGLError(interp, infoPtr);
 }
@@ -14511,13 +14601,13 @@ TclGL_glSelectBufferCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glSelectBufferCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 329, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 331, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &size) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[329];
+    funcPtr = infoPtr->funcv[331];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLsizei)size, (GLuint*)buffer);
     if (SetPtrOutParam(interp, infoPtr, objv[2], paramLength1, buffer) != TCL_OK) {
         return TCL_ERROR;
@@ -14552,10 +14642,10 @@ TclGL_glInitNamesCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glInitNamesCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 330, objc, 0) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 332, objc, 0) != TCL_OK) {
         return TCL_ERROR;
     }
-    funcPtr = infoPtr->funcv[330];
+    funcPtr = infoPtr->funcv[332];
     ((GLfunction_void_)funcPtr->funcPtr)();
     return GetGLError(interp, infoPtr);
 }
@@ -14587,13 +14677,13 @@ TclGL_glLoadNameCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLoadNameCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 331, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 333, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &name) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[331];
+    funcPtr = infoPtr->funcv[333];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLuint)name);
     return GetGLError(interp, infoPtr);
 }
@@ -14625,13 +14715,13 @@ TclGL_glPushNameCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPushNameCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 332, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 334, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetIntParam(interp, infoPtr, objv[1], &name) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[332];
+    funcPtr = infoPtr->funcv[334];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLuint)name);
     return GetGLError(interp, infoPtr);
 }
@@ -14663,10 +14753,10 @@ TclGL_glPopNameCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glPopNameCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 333, objc, 0) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 335, objc, 0) != TCL_OK) {
         return TCL_ERROR;
     }
-    funcPtr = infoPtr->funcv[333];
+    funcPtr = infoPtr->funcv[335];
     ((GLfunction_void_)funcPtr->funcPtr)();
     return GetGLError(interp, infoPtr);
 }
@@ -14704,7 +14794,7 @@ TclGL_glDrawRangeElementsCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glDrawRangeElementsCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 334, objc, 6) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 336, objc, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &mode) != TCL_OK) {
@@ -14725,7 +14815,7 @@ TclGL_glDrawRangeElementsCmd(
     if (GetPtrInParam(interp, infoPtr, objv[6], &indices, &paramLength5) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[334];
+    funcPtr = infoPtr->funcv[336];
     ((GLfunction_void_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)mode, (GLuint)start, (GLuint)end, (GLsizei)count, (GLenum)type, (GLvoid*)indices);
     return GetGLError(interp, infoPtr);
 }
@@ -14767,7 +14857,7 @@ TclGL_glTexImage3DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexImage3DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 335, objc, 10) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 337, objc, 10) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -14800,7 +14890,7 @@ TclGL_glTexImage3DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[10], &pixels, &paramLength9) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[335];
+    funcPtr = infoPtr->funcv[337];
     ((GLfunction_void_int_int_int_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLint)internalFormat, (GLsizei)width, (GLsizei)height, (GLsizei)depth, (GLint)border, (GLenum)format, (GLenum)type, (GLvoid*)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -14843,7 +14933,7 @@ TclGL_glTexSubImage3DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glTexSubImage3DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 336, objc, 11) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 338, objc, 11) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -14879,7 +14969,7 @@ TclGL_glTexSubImage3DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[11], &pixels, &paramLength10) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[336];
+    funcPtr = infoPtr->funcv[338];
     ((GLfunction_void_int_int_int_int_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLint)xoffset, (GLint)yoffset, (GLint)zoffset, (GLsizei)width, (GLsizei)height, (GLsizei)depth, (GLenum)format, (GLenum)type, (GLvoid*)pixels);
     return GetGLError(interp, infoPtr);
 }
@@ -14919,7 +15009,7 @@ TclGL_glCopyTexSubImage3DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCopyTexSubImage3DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 337, objc, 9) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 339, objc, 9) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -14949,7 +15039,7 @@ TclGL_glCopyTexSubImage3DCmd(
     if (GetIntParam(interp, infoPtr, objv[9], &height) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[337];
+    funcPtr = infoPtr->funcv[339];
     ((GLfunction_void_int_int_int_int_int_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLint)xoffset, (GLint)yoffset, (GLint)zoffset, (GLint)x, (GLint)y, (GLsizei)width, (GLsizei)height);
     return GetGLError(interp, infoPtr);
 }
@@ -14987,7 +15077,7 @@ TclGL_glColorTableCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColorTableCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 338, objc, 6) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 340, objc, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15008,7 +15098,7 @@ TclGL_glColorTableCmd(
     if (GetPtrInParam(interp, infoPtr, objv[6], &table, &paramLength5) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[338];
+    funcPtr = infoPtr->funcv[340];
     ((GLfunction_void_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)internalformat, (GLsizei)width, (GLenum)format, (GLenum)type, (GLvoid*)table);
     return GetGLError(interp, infoPtr);
 }
@@ -15046,7 +15136,7 @@ TclGL_glColorSubTableCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColorSubTableCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 339, objc, 6) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 341, objc, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15067,7 +15157,7 @@ TclGL_glColorSubTableCmd(
     if (GetPtrInParam(interp, infoPtr, objv[6], &data, &paramLength5) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[339];
+    funcPtr = infoPtr->funcv[341];
     ((GLfunction_void_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLsizei)start, (GLsizei)count, (GLenum)format, (GLenum)type, (GLvoid*)data);
     return GetGLError(interp, infoPtr);
 }
@@ -15102,7 +15192,7 @@ TclGL_glColorTableParameterivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColorTableParameterivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 340, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 342, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15114,7 +15204,7 @@ TclGL_glColorTableParameterivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[340];
+    funcPtr = infoPtr->funcv[342];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLint*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -15149,7 +15239,7 @@ TclGL_glColorTableParameterfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glColorTableParameterfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 341, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 343, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15161,7 +15251,7 @@ TclGL_glColorTableParameterfvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[341];
+    funcPtr = infoPtr->funcv[343];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLfloat*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -15197,7 +15287,7 @@ TclGL_glCopyColorSubTableCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCopyColorSubTableCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 342, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 344, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15215,7 +15305,7 @@ TclGL_glCopyColorSubTableCmd(
     if (GetIntParam(interp, infoPtr, objv[5], &width) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[342];
+    funcPtr = infoPtr->funcv[344];
     ((GLfunction_void_int_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLsizei)start, (GLint)x, (GLint)y, (GLsizei)width);
     return GetGLError(interp, infoPtr);
 }
@@ -15251,7 +15341,7 @@ TclGL_glCopyColorTableCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCopyColorTableCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 343, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 345, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15269,7 +15359,7 @@ TclGL_glCopyColorTableCmd(
     if (GetIntParam(interp, infoPtr, objv[5], &width) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[343];
+    funcPtr = infoPtr->funcv[345];
     ((GLfunction_void_int_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLenum)internalformat, (GLint)x, (GLint)y, (GLsizei)width);
     return GetGLError(interp, infoPtr);
 }
@@ -15305,7 +15395,7 @@ TclGL_glGetColorTableCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetColorTableCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 344, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 346, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15317,7 +15407,7 @@ TclGL_glGetColorTableCmd(
     if (GetEnumParam(interp, infoPtr, objv[3], &type) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[344];
+    funcPtr = infoPtr->funcv[346];
     ((GLfunction_void_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)format, (GLenum)type, (GLvoid*)table);
     if (SetPtrOutParam(interp, infoPtr, objv[4], paramLength3, table) != TCL_OK) {
         return TCL_ERROR;
@@ -15355,7 +15445,7 @@ TclGL_glGetColorTableParameterfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetColorTableParameterfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 345, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 347, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15364,7 +15454,7 @@ TclGL_glGetColorTableParameterfvCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[345];
+    funcPtr = infoPtr->funcv[347];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLfloat*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -15402,7 +15492,7 @@ TclGL_glGetColorTableParameterivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetColorTableParameterivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 346, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 348, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15411,7 +15501,7 @@ TclGL_glGetColorTableParameterivCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[346];
+    funcPtr = infoPtr->funcv[348];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLint*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -15446,13 +15536,13 @@ TclGL_glBlendEquationCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glBlendEquationCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 347, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 349, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &mode) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[347];
+    funcPtr = infoPtr->funcv[349];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLenum)mode);
     return GetGLError(interp, infoPtr);
 }
@@ -15487,7 +15577,7 @@ TclGL_glBlendColorCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glBlendColorCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 348, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 350, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &red) != TCL_OK) {
@@ -15502,7 +15592,7 @@ TclGL_glBlendColorCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &alpha) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[348];
+    funcPtr = infoPtr->funcv[350];
     ((GLfunction_void_float_float_float_float)funcPtr->funcPtr)((GLclampf)red, (GLclampf)green, (GLclampf)blue, (GLclampf)alpha);
     return GetGLError(interp, infoPtr);
 }
@@ -15537,7 +15627,7 @@ TclGL_glHistogramCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glHistogramCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 349, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 351, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15552,7 +15642,7 @@ TclGL_glHistogramCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &sink) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[349];
+    funcPtr = infoPtr->funcv[351];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLsizei)width, (GLenum)internalformat, (GLboolean)sink);
     return GetGLError(interp, infoPtr);
 }
@@ -15584,13 +15674,13 @@ TclGL_glResetHistogramCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glResetHistogramCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 350, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 352, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[350];
+    funcPtr = infoPtr->funcv[352];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLenum)target);
     return GetGLError(interp, infoPtr);
 }
@@ -15627,7 +15717,7 @@ TclGL_glGetHistogramCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetHistogramCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 351, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 353, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15642,7 +15732,7 @@ TclGL_glGetHistogramCmd(
     if (GetEnumParam(interp, infoPtr, objv[4], &type) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[351];
+    funcPtr = infoPtr->funcv[353];
     ((GLfunction_void_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLboolean)reset, (GLenum)format, (GLenum)type, (GLvoid*)values);
     if (SetPtrOutParam(interp, infoPtr, objv[5], paramLength4, values) != TCL_OK) {
         return TCL_ERROR;
@@ -15680,7 +15770,7 @@ TclGL_glGetHistogramParameterfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetHistogramParameterfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 352, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 354, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15689,7 +15779,7 @@ TclGL_glGetHistogramParameterfvCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[352];
+    funcPtr = infoPtr->funcv[354];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLfloat*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -15727,7 +15817,7 @@ TclGL_glGetHistogramParameterivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetHistogramParameterivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 353, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 355, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15736,7 +15826,7 @@ TclGL_glGetHistogramParameterivCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[353];
+    funcPtr = infoPtr->funcv[355];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLint*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -15773,7 +15863,7 @@ TclGL_glMinmaxCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMinmaxCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 354, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 356, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15785,7 +15875,7 @@ TclGL_glMinmaxCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &sink) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[354];
+    funcPtr = infoPtr->funcv[356];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLenum)internalformat, (GLboolean)sink);
     return GetGLError(interp, infoPtr);
 }
@@ -15817,13 +15907,13 @@ TclGL_glResetMinmaxCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glResetMinmaxCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 355, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 357, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[355];
+    funcPtr = infoPtr->funcv[357];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLenum)target);
     return GetGLError(interp, infoPtr);
 }
@@ -15860,7 +15950,7 @@ TclGL_glGetMinmaxCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetMinmaxCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 356, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 358, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15875,7 +15965,7 @@ TclGL_glGetMinmaxCmd(
     if (GetEnumParam(interp, infoPtr, objv[4], &types) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[356];
+    funcPtr = infoPtr->funcv[358];
     ((GLfunction_void_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLboolean)reset, (GLenum)format, (GLenum)types, (GLvoid*)values);
     if (SetPtrOutParam(interp, infoPtr, objv[5], paramLength4, values) != TCL_OK) {
         return TCL_ERROR;
@@ -15913,7 +16003,7 @@ TclGL_glGetMinmaxParameterfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetMinmaxParameterfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 357, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 359, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15922,7 +16012,7 @@ TclGL_glGetMinmaxParameterfvCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[357];
+    funcPtr = infoPtr->funcv[359];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLfloat*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -15960,7 +16050,7 @@ TclGL_glGetMinmaxParameterivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetMinmaxParameterivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 358, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 360, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -15969,7 +16059,7 @@ TclGL_glGetMinmaxParameterivCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[358];
+    funcPtr = infoPtr->funcv[360];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLint*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -16010,7 +16100,7 @@ TclGL_glConvolutionFilter1DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glConvolutionFilter1DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 359, objc, 6) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 361, objc, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16031,7 +16121,7 @@ TclGL_glConvolutionFilter1DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[6], &image, &paramLength5) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[359];
+    funcPtr = infoPtr->funcv[361];
     ((GLfunction_void_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)internalformat, (GLsizei)width, (GLenum)format, (GLenum)type, (GLvoid*)image);
     return GetGLError(interp, infoPtr);
 }
@@ -16070,7 +16160,7 @@ TclGL_glConvolutionFilter2DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glConvolutionFilter2DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 360, objc, 7) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 362, objc, 7) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16094,7 +16184,7 @@ TclGL_glConvolutionFilter2DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[7], &image, &paramLength6) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[360];
+    funcPtr = infoPtr->funcv[362];
     ((GLfunction_void_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)internalformat, (GLsizei)width, (GLsizei)height, (GLenum)format, (GLenum)type, (GLvoid*)image);
     return GetGLError(interp, infoPtr);
 }
@@ -16128,7 +16218,7 @@ TclGL_glConvolutionParameterfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glConvolutionParameterfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 361, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 363, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16140,7 +16230,7 @@ TclGL_glConvolutionParameterfCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &params) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[361];
+    funcPtr = infoPtr->funcv[363];
     ((GLfunction_void_int_int_float)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLfloat)params);
     return GetGLError(interp, infoPtr);
 }
@@ -16175,7 +16265,7 @@ TclGL_glConvolutionParameterfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glConvolutionParameterfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 362, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 364, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16187,7 +16277,7 @@ TclGL_glConvolutionParameterfvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[362];
+    funcPtr = infoPtr->funcv[364];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLfloat*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -16221,7 +16311,7 @@ TclGL_glConvolutionParameteriCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glConvolutionParameteriCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 363, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 365, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16233,7 +16323,7 @@ TclGL_glConvolutionParameteriCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &params) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[363];
+    funcPtr = infoPtr->funcv[365];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLint)params);
     return GetGLError(interp, infoPtr);
 }
@@ -16268,7 +16358,7 @@ TclGL_glConvolutionParameterivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glConvolutionParameterivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 364, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 366, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16280,7 +16370,7 @@ TclGL_glConvolutionParameterivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[3], &params, &paramLength2) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[364];
+    funcPtr = infoPtr->funcv[366];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLint*)params);
     return GetGLError(interp, infoPtr);
 }
@@ -16316,7 +16406,7 @@ TclGL_glCopyConvolutionFilter1DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCopyConvolutionFilter1DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 365, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 367, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16334,7 +16424,7 @@ TclGL_glCopyConvolutionFilter1DCmd(
     if (GetIntParam(interp, infoPtr, objv[5], &width) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[365];
+    funcPtr = infoPtr->funcv[367];
     ((GLfunction_void_int_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLenum)internalformat, (GLint)x, (GLint)y, (GLsizei)width);
     return GetGLError(interp, infoPtr);
 }
@@ -16371,7 +16461,7 @@ TclGL_glCopyConvolutionFilter2DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCopyConvolutionFilter2DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 366, objc, 6) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 368, objc, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16392,7 +16482,7 @@ TclGL_glCopyConvolutionFilter2DCmd(
     if (GetIntParam(interp, infoPtr, objv[6], &height) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[366];
+    funcPtr = infoPtr->funcv[368];
     ((GLfunction_void_int_int_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLenum)internalformat, (GLint)x, (GLint)y, (GLsizei)width, (GLsizei)height);
     return GetGLError(interp, infoPtr);
 }
@@ -16428,7 +16518,7 @@ TclGL_glGetConvolutionFilterCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetConvolutionFilterCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 367, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 369, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16440,7 +16530,7 @@ TclGL_glGetConvolutionFilterCmd(
     if (GetEnumParam(interp, infoPtr, objv[3], &type) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[367];
+    funcPtr = infoPtr->funcv[369];
     ((GLfunction_void_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)format, (GLenum)type, (GLvoid*)image);
     if (SetPtrOutParam(interp, infoPtr, objv[4], paramLength3, image) != TCL_OK) {
         return TCL_ERROR;
@@ -16478,7 +16568,7 @@ TclGL_glGetConvolutionParameterfvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetConvolutionParameterfvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 368, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 370, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16487,7 +16577,7 @@ TclGL_glGetConvolutionParameterfvCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[368];
+    funcPtr = infoPtr->funcv[370];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLfloat*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -16525,7 +16615,7 @@ TclGL_glGetConvolutionParameterivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetConvolutionParameterivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 369, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 371, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16534,7 +16624,7 @@ TclGL_glGetConvolutionParameterivCmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &pname) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[369];
+    funcPtr = infoPtr->funcv[371];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)pname, (GLint*)params);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, params) != TCL_OK) {
         return TCL_ERROR;
@@ -16578,7 +16668,7 @@ TclGL_glSeparableFilter2DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glSeparableFilter2DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 370, objc, 8) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 372, objc, 8) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16605,7 +16695,7 @@ TclGL_glSeparableFilter2DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[8], &column, &paramLength7) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[370];
+    funcPtr = infoPtr->funcv[372];
     ((GLfunction_void_int_int_int_int_int_int_voidPtr_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)internalformat, (GLsizei)width, (GLsizei)height, (GLenum)format, (GLenum)type, (GLvoid*)row, (GLvoid*)column);
     return GetGLError(interp, infoPtr);
 }
@@ -16645,7 +16735,7 @@ TclGL_glGetSeparableFilterCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetSeparableFilterCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 371, objc, 6) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 373, objc, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16657,7 +16747,7 @@ TclGL_glGetSeparableFilterCmd(
     if (GetEnumParam(interp, infoPtr, objv[3], &type) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[371];
+    funcPtr = infoPtr->funcv[373];
     ((GLfunction_void_int_int_int_voidPtr_voidPtr_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLenum)format, (GLenum)type, (GLvoid*)row, (GLvoid*)column, (GLvoid*)span);
     if (SetPtrOutParam(interp, infoPtr, objv[4], paramLength3, row) != TCL_OK) {
         return TCL_ERROR;
@@ -16698,13 +16788,13 @@ TclGL_glActiveTextureCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glActiveTextureCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 372, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 374, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &texture) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[372];
+    funcPtr = infoPtr->funcv[374];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLenum)texture);
     return GetGLError(interp, infoPtr);
 }
@@ -16736,13 +16826,13 @@ TclGL_glClientActiveTextureCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glClientActiveTextureCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 373, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 375, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &texture) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[373];
+    funcPtr = infoPtr->funcv[375];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLenum)texture);
     return GetGLError(interp, infoPtr);
 }
@@ -16781,7 +16871,7 @@ TclGL_glCompressedTexImage1DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCompressedTexImage1DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 374, objc, 7) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 376, objc, 7) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16805,7 +16895,7 @@ TclGL_glCompressedTexImage1DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[7], &data, &paramLength6) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[374];
+    funcPtr = infoPtr->funcv[376];
     ((GLfunction_void_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLenum)internalformat, (GLsizei)width, (GLint)border, (GLsizei)imageSize, (GLvoid*)data);
     return GetGLError(interp, infoPtr);
 }
@@ -16845,7 +16935,7 @@ TclGL_glCompressedTexImage2DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCompressedTexImage2DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 375, objc, 8) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 377, objc, 8) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16872,7 +16962,7 @@ TclGL_glCompressedTexImage2DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[8], &data, &paramLength7) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[375];
+    funcPtr = infoPtr->funcv[377];
     ((GLfunction_void_int_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLenum)internalformat, (GLsizei)width, (GLsizei)height, (GLint)border, (GLsizei)imageSize, (GLvoid*)data);
     return GetGLError(interp, infoPtr);
 }
@@ -16913,7 +17003,7 @@ TclGL_glCompressedTexImage3DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCompressedTexImage3DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 376, objc, 9) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 378, objc, 9) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -16943,7 +17033,7 @@ TclGL_glCompressedTexImage3DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[9], &data, &paramLength8) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[376];
+    funcPtr = infoPtr->funcv[378];
     ((GLfunction_void_int_int_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLenum)internalformat, (GLsizei)width, (GLsizei)height, (GLsizei)depth, (GLint)border, (GLsizei)imageSize, (GLvoid*)data);
     return GetGLError(interp, infoPtr);
 }
@@ -16982,7 +17072,7 @@ TclGL_glCompressedTexSubImage1DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCompressedTexSubImage1DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 377, objc, 7) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 379, objc, 7) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17006,7 +17096,7 @@ TclGL_glCompressedTexSubImage1DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[7], &data, &paramLength6) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[377];
+    funcPtr = infoPtr->funcv[379];
     ((GLfunction_void_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLint)xoffset, (GLsizei)width, (GLenum)format, (GLsizei)imageSize, (GLvoid*)data);
     return GetGLError(interp, infoPtr);
 }
@@ -17047,7 +17137,7 @@ TclGL_glCompressedTexSubImage2DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCompressedTexSubImage2DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 378, objc, 9) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 380, objc, 9) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17077,7 +17167,7 @@ TclGL_glCompressedTexSubImage2DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[9], &data, &paramLength8) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[378];
+    funcPtr = infoPtr->funcv[380];
     ((GLfunction_void_int_int_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLint)xoffset, (GLint)yoffset, (GLsizei)width, (GLsizei)height, (GLenum)format, (GLsizei)imageSize, (GLvoid*)data);
     return GetGLError(interp, infoPtr);
 }
@@ -17120,7 +17210,7 @@ TclGL_glCompressedTexSubImage3DCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glCompressedTexSubImage3DCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 379, objc, 11) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 381, objc, 11) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17156,7 +17246,7 @@ TclGL_glCompressedTexSubImage3DCmd(
     if (GetPtrInParam(interp, infoPtr, objv[11], &data, &paramLength10) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[379];
+    funcPtr = infoPtr->funcv[381];
     ((GLfunction_void_int_int_int_int_int_int_int_int_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)level, (GLint)xoffset, (GLint)yoffset, (GLint)zoffset, (GLsizei)width, (GLsizei)height, (GLsizei)depth, (GLenum)format, (GLsizei)imageSize, (GLvoid*)data);
     return GetGLError(interp, infoPtr);
 }
@@ -17191,7 +17281,7 @@ TclGL_glGetCompressedTexImageCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glGetCompressedTexImageCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 380, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 382, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17200,7 +17290,7 @@ TclGL_glGetCompressedTexImageCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &lod) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[380];
+    funcPtr = infoPtr->funcv[382];
     ((GLfunction_void_int_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint)lod, (GLvoid*)img);
     if (SetPtrOutParam(interp, infoPtr, objv[3], paramLength2, img) != TCL_OK) {
         return TCL_ERROR;
@@ -17236,7 +17326,7 @@ TclGL_glMultiTexCoord1dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 381, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 383, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17245,7 +17335,7 @@ TclGL_glMultiTexCoord1dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &s) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[381];
+    funcPtr = infoPtr->funcv[383];
     ((GLfunction_void_int_double)funcPtr->funcPtr)((GLenum)target, (GLdouble)s);
     return GetGLError(interp, infoPtr);
 }
@@ -17279,7 +17369,7 @@ TclGL_glMultiTexCoord1dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 382, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 384, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17288,7 +17378,7 @@ TclGL_glMultiTexCoord1dvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[382];
+    funcPtr = infoPtr->funcv[384];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17321,7 +17411,7 @@ TclGL_glMultiTexCoord1fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 383, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 385, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17330,7 +17420,7 @@ TclGL_glMultiTexCoord1fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &s) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[383];
+    funcPtr = infoPtr->funcv[385];
     ((GLfunction_void_int_float)funcPtr->funcPtr)((GLenum)target, (GLfloat)s);
     return GetGLError(interp, infoPtr);
 }
@@ -17364,7 +17454,7 @@ TclGL_glMultiTexCoord1fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 384, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 386, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17373,7 +17463,7 @@ TclGL_glMultiTexCoord1fvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[384];
+    funcPtr = infoPtr->funcv[386];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17406,7 +17496,7 @@ TclGL_glMultiTexCoord1iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 385, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 387, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17415,7 +17505,7 @@ TclGL_glMultiTexCoord1iCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &s) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[385];
+    funcPtr = infoPtr->funcv[387];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLenum)target, (GLint)s);
     return GetGLError(interp, infoPtr);
 }
@@ -17449,7 +17539,7 @@ TclGL_glMultiTexCoord1ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 386, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 388, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17458,7 +17548,7 @@ TclGL_glMultiTexCoord1ivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[386];
+    funcPtr = infoPtr->funcv[388];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17491,7 +17581,7 @@ TclGL_glMultiTexCoord1sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 387, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 389, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17500,7 +17590,7 @@ TclGL_glMultiTexCoord1sCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &s) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[387];
+    funcPtr = infoPtr->funcv[389];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLenum)target, (GLshort)s);
     return GetGLError(interp, infoPtr);
 }
@@ -17534,7 +17624,7 @@ TclGL_glMultiTexCoord1svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 388, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 390, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17543,7 +17633,7 @@ TclGL_glMultiTexCoord1svCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[388];
+    funcPtr = infoPtr->funcv[390];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17577,7 +17667,7 @@ TclGL_glMultiTexCoord2dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 389, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 391, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17589,7 +17679,7 @@ TclGL_glMultiTexCoord2dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &t) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[389];
+    funcPtr = infoPtr->funcv[391];
     ((GLfunction_void_int_double_double)funcPtr->funcPtr)((GLenum)target, (GLdouble)s, (GLdouble)t);
     return GetGLError(interp, infoPtr);
 }
@@ -17623,7 +17713,7 @@ TclGL_glMultiTexCoord2dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 390, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 392, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17632,7 +17722,7 @@ TclGL_glMultiTexCoord2dvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[390];
+    funcPtr = infoPtr->funcv[392];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17666,7 +17756,7 @@ TclGL_glMultiTexCoord2fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 391, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 393, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17678,7 +17768,7 @@ TclGL_glMultiTexCoord2fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &t) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[391];
+    funcPtr = infoPtr->funcv[393];
     ((GLfunction_void_int_float_float)funcPtr->funcPtr)((GLenum)target, (GLfloat)s, (GLfloat)t);
     return GetGLError(interp, infoPtr);
 }
@@ -17712,7 +17802,7 @@ TclGL_glMultiTexCoord2fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 392, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 394, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17721,7 +17811,7 @@ TclGL_glMultiTexCoord2fvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[392];
+    funcPtr = infoPtr->funcv[394];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17755,7 +17845,7 @@ TclGL_glMultiTexCoord2iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 393, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 395, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17767,7 +17857,7 @@ TclGL_glMultiTexCoord2iCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &t) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[393];
+    funcPtr = infoPtr->funcv[395];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLint)s, (GLint)t);
     return GetGLError(interp, infoPtr);
 }
@@ -17801,7 +17891,7 @@ TclGL_glMultiTexCoord2ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 394, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 396, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17810,7 +17900,7 @@ TclGL_glMultiTexCoord2ivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[394];
+    funcPtr = infoPtr->funcv[396];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17844,7 +17934,7 @@ TclGL_glMultiTexCoord2sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 395, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 397, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17856,7 +17946,7 @@ TclGL_glMultiTexCoord2sCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &t) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[395];
+    funcPtr = infoPtr->funcv[397];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLshort)s, (GLshort)t);
     return GetGLError(interp, infoPtr);
 }
@@ -17890,7 +17980,7 @@ TclGL_glMultiTexCoord2svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 396, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 398, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17899,7 +17989,7 @@ TclGL_glMultiTexCoord2svCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[396];
+    funcPtr = infoPtr->funcv[398];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -17934,7 +18024,7 @@ TclGL_glMultiTexCoord3dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 397, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 399, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17949,7 +18039,7 @@ TclGL_glMultiTexCoord3dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &r) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[397];
+    funcPtr = infoPtr->funcv[399];
     ((GLfunction_void_int_double_double_double)funcPtr->funcPtr)((GLenum)target, (GLdouble)s, (GLdouble)t, (GLdouble)r);
     return GetGLError(interp, infoPtr);
 }
@@ -17983,7 +18073,7 @@ TclGL_glMultiTexCoord3dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 398, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 400, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -17992,7 +18082,7 @@ TclGL_glMultiTexCoord3dvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[398];
+    funcPtr = infoPtr->funcv[400];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18027,7 +18117,7 @@ TclGL_glMultiTexCoord3fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 399, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 401, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18042,7 +18132,7 @@ TclGL_glMultiTexCoord3fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &r) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[399];
+    funcPtr = infoPtr->funcv[401];
     ((GLfunction_void_int_float_float_float)funcPtr->funcPtr)((GLenum)target, (GLfloat)s, (GLfloat)t, (GLfloat)r);
     return GetGLError(interp, infoPtr);
 }
@@ -18076,7 +18166,7 @@ TclGL_glMultiTexCoord3fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 400, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 402, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18085,7 +18175,7 @@ TclGL_glMultiTexCoord3fvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[400];
+    funcPtr = infoPtr->funcv[402];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18120,7 +18210,7 @@ TclGL_glMultiTexCoord3iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 401, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 403, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18135,7 +18225,7 @@ TclGL_glMultiTexCoord3iCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &r) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[401];
+    funcPtr = infoPtr->funcv[403];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLint)s, (GLint)t, (GLint)r);
     return GetGLError(interp, infoPtr);
 }
@@ -18169,7 +18259,7 @@ TclGL_glMultiTexCoord3ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 402, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 404, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18178,7 +18268,7 @@ TclGL_glMultiTexCoord3ivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[402];
+    funcPtr = infoPtr->funcv[404];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18213,7 +18303,7 @@ TclGL_glMultiTexCoord3sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 403, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 405, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18228,7 +18318,7 @@ TclGL_glMultiTexCoord3sCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &r) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[403];
+    funcPtr = infoPtr->funcv[405];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLshort)s, (GLshort)t, (GLshort)r);
     return GetGLError(interp, infoPtr);
 }
@@ -18262,7 +18352,7 @@ TclGL_glMultiTexCoord3svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 404, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 406, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18271,7 +18361,7 @@ TclGL_glMultiTexCoord3svCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[404];
+    funcPtr = infoPtr->funcv[406];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18307,7 +18397,7 @@ TclGL_glMultiTexCoord4dCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4dCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 405, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 407, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18325,7 +18415,7 @@ TclGL_glMultiTexCoord4dCmd(
     if (GetDoubleParam(interp, infoPtr, objv[5], &q) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[405];
+    funcPtr = infoPtr->funcv[407];
     ((GLfunction_void_int_double_double_double_double)funcPtr->funcPtr)((GLenum)target, (GLdouble)s, (GLdouble)t, (GLdouble)r, (GLdouble)q);
     return GetGLError(interp, infoPtr);
 }
@@ -18359,7 +18449,7 @@ TclGL_glMultiTexCoord4dvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4dvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 406, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 408, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18368,7 +18458,7 @@ TclGL_glMultiTexCoord4dvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[406];
+    funcPtr = infoPtr->funcv[408];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18404,7 +18494,7 @@ TclGL_glMultiTexCoord4fCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4fCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 407, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 409, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18422,7 +18512,7 @@ TclGL_glMultiTexCoord4fCmd(
     if (GetDoubleParam(interp, infoPtr, objv[5], &q) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[407];
+    funcPtr = infoPtr->funcv[409];
     ((GLfunction_void_int_float_float_float_float)funcPtr->funcPtr)((GLenum)target, (GLfloat)s, (GLfloat)t, (GLfloat)r, (GLfloat)q);
     return GetGLError(interp, infoPtr);
 }
@@ -18456,7 +18546,7 @@ TclGL_glMultiTexCoord4fvCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4fvCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 408, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 410, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18465,7 +18555,7 @@ TclGL_glMultiTexCoord4fvCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[408];
+    funcPtr = infoPtr->funcv[410];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18501,7 +18591,7 @@ TclGL_glMultiTexCoord4iCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4iCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 409, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 411, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18519,7 +18609,7 @@ TclGL_glMultiTexCoord4iCmd(
     if (GetIntParam(interp, infoPtr, objv[5], &q) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[409];
+    funcPtr = infoPtr->funcv[411];
     ((GLfunction_void_int_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLint)s, (GLint)t, (GLint)r, (GLint)q);
     return GetGLError(interp, infoPtr);
 }
@@ -18553,7 +18643,7 @@ TclGL_glMultiTexCoord4ivCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4ivCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 410, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 412, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18562,7 +18652,7 @@ TclGL_glMultiTexCoord4ivCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[410];
+    funcPtr = infoPtr->funcv[412];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18598,7 +18688,7 @@ TclGL_glMultiTexCoord4sCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4sCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 411, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 413, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18616,7 +18706,7 @@ TclGL_glMultiTexCoord4sCmd(
     if (GetIntParam(interp, infoPtr, objv[5], &q) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[411];
+    funcPtr = infoPtr->funcv[413];
     ((GLfunction_void_int_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLshort)s, (GLshort)t, (GLshort)r, (GLshort)q);
     return GetGLError(interp, infoPtr);
 }
@@ -18650,7 +18740,7 @@ TclGL_glMultiTexCoord4svCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4svCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 412, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 414, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18659,7 +18749,7 @@ TclGL_glMultiTexCoord4svCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[412];
+    funcPtr = infoPtr->funcv[414];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -18691,13 +18781,13 @@ TclGL_glLoadTransposeMatrixdCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLoadTransposeMatrixdCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 413, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 415, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &m[16]) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[413];
+    funcPtr = infoPtr->funcv[415];
     ((GLfunction_void_double)funcPtr->funcPtr)((GLdouble)m[16]);
     return GetGLError(interp, infoPtr);
 }
@@ -18729,13 +18819,13 @@ TclGL_glLoadTransposeMatrixfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glLoadTransposeMatrixfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 414, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 416, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &m[16]) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[414];
+    funcPtr = infoPtr->funcv[416];
     ((GLfunction_void_float)funcPtr->funcPtr)((GLfloat)m[16]);
     return GetGLError(interp, infoPtr);
 }
@@ -18767,13 +18857,13 @@ TclGL_glMultTransposeMatrixdCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultTransposeMatrixdCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 415, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 417, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &m[16]) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[415];
+    funcPtr = infoPtr->funcv[417];
     ((GLfunction_void_double)funcPtr->funcPtr)((GLdouble)m[16]);
     return GetGLError(interp, infoPtr);
 }
@@ -18805,13 +18895,13 @@ TclGL_glMultTransposeMatrixfCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultTransposeMatrixfCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 416, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 418, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &m[16]) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[416];
+    funcPtr = infoPtr->funcv[418];
     ((GLfunction_void_float)funcPtr->funcPtr)((GLfloat)m[16]);
     return GetGLError(interp, infoPtr);
 }
@@ -18844,7 +18934,7 @@ TclGL_glSampleCoverageCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glSampleCoverageCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 417, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 419, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetDoubleParam(interp, infoPtr, objv[1], &value) != TCL_OK) {
@@ -18853,7 +18943,7 @@ TclGL_glSampleCoverageCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &invert) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[417];
+    funcPtr = infoPtr->funcv[419];
     ((GLfunction_void_float_int)funcPtr->funcPtr)((GLclampf)value, (GLboolean)invert);
     return GetGLError(interp, infoPtr);
 }
@@ -18885,13 +18975,13 @@ TclGL_glActiveTextureARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glActiveTextureARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 418, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 420, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &texture) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[418];
+    funcPtr = infoPtr->funcv[420];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLenum)texture);
     return GetGLError(interp, infoPtr);
 }
@@ -18923,13 +19013,13 @@ TclGL_glClientActiveTextureARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glClientActiveTextureARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 419, objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 421, objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &texture) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[419];
+    funcPtr = infoPtr->funcv[421];
     ((GLfunction_void_int)funcPtr->funcPtr)((GLenum)texture);
     return GetGLError(interp, infoPtr);
 }
@@ -18962,7 +19052,7 @@ TclGL_glMultiTexCoord1dARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1dARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 420, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 422, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -18971,7 +19061,7 @@ TclGL_glMultiTexCoord1dARBCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &s) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[420];
+    funcPtr = infoPtr->funcv[422];
     ((GLfunction_void_int_double)funcPtr->funcPtr)((GLenum)target, (GLdouble)s);
     return GetGLError(interp, infoPtr);
 }
@@ -19005,7 +19095,7 @@ TclGL_glMultiTexCoord1dvARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1dvARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 421, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 423, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19014,7 +19104,7 @@ TclGL_glMultiTexCoord1dvARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[421];
+    funcPtr = infoPtr->funcv[423];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19047,7 +19137,7 @@ TclGL_glMultiTexCoord1fARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1fARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 422, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 424, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19056,7 +19146,7 @@ TclGL_glMultiTexCoord1fARBCmd(
     if (GetDoubleParam(interp, infoPtr, objv[2], &s) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[422];
+    funcPtr = infoPtr->funcv[424];
     ((GLfunction_void_int_float)funcPtr->funcPtr)((GLenum)target, (GLfloat)s);
     return GetGLError(interp, infoPtr);
 }
@@ -19090,7 +19180,7 @@ TclGL_glMultiTexCoord1fvARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1fvARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 423, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 425, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19099,7 +19189,7 @@ TclGL_glMultiTexCoord1fvARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[423];
+    funcPtr = infoPtr->funcv[425];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19132,7 +19222,7 @@ TclGL_glMultiTexCoord1iARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1iARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 424, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 426, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19141,7 +19231,7 @@ TclGL_glMultiTexCoord1iARBCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &s) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[424];
+    funcPtr = infoPtr->funcv[426];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLenum)target, (GLint)s);
     return GetGLError(interp, infoPtr);
 }
@@ -19175,7 +19265,7 @@ TclGL_glMultiTexCoord1ivARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1ivARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 425, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 427, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19184,7 +19274,7 @@ TclGL_glMultiTexCoord1ivARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[425];
+    funcPtr = infoPtr->funcv[427];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19217,7 +19307,7 @@ TclGL_glMultiTexCoord1sARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1sARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 426, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 428, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19226,7 +19316,7 @@ TclGL_glMultiTexCoord1sARBCmd(
     if (GetIntParam(interp, infoPtr, objv[2], &s) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[426];
+    funcPtr = infoPtr->funcv[428];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLenum)target, (GLshort)s);
     return GetGLError(interp, infoPtr);
 }
@@ -19260,7 +19350,7 @@ TclGL_glMultiTexCoord1svARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord1svARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 427, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 429, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19269,7 +19359,7 @@ TclGL_glMultiTexCoord1svARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[427];
+    funcPtr = infoPtr->funcv[429];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19303,7 +19393,7 @@ TclGL_glMultiTexCoord2dARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2dARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 428, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 430, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19315,7 +19405,7 @@ TclGL_glMultiTexCoord2dARBCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &t) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[428];
+    funcPtr = infoPtr->funcv[430];
     ((GLfunction_void_int_double_double)funcPtr->funcPtr)((GLenum)target, (GLdouble)s, (GLdouble)t);
     return GetGLError(interp, infoPtr);
 }
@@ -19349,7 +19439,7 @@ TclGL_glMultiTexCoord2dvARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2dvARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 429, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 431, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19358,7 +19448,7 @@ TclGL_glMultiTexCoord2dvARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[429];
+    funcPtr = infoPtr->funcv[431];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19392,7 +19482,7 @@ TclGL_glMultiTexCoord2fARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2fARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 430, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 432, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19404,7 +19494,7 @@ TclGL_glMultiTexCoord2fARBCmd(
     if (GetDoubleParam(interp, infoPtr, objv[3], &t) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[430];
+    funcPtr = infoPtr->funcv[432];
     ((GLfunction_void_int_float_float)funcPtr->funcPtr)((GLenum)target, (GLfloat)s, (GLfloat)t);
     return GetGLError(interp, infoPtr);
 }
@@ -19438,7 +19528,7 @@ TclGL_glMultiTexCoord2fvARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2fvARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 431, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 433, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19447,7 +19537,7 @@ TclGL_glMultiTexCoord2fvARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[431];
+    funcPtr = infoPtr->funcv[433];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19481,7 +19571,7 @@ TclGL_glMultiTexCoord2iARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2iARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 432, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 434, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19493,7 +19583,7 @@ TclGL_glMultiTexCoord2iARBCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &t) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[432];
+    funcPtr = infoPtr->funcv[434];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLint)s, (GLint)t);
     return GetGLError(interp, infoPtr);
 }
@@ -19527,7 +19617,7 @@ TclGL_glMultiTexCoord2ivARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2ivARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 433, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 435, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19536,7 +19626,7 @@ TclGL_glMultiTexCoord2ivARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[433];
+    funcPtr = infoPtr->funcv[435];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19570,7 +19660,7 @@ TclGL_glMultiTexCoord2sARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2sARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 434, objc, 3) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 436, objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19582,7 +19672,7 @@ TclGL_glMultiTexCoord2sARBCmd(
     if (GetIntParam(interp, infoPtr, objv[3], &t) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[434];
+    funcPtr = infoPtr->funcv[436];
     ((GLfunction_void_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLshort)s, (GLshort)t);
     return GetGLError(interp, infoPtr);
 }
@@ -19616,7 +19706,7 @@ TclGL_glMultiTexCoord2svARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord2svARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 435, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 437, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19625,7 +19715,7 @@ TclGL_glMultiTexCoord2svARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[435];
+    funcPtr = infoPtr->funcv[437];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19660,7 +19750,7 @@ TclGL_glMultiTexCoord3dARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3dARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 436, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 438, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19675,7 +19765,7 @@ TclGL_glMultiTexCoord3dARBCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &r) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[436];
+    funcPtr = infoPtr->funcv[438];
     ((GLfunction_void_int_double_double_double)funcPtr->funcPtr)((GLenum)target, (GLdouble)s, (GLdouble)t, (GLdouble)r);
     return GetGLError(interp, infoPtr);
 }
@@ -19709,7 +19799,7 @@ TclGL_glMultiTexCoord3dvARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3dvARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 437, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 439, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19718,7 +19808,7 @@ TclGL_glMultiTexCoord3dvARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[437];
+    funcPtr = infoPtr->funcv[439];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19753,7 +19843,7 @@ TclGL_glMultiTexCoord3fARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3fARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 438, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 440, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19768,7 +19858,7 @@ TclGL_glMultiTexCoord3fARBCmd(
     if (GetDoubleParam(interp, infoPtr, objv[4], &r) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[438];
+    funcPtr = infoPtr->funcv[440];
     ((GLfunction_void_int_float_float_float)funcPtr->funcPtr)((GLenum)target, (GLfloat)s, (GLfloat)t, (GLfloat)r);
     return GetGLError(interp, infoPtr);
 }
@@ -19802,7 +19892,7 @@ TclGL_glMultiTexCoord3fvARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3fvARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 439, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 441, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19811,7 +19901,7 @@ TclGL_glMultiTexCoord3fvARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[439];
+    funcPtr = infoPtr->funcv[441];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19846,7 +19936,7 @@ TclGL_glMultiTexCoord3iARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3iARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 440, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 442, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19861,7 +19951,7 @@ TclGL_glMultiTexCoord3iARBCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &r) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[440];
+    funcPtr = infoPtr->funcv[442];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLint)s, (GLint)t, (GLint)r);
     return GetGLError(interp, infoPtr);
 }
@@ -19895,7 +19985,7 @@ TclGL_glMultiTexCoord3ivARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3ivARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 441, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 443, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19904,7 +19994,7 @@ TclGL_glMultiTexCoord3ivARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[441];
+    funcPtr = infoPtr->funcv[443];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -19939,7 +20029,7 @@ TclGL_glMultiTexCoord3sARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3sARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 442, objc, 4) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 444, objc, 4) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19954,7 +20044,7 @@ TclGL_glMultiTexCoord3sARBCmd(
     if (GetIntParam(interp, infoPtr, objv[4], &r) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[442];
+    funcPtr = infoPtr->funcv[444];
     ((GLfunction_void_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLshort)s, (GLshort)t, (GLshort)r);
     return GetGLError(interp, infoPtr);
 }
@@ -19988,7 +20078,7 @@ TclGL_glMultiTexCoord3svARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord3svARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 443, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 445, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -19997,7 +20087,7 @@ TclGL_glMultiTexCoord3svARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[443];
+    funcPtr = infoPtr->funcv[445];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -20033,7 +20123,7 @@ TclGL_glMultiTexCoord4dARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4dARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 444, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 446, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -20051,7 +20141,7 @@ TclGL_glMultiTexCoord4dARBCmd(
     if (GetDoubleParam(interp, infoPtr, objv[5], &q) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[444];
+    funcPtr = infoPtr->funcv[446];
     ((GLfunction_void_int_double_double_double_double)funcPtr->funcPtr)((GLenum)target, (GLdouble)s, (GLdouble)t, (GLdouble)r, (GLdouble)q);
     return GetGLError(interp, infoPtr);
 }
@@ -20085,7 +20175,7 @@ TclGL_glMultiTexCoord4dvARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4dvARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 445, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 447, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -20094,7 +20184,7 @@ TclGL_glMultiTexCoord4dvARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[445];
+    funcPtr = infoPtr->funcv[447];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLdouble*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -20130,7 +20220,7 @@ TclGL_glMultiTexCoord4fARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4fARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 446, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 448, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -20148,7 +20238,7 @@ TclGL_glMultiTexCoord4fARBCmd(
     if (GetDoubleParam(interp, infoPtr, objv[5], &q) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[446];
+    funcPtr = infoPtr->funcv[448];
     ((GLfunction_void_int_float_float_float_float)funcPtr->funcPtr)((GLenum)target, (GLfloat)s, (GLfloat)t, (GLfloat)r, (GLfloat)q);
     return GetGLError(interp, infoPtr);
 }
@@ -20182,7 +20272,7 @@ TclGL_glMultiTexCoord4fvARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4fvARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 447, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 449, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -20191,7 +20281,7 @@ TclGL_glMultiTexCoord4fvARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[447];
+    funcPtr = infoPtr->funcv[449];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLfloat*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -20227,7 +20317,7 @@ TclGL_glMultiTexCoord4iARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4iARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 448, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 450, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -20245,7 +20335,7 @@ TclGL_glMultiTexCoord4iARBCmd(
     if (GetIntParam(interp, infoPtr, objv[5], &q) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[448];
+    funcPtr = infoPtr->funcv[450];
     ((GLfunction_void_int_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLint)s, (GLint)t, (GLint)r, (GLint)q);
     return GetGLError(interp, infoPtr);
 }
@@ -20279,7 +20369,7 @@ TclGL_glMultiTexCoord4ivARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4ivARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 449, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 451, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -20288,7 +20378,7 @@ TclGL_glMultiTexCoord4ivARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[449];
+    funcPtr = infoPtr->funcv[451];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLint*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -20324,7 +20414,7 @@ TclGL_glMultiTexCoord4sARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4sARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 450, objc, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 452, objc, 5) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -20342,7 +20432,7 @@ TclGL_glMultiTexCoord4sARBCmd(
     if (GetIntParam(interp, infoPtr, objv[5], &q) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[450];
+    funcPtr = infoPtr->funcv[452];
     ((GLfunction_void_int_int_int_int_int)funcPtr->funcPtr)((GLenum)target, (GLshort)s, (GLshort)t, (GLshort)r, (GLshort)q);
     return GetGLError(interp, infoPtr);
 }
@@ -20376,7 +20466,7 @@ TclGL_glMultiTexCoord4svARBCmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glMultiTexCoord4svARBCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 451, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 453, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &target) != TCL_OK) {
@@ -20385,7 +20475,7 @@ TclGL_glMultiTexCoord4svARBCmd(
     if (GetPtrInParam(interp, infoPtr, objv[2], &v, &paramLength1) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[451];
+    funcPtr = infoPtr->funcv[453];
     ((GLfunction_void_int_voidPtr)funcPtr->funcPtr)((GLenum)target, (GLshort*)v);
     return GetGLError(interp, infoPtr);
 }
@@ -20418,7 +20508,7 @@ TclGL_glBlendEquationSeparateATICmd(
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
     TclGLShowArgs(1, "TclGL_glBlendEquationSeparateATICmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, 452, objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, 454, objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
     if (GetEnumParam(interp, infoPtr, objv[1], &modeRGB) != TCL_OK) {
@@ -20427,7 +20517,7 @@ TclGL_glBlendEquationSeparateATICmd(
     if (GetEnumParam(interp, infoPtr, objv[2], &modeA) != TCL_OK) {
         return TCL_ERROR;
     } 
-    funcPtr = infoPtr->funcv[452];
+    funcPtr = infoPtr->funcv[454];
     ((GLfunction_void_int_int)funcPtr->funcPtr)((GLenum)modeRGB, (GLenum)modeA);
     return GetGLError(interp, infoPtr);
 }

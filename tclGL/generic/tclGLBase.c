@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLBase.c,v 1.1.2.2 2007/11/10 18:26:20 wiede Exp $
+ * RCS: @(#) $Id: tclGLBase.c,v 1.1.2.3 2007/11/11 00:54:11 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -246,6 +246,7 @@ Initialize (
     memset(infoPtr, 0, sizeof(TclGLInfo));
     infoPtr->version = TCL_GL_INFO_VERSION;
     Tcl_InitObjHashTable(&infoPtr->glDefines);
+    Tcl_InitObjHashTable(&infoPtr->glExtensions);
     Tcl_InitHashTable(&infoPtr->glDefineStrings, TCL_ONE_WORD_KEYS);
     Tcl_InitObjHashTable(&infoPtr->fbos);
     Tcl_InitObjHashTable(&infoPtr->defineGroups);

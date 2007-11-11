@@ -19,6 +19,8 @@ set glTypes [list \
 ]
 
 proc splitParams {params} {
+    upvar name funcName
+
     set lst [list]
     set params [string trim $params]
     set paramLst $params
@@ -27,6 +29,9 @@ proc splitParams {params} {
     foreach entry $paramLst {
 	incr paramNo
         set entry [string trim $entry]
+	set orig_entry $entry
+	while {[regsub -all {[*] [*]} $entry {**} entry]} {
+	}
 	set partLst [split $entry]
 	set const ""
 	if {[lindex $partLst 0] eq "const"} {
@@ -34,11 +39,13 @@ proc splitParams {params} {
 	   set partLst [lrange $partLst 1 end]
 	}
 	set numStars ""
-	if {[llength $partLst] == 1} {
-	    set paramName "param$paramNo"
-	    set paramType [lindex $partLst 0]
-	} else {
-	    regexp {^([^ ]+)[ ]([* ]*)(.*)} [join $partLst] -> paramType numStars paramName
+	if {![regexp {^([^* ]+)[ ]*([* ]*)(.*)} [join $partLst] -> paramType numStars paramName]} {
+	    if {![regexp {[*]+} [join $partLst]  -> xx]} {
+	        set paramType [lindex $partLst 0]
+	        set paramName ""
+	    } else {
+	        puts stderr "funny param!$partLst!"
+	    }
 	}
 	lappend lst [list $const $paramType $numStars $paramName]
     }
@@ -58,10 +65,11 @@ set funcLst [list]
 set hadDefine 0
 set hadFunc 0
 set hadTypedef 0
+set comment2 ""
 while {[gets stdin line] >= 0} {
     incr lineNo
     set line [string trimright $line \n]
-    if {[string match "GLAPI void GLAPIENTRY*" $line]} {
+    if {[string match "GLAPI * *APIENTRY*" $line]} {
         while {![regexp {.*[(].*[)]} $line]} {
 	    if {[gets stdin line2] < 0} {
 	        break
@@ -84,11 +92,19 @@ while {[gets stdin line] >= 0} {
         }
     }
 #puts stderr "LINE!$line![regexp {^/[*] } $line]!"
+    if {[regexp {^#ifndef (GL_.*)[ ]*} $line -> comment2]} {
+        # used instead of comment of there is no comment
+        set comment ""
+        set hadDefine 0
+        set hadFunc 0
+        set hadTypedef 0
+    }
     if {[regexp {^/[*] (.*) [*]/$} $line -> comment]} {
-        # comment save for later use as hash table */
+        # comment save for later use
 	set comment [string trim $comment]
         set comment [string trim $comment "*"]
 	set comment [string trim $comment]
+	set comment2 ""
         set commentLineNo $lineNo
 #puts stderr "comment!$commentLineNo!$comment!"
         set hadDefine 0
@@ -101,6 +117,9 @@ while {[gets stdin line] >= 0} {
 	    }
 	    if {!$hadDefine} {
                 incr numComments
+		if {$comment2 != ""} {
+		   set comment $comment2
+		}
 		puts [list DEFINE_GROUP $numComments $comment]
 	        set hadDefine 1
             }
@@ -108,9 +127,40 @@ while {[gets stdin line] >= 0} {
 	    puts [list DEFINE $numComments $name $value]
 	    set lastDefineLineNo $lineNo
 	} else {
-            if {[regexp {^GLAPI ([^ ]*) GLAPIENTRY ([^ ]*)[(]([^)]*)[)]} $line -> type name params]} {
+	    set haveInfo 0
+            if {[regexp {^GLAPI (.*) GLAPIENTRY ([^ ]*)[ ]*[(]([^)]*)[)]} $line -> type name params]} {
+		set haveInfo 1
+	    } else {
+                if {[regexp {^GLAPI (.*) APIENTRY ([^ ]*)[ ]*[(]([^)]*)[)]} $line -> type name params]} {
+		    set haveInfo 1
+	        }
+	    }
+	    if {$haveInfo} {
+		set typeLst [split $type]
+		set const ""
+		set stars ""
+		if {[llength $typeLst] > 1} {
+		    if {[lindex $typeLst 0] eq "const"} {
+		        set const const
+		        set type [lrange $typeLst 1 end]
+		    }
+		}
+	        if {![regexp {^([^* ]+)[ ]*([* ]*)} [join $type] -> type2 stars]} {
+	            if {![regexp {[*]+} [join $type]  -> xx]} {
+	                set type [lindex $type 0]
+	            } else {
+	                puts stderr "funny return type!$type!"
+	            }
+	        } else {
+	            set type $type2
+	        }
+if {0} {
+	    if {[regexp {(.*)([*]+)} $type -> type2 stars]} {
+	        set type $type2
+	    }
+}
                 if {($type ne "void") && ([lsearch $glTypes $type] < 0)} {
-                    puts stderr "unknown return type: $type inf function $name"
+                    puts stderr "unknown return type: $type in function $name"
 		}
 		set name [string trim $name]
 		switch -glob -- $name {
@@ -121,11 +171,14 @@ while {[gets stdin line] >= 0} {
 		incr numFuncs
 	        if {!$hadFunc} {
                     incr numComments
+		    if {$comment2 != ""} {
+		       set comment $comment2
+		    }
 		    puts [list FUNC_GROUP $numFuncs $comment]
 	            set hadFunc 1
                 }
 	        set parLst [splitParams $params]
-                puts [list FUNC $numFuncs $name $type $parLst]
+                puts [list FUNC $numFuncs $name [list $const $type $stars] $parLst]
 #puts stderr "PARAMS![join $parLst !]!"
 	    } else {
 	        if {[regexp {^[ ]*typedef[ \t]+([^ ]+)[ \t]+[(]([^)]+)[)][ \t]+[(]([^)]+)[)]} $line -> typeType typeNamePart typeParams]} {

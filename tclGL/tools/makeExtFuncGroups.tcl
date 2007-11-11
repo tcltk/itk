@@ -3,7 +3,7 @@
 set funcHeader {
 /*
  * ------------------------------------------------------------------------
- *  TclGL_%sCmd()
+ *  TclGLext_%sCmd()
  *
  *  Handles the OpenGL %s command
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
@@ -12,7 +12,7 @@ set funcHeader {
 /* ARGSUSED */
 
 int
-TclGL_%sCmd(
+TclGLext_%sCmd(
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
@@ -26,7 +26,7 @@ set initPart {
     glResult = 0;
     hPtr = NULL;
     infoPtr = (TclGLInfo *)clientData;
-    TclGLShowArgs(1, "TclGL_%sCmd", objc, objv);}
+    TclGLShowArgs(1, "TclGLext_%sCmd", objc, objv);}
 
 
 proc handleParams {paramInfo} {
@@ -41,16 +41,22 @@ proc handleParams {paramInfo} {
     set usageSep ""
     set callParamSep ""
     set callType [list]
+if {$funcName eq "glMultiDrawElements"} {
+puts stderr "PARAMS!$paramInfo!"
+}
     foreach entry $paramInfo {
         foreach {const type stars name} $entry break
 	# nothing to do for plain void
 	if {($type eq "void") && ($stars eq "")} {
 	    continue
 	}
+        incr paramNo
 	if {$const ne ""} {
 	    set const "$const "
 	}
-        incr paramNo
+	if {$name eq ""} {
+	    set name param[expr {$paramNo+1}]
+	}
         set myVarType int
         set myGetParamType int
         set myType $type
@@ -82,6 +88,20 @@ proc handleParams {paramInfo} {
         GLushort {
           }
         GLuint {
+          }
+	GLhalfNV {
+	  }
+        GLsizeiptrARB {
+          }
+        GLintptrARB {
+          }
+        GLsizeiptr {
+          }
+        GLintptr {
+          }
+        GLcharARB {
+          }
+        GLhandleARB {
           }
         GLsizei {
           }
@@ -115,16 +135,27 @@ proc handleParams {paramInfo} {
 	}
 	lappend callType $callTypePart$stars
 	if {$stars ne ""} {
+	    set myNo [expr {$paramNo+1}]
             if {$const ne ""} {
-	        lappend paramChecks "    if (GetPtrInParam(interp, infoPtr, objv\[[expr {$paramNo+1}]\], &$name, &paramLength$paramNo) != TCL_OK) {\n        return TCL_ERROR;\n    } "
+		switch [string length $stars] {
+		1 {
+	        lappend paramChecks "    if (GetPtrInParam(interp, infoPtr, objv\[$myNo\], &$name, &paramLength$myNo) != TCL_OK) {\n        return TCL_ERROR;\n    } "
+		  }
+		2 {
+	        lappend paramChecks "    if (GetPtrPtrInParam(interp, infoPtr, objv\[$myNo\], &$name, &paramLength$myNo) != TCL_OK) {\n        return TCL_ERROR;\n    } "
+		  }
+		default {
+		    puts stderr "ERROR cannot handle stars!$stars!"
+		  }
+		}
                 lappend paramDecls "    void $stars$name;"
-                lappend paramDecls "    int paramLength$paramNo;"
+                lappend paramDecls "    int paramLength$myNo;"
 	        set paramCheckDone 1
 	    } else {
-	        lappend outParams "    if (SetPtrOutParam(interp, infoPtr, objv\[[expr {$paramNo+1}]\], paramLength$paramNo, $name) != TCL_OK) {\n        return TCL_ERROR;\n    } "
+	        lappend outParams "    if (SetPtrOutParam(interp, infoPtr, objv\[$myNo\], paramLength$myNo, $name) != TCL_OK) {\n        return TCL_ERROR;\n    } "
                 lappend paramDecls "    void $stars$name = NULL;"
 		# to be fixed != 0!!
-                lappend paramDecls "    int paramLength$paramNo = 0;"
+                lappend paramDecls "    int paramLength$myNo = 0;"
 	        set paramCheckDone 1
 puts stderr "NOT YET!$funcName!$entry!"
 	    }
@@ -140,28 +171,66 @@ puts stderr "NOT YET!$funcName!$entry!"
 }
 
 set funcTypeDefs [list]
-set numFuncGroups -1
-set numFuncs -1
-set outFd [open ../generic/tclGLInitFuncGroupHashTables.c w]
-set methodInfoFd [open ../generic/tclGLMethodInfos.c w]
-set funcFd [open ../generic/tclGLFuncs.c w]
-set procFd [open ../generic/tclGLProcNames.c w]
+set oldfuncTypeDefs [list]
+set fd [open ../generic/tclGLFuncSizes.h r]
+gets $fd line1
+gets $fd line2
+set numFuncGroups [lindex [split $line1] 2]
+set numFuncs [lindex [split $line2] 2]
+while {[gets $fd line] >= 0} {
+    if {[string length [string trim $line]] == 0} {
+        continue
+    }
+    lappend oldfuncTypeDefs $line
+}
+close $fd
+set outFd [open ../generic/tclGLInitFuncGroupHashTables.c a]
+set methodInfoFd [open ../generic/tclGLExtMethodInfos.c w]
+set funcFd [open ../generic/tclGLExtFuncs.c w]
+set procFd [open ../generic/tclGLExtProcNames.c w]
 set openCurly "{"
 set closeCurly "}"
+set useIt 1
 while {[gets stdin line] >= 0} {
     set isNormalReturn 1
     foreach {type grpIdx name} $line break
     switch $type {
     FUNC_GROUP {
+	switch -glob $name {
+	*_ATI* -
+	*_3DFX* -
+	*_APPLE* -
+	*_MESA* -
+	*_OML* -
+	*_NV* -
+	*_INGR* -
+	*_IBM* -
+	*_INTEL* -
+	*_S3* -
+	*_HP* -
+	*_PGI* -
+	*_SUN* -
+	*_SGI* {
+	     set useIt 0
+	     continue
+	  }
+	default {
+	     set useIt 1
+	  }
+	}
         incr numFuncGroups
         puts $outFd "    objPtr = InitFuncGroup(interp, infoPtr, $numFuncGroups, \"$name\");"
       }
     FUNC {
+	if {!$useIt} {
+	    continue
+	}
 	set usageStr ""
 	set returnTypeLst [lindex $line 3]
 	foreach {returnConst returnTypeStr returnStars} $returnTypeLst break
         set paramLst [lindex $line 4]
 	switch $returnTypeStr {
+	GLvoid -
 	void {
 	     set returnType "TCL_GLvoid"
 	  }
@@ -170,6 +239,9 @@ while {[gets stdin line] >= 0} {
 	  }
 	GLint {
 	     set returnType "TCL_GLint"
+	  }
+	GLhandleARB {
+	     set returnType "TCL_GLuint"
 	  }
 	GLuint {
 	     set returnType "TCL_GLuint"
@@ -181,7 +253,7 @@ while {[gets stdin line] >= 0} {
 	     set returnType "TCL_GLenum"
 	  }
 	default {
-puts stderr "funny return type!$returnTypeStr!"
+puts stderr "funny return type!$returnTypeStr!$returnTypeLst!"
 	     set returnType "TCL_GLint"
 	  }
 	}
@@ -193,8 +265,8 @@ puts stderr "funny return type!$returnTypeStr!"
 	    set returnFlags "${returnFlags}|TCL_GLptr"
 	}
         puts $outFd "    InitFunc(interp, infoPtr, objPtr, $numFuncGroups, $numFuncs, \"$name\", $returnFlags, $paramNo, \"$usageStr\");"
-        puts $methodInfoFd "    { \"::ntk::gl::GL::$name\",\n            NULL, TclGL_${name}Cmd },"
-        puts $procFd "Tcl_ObjCmdProc TclGL_${name}Cmd;"
+        puts $methodInfoFd "    { \"::ntk::gl::GLext::$name\",\n            NULL, TclGLext_${name}Cmd },"
+        puts $procFd "Tcl_ObjCmdProc TclGLext_${name}Cmd;"
         puts $funcFd [format $funcHeader $name $name $name $openCurly]
 	puts $funcFd [join $paramDecls \n]
 	puts $funcFd "    TclGLFunc *funcPtr;"
@@ -237,8 +309,10 @@ puts stderr "funny return type!$returnTypeStr!"
 	regsub -all {[*]} $callTypeStr {Ptr} callTypeStr
 	set callTypeParamStr [join $callType ", "]
 	set callTypeDef "typedef $returnConst $returnTypeStr $returnStars (* $callTypeStr)($callTypeParamStr);"
-	if {[lsearch $funcTypeDefs $callTypeDef] < 0} {
-	    lappend funcTypeDefs $callTypeDef
+	if {[lsearch $oldfuncTypeDefs $callTypeDef] < 0} {
+	    if {[lsearch $funcTypeDefs $callTypeDef] < 0} {
+	        lappend funcTypeDefs $callTypeDef
+	    }
 	}
 	switch $returnType {
 	TCL_GLvoid {
@@ -294,7 +368,9 @@ close $outFd
 close $methodInfoFd
 close $funcFd
 close $procFd
-set fd [open ../generic/tclGLFuncSizes.h w]
+set fd [open ../generic/tclGLFuncSizes.h a]
+puts $fd "#undef TCL_NUM_GL_FUNC_GROUPS"
+puts $fd "#undef TCL_NUM_GL_FUNCS"
 puts $fd "#define TCL_NUM_GL_FUNC_GROUPS $numFuncGroups"
 puts $fd "#define TCL_NUM_GL_FUNCS $numFuncs"
 puts $fd ""
