@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLBase.c,v 1.1.2.3 2007/11/11 00:54:11 wiede Exp $
+ * RCS: @(#) $Id: tclGLBase.c,v 1.1.2.4 2007/11/11 20:05:44 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -234,7 +234,7 @@ Initialize (
 
     nsPtr = Tcl_CreateNamespace(interp, TCL_GL_NAMESPACE, NULL, NULL);
     if (nsPtr == NULL) {
-        Tcl_Panic("tclGlfw: cannot create namespace: \"%s\" \n",
+        Tcl_Panic("tclGl: cannot create namespace: \"%s\" \n",
 	        TCL_GL_NAMESPACE);
     }
     /*
@@ -312,7 +312,7 @@ Initialize (
  *  Tclgl_Init()
  *
  *  Invoked whenever a new INTERPRETER is created to install the
- *  tclGlfw package.  Usually invoked within Tcl_AppInit() at
+ *  tclGl package.  Usually invoked within Tcl_AppInit() at
  *  the start of execution.
  *
  *  Creates the "::ntk::gl" namespace and installs commands
@@ -338,9 +338,9 @@ Tclgl_Init (
  *  Tclgl_SafeInit()
  *
  *  Invoked whenever a new SAFE INTERPRETER is created to install
- *  the tclGlfw package.
+ *  the tclGl package.
  *
- *  Creates the "::ntk::glfw" namespace and installs access commands
+ *  Creates the "::ntk::gl::GL" namespace and installs access commands
  *
  *  Returns TCL_OK on success, or TCL_ERROR (along with an error
  *  message in the interpreter) if anything goes wrong.

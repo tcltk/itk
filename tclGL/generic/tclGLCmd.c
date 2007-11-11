@@ -9,14 +9,13 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.5 2007/11/11 00:54:12 wiede Exp $
+ * RCS: @(#) $Id: tclGLCmd.c,v 1.1.2.6 2007/11/11 20:05:44 wiede Exp $
  */
 
 #include <stdlib.h>
 #include "tclGLInt.h"
 #include "tclGLFuncSizes.h"
 
-Tcl_ObjCmdProc TclGL_DefaultCmd;
 Tcl_ObjCmdProc TclGL_UnknownCmd;
 Tcl_ObjCmdProc TclGL_Define2Str;
 Tcl_ObjCmdProc TclGL_Str2Define;
@@ -48,11 +47,6 @@ static GLMethod GLMethodList[] = {
             "<list>", TclGL_MakeFloatVector },
     { "::ntk::gl::GL::makeDoubleVector",
             "<list>", TclGL_MakeDoubleVector },
-    /*
-     *  Add an error handler to support all of the usual inquiries
-     *  for the "info" command in the global namespace.
-     */
-    { "::ntk::gl::GL::@error", "", TclGL_DefaultCmd },
     { NULL, NULL, NULL }
 };
 
@@ -132,7 +126,7 @@ TclGL_InitCommands (
 
     nsPtr = Tcl_CreateNamespace(interp, "::ntk::gl::GL", NULL, NULL);
     if (nsPtr == NULL) {
-        Tcl_Panic("ITCL: error in creating namespace: ::ntk::gl::GL \n");
+        Tcl_Panic("tclGL: error in creating namespace: ::ntk::gl::GL \n");
     }
     cmd = Tcl_CreateEnsemble(interp, nsPtr->fullName, nsPtr,
         TCL_ENSEMBLE_PREFIX);
@@ -173,20 +167,21 @@ TclGLGetUsage(
     int i;
 
     for (i=0; GLMethodList[i].commandName != NULL; i++) {
+	if (strcmp(GLMethodList[i].commandName, "::ntk::gl::GL::unknown") == 0) {
+	    continue;
+	}
         Tcl_AppendToObj(objPtr, spaces, -1);
         Tcl_AppendToObj(objPtr, "ntk ", -1);
-        Tcl_AppendToObj(objPtr, GLMethodList[i].commandName, -1);
+	cp = strrchr(GLMethodList[i].commandName, ':');
+	if (cp == NULL) {
+	   cp = GLMethodList[i].commandName;
+	} else {
+	   cp++;
+	}
+        Tcl_AppendToObj(objPtr, cp, -1);
 	if (GLMethodList[i].usage == NULL) {
 	    if (i < TCL_NUM_GL_FUNCS) {
 	        funcPtr = infoPtr->funcv[i];
-		cp = strrchr(GLMethodList[i].commandName, ':');
-		if (cp == NULL) {
-		   cp = GLMethodList[i].commandName;
-		} else {
-		   cp++;
-		}
-		Tcl_AppendToObj(objPtr, " ", -1);
-		Tcl_AppendToObj(objPtr, cp, -1);
 		Tcl_AppendToObj(objPtr, " ", -1);
 		Tcl_AppendToObj(objPtr, Tcl_GetString(funcPtr->usagePtr), -1);
 	    }
@@ -823,32 +818,7 @@ TclGL_InitCmd(
     }
     return TCL_OK;
 }
-
-/*
- * ------------------------------------------------------------------------
- *  TclGL_DefaultCmd()
- *
- *  Handles any unknown options for the "ntk::gl::GL" command
- *
- *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
- * ------------------------------------------------------------------------
- */
-/* ARGSUSED */
-int
-TclGL_DefaultCmd(
-    ClientData clientData, /* infoPtr */
-    Tcl_Interp *interp,    /* current interpreter */
-    int objc,              /* number of arguments */
-    Tcl_Obj *CONST objv[]) /* argument objects */
-{
-    TclGLInfo *infoPtr;
-    int result;
-
-    infoPtr = (TclGLInfo *)clientData;
-    result = TCL_ERROR;
-    TclGLShowArgs(0, "TclGL_DefaultCmd", objc, objv);
-    return result;
-}
+#ifdef NOTDEF
 /*
  * ------------------------------------------------------------------------
  *  TclGL_CallGlFunction()
@@ -869,6 +839,7 @@ TclGL_CallGlFunction(
     TclGLShowArgs(0, "TclGL_CallGlFunction", objc, objv);
     return TCL_OK;
 }
+#endif
 
 #include <GL/gl.h>
 #include "tclGLFuncs.c"

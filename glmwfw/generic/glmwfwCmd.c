@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.4 2007/11/04 13:25:29 wiede Exp $
+ * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.5 2007/11/11 20:01:54 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -42,7 +42,7 @@ Tcl_ObjCmdProc Glmwfw_DisableCmd;
 Tcl_ObjCmdProc Glmwfw_DefaultCmd;
 Tcl_ObjCmdProc Glmwfw_UnknownCmd;
 Tcl_ObjCmdProc Glmwfw_WaitEventsCmd;
-#ifdef NOTDEF
+#ifndef NOTDEF
 Tcl_ObjCmdProc Glmwfw_DrawMegaimageCmd;
 #endif
 
@@ -53,95 +53,49 @@ typedef struct GlmwfwMethod {
 } GlmwfwMethod;
 
 static GlmwfwMethod GlmwfwMethodList[] = {
-    { "init", "", Glmwfw_InitCmd },
-    { "terminate", "", Glmwfw_TerminateCmd },
-    { "enable", "param", Glmwfw_EnableCmd },
-    { "disable", "param", Glmwfw_DisableCmd },
-    { "openWindowHint", "target hint", Glmwfw_OpenWindowHintCmd },
-    { "openWindow", "width height", Glmwfw_OpenWindowCmd },
-    { "closeWindow", "", Glmwfw_CloseWindowCmd },
-    { "setWindowTitle", "title", Glmwfw_SetWindowTitleCmd },
-    { "setWindowSize", "width height", Glmwfw_SetWindowSizeCmd },
-    { "setWindowPos", "x y", Glmwfw_SetWindowPosCmd },
-    { "getWindowParam", "paramName", Glmwfw_GetWindowParamCmd },
-    { "getWindowSize", "", Glmwfw_GetWindowSizeCmd },
-    { "getMousePos", "", Glmwfw_GetMousePosCmd },
-    { "getVideoModes", "??", Glmwfw_GetVideoModesCmd },
-    { "getDesktopMode", "??", Glmwfw_GetDesktopModeCmd },
-    { "swapBuffers", "", Glmwfw_SwapBuffersCmd },
-    { "getKey", "keyName", Glmwfw_GetKeyCmd },
-    { "setKeyCallback", "functionName", Glmwfw_SetKeyCallbackCmd },
-    { "setMousePosCallback", "functionName",
+    { "::ntk::glmwfw::Glmwfw::init", "", Glmwfw_InitCmd },
+    { "::ntk::glmwfw::Glmwfw::terminate", "", Glmwfw_TerminateCmd },
+    { "::ntk::glmwfw::Glmwfw::enable", "param", Glmwfw_EnableCmd },
+    { "::ntk::glmwfw::Glmwfw::disable", "param", Glmwfw_DisableCmd },
+    { "::ntk::glmwfw::Glmwfw::openWindowHint", "target hint",
+            Glmwfw_OpenWindowHintCmd },
+    { "::ntk::glmwfw::Glmwfw::openWindow", "width height",
+            Glmwfw_OpenWindowCmd },
+    { "::ntk::glmwfw::Glmwfw::closeWindow", "", Glmwfw_CloseWindowCmd },
+    { "::ntk::glmwfw::Glmwfw::setWindowTitle", "title",
+            Glmwfw_SetWindowTitleCmd },
+    { "::ntk::glmwfw::Glmwfw::setWindowSize", "width height",
+            Glmwfw_SetWindowSizeCmd },
+    { "::ntk::glmwfw::Glmwfw::setWindowPos", "x y", Glmwfw_SetWindowPosCmd },
+    { "::ntk::glmwfw::Glmwfw::getWindowParam", "paramName",
+            Glmwfw_GetWindowParamCmd },
+    { "::ntk::glmwfw::Glmwfw::getWindowSize", "", Glmwfw_GetWindowSizeCmd },
+    { "::ntk::glmwfw::Glmwfw::getMousePos", "", Glmwfw_GetMousePosCmd },
+    { "::ntk::glmwfw::Glmwfw::getVideoModes", "??", Glmwfw_GetVideoModesCmd },
+    { "::ntk::glmwfw::Glmwfw::getDesktopMode", "??", Glmwfw_GetDesktopModeCmd },
+    { "::ntk::glmwfw::Glmwfw::swapBuffers", "", Glmwfw_SwapBuffersCmd },
+    { "::ntk::glmwfw::Glmwfw::getKey", "keyName", Glmwfw_GetKeyCmd },
+    { "::ntk::glmwfw::Glmwfw::setKeyCallback", "functionName",
+            Glmwfw_SetKeyCallbackCmd },
+    { "::ntk::glmwfw::Glmwfw::setMousePosCallback", "functionName",
             Glmwfw_SetMousePosCallbackCmd },
-    { "setMouseButtonCallback", "functionName",
+    { "::ntk::glmwfw::Glmwfw::setMouseButtonCallback", "functionName",
             Glmwfw_SetMouseButtonCallbackCmd },
-    { "setWindowSizeCallback", "functionName",
+    { "::ntk::glmwfw::Glmwfw::setWindowSizeCallback", "functionName",
             Glmwfw_SetWindowSizeCallbackCmd },
-    { "setWindowRefreshCallback", "functionName",
+    { "::ntk::glmwfw::Glmwfw::setWindowRefreshCallback", "functionName",
             Glmwfw_SetWindowRefreshCallbackCmd },
-    { "setWindowcloseCallback", "functionName",
+    { "::ntk::glmwfw::Glmwfw::setWindowcloseCallback", "functionName",
             Glmwfw_SetWindowCloseCallbackCmd },
-    { "setMouseWheelCallback", "functionName",
+    { "::ntk::glmwfw::Glmwfw::setMouseWheelCallback", "functionName",
             Glmwfw_SetMouseWheelCallbackCmd },
-    { "waitEvents", "", Glmwfw_WaitEventsCmd },
-#ifdef NOTDEF
-    { "drawMegaimage", "width height <pixel-list>", Glmwfw_DrawMegaimageCmd },
+    { "::ntk::glmwfw::Glmwfw::waitEvents", "", Glmwfw_WaitEventsCmd },
+#ifndef NOTDEF
+    { "::ntk::glmwfw::Glmwfw::drawMegaimage", "width height <pixel-list>",
+            Glmwfw_DrawMegaimageCmd },
 #endif
-    /*
-     *  Add an error handler to support all of the usual inquiries
-     *  for the "info" command in the global namespace.
-     */
-    { "@error", "", Glmwfw_DefaultCmd },
+    { "::ntk::glmwfw::Glmwfw::unknown", "", Glmwfw_UnknownCmd },
     { NULL, NULL, NULL }
-};
-
-struct NameProcMap { const char *name; Tcl_ObjCmdProc *proc; };
-
-/*
- * List of commands that are used to implement the [ntk glmwfw] subcommands.
- */
-
-static const struct NameProcMap glmwfwCmds2[] = {
-    { "::ntk::glmwfw::Glmwfw::init", Glmwfw_InitCmd },
-    { "::ntk::glmwfw::Glmwfw::terminate", Glmwfw_TerminateCmd },
-    { "::ntk::glmwfw::Glmwfw::enable", Glmwfw_EnableCmd },
-    { "::ntk::glmwfw::Glmwfw::disable", Glmwfw_DisableCmd },
-    { "::ntk::glmwfw::Glmwfw::openWindow", Glmwfw_OpenWindowCmd },
-    { "::ntk::glmwfw::Glmwfw::openWindowHint", Glmwfw_OpenWindowHintCmd },
-    { "::ntk::glmwfw::Glmwfw::closeWindow", Glmwfw_CloseWindowCmd },
-    { "::ntk::glmwfw::Glmwfw::setWindowTitle", Glmwfw_SetWindowTitleCmd },
-    { "::ntk::glmwfw::Glmwfw::setWindowPos", Glmwfw_SetWindowPosCmd },
-    { "::ntk::glmwfw::Glmwfw::setWindowSize", Glmwfw_SetWindowSizeCmd },
-    { "::ntk::glmwfw::Glmwfw::getWindowParam", Glmwfw_GetWindowParamCmd },
-    { "::ntk::glmwfw::Glmwfw::getWindowSize", Glmwfw_GetWindowSizeCmd },
-    { "::ntk::glmwfw::Glmwfw::getMousePos", Glmwfw_GetMousePosCmd },
-    { "::ntk::glmwfw::Glmwfw::getVideoModes", Glmwfw_GetVideoModesCmd },
-    { "::ntk::glmwfw::Glmwfw::getDesktopMode", Glmwfw_GetDesktopModeCmd },
-    { "::ntk::glmwfw::Glmwfw::swapBuffers", Glmwfw_SwapBuffersCmd },
-    { "::ntk::glmwfw::Glmwfw::getKey", Glmwfw_GetKeyCmd },
-    { "::ntk::glmwfw::Glmwfw::setKeyCallback", Glmwfw_SetKeyCallbackCmd },
-    { "::ntk::glmwfw::Glmwfw::setMousePosCallback", 
-            Glmwfw_SetMousePosCallbackCmd },
-    { "::ntk::glmwfw::Glmwfw::setMouseButtonCallback", 
-            Glmwfw_SetMouseButtonCallbackCmd },
-    { "::ntk::glmwfw::Glmwfw::setMouseWheelCallback",
-            Glmwfw_SetMouseWheelCallbackCmd },
-    { "::ntk::glmwfw::Glmwfw::setWindowSizeCallback",
-            Glmwfw_SetWindowSizeCallbackCmd },
-    { "::ntk::glmwfw::Glmwfw::setWindowRefreshCallback",
-            Glmwfw_SetWindowRefreshCallbackCmd },
-    { "::ntk::glmwfw::Glmwfw::setWindowCloseCallback",
-            Glmwfw_SetWindowCloseCallbackCmd },
-    { "::ntk::glmwfw::Glmwfw::waitEvents", Glmwfw_WaitEventsCmd },
-    { "::ntk::glmwfw::Glmwfw::unknown", Glmwfw_UnknownCmd },
-#ifdef NOTDEF
-    { "::ntk::glmwfw::Glmwfw::drawMegaimage", Glmwfw_DrawMegaimageCmd },
-#endif
-    /*
-     *  Add an error handler
-     */
-    { "::ntk::glmwfw::GlfW::@error", Glmwfw_DefaultCmd },
-    { NULL, NULL }
 };
 
 /*
@@ -174,9 +128,9 @@ Glmwfw_InitCommands (
     cmd = Tcl_CreateEnsemble(interp, nsPtr->fullName, nsPtr,
         TCL_ENSEMBLE_PREFIX);
     Tcl_Export(interp, nsPtr, "[a-z]*", 1);
-    for (i=0 ; glmwfwCmds2[i].name!=NULL ; i++) {
-        Tcl_CreateObjCommand(interp, glmwfwCmds2[i].name,
-                glmwfwCmds2[i].proc, infoPtr, NULL);
+    for (i=0 ; glmwfwGlmwfwMethodList[i].name!=NULL ; i++) {
+        Tcl_CreateObjCommand(interp, GlmwfwMethodList[i].name,
+                GlmwfwMethodList[i].proc, infoPtr, NULL);
     }
     Tcl_Obj *ensObjPtr = Tcl_NewStringObj("::ntk::glmwfw::Glmwfw", -1);
     Tcl_IncrRefCount(ensObjPtr);
@@ -203,14 +157,25 @@ GlmwfwGetUsage(
     Tcl_Interp *interp,
     Tcl_Obj *objPtr)       /* returns: summary of usage info */
 {
+    const char *cp;
     char *spaces = "  ";
 
     int i;
 
     for (i=0; GlmwfwMethodList[i].name != NULL; i++) {
+	if (strcmp(GLMethodList[i].commandName,
+	        "::ntk::glmwfw::Glmwfw::unknown") == 0) {
+	    continue;
+	}
         Tcl_AppendToObj(objPtr, spaces, -1);
         Tcl_AppendToObj(objPtr, "ntk glmwfw ", -1);
-        Tcl_AppendToObj(objPtr, GlmwfwMethodList[i].name, -1);
+	cp = strrchr(GlmwfwMethodList[i].name, ':');
+	if (cp == NULL) {
+	   cp = GlmwfwMethodList[i].name;
+	} else {
+	   cp++;
+	}
+        Tcl_AppendToObj(objPtr, cp, -1);
         if (strlen(GlmwfwMethodList[i].usage) > 0) {
             Tcl_AppendToObj(objPtr, " ", -1);
             Tcl_AppendToObj(objPtr, GlmwfwMethodList[i].usage, -1);
@@ -1552,9 +1517,9 @@ Glmwfw_WaitEventsCmd(
     glmwfwWaitEvents(infoPtr->currWindow);
     return TCL_OK;
 }
-#ifdef NOTDEF
+#ifndef NOTDEF
 
-#include "megaimage_shared.h"
+#include "/home/arnulf/lib/include/megaimage_shared.h"
 /*
  * ------------------------------------------------------------------------
  *  Glmwfw_DrawMegaimageCmd()

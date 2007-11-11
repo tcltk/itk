@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkGLWidgetCmd.c,v 1.1.2.2 2007/11/11 11:46:31 wiede Exp $
+ * RCS: @(#) $Id: ntkGLWidgetCmd.c,v 1.1.2.3 2007/11/11 20:02:21 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -173,16 +173,24 @@ TclGLGetUsage(
     NtkGLWidgetInfo *infoPtr,
     Tcl_Obj *objPtr)       /* returns: summary of usage info */
 {
+    const char *cp;
     char *spaces = "  ";
     int i;
 
     for (i=0; GLMethodList[i].commandName != NULL; i++) {
-	if (strcmp(GLMethodList[i].commandName, "::ntk::glWidget::Widget::unknown") == 0) {
+	if (strcmp(GLMethodList[i].commandName,
+	        "::ntk::glWidget::Widget::unknown") == 0) {
 	    continue;
 	}
         Tcl_AppendToObj(objPtr, spaces, -1);
         Tcl_AppendToObj(objPtr, "ntk ", -1);
-        Tcl_AppendToObj(objPtr, GLMethodList[i].commandName, -1);
+	cp = strrchr(GLMethodList[i].commandName, ':');
+	if (cp == NULL) {
+	   cp = GLMethodList[i].commandName;
+	} else {
+	   cp++;
+	}
+        Tcl_AppendToObj(objPtr, cp, -1);
         if (strlen(GLMethodList[i].usage) > 0) {
             Tcl_AppendToObj(objPtr, " ", -1);
             Tcl_AppendToObj(objPtr, GLMethodList[i].usage, -1);
