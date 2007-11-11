@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkGLWidgetBase.c,v 1.1.2.1 2007/11/11 10:08:14 wiede Exp $
+ * RCS: @(#) $Id: ntkGLWidgetBase.c,v 1.1.2.2 2007/11/11 11:46:31 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -44,7 +44,7 @@ Initialize (
 
     nsPtr = Tcl_CreateNamespace(interp, NTK_GL_WIDGET_NAMESPACE, NULL, NULL);
     if (nsPtr == NULL) {
-        Tcl_Panic("tclGlfw: cannot create namespace: \"%s\" \n",
+        Tcl_Panic("ntkGlWidget: cannot create namespace: \"%s\" \n",
 	        NTK_GL_WIDGET_NAMESPACE);
     }
     /*
