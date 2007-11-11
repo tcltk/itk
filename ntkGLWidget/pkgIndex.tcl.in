@@ -1,0 +1,2 @@
+if {[catch {package present Tcl }]} return
+package ifneeded ntkGLWidget 0.1  [list load [file join $dir libntkGLWidget0.1.so] ntkGLWidget] 
