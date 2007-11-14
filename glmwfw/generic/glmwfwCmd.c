@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.5 2007/11/11 20:01:54 wiede Exp $
+ * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.6 2007/11/14 17:46:50 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -44,6 +44,7 @@ Tcl_ObjCmdProc Glmwfw_UnknownCmd;
 Tcl_ObjCmdProc Glmwfw_WaitEventsCmd;
 #ifndef NOTDEF
 Tcl_ObjCmdProc Glmwfw_DrawMegaimageCmd;
+Tcl_ObjCmdProc Glmwfw_DrawPixels2Cmd;
 #endif
 
 typedef struct GlmwfwMethod {
@@ -85,7 +86,7 @@ static GlmwfwMethod GlmwfwMethodList[] = {
             Glmwfw_SetWindowSizeCallbackCmd },
     { "::ntk::glmwfw::Glmwfw::setWindowRefreshCallback", "functionName",
             Glmwfw_SetWindowRefreshCallbackCmd },
-    { "::ntk::glmwfw::Glmwfw::setWindowcloseCallback", "functionName",
+    { "::ntk::glmwfw::Glmwfw::setWindowCloseCallback", "functionName",
             Glmwfw_SetWindowCloseCallbackCmd },
     { "::ntk::glmwfw::Glmwfw::setMouseWheelCallback", "functionName",
             Glmwfw_SetMouseWheelCallbackCmd },
@@ -93,6 +94,8 @@ static GlmwfwMethod GlmwfwMethodList[] = {
 #ifndef NOTDEF
     { "::ntk::glmwfw::Glmwfw::drawMegaimage", "width height <pixel-list>",
             Glmwfw_DrawMegaimageCmd },
+    { "::ntk::glmwfw::Glmwfw::drawPixels2", "width height <data>",
+            Glmwfw_DrawPixels2Cmd },
 #endif
     { "::ntk::glmwfw::Glmwfw::unknown", "", Glmwfw_UnknownCmd },
     { NULL, NULL, NULL }
@@ -128,7 +131,7 @@ Glmwfw_InitCommands (
     cmd = Tcl_CreateEnsemble(interp, nsPtr->fullName, nsPtr,
         TCL_ENSEMBLE_PREFIX);
     Tcl_Export(interp, nsPtr, "[a-z]*", 1);
-    for (i=0 ; glmwfwGlmwfwMethodList[i].name!=NULL ; i++) {
+    for (i=0 ; GlmwfwMethodList[i].name!=NULL ; i++) {
         Tcl_CreateObjCommand(interp, GlmwfwMethodList[i].name,
                 GlmwfwMethodList[i].proc, infoPtr, NULL);
     }
@@ -163,7 +166,7 @@ GlmwfwGetUsage(
     int i;
 
     for (i=0; GlmwfwMethodList[i].name != NULL; i++) {
-	if (strcmp(GLMethodList[i].commandName,
+	if (strcmp(GlmwfwMethodList[i].name,
 	        "::ntk::glmwfw::Glmwfw::unknown") == 0) {
 	    continue;
 	}
@@ -1557,6 +1560,47 @@ Glmwfw_DrawMegaimageCmd(
     memcpy(&megaimageHeader, hdPtr, sizeof(struct megaimage_header));
     data = hdPtr + sizeof(struct megaimage_header);
     glDrawPixels(megaimageHeader.width, megaimageHeader.height,
+            GL_RGBA, GL_UNSIGNED_BYTE, data);
+    return result;
+}
+/*
+ * ------------------------------------------------------------------------
+ *  Glmwfw_DrawPixels2Cmd()
+ *
+ *  Handles drawing of a pixel area with rgba values
+ *
+ *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+Glmwfw_DrawPixels2Cmd(
+    ClientData clientData, /* infoPtr */
+    Tcl_Interp *interp,    /* current interpreter */
+    int objc,              /* number of arguments */
+    Tcl_Obj *CONST objv[]) /* argument objects */
+{
+    GlmwfwInfo *infoPtr;
+    unsigned char *data;
+    int width;
+    int height;
+    int lgth;
+    int result;
+
+    infoPtr = (GlmwfwInfo *)clientData;
+    result = TCL_OK;
+    GlmwfwShowArgs(1, "Glmwfw_DrawPixels2Cmd", objc, objv);
+    if (objc != 4) {
+	Tcl_AppendResult(interp,
+	        "wrong # args: should be \"ntk glmwfw drawMegaimage data\"",
+	        NULL);
+        return TCL_ERROR;
+    }
+    Tcl_GetIntFromObj(interp, objv[1], &width);
+    Tcl_GetIntFromObj(interp, objv[2], &height);
+    data = Tcl_GetByteArrayFromObj(objv[3], &lgth);
+fprintf(stderr, "W!%d!%d!\n", width, height);
+    glDrawPixels(width, height,
             GL_RGBA, GL_UNSIGNED_BYTE, data);
     return result;
 }
