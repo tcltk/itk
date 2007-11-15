@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetCmd.c,v 1.1.2.1 2007/11/14 17:35:06 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetCmd.c,v 1.1.2.2 2007/11/15 21:18:32 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -42,25 +42,26 @@ static NtkWidgetMethod NtkWidgetMethodList[] = {
     { "::ntk::widget::Widget::create",
             "width height itemsize", NtkWidget_CreateCmd },
     { "::ntk::widget::Widget::line",
-            "object x1 y1 x2 y2 rgbaList", NtkWidget_LineCmd },
+            "widget x1 y1 x2 y2 rgbaList", NtkWidget_LineCmd },
     { "::ntk::widget::Widget::blend",
-            "", NtkWidget_BlendCmd },
+            "widget", NtkWidget_BlendCmd },
     { "::ntk::widget::Widget::blendwidget",
-            "", NtkWidget_BlendWidgetCmd },
+            "destWidget destX destY ?srcX1 srcY1 srcX2 srcY2? srcWidget",
+	    NtkWidget_BlendWidgetCmd },
     { "::ntk::widget::Widget::getdata",
-            "", NtkWidget_GetDataCmd },
+            "widget", NtkWidget_GetDataCmd },
     { "::ntk::widget::Widget::getsize",
-            "", NtkWidget_GetSizeCmd },
+            "widget", NtkWidget_GetSizeCmd },
     { "::ntk::widget::Widget::fill",
-            "", NtkWidget_FillCmd },
+            "widget", NtkWidget_FillCmd },
     { "::ntk::widget::Widget::setdata",
-            "", NtkWidget_SetDataCmd },
+            "widget data", NtkWidget_SetDataCmd },
     { "::ntk::widget::Widget::setsize",
-            "", NtkWidget_SetSizeCmd },
+            "widget width height", NtkWidget_SetSizeCmd },
     { "::ntk::widget::Widget::rectangle",
-            "", NtkWidget_RectangleCmd },
+            "widget", NtkWidget_RectangleCmd },
     { "::ntk::widget::Widget::rotate",
-            "", NtkWidget_RotateCmd },
+            "widget degrees", NtkWidget_RotateCmd },
     { NULL, NULL, NULL }
 };
 #ifdef NOTDEF
@@ -242,7 +243,7 @@ NtkWidget_UnknownCmd(
 /* ARGSUSED */
 void (*glXGetProcAddressARB(const GLubyte *procName))();
 
-int
+static int
 CheckNumParams(
     Tcl_Interp *interp,
     NtkWidgetInfo *infoPtr,
@@ -315,7 +316,7 @@ NtkWidget_CreateCmd(
         return TCL_ERROR;
     }
     if (argc != 2) {
-	Tcl_AppendResult(interp, "bad argument value for rgbalist \"",
+	Tcl_AppendResult(interp, "bad argument value for itemsize \"",
 	        Tcl_GetString(objv[3]), "\"", NULL);
         ckfree((char *)argv);
         return TCL_ERROR;
@@ -325,8 +326,9 @@ NtkWidget_CreateCmd(
     wgtPtr->height = height;
     wgtPtr->numTypeItems = atoi(argv[0]);
     wgtPtr->numTypeEntryBits =  atoi(argv[1]);
-    wgtPtr->typeEntryBytes = (wgtPtr->numTypeItems * (wgtPtr->numTypeEntryBits / 8));
-    wgtPtr->dataSize = width * height *wgtPtr->typeEntryBytes;
+    wgtPtr->typeEntryBytes = (wgtPtr->numTypeItems *
+            (wgtPtr->numTypeEntryBits / 8));
+    wgtPtr->dataSize = width * height * wgtPtr->typeEntryBytes;
     wgtPtr->data = (char *)ckalloc(wgtPtr->dataSize);
     sprintf(buf, "widget_%d", infoPtr->numWidgets);
     objPtr = Tcl_NewStringObj(buf, -1);
@@ -356,8 +358,8 @@ NtkWidget_LineCmd(
     Tcl_Obj *CONST objv[])   /* argument objects */
 {
     Tcl_HashEntry *hPtr;
-    NtkWidgetInfo *infoPtr;
     NtkWidget *wgtPtr;
+    NtkWidgetInfo *infoPtr;
     int x1;
     int y1;
     int x2;
@@ -413,12 +415,22 @@ NtkWidget_BlendCmd(
     Tcl_Obj *CONST objv[])   /* argument objects */
 {
     NtkWidgetInfo *infoPtr;
+    Tcl_HashEntry *hPtr;
+    NtkWidget *wgtPtr;
 
     infoPtr = (NtkWidgetInfo *)clientData;
     NtkWidgetShowArgs(0, "NtkWIdget_BlendCmd", objc, objv);
     if (CheckNumParams(interp, infoPtr, "blend", objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[1]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    wgtPtr = Tcl_GetHashValue(hPtr);
+fprintf(stderr, "blend not yet implemented\n");
     return TCL_OK;
 }
 
@@ -439,12 +451,78 @@ NtkWidget_BlendWidgetCmd(
     Tcl_Obj *CONST objv[])   /* argument objects */
 {
     NtkWidgetInfo *infoPtr;
+    Tcl_HashEntry *hPtr;
+    NtkWidget *wgtPtr;
+    NtkWidget *srcWgtPtr;
+    int x1;
+    int y1;
+    int x2;
+    int y2;
+    int destx;
+    int desty;
+    int idx;
 
     infoPtr = (NtkWidgetInfo *)clientData;
     NtkWidgetShowArgs(0, "NtkWIdget_BlendWidgetCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, "blendwidget", objc, 1) != TCL_OK) {
+    idx = -1;
+    switch (objc) {
+    case 5: {
+	if (Tcl_GetIntFromObj (interp, objv[2], &destx) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	if (Tcl_GetIntFromObj (interp, objv[3], &desty) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	idx = 4;
+	x1 = 0;
+	y1 = 0;
+        break;
+      }
+    case 9: {
+	if (Tcl_GetIntFromObj (interp, objv[2], &destx) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	if (Tcl_GetIntFromObj (interp, objv[3], &desty) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	if (Tcl_GetIntFromObj (interp, objv[4], &x1) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	if (Tcl_GetIntFromObj (interp, objv[5], &y1) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	if (Tcl_GetIntFromObj (interp, objv[6], &x2) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	if (Tcl_GetIntFromObj (interp, objv[7], &y2) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	idx = 8;
+        break;
+      }
+    default:
+        CheckNumParams(interp, infoPtr, "blendwidget", objc, 1);
         return TCL_ERROR;
     }
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[1]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    wgtPtr = Tcl_GetHashValue(hPtr);
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[idx]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[idx]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    srcWgtPtr = Tcl_GetHashValue(hPtr);
+    if (idx == 4) {
+        x2 = wgtPtr->width;
+        y2 = wgtPtr->height;
+    }
+    NtkWidgetBlend(interp, wgtPtr, srcWgtPtr, destx, desty, x1, y1, x2, y2);
     return TCL_OK;
 }
 
@@ -465,8 +543,8 @@ NtkWidget_GetDataCmd(
     Tcl_Obj *CONST objv[])   /* argument objects */
 {
     Tcl_Obj *objPtr;
-    Tcl_HashEntry *hPtr;
     NtkWidgetInfo *infoPtr;
+    Tcl_HashEntry *hPtr;
     NtkWidget *wgtPtr;
 
     infoPtr = (NtkWidgetInfo *)clientData;
@@ -502,13 +580,27 @@ NtkWidget_GetSizeCmd(
     int objc,                /* number of arguments */
     Tcl_Obj *CONST objv[])   /* argument objects */
 {
+    Tcl_Obj *listPtr;
     NtkWidgetInfo *infoPtr;
+    Tcl_HashEntry *hPtr;
+    NtkWidget *wgtPtr;
 
     infoPtr = (NtkWidgetInfo *)clientData;
     NtkWidgetShowArgs(0, "NtkWIdget_GetSizeCmd", objc, objv);
     if (CheckNumParams(interp, infoPtr, "getsize", objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[1]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    wgtPtr = Tcl_GetHashValue(hPtr);
+    listPtr = Tcl_NewListObj(0, NULL);
+    Tcl_ListObjAppendElement(interp, listPtr, Tcl_NewIntObj(wgtPtr->width));
+    Tcl_ListObjAppendElement(interp, listPtr, Tcl_NewIntObj(wgtPtr->height));
+    Tcl_SetObjResult(interp, listPtr);
     return TCL_OK;
 }
 
@@ -569,12 +661,33 @@ NtkWidget_SetDataCmd(
     Tcl_Obj *CONST objv[])   /* argument objects */
 {
     NtkWidgetInfo *infoPtr;
+    Tcl_HashEntry *hPtr;
+    NtkWidget *wgtPtr;
+    NtkWidget *srcWgtPtr;
 
     infoPtr = (NtkWidgetInfo *)clientData;
     NtkWidgetShowArgs(0, "NtkWIdget_SetDataCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, "setdata", objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, "setdata", objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[1]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    wgtPtr = Tcl_GetHashValue(hPtr);
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[2]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    srcWgtPtr = Tcl_GetHashValue(hPtr);
+    ckfree((char *)wgtPtr->data);
+    memcpy(wgtPtr, srcWgtPtr, sizeof(NtkWidget));
+    wgtPtr->data = (char*)ckalloc(srcWgtPtr->dataSize);
+    memcpy(wgtPtr->data, srcWgtPtr->data, srcWgtPtr->dataSize);
     return TCL_OK;
 }
 
@@ -595,12 +708,47 @@ NtkWidget_SetSizeCmd(
     Tcl_Obj *CONST objv[])   /* argument objects */
 {
     NtkWidgetInfo *infoPtr;
+    Tcl_HashEntry *hPtr;
+    NtkWidget *wgtPtr;
+    char *newBytes;
+    int newSize;
+    int width;
+    int height;
 
     infoPtr = (NtkWidgetInfo *)clientData;
     NtkWidgetShowArgs(0, "NtkWIdget_SetSizeCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, "setsize", objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, "setsize", objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[1]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    wgtPtr = Tcl_GetHashValue(hPtr);
+    if (Tcl_GetIntFromObj (interp, objv[2], &width) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (Tcl_GetIntFromObj (interp, objv[3], &height) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if ((wgtPtr->width == width) && (wgtPtr->height == height)) {
+        return TCL_OK;
+    }
+    newSize = width * height * wgtPtr->typeEntryBytes;
+    newBytes = ckalloc(newSize);
+    if (newBytes == NULL) {
+	Tcl_SetResult (interp, "unable to setsize.", TCL_STATIC);
+	Tcl_AppendResult (interp, "  more info: ",
+	        (char *)Tcl_PosixError (interp), NULL);
+        return TCL_ERROR;
+    }
+    ckfree((char *)wgtPtr->data);
+    wgtPtr->width = width;
+    wgtPtr->height = height;
+    wgtPtr->dataSize = newSize;
+    wgtPtr->data = newBytes;
     return TCL_OK;
 }
 
@@ -621,12 +769,22 @@ NtkWidget_RectangleCmd(
     Tcl_Obj *CONST objv[])   /* argument objects */
 {
     NtkWidgetInfo *infoPtr;
+    Tcl_HashEntry *hPtr;
+    NtkWidget *wgtPtr;
 
     infoPtr = (NtkWidgetInfo *)clientData;
     NtkWidgetShowArgs(0, "NtkWIdget_RectangleCmd", objc, objv);
     if (CheckNumParams(interp, infoPtr, "rectangle", objc, 1) != TCL_OK) {
         return TCL_ERROR;
     }
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[1]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    wgtPtr = Tcl_GetHashValue(hPtr);
+fprintf(stderr, "rectangle not yet implemented\n");
     return TCL_OK;
 }
 
@@ -647,11 +805,24 @@ NtkWidget_RotateCmd(
     Tcl_Obj *CONST objv[])   /* argument objects */
 {
     NtkWidgetInfo *infoPtr;
+    Tcl_HashEntry *hPtr;
+    NtkWidget *wgtPtr;
+    int degrees;
 
     infoPtr = (NtkWidgetInfo *)clientData;
     NtkWidgetShowArgs(0, "NtkWIdget_RotateCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, "rotate", objc, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, "rotate", objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
-    return TCL_OK;
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[1]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    wgtPtr = Tcl_GetHashValue(hPtr);
+    if (Tcl_GetIntFromObj (interp, objv[2], &degrees) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    return NtkWidgetRotate(interp, wgtPtr, degrees);
 }

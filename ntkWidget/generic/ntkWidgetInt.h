@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetInt.h,v 1.1.2.1 2007/11/14 17:35:06 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetInt.h,v 1.1.2.2 2007/11/15 21:18:32 wiede Exp $
  */
 
 #include <string.h>
@@ -85,3 +85,8 @@ MODULE_SCOPE int NtkWidgetLine(Tcl_Interp *interp, NtkWidget *wgtPtr,
 	int x1, int y1, int x2, int y2, unsigned char *rgba);
 MODULE_SCOPE int NtkWidgetFill(Tcl_Interp *interp, NtkWidget *wgtPtr,
 	 unsigned char *rgba);
+MODULE_SCOPE void NtkWidgetBlend(Tcl_Interp *interp, NtkWidget *destWgtPtr,
+        NtkWidget *srcWgtPtr, int destx, int desty, int x1, int y1,
+        int x2, int y2);
+MODULE_SCOPE int NtkWidgetRotate(Tcl_Interp *interp, NtkWidget *wgtPtr,
+	int degrees);
