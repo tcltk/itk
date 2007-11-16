@@ -3,7 +3,7 @@ dnl	This file is an input file used by the GNU "autoconf" program to
 dnl	generate the file "configure", which is run during Tcl installation
 dnl	to configure the system for the local environment.
 #
-# RCS: @(#) $Id: configure.in,v 1.1.2.1 2007/11/14 17:33:23 wiede Exp $
+# RCS: @(#) $Id: configure.in,v 1.1.2.2 2007/11/16 20:27:16 wiede Exp $
 
 #-----------------------------------------------------------------------
 # ntkWidget configure.in for Tcl Extensions.  The only places you should
@@ -71,10 +71,10 @@ TEA_SETUP_COMPILER
 # and PKG_TCL_SOURCES.
 #-----------------------------------------------------------------------
 
-TEA_ADD_SOURCES([ntkWidgetBase.c ntkWidgetCmd.c ntkWidgetStubInit.c ntkWidgetUtil.c])
+TEA_ADD_SOURCES([ntkWidgetBase.c ntkWidgetCmd.c ntkWidgetStubInit.c ntkWidgetUtil.c ntkWidgetFreeType.c])
 TEA_ADD_HEADERS([])
-TEA_ADD_INCLUDES([])
-TEA_ADD_LIBS([-L/usr/X11/lib -lGLU -lGL -lX11 -lXrandr -lm])
+TEA_ADD_INCLUDES([-I/usr/include/freetype2])
+TEA_ADD_LIBS([-L/usr/X11/lib -lGLU -lGL -lX11 -lXrandr -lfreetype -lm])
 TEA_ADD_CFLAGS([-DNTK_WIDGET_DEBUG])
 TEA_ADD_STUB_SOURCES([])
 TEA_ADD_TCL_SOURCES([])

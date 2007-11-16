@@ -24,7 +24,9 @@ package require ntkWidget
     }
     
     constructor {args} {
+puts stderr "ARGS!{*}$args!"
         configure {*}$args
+puts stderr "ARGS2!$args!"
 	set widget [::ntk::widget::Widget create $itcl_options(-width) $itcl_options(-height) $itcl_options(-itemsize)]
 	set constructing 0
 	return $widget
@@ -32,6 +34,10 @@ package require ntkWidget
 
     public method widget {} {
         return $widget
+    }
+
+    public method createText {font fontSize text wVar hVar} {
+        return [::ntk::widget::Widget createText $widget $font $fontSize $text $wVar $hVar]
     }
 
     public method line {x1 y1 x2 y2 rgbaList} {
@@ -50,8 +56,16 @@ package require ntkWidget
         return [::ntk::widget::Widget getdata $widget]
     }
 
+    public method setdata {srcWidget} {
+        return [::ntk::widget::Widget setdata $widget $srcWidget]
+    }
+
     public method blendwidget {args} {
         return [::ntk::widget::Widget blendwidget $widget {*}$args]
+    }
+
+    public method setsize {width height} {
+        return [::ntk::widget::Widget setsize $widget $width $height]
     }
 
     public method rotate {degrees} {

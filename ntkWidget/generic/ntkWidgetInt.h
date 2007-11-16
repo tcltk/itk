@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetInt.h,v 1.1.2.2 2007/11/15 21:18:32 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetInt.h,v 1.1.2.3 2007/11/16 20:27:16 wiede Exp $
  */
 
 #include <string.h>
@@ -51,6 +51,8 @@
 #define NTK_WIDGET_INTERP_DATA "ntkWidget_data"
 #define NTK_WIDGET_INFO_VERSION 1
 
+struct NtkFreeTypeString;
+
 typedef struct NtkWidget {
     int width;
     int height;
@@ -58,6 +60,8 @@ typedef struct NtkWidget {
     int numTypeEntryBits;
     int typeEntryBytes;
     int dataSize;
+    int fontInfoSize;
+    struct NtkFreeTypeString *fontInfo;
     void *data;
 } NtkWidget;
 
@@ -90,3 +94,8 @@ MODULE_SCOPE void NtkWidgetBlend(Tcl_Interp *interp, NtkWidget *destWgtPtr,
         int x2, int y2);
 MODULE_SCOPE int NtkWidgetRotate(Tcl_Interp *interp, NtkWidget *wgtPtr,
 	int degrees);
+MODULE_SCOPE int NtkWidget_InitFreeType(Tcl_Interp *interp,
+        NtkWidgetInfo *infoPtr);
+MODULE_SCOPE int NtkWidget_GetFreeTypeInfo(Tcl_Interp *interp,
+        NtkWidgetInfo *infoPtr, const char *fontName, int fontSize,
+        unsigned char *rgbaPtr, Tcl_Obj *textPtr, NtkWidget *wgtPtr);

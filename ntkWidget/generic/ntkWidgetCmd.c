@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetCmd.c,v 1.1.2.2 2007/11/15 21:18:32 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetCmd.c,v 1.1.2.3 2007/11/16 20:27:16 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -19,6 +19,7 @@
 
 Tcl_ObjCmdProc NtkWidget_UnknownCmd;
 Tcl_ObjCmdProc NtkWidget_CreateCmd;
+Tcl_ObjCmdProc NtkWidget_CreateTextCmd;
 Tcl_ObjCmdProc NtkWidget_LineCmd;
 Tcl_ObjCmdProc NtkWidget_BlendCmd;
 Tcl_ObjCmdProc NtkWidget_BlendWidgetCmd;
@@ -41,6 +42,9 @@ static NtkWidgetMethod NtkWidgetMethodList[] = {
             "", NtkWidget_UnknownCmd },
     { "::ntk::widget::Widget::create",
             "width height itemsize", NtkWidget_CreateCmd },
+    { "::ntk::widget::Widget::createtext",
+            "font fontsize textcolor widthVar heightVar",
+	    NtkWidget_CreateTextCmd },
     { "::ntk::widget::Widget::line",
             "widget x1 y1 x2 y2 rgbaList", NtkWidget_LineCmd },
     { "::ntk::widget::Widget::blend",
@@ -278,7 +282,7 @@ CheckNumParams(
  * ------------------------------------------------------------------------
  *  NtkWidget_CreateCmd()
  *
- *  Handles the ntk glwidget create command
+ *  Handles the ntk widget create command
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
@@ -328,6 +332,8 @@ NtkWidget_CreateCmd(
     wgtPtr->numTypeEntryBits =  atoi(argv[1]);
     wgtPtr->typeEntryBytes = (wgtPtr->numTypeItems *
             (wgtPtr->numTypeEntryBits / 8));
+    wgtPtr->fontInfo = NULL;
+    wgtPtr->fontInfoSize = 0;
     wgtPtr->dataSize = width * height * wgtPtr->typeEntryBytes;
     wgtPtr->data = (char *)ckalloc(wgtPtr->dataSize);
     sprintf(buf, "widget_%d", infoPtr->numWidgets);
@@ -343,9 +349,85 @@ NtkWidget_CreateCmd(
 
 /*
  * ------------------------------------------------------------------------
+ *  NtkWidget_CreateTextCmd()
+ *
+ *  Handles the ntk widget createtext command
+ *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+NtkWidget_CreateTextCmd(
+    ClientData clientData,  /* infoPtr */
+    Tcl_Interp *interp,      /* current interpreter */
+    int objc,                /* number of arguments */
+    Tcl_Obj *CONST objv[])   /* argument objects */
+{
+    Tcl_HashEntry *hPtr;
+    Tcl_Obj *objPtr;
+    Tcl_Obj *varPtr;
+    NtkWidgetInfo *infoPtr;
+    NtkWidget *wgtPtr;
+    const char *fontName;
+    int fontSize;
+    unsigned char rgba[4];
+    int result;
+
+    result = TCL_OK;
+    infoPtr = (NtkWidgetInfo *)clientData;
+    NtkWidgetShowArgs(0, "NtkWIdget_CreateTextCmd", objc, objv);
+    if (CheckNumParams(interp, infoPtr, "createtext", objc, 7) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[1]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    wgtPtr = Tcl_GetHashValue(hPtr);
+    fontName = Tcl_GetString(objv[2]);
+    if (Tcl_GetIntFromObj(interp, objv[3], &fontSize) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (ExtractRGBAValues(interp, objv[5], &rgba[0], &rgba[1],
+            &rgba[2], &rgba[3]) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (NtkWidget_GetFreeTypeInfo(interp, infoPtr, fontName, fontSize,
+            rgba, objv[4], wgtPtr) != TCL_OK) {
+	return TCL_ERROR;
+    }
+    objPtr = Tcl_NewIntObj(wgtPtr->width);
+    Tcl_IncrRefCount(objPtr);
+    varPtr = Tcl_ObjSetVar2(interp, objv[6], NULL, objPtr, /*flags*/0);
+    if (varPtr == NULL) {
+        result = TCL_ERROR;
+	goto outerr;
+    }
+    objPtr = Tcl_NewIntObj(wgtPtr->height);
+    Tcl_IncrRefCount(objPtr);
+    varPtr = Tcl_ObjSetVar2(interp, objv[7], NULL, objPtr, /*flags*/0);
+    if (varPtr == NULL) {
+        result = TCL_ERROR;
+	goto outerr;
+    }
+    goto out;
+
+outerr:
+    
+out:
+    ckfree((char *)wgtPtr->fontInfo);
+    wgtPtr->fontInfo = NULL;
+    wgtPtr->fontInfoSize = 0;
+    return result;
+}
+
+/*
+ * ------------------------------------------------------------------------
  *  NtkWidget_LineCmd()
  *
- *  Handles the ntk glwidget line command
+ *  Handles the ntk widget line command
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
@@ -402,7 +484,7 @@ NtkWidget_LineCmd(
  * ------------------------------------------------------------------------
  *  NtkWidget_BlendCmd()
  *
- *  Handles the ntk glwidget blen command
+ *  Handles the ntk widget blend command
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
@@ -438,7 +520,7 @@ fprintf(stderr, "blend not yet implemented\n");
  * ------------------------------------------------------------------------
  *  NtkWidget_BlendWidgetCmd()
  *
- *  Handles the ntk glwidget blendwidget command
+ *  Handles the ntk widget blendwidget command
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
@@ -530,7 +612,7 @@ NtkWidget_BlendWidgetCmd(
  * ------------------------------------------------------------------------
  *  NtkWidget_GetDataCmd()
  *
- *  Handles the ntk glwidget getdata command
+ *  Handles the ntk widget getdata command
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
@@ -568,7 +650,7 @@ NtkWidget_GetDataCmd(
  * ------------------------------------------------------------------------
  *  NtkWidget_GetSizeCmd()
  *
- *  Handles the ntk glwidget getsize command
+ *  Handles the ntk widget getsize command
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
@@ -608,7 +690,7 @@ NtkWidget_GetSizeCmd(
  * ------------------------------------------------------------------------
  *  NtkWidget_FillCmd()
  *
- *  Handles the ntk glwidget fill command
+ *  Handles the ntk widget fill command
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
@@ -648,7 +730,7 @@ NtkWidget_FillCmd(
  * ------------------------------------------------------------------------
  *  NtkWidget_SetDataCmd()
  *
- *  Handles the ntk glwidget setdata command
+ *  Handles the ntk widget setdata command
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
@@ -695,7 +777,7 @@ NtkWidget_SetDataCmd(
  * ------------------------------------------------------------------------
  *  NtkWidget_SetSizeCmd()
  *
- *  Handles the ntk glwidget setsize command
+ *  Handles the ntk widget setsize command
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
@@ -717,7 +799,7 @@ NtkWidget_SetSizeCmd(
 
     infoPtr = (NtkWidgetInfo *)clientData;
     NtkWidgetShowArgs(0, "NtkWIdget_SetSizeCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, "setsize", objc, 2) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, "setsize", objc, 3) != TCL_OK) {
         return TCL_ERROR;
     }
     hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[1]);
@@ -756,7 +838,7 @@ NtkWidget_SetSizeCmd(
  * ------------------------------------------------------------------------
  *  NtkWidget_RectangleCmd()
  *
- *  Handles the ntk glwidget rectangle command
+ *  Handles the ntk widget rectangle command
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
@@ -792,7 +874,7 @@ fprintf(stderr, "rectangle not yet implemented\n");
  * ------------------------------------------------------------------------
  *  NtkWidget_RotateCmd()
  *
- *  Handles the ntk glwidget rotate command
+ *  Handles the ntk widget rotate command
  *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */

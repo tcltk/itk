@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetBase.c,v 1.1.2.1 2007/11/14 17:35:06 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetBase.c,v 1.1.2.2 2007/11/16 20:27:16 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -66,6 +66,9 @@ Initialize (
     Tcl_Preserve((ClientData)infoPtr);
 
     NtkWidget_InitCommands(interp, infoPtr);
+    if (NtkWidget_InitFreeType(interp, infoPtr) != TCL_OK) {
+        return TCL_ERROR;
+    }
 
     Tcl_SetVar(interp, "::ntk::widget::version", NTK_WIDGET_VERSION,
             TCL_NAMESPACE_ONLY);
