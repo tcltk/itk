@@ -34,8 +34,11 @@ display $win
     $widget2 fill [list 0 0 255 125]
     $widget2 rotate 10
     set data2 [$widget2 getdata]
-puts stderr "size![$widget2 getsize]!"
+#puts stderr "size![$widget2 getsize]!"
     $widget blendwidget 50 50 [$widget2 widget]
+    set widget3 [ntkWidget wgt3 -width 20 -height 20]
+    $widget3 createText Vera.ttf 14 "Arnulf geht jetzt" [list 0 0 0 255] w h
+    $widget blendwidget 100 100 [$widget3 widget]
     set data [$widget getdata]
     ::ntk::glmwfw::Glmwfw drawPixels2 400 200 $data
     ::ntk::glmwfw::Glmwfw swapBuffers $win

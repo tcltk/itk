@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetCmd.c,v 1.1.2.3 2007/11/16 20:27:16 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetCmd.c,v 1.1.2.4 2007/11/17 12:58:45 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -398,8 +398,18 @@ NtkWidget_CreateTextCmd(
             rgba, objv[4], wgtPtr) != TCL_OK) {
 	return TCL_ERROR;
     }
+fprintf(stderr, "bwidth!%d!%d!\n", wgtPtr->width, wgtPtr->height);
+int i;
+unsigned char *bp;
+bp = wgtPtr->data;
+for(i=0;i<wgtPtr->width*wgtPtr->height*4; i++) {
+//fprintf(stderr, "0x%0x2 0x%02x 0x%02x 0x%02x\n", bp[i], bp[i+1],bp[i+2],bp[i+3]);
+i+= 3;
+}
+fprintf(stderr, "W!%d!%d!\n", wgtPtr->width, wgtPtr->height);
     objPtr = Tcl_NewIntObj(wgtPtr->width);
     Tcl_IncrRefCount(objPtr);
+fprintf(stderr, "SET!%s!%s!\n", Tcl_GetCurrentNamespace(interp)->fullName, Tcl_GetString(objv[6]));
     varPtr = Tcl_ObjSetVar2(interp, objv[6], NULL, objPtr, /*flags*/0);
     if (varPtr == NULL) {
         result = TCL_ERROR;
@@ -407,6 +417,7 @@ NtkWidget_CreateTextCmd(
     }
     objPtr = Tcl_NewIntObj(wgtPtr->height);
     Tcl_IncrRefCount(objPtr);
+fprintf(stderr, "SET!%s!%s!\n", Tcl_GetCurrentNamespace(interp)->fullName, Tcl_GetString(objv[7]));
     varPtr = Tcl_ObjSetVar2(interp, objv[7], NULL, objPtr, /*flags*/0);
     if (varPtr == NULL) {
         result = TCL_ERROR;

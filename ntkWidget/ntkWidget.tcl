@@ -24,9 +24,8 @@ package require ntkWidget
     }
     
     constructor {args} {
-puts stderr "ARGS!{*}$args!"
+#puts stderr "ARGS!{*}$args!"
         configure {*}$args
-puts stderr "ARGS2!$args!"
 	set widget [::ntk::widget::Widget create $itcl_options(-width) $itcl_options(-height) $itcl_options(-itemsize)]
 	set constructing 0
 	return $widget
@@ -36,8 +35,8 @@ puts stderr "ARGS2!$args!"
         return $widget
     }
 
-    public method createText {font fontSize text wVar hVar} {
-        return [::ntk::widget::Widget createText $widget $font $fontSize $text $wVar $hVar]
+    public method createText {font fontSize text textColor wVar hVar} {
+        return [::ntk::widget::Widget createtext $widget $font $fontSize $text $textColor $wVar $hVar]
     }
 
     public method line {x1 y1 x2 y2 rgbaList} {

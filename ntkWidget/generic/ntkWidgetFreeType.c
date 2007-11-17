@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetFreeType.c,v 1.1.2.1 2007/11/16 20:27:16 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetFreeType.c,v 1.1.2.2 2007/11/17 12:58:46 wiede Exp $
  */
 
 #include <math.h>
@@ -62,6 +62,7 @@ NtkWidget_InitFreeType(
     int result;
 
     result = FT_Init_FreeType(&library);
+fprintf(stderr, "NtkWidget_InitFreeType\n");
     if (result) {
         Tcl_AppendResult(interp, "ERROR during initialisation of FreeType",
 	        NULL);
@@ -71,6 +72,29 @@ NtkWidget_InitFreeType(
     CachedFont.fontSize = 0;
     return TCL_OK;
 }
+static void
+dump_metrics ( FT_Glyph_Metrics *m ) {
+
+fprintf (stderr, "metrics %p\n"
+   "width %ld\n"
+   "height %ld\n"
+   "horiBearingX %ld\n"
+   "horiBearingY %ld\n"
+   "horiAdvance %ld\n"
+   "vertBearingX %ld\n"
+   "vertBearingY %ld\n"
+   "vertAdvance %ld\n",
+   m,
+   m->width / 64,
+   m->height / 64,
+   m->horiBearingX / 64,
+   m->horiBearingY / 64,
+   m->horiAdvance / 64,
+   m->vertBearingX / 64,
+   m->vertBearingY / 64,
+   m->vertAdvance / 64);
+}
+
 
 /*
  * ------------------------------------------------------------------------
@@ -110,6 +134,7 @@ LoadString (
             Tcl_SetResult (interp, "error loading character", TCL_STATIC);
             return TCL_ERROR;
         }
+//dump_metrics(&face->glyph->metrics);
         left  = FLOOR(face->glyph->metrics.horiBearingX);
         right = CEIL(face->glyph->metrics.horiBearingX +
 	        face->glyph->metrics.width);
@@ -123,11 +148,6 @@ LoadString (
 	            abs(face->glyph->bitmap.pitch);
             ftInfoPtr->bitmap.buffer = 
 	            (void *)ckalloc (ftInfoPtr->bitmapLength);
-            if (ftInfoPtr->bitmap.buffer == NULL) {
-                Tcl_AppendResult (interp, "malloc failure: ",
-	                (char *)Tcl_PosixError (interp), NULL);
-                return TCL_ERROR;   
-            }
             memcpy (ftInfoPtr->bitmap.buffer, face->glyph->bitmap.buffer,
 	            ftInfoPtr->bitmapLength);
         }  
@@ -141,14 +161,12 @@ LoadString (
         ftInfoPtr->horiAdvance = TRUNCATE (face->glyph->metrics.horiAdvance);
         ftInfoPtr->xOffset = TRUNCATE (ROUND (face->glyph->advance.x));
         ftInfoPtr->yOffset = -TRUNCATE (ROUND (face->glyph->advance.y));
-
-        /*
-          printf ("vertadvance %d\n", f->rendered[i].vertadvance);
-         */
+/* fprintf (stderr, "vertadvance %d\n", f->rendered[i].vertadvance); */
         if (Tcl_UniCharIsSpace (unitext[i])) {
             ftInfoPtr->width = ftInfoPtr->horiAdvance;
         }
-        wgtPtr->width += ftInfoPtr->width + abs(ftInfoPtr->x);
+//        wgtPtr->width += ftInfoPtr->width + abs(ftInfoPtr->x);
+        wgtPtr->width += ftInfoPtr->width + abs(ftInfoPtr->horiAdvance);
         totaly = ftInfoPtr->vertAdvance;
         if (totaly > peakheight) {
             peakheight = totaly;
@@ -156,6 +174,7 @@ LoadString (
     }
     wgtPtr->width += wgtPtr->fontInfo[0].x;
     wgtPtr->height = peakheight;
+fprintf(stderr, "W!%d!%d!\n", wgtPtr->width, wgtPtr->height);
     return TCL_OK;
 }
 
@@ -219,7 +238,7 @@ NtkWidget_GetFreeTypeInfo(
 	    return TCL_ERROR;
 	}
         result = FT_Set_Char_Size(CachedFont.face, 0,
-	        fontSize + SCALE_FACTOR, 81, 81);
+	        fontSize * SCALE_FACTOR, 81, 81);
 	if (result != 0) {
 	    Tcl_SetResult(interp, "ERROR in setting FreeType char size",
 	           TCL_STATIC);
@@ -234,8 +253,11 @@ NtkWidget_GetFreeTypeInfo(
 	wgtPtr->fontInfo = (NtkFreeTypeString *)
 	        ckalloc(sizeof(NtkFreeTypeString)*unitextlen);
     }
+    /* FIX ME !! need to eventually free data !! */
+    wgtPtr->width = 1;
+    wgtPtr->height = 1;
     if (LoadString(interp, wgtPtr, CachedFont.face, unitext, unitextlen,
-            /*justmeasure*/0) != TCL_OK) {
+            /*justmeasure*/1) != TCL_OK) {
         return TCL_ERROR;
     }
     bottom = 0;
@@ -248,22 +270,23 @@ NtkWidget_GetFreeTypeInfo(
             /*RGBA*/wgtPtr->typeEntryBytes;
     bitmap = (unsigned char *)ckalloc (wgtPtr->dataSize);
     memset (bitmap, 0, wgtPtr->dataSize);
+    wgtPtr->data = bitmap;
     numRgbaBytes = wgtPtr->typeEntryBytes;
+    int destx;
+    destx = 0;
     for (i= 0;i<unitextlen;++i) {
 	unsigned char *dp;
 	unsigned char ch;
 	int desty;
-	int destx;
 	int ty;
 	int tx;
 	int x;
 	int y;
 
-	destx = 0;
         ftInfoPtr = &wgtPtr->fontInfo[i];
-        desty = ftInfoPtr->vertAdvance;
-        desty -= ftInfoPtr->top;
-        desty += bottom;
+        desty = 0;
+        desty -= bottom;
+        desty += ftInfoPtr->bottom;
         if (desty < 0) {
             desty = 0;
 	}
@@ -271,8 +294,8 @@ NtkWidget_GetFreeTypeInfo(
 
 	unsigned char fpdelta;
 	unsigned char finalalpha;
-        for (ty = 0, y = desty; ty < ftInfoPtr->bitmap.rows &&
-	        y >= 0 && y < wgtPtr->height; ++ty, ++y) {
+        for (ty = ftInfoPtr->bitmap.rows-1, y = desty; ty >= 0 &&
+	        y >= 0 && y < wgtPtr->height; --ty, ++y) {
             for (tx = 0, x = destx; tx < ftInfoPtr->bitmap.width && x >= 0 &&
 	            x < wgtPtr->width; ++tx, ++x) {
                 dp = bitmap + (y*wgtPtr->width*numRgbaBytes) + (x*numRgbaBytes);
@@ -293,7 +316,9 @@ NtkWidget_GetFreeTypeInfo(
                 dp[3] = finalalpha;
             }
         }
-        x += ftInfoPtr->width;
+//        destx += ftInfoPtr->width;
+        destx += ftInfoPtr->horiAdvance;
         ckfree((char *)ftInfoPtr->bitmap.buffer);
     }
+    return TCL_OK;
 }
