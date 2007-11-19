@@ -11,9 +11,10 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetUtil.c,v 1.1.2.2 2007/11/15 21:18:32 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetUtil.c,v 1.1.2.3 2007/11/19 16:21:57 wiede Exp $
  */
 
+#include <stdlib.h>
 #include <math.h>
 #include "ntkWidgetInt.h"
 /* needed on SUSE Linux 10.0 */
@@ -140,9 +141,16 @@ InitRotationTable (
 	         TCL_STATIC);
          return TCL_ERROR;
     }
+    /* as trigonometry is 35 years ago for me here a reminder
+     * acos(0): get the radians for angle x for which cos(x) is 0
+     * as cos for angle 90 degrees is zero divide by 90 to get the radians
+     * for 1 degree */
     coeff = acos(0) / 90;
+    /* values for cos_table go from 0.0 to 0.707107
+     * values for sin table go from 1.0 to 0.707107 */
     for (a = 0; a <= 45; ++a) {
         radians = coeff * a;
+//fprintf(stderr, "SC!%d!%f!%f!%f!%f!\n", a, sin(radians), cos(radians), coeff, acos(0));
         cos_table[offset] = (int)((double)ROTSCALE * cos(radians));
         sin_table[offset] = (int)((double)ROTSCALE * sin(radians)); 
         ++offset;
@@ -624,8 +632,6 @@ NtkWidgetRotate(
     unsigned char *src;
     unsigned char *dest;
     double db;
-    double db1;
-    double db2;
     size_t newsize;
     int r;
     int g;
@@ -649,24 +655,11 @@ NtkWidgetRotate(
     centerx = wgtPtr->width / 2;
     centery = wgtPtr->height / 2;
     db = (3.14159265359 * degrees) / 180;
-    db1 = wgtPtr->width * cos(db);
-    if (db1 < 0) {
-       db1 = db1*-1.0;
-    }
-    db2 = wgtPtr->height * sin(db);
-    if (db2 < 0) {
-       db2 = db2*-1.0;
-    }
-    newwidth = round((db1 + db2 + 2.0));
-    db1 = wgtPtr->height * cos(db);
-    if (db1 < 0) {
-       db1 = db1*-1.0;
-    }
-    db2 = wgtPtr->width * sin(db);
-    if (db2 < 0) {
-       db2 = db2*-1.0;
-    }
-    newheight = round((db1 + db2 + 2.0));
+    newwidth = (abs(round(wgtPtr->width * cos(db))) +
+            abs(round(wgtPtr->height * sin(db))) + 2.0);
+    newheight = (abs(round(wgtPtr->height * cos(db))) +
+            abs(round(wgtPtr->width * sin(db))) + 2.0);
+//fprintf(stderr, "NW!%d!%d!%d!%d!%f!%f!%d!\n", wgtPtr->width, wgtPtr->height, newwidth, newheight, sin(db), cos(db), degrees);
     IntCosAndSin(degrees, &cosine, &sine);
     newsize = newwidth * newheight * wgtPtr->typeEntryBytes;
     newbytes = (unsigned char *)ckalloc(newsize);
@@ -738,8 +731,8 @@ NtkWidgetRotate(
             a = 0;
             if ((srcx >= 0) && (srcy >= 0)) {
                if ((srcx < wgtPtr->width) && (srcy < wgtPtr->height)) {
-                   src = (srcx * wgtPtr->typeEntryBytes) +
-		           (srclinebytes * srcy) + wgtPtr->data;
+                   src = wgtPtr->data + (srclinebytes * srcy) +
+		           (srcx * wgtPtr->typeEntryBytes);
                    r = src[0];
                    g = src[1];
                    b = src[2];
@@ -750,8 +743,8 @@ NtkWidgetRotate(
                    }
                }
                if ((srcxr < wgtPtr->width) && (srcy < wgtPtr->height)) {
-                   src = srcxr * wgtPtr->typeEntryBytes +
-		           (srclinebytes * srcy) + wgtPtr->data;
+                   src = wgtPtr->data + (srclinebytes * srcy) +
+		           srcxr * wgtPtr->typeEntryBytes;
                    SETRGBA;
                }
            }

@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetFreeType.c,v 1.1.2.2 2007/11/17 12:58:46 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetFreeType.c,v 1.1.2.3 2007/11/19 16:21:57 wiede Exp $
  */
 
 #include <math.h>
@@ -165,8 +165,7 @@ LoadString (
         if (Tcl_UniCharIsSpace (unitext[i])) {
             ftInfoPtr->width = ftInfoPtr->horiAdvance;
         }
-//        wgtPtr->width += ftInfoPtr->width + abs(ftInfoPtr->x);
-        wgtPtr->width += ftInfoPtr->width + abs(ftInfoPtr->horiAdvance);
+        wgtPtr->width += ftInfoPtr->width + abs(ftInfoPtr->x);
         totaly = ftInfoPtr->vertAdvance;
         if (totaly > peakheight) {
             peakheight = totaly;
@@ -316,8 +315,7 @@ NtkWidget_GetFreeTypeInfo(
                 dp[3] = finalalpha;
             }
         }
-//        destx += ftInfoPtr->width;
-        destx += ftInfoPtr->horiAdvance;
+        destx += ftInfoPtr->width;
         ckfree((char *)ftInfoPtr->bitmap.buffer);
     }
     return TCL_OK;
