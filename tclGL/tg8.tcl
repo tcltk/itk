@@ -4,7 +4,7 @@ package require Glmwfw
 
 proc init {} {
     set xx [::ntk::gl::GL glGetString GL_EXTENSIONS]
-puts stderr "xx![join [lsort [split $xx]] \n]!"
+#puts stderr "xx![join [lsort [split $xx]] \n]!"
     ::ntk::gl::GL glClearColor 0.55 0.55 0.55 0.0
     ::ntk::gl::GL glShadeModel GL_FLAT
     ::ntk::gl::GL glOrtho 0.0 1.0 0.0 1.0 -1.0 1.0
@@ -30,6 +30,7 @@ init
 display $win
 set xx [::ntk::gl::GLext::glGenBuffersARB 2 xx]
 puts stderr "xx!$xx!"
+::ntk::gl::GLext glGenBu
 
 set xx 1
 vwait xx

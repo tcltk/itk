@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile,v 1.1.2.4 2007/11/11 00:57:54 wiede Exp $
+# RCS: @(#) $Id: Makefile,v 1.1.2.5 2007/11/23 21:13:49 wiede Exp $
 
 #========================================================================
 # Add additional lines to handle any additional AC_SUBST cases that
@@ -146,7 +146,7 @@ SHARED_BUILD	= 1
 INCLUDES	=  -I"/home/arnulf/SOURCES/tclOO/head/generic"
 #INCLUDES	=  -I"/home/arnulf/SOURCES/tclOO/head/generic" @TK_INCLUDES@ @TK_XINCLUDES@
 
-PKG_CFLAGS	=  
+PKG_CFLAGS	=  -DTCL_GL_DEBUG
 
 # TCL_DEFS is not strictly need here, but if you remove it, then you
 # must make sure that configure.in checks for the necessary components

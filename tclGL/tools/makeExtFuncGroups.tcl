@@ -60,7 +60,7 @@ puts stderr "PARAMS!$paramInfo!"
         set myVarType int
         set myGetParamType int
         set myType $type
-	append usageStr "$usageSep<($const$type$stars) $name"
+	append usageStr "$usageSep<($const$type$stars) $name>"
 	set usageSep " "
 	append callParamInfos "${callParamSep}(${myType}$stars)$name"
 	set callParamSep ", "
