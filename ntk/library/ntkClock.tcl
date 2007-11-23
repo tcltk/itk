@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkClock.tcl,v 1.1.2.3 2007/10/19 20:30:42 wiede Exp $
+# RCS: @(#) $Id: ntkClock.tcl,v 1.1.2.4 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::clock {
@@ -99,7 +99,7 @@ itcl::extendedclass ::ntk::classes::clock {
         #
         set radius [expr {($min - 6) / 2}]
         set obj [$wpath obj]
-        $obj setall [list 0 0 0 0]
+        $obj fill [list 0 0 0 0]
         set offset [expr {$radius + 2}]
         for {set r 0} {$r < 4} {incr r} {
             set lastx [expr {$offset + round(cos(6.28318530718) * $radius)}]

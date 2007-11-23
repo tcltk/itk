@@ -1,5 +1,4 @@
 package require Itcl 4.0
-package require megaimage
 package require freetypeext
 package require ntk
 lappend auto_path .

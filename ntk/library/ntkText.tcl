@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.5 2007/10/19 10:11:58 wiede Exp $
+# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.6 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------
@@ -85,7 +85,7 @@ itcl::extendedclass ::ntk::classes::text {
 #puts stderr "textDraw!w!$itcl_options(-width)!h!$itcl_options(-height)!"
         themeDrawTextBackground $wpath
         set linemap [list]
-        set textobj [megaimage-blank 1 1]
+        set textobj [uplevel #0 ntkWidget #auto -width 1 -height1]
         set myY 0
 	set myContexts $contexts
         foreach line $text {
@@ -109,7 +109,7 @@ itcl::extendedclass ::ntk::classes::text {
 		    set lineheight $myHeight
 		}
                 $textobj setdata $textdata
-                $obj blendobj $myX $myY $textobj
+                $obj blendwidget $myX $myY $textobj
                 incr myX $myWidth
                 lappend lineoffsetmap $offsetmap
                 if {$myWidth > $linewidth} {

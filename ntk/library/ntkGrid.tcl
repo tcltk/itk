@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.9 2007/10/22 20:32:53 wiede Exp $
+# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.10 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::grid {
@@ -38,7 +38,7 @@ itcl::extendedclass ::ntk::classes::grid {
         foreach row $grid {
 	    foreach cells $row {
 	        foreach w $cells {
-		    puts -nonewline stderr "$w is +[$w cget -x]+[$w cget -y] [$w cget -width]x[$w cget -height] \[[$w cget -slot]\]\t"
+		    puts -nonewline stderr "$w is +[$w cget -xoffset]+[$w cget -yoffset] [$w cget -width]x[$w cget -height] \[[$w cget -slot]\]\t"
 		}
 	    }
 	    puts stderr ""
@@ -325,7 +325,7 @@ itcl::extendedclass ::ntk::classes::grid {
 			}
                     }
                     set gridLock($path) $path
-                    $path configure -x $x -y $y
+                    $path configure -xoffset $x -yoffset $y
                     unset gridLock($path)
                 }
             }   
@@ -346,8 +346,8 @@ itcl::extendedclass ::ntk::classes::grid {
         foreach row $grid {
             foreach cells $row {
                 foreach path $cells {
-                    #Resize the backing megaimage obj.
-                    [$path obj] setsize [$path cget -width] [$path cget -height]
+                    #Resize the backing ntkWidget windowImage.
+                    ::ntk::widgetImage::Image setsize [$path windowImage] [$path cget -width] [$path cget -height]
                     #Trigger a redraw of the widget.
                     $path dispatchRedraw
                 }

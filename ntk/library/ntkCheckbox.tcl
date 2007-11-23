@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkCheckbox.tcl,v 1.1.2.1 2007/10/27 20:04:23 wiede Exp $
+# RCS: @(#) $Id: ntkCheckbox.tcl,v 1.1.2.2 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::checkbox {
@@ -56,7 +56,7 @@ itcl::extendedclass ::ntk::classes::checkbox {
     }
 
     public method checkboxDraw {} {
-        $obj setall $itcl_options(-bg)
+        $obj fill $itcl_options(-bg)
         themeDrawGenericBorder $wpath
         if {$itcl_options(-check)} {
             set w $itcl_options(-width)

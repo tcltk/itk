@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.9 2007/10/22 20:32:53 wiede Exp $
+# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.10 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::helpers {
@@ -111,6 +111,14 @@
 
     public proc getFocus {} {
         return $focusList
+    }
+
+    public proc drawPixels {topWindow window} {
+        set data [::ntk::widgetImage::Image getdata [$window windowImage]]
+	set w [$window cget -width]
+	set h [$window cget -height]
+	::ntk::glmwfw::Glmwfw drawPixels2 $w $h $data
+	::ntk::glmwfw::Glmwfw swapBuffers $topWindow
     }
 }
 

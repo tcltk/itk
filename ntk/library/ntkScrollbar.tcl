@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.9 2007/10/19 20:30:43 wiede Exp $
+# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.10 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------
@@ -131,7 +131,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
     }
 
     public method scrollbarDrawHorizontal {} {
-        $obj setall $itcl_options(-bg)
+        $obj fill $itcl_options(-bg)
         render $wpath $wpath.a $wpath.trough $wpath.b
     }
 
@@ -145,7 +145,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
             set myY [expr {round($rstart * $myHeight)}]
             set yend [expr {round($rend * $myHeight)}]
             set rectheight [expr {$yend - $myY}]
-            [$wpath.trough obj] setall $itcl_options(-bg)
+            [$wpath.trough obj] fill $itcl_options(-bg)
             [$wpath.trough obj] rectangle 0 $myY $myWidth $rectheight \
                     $itcl_options(-slidercolor)
             themeDrawBorder [$wpath.trough obj] 0 $myY $myWidth $rectheight \
@@ -156,7 +156,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
             set myX [expr {round($rstart * $myWidth)}]
             set xend [expr {round($rend * $myWidth)}]
             set rectwidth [expr {$xend - $myX}]
-            [$wpath.trough obj] setall $itcl_options(-bg)
+            [$wpath.trough obj] fill $itcl_options(-bg)
             [$wpath.trough obj] rectangle $myX 0 $rectwidth $myHeight \
                     $itcl_options(-slidercolor)
             themeDrawBorder [$wpath.trough obj] $myX 0 $rectwidth \
@@ -167,7 +167,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
     }
 
     public method scrollbarDrawVertical {} {
-        $obj setall $itcl_options(-bg)
+        $obj fill $itcl_options(-bg)
         render $wpath $wpath.a $wpath.trough $wpath.b
     }
 

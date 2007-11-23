@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.15 2007/10/27 20:30:00 wiede Exp $
+# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.16 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::render {
@@ -37,20 +37,14 @@
     }
 
     public proc renderNow {} {
-	set myObj [. obj]
-        $myObj setall [. cget -bg]
+	set myObj [. windowImage]
+        ::ntk::widgetImage::Image fill $myObj [. cget -bg]
         renderTree $myObj .
         set myWinId [. id]
-#puts stderr "renderNow!ntk-put-image $myWinId $myObj!"
-        if {[info exists ::useGLFW] && $::useGLFW} {
-                ::ntk::glfw::Glfw glClear GL_COLOR_BUFFER_BIT
-                set data [$myObj getdata]
-                ::ntk::glfw::Glfw drawMegaimage $data
-                ::ntk::glfw::Glfw swapBuffers
-        } else {
+puts stderr "====renderNow!$myWinId $myObj!"
 #	    ntk-resize-image $myWinId [. cget -width] [. cget -height]
-	    ntk-put-image  $myWinId $myObj
-        }
+#	    ntk-put-image  $myWinId $myObj
+        . drawPixels $myWinId .
 	set rendering 0
 #puts stderr "renderNow END"
     }
@@ -71,58 +65,58 @@
         return 0
     }
 
-    protected proc renderRecurse {baseobj path x y} {
-#puts stderr "renderRecurse!$baseobj!$path!$x!$y![$path children]!"
+    protected proc renderRecurse {baseWindowOmage path x y} {
+#puts stderr "renderRecurse!$baseWindowImage!$path!$x!$y![$path children]!"
         foreach child [$path children] {
 	    if {![$child cget -visible]} {
 	        continue
 	    }
-            set cx [expr {$x + [$child x]}]
-            set cy [expr {$y + [$child y]}]
+            set cx [expr {$x + [$child cget -xoffset]}]
+            set cy [expr {$y + [$child cget -yoffset]}]
             set r [$child cget -rotate]
-	    set childObj [$child obj]
+	    set childWindowImage [$child windowImage]
             if {$r} {
 		set myRenderTreeData [$child renderTreeData]
                 if {$myRenderTreeData eq ""} {
-                    $child renderTreeData [megaimage-blank]
+                    $child renderTreeData [::ntk::widgetImage::Image create 1 1]
 		    set myRenderTreeData [$child renderTreeData]
                 }
-                $myRenderTreeData setdata [$childObj getdata]
+                ::ntk::widgetImage::Image setdata $myRenderTreeData [::ntk::widgetImage::Image getdata $childWindowImage]
                 renderRecurse $myRenderTreeData] $child 0 0
-                $myRenderTreeData rotate $r
-#puts stderr "BASE2a!$baseobj!$cx!$cy!$myRenderTreeData!"
-                $baseobj blendobj $cx $cy $myRenderTreeData
+                ::ntk::widgetImage::Image rotate $myRenderTreeData $r
+#puts stderr "BASE2a!$baseWindowImage!$cx!$cy!$myRenderTreeData!"
+                ::ntk::widgetImage::Image blendwidget $baseWindowImage $cx $cy $myRenderTreeData
             } else {
-#puts stderr "BASE2b!$baseobj!$cx!$cy!$childObj!"
-                $baseobj blendobj $cx $cy $childObj
-                renderRecurse $baseobj $child $cx $cy
+#puts stderr "BASE2b!$baseWindowImage!$cx!$cy!$childWindowImage!"
+                ::ntk::widgetImage::Image blendwidget $baseWindowImage $cx $cy $childWindowImage
+                renderRecurse $baseWindowImage $child $cx $cy
             }
             $child update 0
         } 
     }
 
-    public proc renderTree {baseobj path} {
+    public proc renderTree {baseWindowImage path} {
 #puts stderr "renderTree!WIN!$path![$path children]!"
         foreach child [$path children] {
-#puts stderr "CHILD:$child![$child x]![$child y]!"
+#puts stderr "CHILD:$child![$child cget -xoffset]![$child cget -yoffset]!"
 	    if {![$child cget -visible]} {
 	        continue
 	    }
             if {[$child renderTreeData] eq ""} {
-                $child renderTreeData [megaimage-blank 1 1]
+                $child renderTreeData [::ntk::widgetImage::Image create 1 1]
             } 
             set back [$child renderTreeData]
             if {[changeInTree $child]} {
-#puts stderr "changeInChild:CHILD:$child!$back![$child obj]!"
-                $back setdata [[$child obj] getdata]
+puts stderr "changeInChild:CHILD:$child!$back![$child windowImage]!"
+                ::ntk::widgetImage::Image setdata $back [$child windowImage]
                 renderRecurse $back $child 0 0
                 if {[set r [$child cget -rotate]]} {
-                    $back rotate $r
+                    ::ntk::widgetImage::Image rotate $back $r
                 }
                 $child update 0
            }
-#puts stderr "BLEND!$child![$child x]![$child y]![$back getsize]!"
-           $baseobj blendobj [$child x] [$child y] $back
+#puts stderr "BLEND!$child![$child cget -xoffset]![$child cget -yoffset]![$back getsize]!"
+           ::ntk::widgetImage::Image blendwidget $baseWindowImage [$child cget -xoffset] [$child cget -yoffset] $back
         }
 #puts stderr "renderTree END!WIN!$path![$path children]!"
     }

@@ -13,8 +13,13 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.16 2007/10/27 20:30:00 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.17 2007/11/23 21:02:56 wiede Exp $
 #--------------------------------------------------------------------------
+
+package require TclGL
+package require GlmwfwX11
+package require Glmwfw
+package require ntkWidgetImage
 
 namespace eval ::ntk {
     namespace ensemble create -map [list \
@@ -41,6 +46,7 @@ namespace eval ::ntk {
         mousePress ::ntk::classes::input::inputMousePress \
         mouseRelease ::ntk::classes::input::inputMouseRelease \
         motion ::ntk::classes::input::inputMotion \
+        widget ::ntk::widget::Widget \
     ]
 }
 

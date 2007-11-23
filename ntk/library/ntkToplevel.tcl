@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkToplevel.tcl,v 1.1.2.11 2007/10/19 20:30:43 wiede Exp $
+# RCS: @(#) $Id: ntkToplevel.tcl,v 1.1.2.12 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::toplevel {
@@ -34,8 +34,9 @@ puts stderr "toplevel layout called"
     }
 
     constructor {args} {
-        ::ntk::classes::window::constructor {*}$args
-    } {
+	if {[llength $args] > 0} {
+	    configure {*}$args
+	}
         set toplevel 1
         return $wpath
     }

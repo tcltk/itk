@@ -1,9 +1,7 @@
 package require Itcl 4.0
-package require megaimage
-package require freetypeext
-package require ntk
+source ntk.tcl
 lappend auto_path .
-package require ntkWidget
+package require ntkWidgetImage
 
 proc eval_stdin {} {
     set cmd [gets stdin]
@@ -13,65 +11,28 @@ proc eval_stdin {} {
     flush stdout
 }
 
-set wdth 800
-set hght 600
-set configure_pending 0
+set width 800
+set height 600
 
-proc topConfigure {winid x y width height} {
-puts stderr "global configure called"
-    global cfg configure_pending
-
-    if {$width == [. cget -width] && $height == [. cget -height]} {
-        return
-    }
-    set cfg [list $width $height]
-    if {$configure_pending} {
-        return
-    }
-    set configure_pending 1
-    after idle [list configureNow $winid]
-}
-
-proc configureNow {winid} {
-puts stderr "global configureNow called"
-    global cfg configure_pending
-
-    lassign $cfg w h
-    set obj [. obj]
-    $obj setsize $w $h
-    . configure -width $w -height $h
-    set rat [expr {$width / 7.0}]
-    ntk_request-size .left [expr {int($rat)}] $h
-    ntk_request-size .right [expr {round($rat * 6)}] $h
-    set configure_pending 0
-}
-
-set id [ntk-create-sys-window $wdth $hght]
-ntk-set-title $id "ntkWidget Demo"
-
-puts stderr "TOP"
-set top [ntk toplevel .  -width $wdth -height $hght -bg [list 255 255 255 0]]
-. id $id
-
+set win [::ntk::glmwfw::Glmwfw openWindow $width $height]
+::ntk::glmwfw::Glmwfw setWindowTitle $win "NtkWidget Demo"
+set top [ntk toplevel .  -width $width -height $height -bg [list 0 255 0 0]]
+. id $win
 puts stderr "TOP DONE"
-ntk-create-event-handler $id [list ntk keyPress .] \
-       [list ntk keyRelease .] [list ntk motion .] \
-       [list ntk mousePress .] [list ntk mouseRelease .] \
-       [list topConfigure .]
+source tg_util.tcl
+tgInit $win
 
-ntk-move-sys-window $id 200 200
-ntk-map-sys-window $id
+#ntk-create-event-handler $id [list ntk keyPress .] \
+#       [list ntk keyRelease .] [list ntk motion .] \
+#       [list ntk mousePress .] [list ntk mouseRelease .] \
+#       [list topConfigure .]
 
+#ntk-move-sys-window $id 200 200
+#ntk-map-sys-window $id
 
-set topObj [$top obj]
+set w2Path [ntk button .w2 -width 100 -xoffset 50 -yoffset 50 -height 100 -text arnulf -textcolor [list 0 0 0 255] -bd 2 -bg [list 255 255 255 255]]
 
-::itcl::extendedclass geo {
-    public option -sticky -default nswe 
-}
-geo geo1
-
-set w2Path [ntk button .w2 -width 100 -height 100 -x 50 -y 50 -text arnulf -textcolor [list 0 0 0 255] -bd 2 -bg [list 255 255 255 255]]
-puts stderr "w2Path!$w2Path![$w2Path obj]!"
+puts stderr "w2Path!$w2Path![$w2Path windowImage]!"
 if {0} {
 set xx [::ntk::classes::gridManager gd1 $w2Path]
 puts stderr "XX!$xx!"
@@ -80,7 +41,6 @@ puts stderr "COLUMNSPAN![$w2Path cget -columnspan]!"
 puts stderr "PEAKCOLUMN![$w2Path peakcolumn]!"
 }
 ntk grid $w2Path
-
 puts stderr "setting eval-stdin"
 fileevent stdin readable eval_stdin
 vwait forever

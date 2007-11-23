@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.10 2007/10/22 20:30:39 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.11 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
@@ -140,8 +140,8 @@ puts stderr "entryCursorIncrOffset"
         if {$cx >= $itcl_options(-width)} {
             $wpath xslide [expr {$itcl_options(-width) - $cx}]
         } 
-        $obj setall $itcl_options(-bg)
-        $obj blendobj $xslide 0 $textobj
+        $obj fill $itcl_options(-bg)
+        $obj blendwidget $xslide 0 $textobj
 	set myCursorColor $itcl_options(-cursorcolor)
         $obj line $cx 0 $cx $objh $myCursorColor
         set cx [expr {$cx + 1}]

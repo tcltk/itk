@@ -1,5 +1,4 @@
 package require Itcl 4.0
-package require megaimage
 package require freetypeext
 package require pngext2
 package require jpegext2

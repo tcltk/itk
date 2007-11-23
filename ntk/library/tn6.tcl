@@ -13,7 +13,6 @@
 # adapted to ntkWidget by Arnulf Wiedemann
 
 package require Itcl 4.0
-package require megaimage
 package require freetypeext
 package require pngext2
 package require jpegext2
@@ -86,7 +85,7 @@ proc configureNow {winid} {
 proc doRendernow {} {
     global base rendering
 
-    [. obj] setall $::background_color
+    [. obj] fill $::background_color
     ::ntk::classes::render::renderTree [. obj] .
     set rendering 0
 }
@@ -342,14 +341,14 @@ set demo_dir .
 
 if {0} {
     ntk window .w2 -width 200 -height 200
-    [.w2 obj] setall [list 255 0 255 120]
+    [.w2 obj] fill [list 255 0 255 120]
     makeDraggable .w2
 }
 
 if {0} {
     #Grid test
     ntk window .gridtest -width 60 -height 60
-    [.gridtest obj] setall [list 255 255 255 255]
+    [.gridtest obj] fill [list 255 255 255 255]
     ntk frame .gridtest.10 -bg [list 255 0 0 255]
     ntk frame .gridtest.50 -bg [list 0 0 255 255]
     ntk frame .gridtest.60 -bg [list 0 255 0 255]
@@ -389,16 +388,16 @@ puts stderr [llength [.text text]]
 
 if {1} {
     ntk window .w3 -width 300 -height 150
-    [.w3 obj] setall [list 180 206 0 200] 
+    [.w3 obj] fill [list 180 206 0 200] 
     #ntk window .w4 -width 230 -height 230
-    #[.w4 obj] setall [list 127 127 255 160]
+    #[.w4 obj] fill [list 127 127 255 160]
     #ntk window .w5 -width 400 -height 285
 }
 
 if {1} {
     ntk window .w6 -width 400 -height 400
-    [.w6 obj] setall [list 255 255 255 255]
-#    [.w6 obj] setall [list 0 0 0 50]
+    [.w6 obj] fill [list 255 255 255 255]
+#    [.w6 obj] fill [list 0 0 0 50]
     ntk window .w6.r -width 20 -height 20 ;# -bg [list 255 0 255 0]
     ntk window .w6.g -width 40 -height 50 ;# -bg [list 255 125 255 125]
     ntk window .w6.b -width 60 -height 70 ;# -bg [list 255 125 125 125]
@@ -435,13 +434,13 @@ if {1} {
     # .w6.a -slot [list 2 1]
 
 #    .w6 configure -x 200 -y 100
-#    [.w6.r obj] setall [list 255 0 0 255]
+#    [.w6.r obj] fill [list 255 0 0 255]
     .w6.r configure -bg [list 255 0 0 255]
-#    [.w6.g obj] setall [list 0 255 0 255]
+#    [.w6.g obj] fill [list 0 255 0 255]
     .w6.g configure -bg [list 0 255 0 255]
-#    [.w6.b obj] setall [list 0 0 255 100]
+#    [.w6.b obj] fill [list 0 0 255 100]
     .w6.b configure -bg [list 0 0 255 100]
-#    [.w6.a obj] setall [list 255 255 255 255]
+#    [.w6.a obj] fill [list 255 255 255 255]
     .w6.a configure -bg [list 255 255 255 255]
 
     .w6 configure -x 200 -y 100
@@ -475,7 +474,7 @@ puts stderr ".w6 2 done"
  #
 
 if 0 {
- ntk window .gridtest -width 400 -height 400 ; [.gridtest obj] setall [list 255 255 255 255]
+ ntk window .gridtest -width 400 -height 400 ; [.gridtest obj] fill [list 255 255 255 255]
 
  ntk grid [ntk button .gridtest.b75 -text 75%] -columnratio 75 -slot [list 0 0]
  ntk grid [ntk button .gridtest.b90 -text 80%] -rowratio 80 -slot [list 1 0]
@@ -488,7 +487,7 @@ if 0 {
  # 
 if {1} {
  ntk window .wimgsel -width 200 -height 300
- [.wimgsel obj] setall [list 255 255 255 150]
+ [.wimgsel obj] fill [list 255 255 255 150]
 
  ntk grid [ntk frame .wimgsel.grip] -slot [list 0 0] -sticky [list width]
  .wimgsel.grip requestSize 200 20
@@ -513,7 +512,7 @@ if {0} {
  # Create the display widget
  #
  ntk window .wimgdisplay -width 400 -height 300
- [.wimgdisplay obj] setall [list 0 0 0 127]
+ [.wimgdisplay obj] fill [list 0 0 0 127]
  .wimgdisplay x 200 y 200
 
  makeDraggable .wimgdisplay
@@ -538,7 +537,7 @@ if {0} {
 
 if {0} {
  ntk window .fscroll -width 200 -height 200
- [.fscroll obj] setall [list 255 0 0 255]
+ [.fscroll obj] fill [list 255 0 0 255]
  .fscroll y 300
 
  ntk grid [ntk scrollbar .fscroll.yview] -slot {0 0} -sticky height

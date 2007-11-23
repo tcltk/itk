@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkFrame.tcl,v 1.1.2.9 2007/10/22 20:32:53 wiede Exp $
+# RCS: @(#) $Id: ntkFrame.tcl,v 1.1.2.10 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::frame {
@@ -47,9 +47,9 @@ itcl::extendedclass ::ntk::classes::frame {
 	} else {
 	    set myColor $itcl_options(-bg)
 	    if {[llength $myColor] == 1} {
-	        $obj setall $colors($myColor)
+	        $obj fill $colors($myColor)
 	    } else {
-	        $obj setall $myColor
+	        $obj fill $myColor
 	    }
 	}
         render $wpath

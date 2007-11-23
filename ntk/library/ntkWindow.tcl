@@ -14,11 +14,13 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.17 2007/10/22 20:32:53 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.18 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::window {
     inherit ::ntk::classes::helpers ::ntk::classes::render ::ntk::classes::grid
+
+    private variable constructing 1
 
     protected common cntWindows 0
     protected common windows
@@ -33,12 +35,7 @@
     public methodvariable manager -default [list]
     public methodvariable parent -default [list]
     public methodvariable update -default 1
-    public methodvariable reqheight -default [list]
-    public methodvariable reqwidth -default [list]
-    public methodvariable rotate -default 0
-    public methodvariable x -default 0
-    public methodvariable y -default 0
-    public methodvariable obj -default [list]
+    public methodvariable windowImage -default [list]
     public methodvariable wpath -default [list]
 
     public component geometryManager
@@ -56,20 +53,25 @@
     public option -width -default 1 -configuremethod windowConfig
     public option -visible -default 1 -validatemethod verifyBoolean \
             -configuremethod windowConfig
+    public option -reqheight -default [list] -configuremethod windowConfig
+    public option -reqwidth -default [list] -configuremethod windowConfig
+    public option -rotate -default 0 -configuremethod windowConfig
+    public option -xoffset -default 0 -configuremethod windowConfig
+    public option -yoffset -default 0 -configuremethod windowConfig
     
     public method windowConfig {option value} {
 #puts stderr "windowConfig!$wpath!$option!$value!"
         set itcl_options($option) $value
 	switch -- $option {
 	-height {
-	    if {$obj ne ""} {
-	        $obj setsize $itcl_options(-width) $value
+	    if {$windowImage ne ""} {
+	        ::ntk::widgetImage::Image setsize $windowImage $itcl_options(-width) $value
 	        dispatchRedraw
 	    }
 	  }
 	-width {
-	    if {$obj ne ""} {
-	        $obj setsize $value $itcl_options(-height)
+	    if {$windowImage ne ""} {
+	        ::ntk::widgetImage::Image setsize $windowImage $value $itcl_options(-height)
 	        dispatchRedraw
 	    }
 	  }
@@ -99,7 +101,7 @@
     }
 
     constructor {args} {
-#puts stderr "WINDDOW constructor ARGS!$args!"
+puts stderr "WINDOW constructor ARGS!$args!"
 	incr cntWindows
 	set wpath [string trimleft $this :]
         if {[info exists windows($wpath)]} {
@@ -111,9 +113,10 @@
 	if {[llength $args] > 0} {
 	    configure {*}$args
 	}
-        set obj [megaimage-blank $itcl_options(-width) $itcl_options(-height)]
-	set reqwidth $itcl_options(-width)
-	set reqheight $itcl_options(-height)
+        set windowImage [::ntk::widgetImage::Image create \
+	        $itcl_options(-width) $itcl_options(-height)]
+	set itcl_options(-reqwidth) $itcl_options(-width)
+	set itcl_options(-reqheight) $itcl_options(-height)
 	#
 	# Append the child to the parent's window list
 	#
@@ -126,6 +129,8 @@
 	set geometryManager [list]
 	set verticalScrollbar [list]
 	set horizontalScrollbar [list]
+	set constructing 0
+puts stderr "WINDOW END"
         return $wpath
     }
 
@@ -143,12 +148,12 @@
 	     return
 	 }
          # Destroy this window's children.
-         foreach c [$pathchildren] {
+         foreach c $children {
              destroyWindow $c 
          }  
 
          # Invoke destroy handlers.
-         foreach cmd [$path destroy] {
+         foreach cmd $destroy {
              uplevel #0 $cmd
          }
 
@@ -168,7 +173,7 @@
              [$m free] $m
         }
         inputDestroy $path
-        rename [$path obj] {}
+        rename [$path windowImage] {}
         if {[$path renderTreeData] ne ""} {
             rename [$path renderTreeData] {}
         }
@@ -176,7 +181,7 @@
     }
 
     public method dispatchRedraw {} {
-        foreach cmd [redraw] {
+        foreach cmd $redraw {
             uplevel #0 $cmd
         }
     }
@@ -195,8 +200,8 @@
     }
 
     public method redrawWindow {} {
-#puts stderr "redrawWindow![obj] setsize [cget -width] [cget -height]!x![x]!y![y]!"
-        [obj] setsize [cget -width] [cget -height]
+#puts stderr "redrawWindow!$windowImage setsize [cget -width] [cget -height]!x![x]!y![y]!"
+        ::ntk::widgetImage::Image setsize $windowImage $itcl_options(-width) $itcl_options(-height)
     }
 
     public method remanageWindow {} {
@@ -204,7 +209,8 @@
         set p $parent
 	set myManager [$p manager]
 	if {$myManager eq ""} {
-	    configure -width $reqwidth -height $reqheight
+	    configure -width $itcl_options(-reqwidth) \
+	            -height $itcl_options(-reqheight)
 	    set w $itcl_options(-width)
 	    set h $itcl_options(-height)
 	    if {$w <= 0} {
@@ -213,7 +219,7 @@
 	    if {$h <= 0} {
 	        set h 1
 	    }
-	    $obj setsize $w $h
+	    ::ntk::widgetImage::Image setsize $windowImage $w $h
 	    dispatchRedraw
 	    return
 	}
@@ -222,21 +228,21 @@
 
     public method requestSize {width height} {
 #puts stderr "requestSize!$wpath!$width!$height!"
-        set reqwidth $width
-	set reqheight $height
+        set itcl_options(-reqwidth) $width
+	set itcl_options(-reqheight) $height
 	remanageWindow
     }
 
     public method windowDraw {} {
-#puts stderr "windowDraw!$obj!"
-	if {$obj eq ""} {
+#puts stderr "windowDraw!$windowImage!"
+	if {$constructing} {
 	    return
-        }
-        set myColor [cget -bg]
+	}
+        set myColor $itcl_options(-bg)
         if {[llength $myColor] == 1} {
-            $obj setall $colors($myColor)
+            ::ntk::widgetImage::Image fill $windowImage $colors($myColor)
         } else {
-            $obj setall $myColor
+            ::ntk::widgetImage::Image fill $windowImage $myColor
         }
         render $wpath
     }

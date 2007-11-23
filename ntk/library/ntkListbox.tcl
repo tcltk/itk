@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.9 2007/10/19 22:30:56 wiede Exp $
+# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.10 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::listbox {
@@ -152,12 +152,12 @@ should be: $wpath delete index ?end-index?"
     }
 
     public method listboxDestroy {} {
-        #Cleanup any megaimage or freetype objects
+        #Cleanup any ntkWidget or freetype objects
     }
 
     public method listboxDraw {} {
-        $obj setall $itcl_options(-bg)
-        set tmp [megaimage-blank]
+        $obj fill $itcl_options(-bg)
+        set tmp [uplevel #0 ntkWidget #auto -width 20 -height 20]
         set myX [expr {$xoffset + $itcl_options(-bd) + 1}]
         set myY 0
         set mySelected $selected
@@ -193,13 +193,13 @@ should be: $wpath delete index ?end-index?"
             set buf [freetype $font $fontsize $d $textcolor _ _]
             $tmp setdata $buf
             if {[lsearch -exact $mySelected $i] >= 0} {
-                set tmp2 [megaimage-blank $myWidth $myHeight]
-                $tmp2 setall $itcl_options(-selectioncolor)
-                $tmp2 blendobj 0 0 $tmp
-                $obj blendobj $myX $myY $tmp2
+                set tmp2 [uplevel #0 ntkWidget #auto -width $myWidth -height $myHeight]
+                $tmp2 fill $itcl_options(-selectioncolor)
+                $tmp2 blendwidget 0 0 $tmp
+                $obj blendwidget $myX $myY $tmp2
                 rename $tmp2 {}
             } else {
-                $obj blendobj $myX $myY $tmp
+                $obj blendwidget $myX $myY $tmp
             }
             incr i
             incr myY $myHeight

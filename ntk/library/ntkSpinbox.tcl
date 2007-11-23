@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkSpinbox.tcl,v 1.1.2.2 2007/10/27 20:30:00 wiede Exp $
+# RCS: @(#) $Id: ntkSpinbox.tcl,v 1.1.2.3 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::spinbox {
@@ -79,18 +79,21 @@ itcl::extendedclass ::ntk::classes::spinbox {
     }
 
     proc spinboxDraw {} {
-        [$wpath.textarea obj] setall [$wpath -bg]
+        [$wpath.textarea obj] fill [$wpath -bg]
         themeSpinboxDrawTextareaBorder $wpath
         set item [lindex $itcl_options(-items) $itcl_options(-itemindex)]
         if {$item ne ""} {
-            set textobj [megaimage [freetype $itcl_options(-font) \
+	    set data [freetype $itcl_options(-font) \
 	            $itcl_options(-fontsize) $item $itcl_options(-textcolor) \
-	            textwidth textheight]]
+	            textwidth textheight]
+            set textobj [uplevel #0 ntkWidget #auto -width 1 -height 1]
+	    # TO BE FIXED, NEED width and height here !!
+	    $textobj setdata $data
             $wpath.textarea requestSize [expr {$textwidth + 2}] \
 	            [expr {$textheight + 2}]
             set myX [expr {($itcl_options(-width) / 2) - ($textwidth / 2)}]
             set myY [expr {($itcl_options(-height) / 2) - ($textheight / 2)}]
-            [$wpath.textarea obj] blendobj $myX $myY $textobj
+            [$wpath.textarea obj] blendwidget $myX $myY $textobj
             rename $textobj {}
         }
         render $path.textarea

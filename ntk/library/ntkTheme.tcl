@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.11 2007/10/27 20:30:00 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.12 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
@@ -23,7 +23,7 @@
     private variable constructing 1
     protected variable themeConfig
 
-    public methodvariable textobj -default [list]
+    public methodvariable textImage -default [list]
 
     public option -font -default {} -configuremethodvar themeConfig
     public option -fontsize -default {} -configuremethodvar themeConfig
@@ -35,34 +35,42 @@
 
     constructor {args} {
         eval ::ntk::classes::window::constructor -width 60 -height 100
+puts stderr "THEME after window constructor"
     } {
-        freetype $defaultFont $defaultFontSize "_^" [list 0 0 0 255] \
+puts stderr "THEME2 after window constructor"
+        set xx [::ntk::widgetImage::Image create 1 1]
+        ::ntk::widgetImage::Image createtext $xx $defaultFont $defaultFontSize "_^" [list 0 0 0 255] \
 	        myWidth myHeight
+	# MEMORY LEAK !! FIX ME !! need to destroy xx !!!
+	# ::ntk::widgetImage::Image destroy $xx
 	set itcl_options(-height) $myHeight
-	set reqwidth $itcl_options(-width)
-	set reqheight $myHeight
+	set itcl_options(-reqwidth) $itcl_options(-width)
+	set itcl_options(-reqheight) $myHeight
 	set itcl_options(-font) $defaultFont
 	set itcl_options(-fontsize) $defaultFontSize
 	set itcl_options(-textcolor) $defaultTextColor
 	set itcl_options(-bg) [defaultBackgroundColor]
-	set textobj [megaimage-blank 20 20]
+puts stderr "crea textImage"
+	set textImage [::ntk::widgetImage::Image create 20 20]
+puts stderr "TEXTImage!$textImage!"
     }
 
-    public proc themeButtonDrawBorder {path} {
+    public proc themeButtonDrawBorder {} {
+#        set low [list 20 20 20 255]
+        set low [list 255 20 20 255]
+        set high [list 200 200 200 255]
+        themeDrawBorder 0 0 $itcl_options(-width) \
+	        $itcl_options(-height) $low $high $itcl_options(-bd)
+    }
+
+    public proc themeButtonDrawPressedBorder {} {
         set low [list 20 20 20 255]
         set high [list 200 200 200 255]
-        themeDrawBorder [$path obj] 0 0 [$path cget -width] \
-	        [$path cget -height] $low $high [$path cget -bd]
+        themeDrawBorder $windowImage 0 0 $itcl_options(-width) \
+	        $itcl_options(-height) $high $low $itcl_options(-bd)
     }
 
-    public proc themeButtonDrawPressedBorder {path} {
-        set low [list 20 20 20 255]
-        set high [list 200 200 200 255]
-        themeDrawBorder [$path obj] 0 0 [$path cget -width] \
-	        [$path cget -height] $high $low [$path cget -bd]
-    }
-
-    public proc themeDrawBorder {obj x y width height low high bd} {
+    public proc themeDrawBorder {x y width height low high bd} {
         incr bd -1
         while {$bd >= 0} {
             set x1 [expr {$x + $bd}]
@@ -70,27 +78,27 @@
             set x2 [expr {($x + $width) - $bd - 1}]
             set y2 [expr {($y + $height) - $bd - 1}]
             #top line
-#puts stderr "top!$obj!$x1!$y1!$x2!$y1!$high!$low!"
-            $obj line $x1 $y1 $x2 $y1 $high
+puts stderr "top!$windowImage!$x1!$y1!$x2!$y1!$high!$low!"
+            ::ntk::widgetImage::Image line $windowImage $x1 $y1 $x2 $y1 $high
             #right line
-            $obj line $x2 $y1 $x2 $y2 $low
+            ::ntk::widgetImage::Image line $windowImage $x2 $y1 $x2 $y2 $low
             #bottom line
-            $obj line $x1 $y2 $x2 $y2 $low
+            ::ntk::widgetImage::Image line $windowImage $x1 $y2 $x2 $y2 $low
             #left line
-            $obj line $x1 $y1 $x1 $y2 $high
+            ::ntk::widgetImage::Image line $windowImage $x1 $y1 $x1 $y2 $high
             incr bd -1
         }
     }
-    public method themeDrawGenericBorder {path} {
+    public method themeDrawGenericBorder {} {
         set low [list 20 20 20 255]
         set high [list 200 200 200 255]
-        themeDrawBorder [$path obj] 0 0 [$path cget -width] \
-                [$path cget -height] $high $low [$path cget -bd]
+        themeDrawBorder $windowImage 0 0 $itcl_options(-width) \
+                $itcl_options(-height) $high $low $itcl_options(-bd)
     }
 
-    public proc themeDrawTextBackground {path} {
+    public proc themeDrawTextBackground {} {
         # TODO add tile call with nice metallic background.
-        [$path obj] setall [$path cget -bg]
+        $windowImage fill $itcl_options(-bg)
     }
 
     public proc themeGetText {} {
@@ -98,18 +106,18 @@
 	        -theme default -themeclass text
     }
 
-    public proc themeLabelDrawBorder {path} {
+    public proc themeLabelDrawBorder {} {
         set low [list 20 20 20 255]
         set high [list 200 200 200 255]
-        themeDrawBorder [$path obj] 0 0 [$path cget -width] \
-	        [$path cget -height] $low $high [$path cget -bd]
+        themeDrawBorder $windowImage 0 0 $itcl_options(-width) \
+	        $itcl_options(-height) $low $high $itcl_options(-bd)
     }
 
-    public method themeListboxDrawBorder {path} {
+    public method themeListboxDrawBorder {} {
          set low [list 20 20 20 255]
          set high [list 200 200 200 255]
-         themeDrawBorder [$path obj] 0 0 [$path cget -width] \
-	         [$path cget -height] $high $low [$path cget -bd]
+         themeDrawBorder $windowImage 0 0 $itcl_options(-width) \
+	         $itcl_options(-height) $high $low $itcl_options(-bd)
     }
 
     public proc themeScrollbarButton {path} {
@@ -125,31 +133,31 @@
         set high [list 200 200 200 255]
         set w [$path cget -width]
         set h [$path cget -height]
-        [$path obj] setall [[$path parent] cget -bg]
+        [$path windowImage] fill [[$path parent] cget -bg]
 
         if {[$path pressed] == 0} {
-            themeDrawBorder [$path obj] 0 0 $w $h $low $high 1
+            themeDrawBorder [$path windowImage] 0 0 $w $h $low $high 1
         } else {
-            themeDrawBorder [$path obj] 0 0 $w $h $high $low 1
+            themeDrawBorder [$path windowImage] 0 0 $w $h $high $low 1
         }
         switch -- [$path direction] {
         up {
-            [$path obj] polygon [list 0 0 0 255] \
+            [$path windowImage] polygon [list 0 0 0 255] \
                     [expr {$w / 2}] 2  \
                     2 [expr {$h - 2}]  [expr {$w - 2}] [expr {$h - 2}]
           }
         down {
-            [$path obj] polygon [list 0 0 0 255] \
+            [$path windowImage] polygon [list 0 0 0 255] \
                     2 2 [expr {$w - 2}] 2 \
                     [expr {$w / 2}] [expr {$h - 2}]         
           }
         left {
-            [$path obj] polygon [list 0 0 0 255] \
+            [$path windowImage] polygon [list 0 0 0 255] \
                     2 [expr {$h / 2}] [expr {$w - 2}] 2 \
 		    [expr {$w - 2}] [expr {$h - 2}]
           }
         right {
-            [$path obj] polygon [list 0 0 0 255] \
+            [$path windowImage] polygon [list 0 0 0 255] \
                      2 2 [expr {$w - 2}] [expr {$h / 2}] 2 [expr {$h - 2}]
           }
         }
@@ -162,18 +170,18 @@
     }
 
     public proc themeScrollbarTroughDraw {path} {
-        [$path obj] setall [list 127 127 127 255]
+        [$path windowImage] fill [list 127 127 127 255]
         render $path
     }
 
     public method themeSpinboxButtonBgDraw {path} {
-        [$path obj] setall $default_background_color
+        [$path windowImage] fill $default_background_color
     }
   
     public method themeSpinboxButtonDownDraw {path} {
         set w [$path cget -width]
         set h [$path cget -height]
-        [$path obj] polygon [list 0 0 0 255] \
+        [$path windowImage] polygon [list 0 0 0 255] \
                 2 2       [expr {$w - 2}] 2 \
                 [expr {$w / 2}] [expr {$h - 2}]
     }
@@ -182,7 +190,7 @@
         set w [$path width]
         set h [$path height]
   
-        [$path obj] polygon [list 0 0 0 255] \
+        [$path windowImage] polygon [list 0 0 0 255] \
              [expr {$w / 2}] 2 \
              2 [expr {$h - 2}]  [expr {$w - 2}] [expr {$h - 2}]
         render $path
@@ -191,7 +199,7 @@
     public method themeSpinboxDrawTextareaBorder {path} {
         set low [list 20 20 20 255]
         set high [list 200 200 200 255]
-        themeDrawBorder [$path.textarea obj] 0 0 \
+        themeDrawBorder [$path.textarea windowImage] 0 0 \
                 [expr {[$path.textarea cget -width] - 1}] \
                 [$path.textarea cget -height] $high $low [$path cget -bd]
    }
@@ -199,16 +207,16 @@
    public method themeSpinboxMakeButtonImage {direction} {
        set w 18
        set h 12
-       set obj [megaimage-blank $w $h]
+       set myWidgetImage [uplevel #0 ntkWidget #auto -width $w -height $h]
        if {$direction eq "up"} {
-           $obj polygon [list 0 0 0 255] \
+           $myWidgetImage polygon [list 0 0 0 255] \
                    [expr {$w / 2}] 2 \
                    2 [expr {$h - 2}]  [expr {$w - 2}] [expr {$h - 2}]
        } else {
-               $obj polygon [list 0 0 0 255] \
+               $myWidgetImage polygon [list 0 0 0 255] \
                    2 2 [expr {$w - 2}] 2 \
                    [expr {$w / 2}] [expr {$h - 2}]
        }
-       return $obj
+       return $myWidgetImage
     }
 }

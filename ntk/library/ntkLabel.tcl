@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.8 2007/10/19 10:11:58 wiede Exp $
+# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.9 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::label {
@@ -51,9 +51,9 @@ itcl::extendedclass ::ntk::classes::label {
 	}
 	set myColor $itcl_options(-bg)
 	if {[llength $myColor] == 1} {
-	    $obj setall $colors($myColor)
+	    $obj fill $colors($myColor)
 	} else {
-	    $obj setall $myColor
+	    $obj fill $myColor
 	}
         themeLabelDrawBorder $wpath
         labelDrawText
@@ -67,7 +67,7 @@ itcl::extendedclass ::ntk::classes::label {
         set myX [expr {($winwidth / 2) - ($textwidth / 2)}]
         set myY [expr {($winheight / 2) - ($textheight / 2)}]
         set myTextObj $textobj
-        $obj blendobj $myX $myY $myTextObj
+        $obj blendwidget $myX $myY $myTextObj
     }
 
     public method labelRequestSize {} {

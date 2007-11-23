@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.13 2007/10/22 20:30:39 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.14 2007/11/23 21:02:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::button {
@@ -28,7 +28,7 @@ itcl::extendedclass ::ntk::classes::button {
     public option -state -default released -configuremethod buttonConfig
 
     private method buttonConfig {option value} {
-#puts stderr "buttonConfig!$option!$value!"
+puts stderr "buttonConfig!$option!$value!"
         set itcl_options($option) $value
         switch -- $option {
 	-font -
@@ -47,21 +47,25 @@ itcl::extendedclass ::ntk::classes::button {
     }
 
     constructor {args} {
+puts stderr "BUTTON CONSTR"
 	set itcl_options(-buttonpress) [list $wpath buttonPress]
 	set itcl_options(-buttonrelease) [list $wpath buttonRelease]
 	set itcl_options(-width) 60
 	set itcl_options(-height) 30
 	set itcl_options(-bd) 1
-	set reqwidth 60
-	set reqheight 30
+	set itcl_options(-reqwidth) 60
+	set itcl_options(-reqheight) 30
 	set themeConfig buttonConfig
 	set destroy buttonDestroy
+puts stderr "BUTTON CONFIG $args"
 	if {[llength $args] > 0} {
 	    configure {*}$args
 	}
 	appendRedrawHandler [list $wpath buttonRedraw]
 	set constructing 0
+puts stderr "BUTTON DRAW"
 	buttonDraw
+puts stderr "BUTTON CONSTR END"
         return $wpath
     }
 
@@ -90,21 +94,21 @@ itcl::extendedclass ::ntk::classes::button {
     }
 
     public method buttonDestroy {} {
-        rename [textobj] {}
+        rename [textImage] {}
     }
 
     public method buttonDraw {} {
-#puts stderr "buttonDraw!"
+puts stderr "buttonDraw!"
 	if {$constructing} {
 	    return
 	}
 	set myColor $itcl_options(-bg)
 	if {[llength $myColor] == 1} {
-	    $obj setall $colors($myColor)
+	    ::ntk::widgetImage::Image fill $windowImage $colors($myColor)
 	} else {
-	    $obj setall $myColor
+	    ::ntk::widgetImage::Image fill $windowImage $myColor
 	}
-        themeButtonDrawBorder $wpath
+        themeButtonDrawBorder
         buttonDrawText
         render $wpath
     }
@@ -113,9 +117,9 @@ itcl::extendedclass ::ntk::classes::button {
 #puts stderr "buttonDrawPressed!"
 	set myColor $itcl_options(-bg)
 	if {[llength $myColor] == 1} {
-	    $obj setall $colors($myColor)
+	    $windowImage fill $colors($myColor)
 	} else {
-	    $obj setall $myColor
+	    $windowImage fill $myColor
 	}
         themeButtonDrawPressedBorder $wpath
         buttonDrawText
@@ -123,13 +127,14 @@ itcl::extendedclass ::ntk::classes::button {
     }
 
     public method buttonDrawText {} {
-        lassign [$obj getsize] winwidth winheight
-        lassign [[textobj] getsize] textwidth textheight
+        lassign [::ntk::widgetImage::Image getsize $windowImage] winwidth winheight
+#puts stderr "WIHE!$winwidth!$winheight!$itcl_options(-width)!$itcl_options(-height)!"
+        lassign [::ntk::widgetImage::Image getsize $textImage] textwidth textheight
 #puts stderr "buttonDrawText!$wpath!$winwidth!$winheight!$textwidth!$textheight!"
         set myX [expr {($winwidth / 2) - ($textwidth / 2)}]
         set myY [expr {($winheight / 2) - ($textheight / 2)}]
-        set myTextObj [textobj]
-        [obj] blendobj $myX $myY $myTextObj
+#puts stderr "TextObj!$textImage!$myX!$myY!$obj!"
+        ::ntk::widgetImage::Image blendwidget $windowImage $myX $myY $textImage
     }
 
     public method buttonRedraw {} {
@@ -152,12 +157,12 @@ itcl::extendedclass ::ntk::classes::button {
     }
 
     public method buttonTextCallback {value} {
-#puts stderr "buttonTextCallback!$value!"
-        set rgbadata [freetype $itcl_options(-font) \
-                $itcl_options(-fontsize) $value $itcl_options(-textcolor) \
-		myWidth myHeight offsetmap]
+puts stderr "buttonTextCallback!$value!$textImage!"
+	::ntk::widgetImage::Image createtext $textImage $itcl_options(-font) \
+	        $itcl_options(-fontsize) $value $itcl_options(-textcolor) \
+	        myWidth myHeight
+#puts stderr MYWH!$myWidth!$myHeight!"
         configure -textwidth $myWidth -textheight $myHeight
-        $textobj setdata $rgbadata
 	set myBd $itcl_options(-bd)
         set myWidth [expr {$myWidth + 2 + ($myBd * 2)}]
         set myHeight [expr {$myHeight + 2 + ($myBd * 2)}]
