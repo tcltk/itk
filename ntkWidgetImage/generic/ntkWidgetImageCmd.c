@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.2 2007/11/23 18:26:54 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.3 2007/11/23 21:01:04 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -54,7 +54,7 @@ static NtkWidgetImageMethod NtkWidgetImageMethodList[] = {
 	    NtkWidgetImage_BlendWidgetCmd },
     { "::ntk::widgetImage::Image::getdata",
             "widget", NtkWidgetImage_GetDataCmd },
-    { "::ntk::widgetImage::getsize",
+    { "::ntk::widgetImage::Image::getsize",
             "widget", NtkWidgetImage_GetSizeCmd },
     { "::ntk::widgetImage::Image::fill",
             "widget", NtkWidgetImage_FillCmd },
