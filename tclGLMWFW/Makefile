@@ -40,7 +40,7 @@ RANLIB=:
 RANLIB_STUB=:
 SHLIB_CFLAGS=-fPIC
 SHLIB_LD=${CC} -shared ${CFLAGS} ${LDFLAGS_DEFAULT}
-SHLIB_LD_LIBS=${LIBS} /home/arnulf/SOURCES/tclOO/itcl-ng/itk/ntk/library/glfw/lib/x11/libglfw.a -L/home/arnulf/SOURCES/tclOO/head/unix -ltclstub8.5 \
+SHLIB_LD_LIBS=${LIBS} -L/home/arnulf/SOURCES/tclOO/head/unix -ltclstub8.5 \
 -L/usr/X11/lib -lGLU -lGL -lX11 -lXrandr -pthread -lm
 STLIB_LD=${AR} cr
 TCL_SRC_DIR=/home/arnulf/SOURCES/tclOO/head				     TCL_BIN_DIR=/home/arnulf/SOURCES/tclOO/head/unix
