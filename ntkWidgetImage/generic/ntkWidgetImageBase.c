@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageBase.c,v 1.1.2.1 2007/11/23 18:06:47 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageBase.c,v 1.1.2.2 2007/11/23 18:26:53 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -70,9 +70,9 @@ Initialize (
         return TCL_ERROR;
     }
 
-    Tcl_SetVar(interp, "::ntk::widgetImage::version",
+    Tcl_SetVar(interp, NTK_WIDGET_IMAGE_NAMESPACE"::version",
             NTK_WIDGET_IMAGE_VERSION, TCL_NAMESPACE_ONLY);
-    Tcl_SetVar(interp, "::ntk::widgetImage::patchLevel",
+    Tcl_SetVar(interp, NTK_WIDGET_IMAGE_NAMESPACE"::patchLevel",
             NTK_WIDGET_IMAGE_PATCH_LEVEL, TCL_NAMESPACE_ONLY);
     /*
      *  Package is now loaded.

@@ -2,7 +2,7 @@ package require TclGL
 package require GlmwfwX11
 package require Glmwfw
 
-source ntkWidget.tcl
+package require ntkWidgetImage
 
 source tg_util.tcl
 
@@ -26,8 +26,8 @@ init
 
 display $win
 
-    set widget [ntkWidget wgt -width 400 -height 200]
-    $widget fill [list 0 255 0 255]
+    set widget [::ntk::widgetImage::Image create 400 200]
+    ::ntk::widgetImage::Image  fill $widget [list 0 255 0 255]
 #    $widget line 5 5 115 115 [list 195 0 0 0]
 #    $widget line 5 5 195 60 [list 195 0 0 0]
 if {0} {
@@ -42,19 +42,19 @@ if {0} {
 #    $widget blendwidget 50 50 [$widget2 widget]
     $widget blendwidget 0 0 [$widget2 widget]
 }
-    set widget3 [ntkWidget wgt3 -width 20 -height 20]
-    $widget3 createText Vera.ttf 14 "Arnulf geht jetzt" [list 0 0 0 255] w h
+    set widget3 [::ntk::widgetImage::Image create 20 20]
+    ::ntk::widgetImage::Image createtext $widget3 Vera.ttf 14 "Arnulf geht jetzt" [list 0 0 0 255] w h
 puts stderr "WH!$w!$h!"
-    set widget3b [ntkWidget wgt3b -width 2 -height 19]
-    $widget3b fill [list 255 0 0 255]
-    set widget3a [ntkWidget wgt3a -width 229 -height 1]
-    $widget3a fill [list 255 0 0 255]
+    set widget3b [::ntk::widgetImage::Image create 2 19]
+    ::ntk::widgetImage::Image fill $widget3b [list 255 0 0 255]
+    set widget3a [::ntk::widgetImage::Image create 229 1]
+    ::ntk::widgetImage::Image fill $widget3a [list 255 0 0 255]
 #    $widget3 createText Vera.ttf 14 "Arnulf" [list 0 0 0 255] w h
-    $widget3 blendwidget 0 0 [$widget3a widget]
-    $widget3 rotate -22
-    $widget blendwidget 0 0 [$widget3 widget]
-    $widget blendwidget 113 0 [$widget3b widget]
-    set data [$widget getdata]
+    ::ntk::widgetImage::Image blendwidget $widget3 0 0 $widget3a
+    ::ntk::widgetImage::Image rotate $widget3 -22
+    ::ntk::widgetImage::Image blendwidget $widget 0 0 $widget3
+    ::ntk::widgetImage::Image blendwidget $widget 113 0 $widget3b
+    set data [::ntk::widgetImage::Image getdata $widget]
 #    set data [$widget3 getdata]
     ::ntk::glmwfw::Glmwfw drawPixels2 400 200 $data
 #    ::ntk::glmwfw::Glmwfw drawPixels2 232 41 $data

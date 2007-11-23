@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.1 2007/11/23 18:06:47 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.2 2007/11/23 18:26:54 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -38,33 +38,33 @@ typedef struct NtkWidgetImageMethod {
 } NtkWidgetImageMethod;
 
 static NtkWidgetImageMethod NtkWidgetImageMethodList[] = {
-    { "::ntk::widgetImage::unknown",
+    { "::ntk::widgetImage::Image::unknown",
             "", NtkWidgetImage_UnknownCmd },
-    { "::ntk::widgetImage::create",
+    { "::ntk::widgetImage::Image::create",
             "width height", NtkWidgetImage_CreateCmd },
-    { "::ntk::widgetImage::createtext",
+    { "::ntk::widgetImage::Image::createtext",
             "font fontsize textcolor widthVar heightVar",
 	    NtkWidgetImage_CreateTextCmd },
-    { "::ntk::widgetImage::line",
+    { "::ntk::widgetImage::Image::line",
             "widget x1 y1 x2 y2 rgbaList", NtkWidgetImage_LineCmd },
-    { "::ntk::widgetImage::blend",
+    { "::ntk::widgetImage::Image::blend",
             "widget", NtkWidgetImage_BlendCmd },
-    { "::ntk::widgetImage::blendwidget",
+    { "::ntk::widgetImage::Image::blendwidget",
             "destWidget destX destY ?srcX1 srcY1 srcX2 srcY2? srcWidget",
 	    NtkWidgetImage_BlendWidgetCmd },
-    { "::ntk::widgetImage::getdata",
+    { "::ntk::widgetImage::Image::getdata",
             "widget", NtkWidgetImage_GetDataCmd },
     { "::ntk::widgetImage::getsize",
             "widget", NtkWidgetImage_GetSizeCmd },
-    { "::ntk::widgetImage::fill",
+    { "::ntk::widgetImage::Image::fill",
             "widget", NtkWidgetImage_FillCmd },
-    { "::ntk::widgetImage::setdata",
+    { "::ntk::widgetImage::Image::setdata",
             "widget data", NtkWidgetImage_SetDataCmd },
-    { "::ntk::widgetImage::setsize",
+    { "::ntk::widgetImage::Image::setsize",
             "widget width height", NtkWidgetImage_SetSizeCmd },
-    { "::ntk::widgetImage::rectangle",
+    { "::ntk::widgetImage::Image::rectangle",
             "widget", NtkWidgetImage_RectangleCmd },
-    { "::ntk::widgetImage::rotate",
+    { "::ntk::widgetImage::Image::rotate",
             "widget degrees", NtkWidgetImage_RotateCmd },
     { NULL, NULL, NULL }
 };
@@ -143,9 +143,9 @@ NtkWidgetImage_InitCommands (
      * Build the ensemble used to implement [ntk widget].
      */
 
-    nsPtr = Tcl_CreateNamespace(interp, "::ntk::widgetImage", NULL, NULL);
+    nsPtr = Tcl_CreateNamespace(interp, "::ntk::widgetImage::Image", NULL, NULL);
     if (nsPtr == NULL) {
-        Tcl_Panic("ntkWidgetImage: error in creating namespace: ::ntk::widgetImage \n");
+        Tcl_Panic("ntkWidgetImage: error in creating namespace: ::ntk::widgetImage::Image \n");
     }
     cmd = Tcl_CreateEnsemble(interp, nsPtr->fullName, nsPtr,
         TCL_ENSEMBLE_PREFIX);
@@ -154,9 +154,9 @@ NtkWidgetImage_InitCommands (
         Tcl_CreateObjCommand(interp, NtkWidgetImageMethodList[i].commandName,
                 NtkWidgetImageMethodList[i].proc, infoPtr, NULL);
     }
-    Tcl_Obj *ensObjPtr = Tcl_NewStringObj("::ntk::widgetImage", -1);
+    Tcl_Obj *ensObjPtr = Tcl_NewStringObj("::ntk::widgetImage::Image", -1);
     Tcl_IncrRefCount(ensObjPtr);
-    Tcl_Obj *unkObjPtr = Tcl_NewStringObj("::ntk::widgetImage::unknown", -1);
+    Tcl_Obj *unkObjPtr = Tcl_NewStringObj("::ntk::widgetImage::Image::unknown", -1);
     Tcl_IncrRefCount(unkObjPtr);
     if (Tcl_SetEnsembleUnknownHandler(NULL,
             Tcl_FindEnsemble(interp, ensObjPtr, TCL_LEAVE_ERR_MSG),
@@ -245,7 +245,6 @@ NtkWidgetImage_UnknownCmd(
  * ------------------------------------------------------------------------
  */
 /* ARGSUSED */
-void (*glXGetProcAddressARB(const GLubyte *procName))();
 
 static int
 CheckNumParams(
@@ -268,7 +267,7 @@ CheckNumParams(
 	    }
 	    if (strcmp(cp, funcName) == 0) {
                 Tcl_AppendResult(interp,
-                        "wrong # args: should be \"ntk glwidget ",
+                        "wrong # args: should be \"::ntk::widgetImage::Image ",
 		        funcName, " ", 
 		        NtkWidgetImageMethodList[i].usage, "\"", NULL);
                 return TCL_ERROR;
