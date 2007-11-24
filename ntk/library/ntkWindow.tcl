@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.18 2007/11/23 21:02:57 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.19 2007/11/24 22:25:20 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::window {
@@ -101,9 +101,9 @@
     }
 
     constructor {args} {
-puts stderr "WINDOW constructor ARGS!$args!"
+#puts stderr "WINDOW constructor ARGS!$args!"
 	incr cntWindows
-	set wpath [string trimleft $this :]
+	set wpath [namespace tail $this]
         if {[info exists windows($wpath)]} {
 	    return -code error "window $this already exists"
 	}
@@ -130,7 +130,7 @@ puts stderr "WINDOW constructor ARGS!$args!"
 	set verticalScrollbar [list]
 	set horizontalScrollbar [list]
 	set constructing 0
-puts stderr "WINDOW END"
+#puts stderr "WINDOW END"
         return $wpath
     }
 

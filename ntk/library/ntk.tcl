@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.17 2007/11/23 21:02:56 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.18 2007/11/24 22:25:19 wiede Exp $
 #--------------------------------------------------------------------------
 
 package require TclGL
@@ -75,6 +75,7 @@ source [file join $myDir ntkBox.tcl]
 source [file join $myDir ntkCheckbox.tcl]
 source [file join $myDir ntkSpinbox.tcl]
 source [file join $myDir ntkMenu.tcl]
+source [file join $myDir ntkInit.tcl]
 
 package provide ntkWidget 0.1
 

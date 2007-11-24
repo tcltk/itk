@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.14 2007/11/23 21:02:57 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.15 2007/11/24 22:25:20 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::button {
@@ -28,7 +28,7 @@ itcl::extendedclass ::ntk::classes::button {
     public option -state -default released -configuremethod buttonConfig
 
     private method buttonConfig {option value} {
-puts stderr "buttonConfig!$option!$value!"
+#puts stderr "buttonConfig!$option!$value!"
         set itcl_options($option) $value
         switch -- $option {
 	-font -
@@ -47,7 +47,7 @@ puts stderr "buttonConfig!$option!$value!"
     }
 
     constructor {args} {
-puts stderr "BUTTON CONSTR"
+#puts stderr "BUTTON CONSTR"
 	set itcl_options(-buttonpress) [list $wpath buttonPress]
 	set itcl_options(-buttonrelease) [list $wpath buttonRelease]
 	set itcl_options(-width) 60
@@ -57,30 +57,33 @@ puts stderr "BUTTON CONSTR"
 	set itcl_options(-reqheight) 30
 	set themeConfig buttonConfig
 	set destroy buttonDestroy
-puts stderr "BUTTON CONFIG $args"
+#puts stderr "BUTTON CONFIG $args"
 	if {[llength $args] > 0} {
 	    configure {*}$args
 	}
 	appendRedrawHandler [list $wpath buttonRedraw]
 	set constructing 0
-puts stderr "BUTTON DRAW"
+#puts stderr "BUTTON DRAW"
 	buttonDraw
-puts stderr "BUTTON CONSTR END"
+#puts stderr "BUTTON CONSTR END"
         return $wpath
     }
 
     public method buttonPress {button x y globalx globaly} {
 #puts stderr "button!buttonPress called $x $y"
         if {$button == 1} {
-            configure -state pressed
+            set itcl_options(-state) pressed
+	    buttonDrawPressed
         }
 #puts stderr "button!buttonPress END"
     }
 
     public method buttonRelease {button x y globalx globaly} {
 #puts stderr "button!buttonRelease called $button $x $y"
-        configure -state released
-        if {($x < 0) || ($y < 0) || ($x >= $itcl_options(-width)) ||
+        set itcl_options(-state) released
+	buttonDraw
+        if {($x < 0) || ($y < 0) || \
+	        ($x >= $itcl_options(-width)) || \
 	        ($y >= $itcl_options(-height))} {
             return
         }
@@ -98,7 +101,7 @@ puts stderr "BUTTON CONSTR END"
     }
 
     public method buttonDraw {} {
-puts stderr "buttonDraw!"
+#puts stderr "buttonDraw!"
 	if {$constructing} {
 	    return
 	}
@@ -108,6 +111,7 @@ puts stderr "buttonDraw!"
 	} else {
 	    ::ntk::widgetImage::Image fill $windowImage $myColor
 	}
+#puts stderr "themeButtonDrawBorder"
         themeButtonDrawBorder
         buttonDrawText
         render $wpath
@@ -117,11 +121,12 @@ puts stderr "buttonDraw!"
 #puts stderr "buttonDrawPressed!"
 	set myColor $itcl_options(-bg)
 	if {[llength $myColor] == 1} {
-	    $windowImage fill $colors($myColor)
+	    ::ntk::widgetImage::Image fill $windowImage $colors($myColor)
 	} else {
-	    $windowImage fill $myColor
+	    ::ntk::widgetImage::Image fill $windowImage $myColor
 	}
-        themeButtonDrawPressedBorder $wpath
+#puts stderr "themeButtonDrawPressedBorder"
+        themeButtonDrawPressedBorder
         buttonDrawText
         render $wpath
     }
@@ -157,7 +162,7 @@ puts stderr "buttonDraw!"
     }
 
     public method buttonTextCallback {value} {
-puts stderr "buttonTextCallback!$value!$textImage!"
+#puts stderr "buttonTextCallback!$value!$textImage!"
 	::ntk::widgetImage::Image createtext $textImage $itcl_options(-font) \
 	        $itcl_options(-fontsize) $value $itcl_options(-textcolor) \
 	        myWidth myHeight

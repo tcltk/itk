@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.16 2007/11/23 21:02:57 wiede Exp $
+# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.17 2007/11/24 22:25:20 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::render {
@@ -41,7 +41,7 @@
         ::ntk::widgetImage::Image fill $myObj [. cget -bg]
         renderTree $myObj .
         set myWinId [. id]
-puts stderr "====renderNow!$myWinId $myObj!"
+#puts stderr "====renderNow!$myWinId $myObj!"
 #	    ntk-resize-image $myWinId [. cget -width] [. cget -height]
 #	    ntk-put-image  $myWinId $myObj
         . drawPixels $myWinId .
@@ -107,7 +107,7 @@ puts stderr "====renderNow!$myWinId $myObj!"
             } 
             set back [$child renderTreeData]
             if {[changeInTree $child]} {
-puts stderr "changeInChild:CHILD:$child!$back![$child windowImage]!"
+#puts stderr "changeInChild:CHILD:$child!$back![$child windowImage]!"
                 ::ntk::widgetImage::Image setdata $back [$child windowImage]
                 renderRecurse $back $child 0 0
                 if {[set r [$child cget -rotate]]} {

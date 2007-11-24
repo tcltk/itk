@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.9 2007/10/27 20:30:00 wiede Exp $
+# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.10 2007/11/24 22:25:20 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::input {
@@ -137,12 +137,13 @@
     }
 
     public proc inputMousePress {basewin button x y} {
+#puts stderr "inputMousePress!$basewin!$button!$x!$y!"
         inputMousePressRecurse $basewin $button $x $y $x $y
     }
 
     public proc inputMousePressDispatch {path button x y globalx globaly} {
         set callback [$path cget -buttonpress]
-#puts stderr "PRESS DISPATCH $path!$button!$callback!"
+#puts stderr "MOUSE PRESS DISPATCH $path!$button!$callback!"
         if {$callback ne ""} {
             lappend input(activewindows) $path
             uplevel #0 $callback $button $x $y $globalx $globaly
@@ -157,8 +158,8 @@
         set ci [expr {[llength $children] - 1}]
         set c [lindex $children $ci]
         while {$ci >= 0} {
-            set x1 [$c cget -x]
-            set y1 [$c cget -y]
+            set x1 [$c cget -xoffset]
+            set y1 [$c cget -yoffset]
 	    set myWidth [$c cget -width]
 	    set myHeight [$c cget -height]
             set x2 [expr {$x1 + $myWidth}]
@@ -181,10 +182,10 @@
                 set localx [expr {$px - $x1}]
                 set localy [expr {$py - $y1}]  
                 if {[catch {
-		        lassign [[$c obj] pixel $localx $localy] _ _ _ a
+		        lassign [::ntk::widgetImage::Image pixel [$c windowImage] $localx $localy] _ _ _ a
 		    } err]} {
                     #DEBUG
-                    puts stderr "invalid offset in $c"
+                    puts stderr "invalid offset in $c ERR!$err"
                     return 0
                 }
                 if {$a > 0} {
@@ -277,8 +278,8 @@
         set px $x
 	set py $y 
         foreach c $worklist {
-            set x1 [$c cget -x]
-            set y1 [$c cget -y]
+            set x1 [$c cget -xoffset]
+            set y1 [$c cget -yoffset]
 	    set myWidth [$c cget -width]
 	    set myHeight [$c cget -height]
 	    set myRotate [$c cget -rotate]
@@ -309,8 +310,8 @@
         }
 #puts stderr SEARCHING:$w
         foreach c [$path children] {
-            set x1 [$c x]
-            set y1 [$c y]
+            set x1 [$c cget -xoffset]
+            set y1 [$c cget -yoffset]
             set myWidth [$c cget -width]
             set myHeight [$c cget -height]
 	    set x2 [expr {$x1 + $myWidth}]

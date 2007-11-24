@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.12 2007/11/23 21:02:57 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.13 2007/11/24 22:25:20 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
@@ -35,9 +35,7 @@
 
     constructor {args} {
         eval ::ntk::classes::window::constructor -width 60 -height 100
-puts stderr "THEME after window constructor"
     } {
-puts stderr "THEME2 after window constructor"
         set xx [::ntk::widgetImage::Image create 1 1]
         ::ntk::widgetImage::Image createtext $xx $defaultFont $defaultFontSize "_^" [list 0 0 0 255] \
 	        myWidth myHeight
@@ -50,14 +48,11 @@ puts stderr "THEME2 after window constructor"
 	set itcl_options(-fontsize) $defaultFontSize
 	set itcl_options(-textcolor) $defaultTextColor
 	set itcl_options(-bg) [defaultBackgroundColor]
-puts stderr "crea textImage"
 	set textImage [::ntk::widgetImage::Image create 20 20]
-puts stderr "TEXTImage!$textImage!"
     }
 
     public proc themeButtonDrawBorder {} {
-#        set low [list 20 20 20 255]
-        set low [list 255 20 20 255]
+        set low [list 20 20 20 255]
         set high [list 200 200 200 255]
         themeDrawBorder 0 0 $itcl_options(-width) \
 	        $itcl_options(-height) $low $high $itcl_options(-bd)
@@ -66,7 +61,7 @@ puts stderr "TEXTImage!$textImage!"
     public proc themeButtonDrawPressedBorder {} {
         set low [list 20 20 20 255]
         set high [list 200 200 200 255]
-        themeDrawBorder $windowImage 0 0 $itcl_options(-width) \
+        themeDrawBorder 0 0 $itcl_options(-width) \
 	        $itcl_options(-height) $high $low $itcl_options(-bd)
     }
 
@@ -78,7 +73,6 @@ puts stderr "TEXTImage!$textImage!"
             set x2 [expr {($x + $width) - $bd - 1}]
             set y2 [expr {($y + $height) - $bd - 1}]
             #top line
-puts stderr "top!$windowImage!$x1!$y1!$x2!$y1!$high!$low!"
             ::ntk::widgetImage::Image line $windowImage $x1 $y1 $x2 $y1 $high
             #right line
             ::ntk::widgetImage::Image line $windowImage $x2 $y1 $x2 $y2 $low
