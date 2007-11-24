@@ -38,7 +38,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: x11_window.c,v 1.1.2.7 2007/11/24 19:07:08 wiede Exp $
+ * RCS: @(#) $Id: x11_window.c,v 1.1.2.8 2007/11/24 22:23:48 wiede Exp $
  */
 
 #include "platform.h"
@@ -853,7 +853,15 @@ int _glmwfwHandleNextEvent(
       }
     // Were any of the mouse-buttons pressed?
     case ButtonPress: {
+        XButtonEvent *xbutton = &event->xbutton;
+        winPtr->input.platformInput->CursorPosX = xbutton->x;
+        winPtr->input.platformInput->CursorPosY = xbutton->y;
+        winPtr->input.platformInput->MouseMoved = GL_TRUE;
+        winPtr->input.MousePosX = xbutton->x;
+        winPtr->input.MousePosY = xbutton->y;
         if (event->xbutton.button == Button1) {
+//fprintf(stderr, "B1!%d!%d!\n", winPtr->input.MousePosX, winPtr->input.MousePosY);
+//fprintf(stderr, "x:%d!y:%d!x_root:%d!y_root:%d!window:0x%08x!\n", xbutton->x, xbutton->y, xbutton->x_root, xbutton->y_root, (unsigned int)xbutton->window);
             winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_LEFT, GLMWFW_PRESS );
         } else {
 	    if (event->xbutton.button == Button2) {
@@ -905,6 +913,7 @@ int _glmwfwHandleNextEvent(
       }
     // Was the mouse moved?
     case MotionNotify: {
+fprintf(stderr, "MOTION!%d!%d!%d!%d!%d!%d!\n", event->xmotion.x, event->xmotion.y, winPtr->input.platformInput->CursorPosX, winPtr->input.platformInput->CursorPosY, winPtr->input.MousePosX, winPtr->input.MousePosY);
         if (event->xmotion.x != winPtr->input.platformInput->CursorPosX ||
                 event->xmotion.y != winPtr->input.platformInput->CursorPosY) {
             if (winPtr->MouseLock) {
@@ -1023,14 +1032,17 @@ dispatch_event(
 //fprintf(stderr, "dispatch_event!%p!0x%08x\n", winPtr, xe->type);
     switch (xe->type) {
     case ButtonPress: {
-        XButtonEvent *xbutton = &xe->xbutton;
-fprintf(stderr, "ButtonPress:!0x%08x!0x%08x\n", xbutton->button, xe->type);
-fprintf(stderr, "x:%d!y:%d!x_root:%d!y_root:%d!window:0x%08x!\n", xbutton->x, xbutton->y, xbutton->x_root, xbutton->y_root, (unsigned int)xbutton->window);
-fprintf(stderr, "RR!%d!%d!%d!%d!\n", winPtr->xRoot, winPtr->yRoot, xbutton->x_root-xbutton->x,xbutton->y_root-xbutton->y);
+//        XButtonEvent *xbutton = &xe->xbutton;
+//fprintf(stderr, "ButtonPress:!0x%08x!0x%08x\n", xbutton->button, xe->type);
+//fprintf(stderr, "x:%d!y:%d!x_root:%d!y_root:%d!window:0x%08x!\n", xbutton->x, xbutton->y, xbutton->x_root, xbutton->y_root, (unsigned int)xbutton->window);
+//fprintf(stderr, "RR!%d!%d!%d!%d!\n", winPtr->xRoot, winPtr->yRoot, xbutton->x_root-xbutton->x,xbutton->y_root-xbutton->y);
       }
       break;
     case ButtonRelease: {
 //        XButtonEvent *xbutton = &xe->xbutton;
+//fprintf(stderr, "ButtonRelease:!0x%08x!0x%08x\n", xbutton->button, xe->type);
+//fprintf(stderr, "x:%d!y:%d!x_root:%d!y_root:%d!window:0x%08x!\n", xbutton->x, xbutton->y, xbutton->x_root, xbutton->y_root, (unsigned int)xbutton->window);
+//fprintf(stderr, "RR!%d!%d!%d!%d!\n", winPtr->xRoot, winPtr->yRoot, xbutton->x_root-xbutton->x,xbutton->y_root-xbutton->y);
       }
       break;
     case ClientMessage: {

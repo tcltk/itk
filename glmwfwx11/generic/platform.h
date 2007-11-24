@@ -193,6 +193,8 @@ typedef struct _GlmwfwPlatformInput {
     int  MouseMoved;
     int CursorPosX;
     int CursorPosY;
+    int RootX;
+    int RootY;
 } _GlmwfwPlatformInput;
 
 //------------------------------------------------------------------------
