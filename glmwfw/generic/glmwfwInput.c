@@ -18,7 +18,7 @@
  * and package require command has to look for the right one dependent on the
  * platform
  *
- * RCS: @(#) $Id: glmwfwInput.c,v 1.1.2.1 2007/11/02 16:29:39 wiede Exp $
+ * RCS: @(#) $Id: glmwfwInput.c,v 1.1.2.2 2007/11/24 11:56:44 wiede Exp $
  */
 
 #include "glmwfwInt.h"
@@ -180,21 +180,21 @@ glmwfwSetMouseWheel(
 
 /*
  *========================================================================
-  *glmwfwSetKeyCallback() - Set callback function for keyboard input
+ * glmwfwSetKeyCallback() - Set callback function for keyboard input
  *========================================================================
  */
 
 int
 glmwfwSetKeyCallback(
     GlmwfwWindow *winPtr,
-    glmwfwkeyfun cbfun)
+    glmwfwKeyFunc cbfun)
 {
     /* Is Glmwfw initialized? */
     if (!winPtr->Opened ) {
         return TCL_OK;
     }
     /* Set callback function */
-    winPtr->keyfun = cbfun;
+    winPtr->keyFunc = cbfun;
     return TCL_OK;
 }
 
@@ -207,14 +207,14 @@ glmwfwSetKeyCallback(
 int
 glmwfwSetCharCallback(
     GlmwfwWindow *winPtr,
-    glmwfwcharfun cbfun)
+    glmwfwCharFunc cbfun)
 {
     /* Is Glmwfw initialized? */
     if (!winPtr->Opened) {
         return TCL_OK;
     }
     /* Set callback function */
-    winPtr->charfun = cbfun;
+    winPtr->charFunc = cbfun;
     return TCL_OK;
 }
 
@@ -227,14 +227,14 @@ glmwfwSetCharCallback(
 int
 glmwfwSetMouseButtonCallback(
     GlmwfwWindow *winPtr,
-    glmwfwmousebuttonfun cbfun)
+    glmwfwMouseButtonFunc cbfun)
 {
     /* Is Glmwfw initialized? */
     if (!winPtr->Opened) {
         return TCL_OK;
     }
     /* Set callback function */
-    winPtr->mousebuttonfun = cbfun;
+    winPtr->mouseButtonFunc = cbfun;
     return TCL_OK;
 }
 
@@ -247,14 +247,14 @@ glmwfwSetMouseButtonCallback(
 int
 glmwfwSetMousePosCallback(
     GlmwfwWindow *winPtr,
-    glmwfwmouseposfun cbfun)
+    glmwfwMousePosFunc cbfun)
 {
     /* Is Glmwfw initialized? */
     if (!winPtr->Opened) {
         return TCL_OK;
     }
     /* Set callback function */
-    winPtr->mouseposfun = cbfun;
+    winPtr->mousePosFunc = cbfun;
     /* Call the callback function to let the application know the current
      * mouse position
      */
@@ -273,14 +273,14 @@ glmwfwSetMousePosCallback(
 int
 glmwfwSetMouseWheelCallback(
     GlmwfwWindow *winPtr,
-    glmwfwmousewheelfun cbfun)
+    glmwfwMouseWheelFunc cbfun)
 {
     /* Is Glmwfw initialized? */
     if (!winPtr->Opened) {
         return TCL_OK;
     }
     /* Set callback function */
-    winPtr->mousewheelfun = cbfun;
+    winPtr->mouseWheelFunc = cbfun;
     /* Call the callback function to let the application know the current
      * mouse wheel position
      */
@@ -289,4 +289,3 @@ glmwfwSetMouseWheelCallback(
     }
     return TCL_OK;
 }
-

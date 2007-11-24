@@ -18,7 +18,7 @@
  * and package require command has to look for the right one dependent on the
  * platform
  *
- * RCS: @(#) $Id: glmwfwEnable.c,v 1.1.2.1 2007/11/02 16:29:39 wiede Exp $
+ * RCS: @(#) $Id: glmwfwEnable.c,v 1.1.2.2 2007/11/24 11:56:44 wiede Exp $
  */
 
 #include "glmwfwInt.h"
@@ -58,8 +58,8 @@ _glmwfwEnableMouseCursor(
 	_glmwfwPlatformSetMouseCursorPos(winPtr, CenterPosX, CenterPosY);
 	winPtr->input.MousePosX = CenterPosX;
 	winPtr->input.MousePosY = CenterPosY;
-	if (winPtr->mouseposfun) {
-	    winPtr->mouseposfun(winPtr, winPtr->input.MousePosX, 
+	if (winPtr->mousePosFunc) {
+	    winPtr->mousePosFunc(winPtr, winPtr->input.MousePosX, 
 	            winPtr->input.MousePosY);
 	}
     }

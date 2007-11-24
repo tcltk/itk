@@ -38,7 +38,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: x11_window.c,v 1.1.2.5 2007/11/04 16:17:21 wiede Exp $
+ * RCS: @(#) $Id: x11_window.c,v 1.1.2.6 2007/11/24 11:55:00 wiede Exp $
  */
 
 #include "platform.h"
@@ -675,7 +675,7 @@ int _glmwfwHandleNextEvent(
 
 #ifdef NOTDEF
         // Translate and report character input
-        if (winPtr->platformWindow->charfun) {
+        if (winPtr->platformWindow->charFunc) {
                 _glmwfwInputChar( winPtr, _glmwfwTranslateChar( &event->xkey ), GLMWFW_PRESS );
         }
 #endif
@@ -702,7 +702,7 @@ int _glmwfwHandleNextEvent(
 
 #ifdef NOTDEF
         // Translate and report character input
-        if (winPtr->platformWindow->charfunc) {
+        if (winPtr->platformWindow->charFunc) {
             _glmwfwInputChar( winPtr, _glmwfwTranslateChar( &event->xkey ), GLMWFW_RELEASE );
         }
 #endif
@@ -725,14 +725,14 @@ int _glmwfwHandleNextEvent(
                 // mouse button 4 & 5 presses
                     if (event->xbutton.button == Button4) {
                         winPtr->input.WheelPos++;  // To verify: is this up or down?
-                        if (winPtr->mousewheelfun) {
-                            winPtr->mousewheelfun(winPtr, winPtr->input.WheelPos);
+                        if (winPtr->mouseWheelFunc) {
+                            winPtr->mouseWheelFunc(winPtr, winPtr->input.WheelPos);
                         }
                     } else {
 		        if (event->xbutton.button == Button5) {
                             winPtr->input.WheelPos--;
-                            if (winPtr->mousewheelfun) {
-                                winPtr->mousewheelfun(winPtr,
+                            if (winPtr->mouseWheelFunc) {
+                                winPtr->mouseWheelFunc(winPtr,
 		                        winPtr->input.WheelPos);
                             }
 	                }
@@ -777,8 +777,8 @@ int _glmwfwHandleNextEvent(
             winPtr->input.platformInput->CursorPosY = event->xmotion.y;
             winPtr->input.platformInput->MouseMoved = GL_TRUE;
             // Call user callback function
-            if (winPtr->mouseposfun) {
-                winPtr->mouseposfun(winPtr, winPtr->input.MousePosX,
+            if (winPtr->mousePosFunc) {
+                winPtr->mousePosFunc(winPtr, winPtr->input.MousePosX,
                         winPtr->input.MousePosY);
             }
         }
@@ -791,9 +791,9 @@ fprintf(stderr, "glmwfw ConfigureNotify 1:%d!%d!%d!%d\n", event->xconfigure.widt
                 event->xconfigure.height != winPtr->Height) {
             winPtr->Width = event->xconfigure.width;
             winPtr->Height = event->xconfigure.height;
-fprintf(stderr, "glmwfw ConfigureNotify 2:%p\n", winPtr->windowsizefun);
-            if (winPtr->windowsizefun) {
-                winPtr->windowsizefun(winPtr, winPtr->Width,
+fprintf(stderr, "glmwfw ConfigureNotify 2:%p\n", winPtr->windowSizeFunc);
+            if (winPtr->windowSizeFunc) {
+                winPtr->windowSizeFunc(winPtr, winPtr->Width,
                         winPtr->Height);
             }
         }
@@ -838,9 +838,9 @@ fprintf(stderr, "glmwfw UnmapNotify:\n");
     // Was the window contents damaged?
     case Expose: {
         // Call user callback function
-fprintf(stderr, "glmwfw Expose:%p\n", winPtr->windowrefreshfun);
-        if (winPtr->windowrefreshfun) {
-            winPtr->windowrefreshfun(winPtr);
+//fprintf(stderr, "glmwfw Expose:%p\n", winPtr->windowRefreshFunc);
+        if (winPtr->windowRefreshFunc) {
+            winPtr->windowRefreshFunc(winPtr);
         }
         break;
       }
@@ -1007,8 +1007,8 @@ again:
         goto again;
     }
     if (!infoPtr->currWindow->Opened) {
-fprintf(stderr, "Call windowclosefun %d\n", allResult);
-        infoPtr->currWindow->windowclosefun(infoPtr->currWindow);
+fprintf(stderr, "Call windowCloseFunc %d\n", allResult);
+        infoPtr->currWindow->windowCloseFunc(infoPtr->currWindow);
     }
 }
 
@@ -1799,9 +1799,9 @@ _glmwfwPlatformPollEvents(
 	        winPtr->infoPtr->inputDeactivation(winPtr);
             }
             // Was there a window close request?
-            if (winclosed && winPtr->windowclosefun) {
+            if (winclosed && winPtr->windowCloseFunc) {
                 // Check if the program wants us to close the window
-                winclosed = winPtr->windowclosefun(winPtr);
+                winclosed = winPtr->windowCloseFunc(winPtr);
             }
             if (winclosed) {
                 winPtr->infoPtr->closeWindow(winPtr);

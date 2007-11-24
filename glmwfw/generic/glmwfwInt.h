@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwInt.h,v 1.1.2.3 2007/11/04 13:25:30 wiede Exp $
+ * RCS: @(#) $Id: glmwfwInt.h,v 1.1.2.4 2007/11/24 11:56:44 wiede Exp $
  */
 
 #include <string.h>
@@ -109,33 +109,33 @@ typedef int (* glmwfwCloseWindowT)(struct GlmwfwWindow *);
 typedef void (* glmwfwInputKeyT)(struct GlmwfwWindow *, int, int);
 typedef void (* glmwfwInputMouseClickT)(struct GlmwfwWindow *, int, int);
 
-typedef void (* glmwfwwindowsizefun)(struct GlmwfwWindow *, int,int);
-typedef int (* glmwfwwindowclosefun)(struct GlmwfwWindow *);
-typedef void (* glmwfwwindowrefreshfun)(struct GlmwfwWindow *);
-typedef void (* glmwfwmousebuttonfun)(struct GlmwfwWindow *, int,int);
-typedef void (* glmwfwmouseposfun)(struct GlmwfwWindow *, int,int);
-typedef void (* glmwfwmousewheelfun)(struct GlmwfwWindow *, int);
-typedef void (* glmwfwkeyfun)(struct GlmwfwWindow *, int,int);
-typedef void (* glmwfwcharfun)(struct GlmwfwWindow *, int,int);
+typedef void (* glmwfwWindowSizeFunc)(struct GlmwfwWindow *winPtr, int,int);
+typedef int (* glmwfwWindowCloseFunc)(struct GlmwfwWindow *winPtr);
+typedef void (* glmwfwWindowRefreshFunc)(struct GlmwfwWindow *winPtr);
+typedef void (* glmwfwMouseButtonFunc)(struct GlmwfwWindow *winPtr, int,int);
+typedef void (* glmwfwMousePosFunc)(struct GlmwfwWindow *winPtr, int,int);
+typedef void (* glmwfwMouseWheelFunc)(struct GlmwfwWindow *winPtr, int);
+typedef void (* glmwfwKeyFunc)(struct GlmwfwWindow *winPtr, int,int);
+typedef void (* glmwfwCharFunc)(struct GlmwfwWindow *winPtr, int,int);
 
 typedef struct GlmwfwWindow {
     Tcl_Obj *handlePtr;
     Tcl_Obj *windowSizeCallback;
-    glmwfwwindowsizefun windowsizefun;
     Tcl_Obj *windowCloseCallback;
-    glmwfwwindowclosefun windowclosefun;
     Tcl_Obj *windowRefreshCallback;
-    glmwfwwindowrefreshfun windowrefreshfun;
     Tcl_Obj *mouseButtonCallback;
-    glmwfwmousebuttonfun mousebuttonfun;
     Tcl_Obj *mousePosCallback;
-    glmwfwmouseposfun mouseposfun;
     Tcl_Obj *mouseWheelCallback;
-    glmwfwmousewheelfun mousewheelfun;
     Tcl_Obj *keyCallback;
-    glmwfwkeyfun keyfun;
     Tcl_Obj *charCallback;
-    glmwfwkeyfun charfun;
+    glmwfwWindowSizeFunc windowSizeFunc;
+    glmwfwWindowCloseFunc windowCloseFunc;
+    glmwfwWindowRefreshFunc windowRefreshFunc;
+    glmwfwMouseButtonFunc mouseButtonFunc;
+    glmwfwMousePosFunc mousePosFunc;
+    glmwfwMouseWheelFunc mouseWheelFunc;
+    glmwfwKeyFunc keyFunc;
+    glmwfwCharFunc charFunc;
     struct GlmwfwInfo *infoPtr;
     GlmwfwInput input;
 
@@ -245,11 +245,11 @@ MODULE_SCOPE int glmwfwSwapBuffers(GlmwfwWindow *winPtr);
 MODULE_SCOPE int glmwfwSwapInterval(GlmwfwWindow *winPtr, int interval);
 MODULE_SCOPE int glmwfwGetWindowParam(GlmwfwWindow *winPtr, int param);
 MODULE_SCOPE int glmwfwSetWindowSizeCallback(GlmwfwWindow *winPtr,
-        glmwfwwindowsizefun cbfun);
+        glmwfwWindowSizeFunc cbfun);
 MODULE_SCOPE int glmwfwSetWindowCloseCallback(GlmwfwWindow *winPtr,
-        glmwfwwindowclosefun cbfun);
+        glmwfwWindowCloseFunc cbfun);
 MODULE_SCOPE int glmwfwSetWindowRefreshCallback(GlmwfwWindow *winPtr,
-        glmwfwwindowrefreshfun cbfun);
+        glmwfwWindowRefreshFunc cbfun);
 
 /* Video mode functions */
 MODULE_SCOPE int glmwfwGetVideoModes(GlmwfwInfo *infoPtr,
@@ -269,15 +269,15 @@ MODULE_SCOPE int glmwfwSetMousePos(GlmwfwWindow *winPtr,
 MODULE_SCOPE int glmwfwGetMouseWheel(GlmwfwWindow *winPtr);
 MODULE_SCOPE int glmwfwSetMouseWheel(GlmwfwWindow *winPtr, int pos);
 MODULE_SCOPE int glmwfwSetKeyCallback(GlmwfwWindow *winPtr,
-        glmwfwkeyfun cbfun);
+        glmwfwKeyFunc cbfun);
 MODULE_SCOPE int glmwfwSetCharCallback(GlmwfwWindow *winPtr,
-        glmwfwcharfun cbfun);
+        glmwfwCharFunc cbfun);
 MODULE_SCOPE int glmwfwSetMouseButtonCallback(GlmwfwWindow *winPtr,
-        glmwfwmousebuttonfun cbfun);
+        glmwfwMouseButtonFunc cbfun);
 MODULE_SCOPE int glmwfwSetMousePosCallback(GlmwfwWindow *winPtr,
-        glmwfwmouseposfun cbfun);
+        glmwfwMousePosFunc cbfun);
 MODULE_SCOPE int glmwfwSetMouseWheelCallback(GlmwfwWindow *winPtr,
-        glmwfwmousewheelfun cbfun);
+        glmwfwMouseWheelFunc cbfun);
 
 /* Joystick input */
 MODULE_SCOPE int glmwfwGetJoystickParam(GlmwfwWindow *winPtr, int joy,

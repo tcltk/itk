@@ -18,7 +18,7 @@
  * and package require command has to look for the right one dependent on the
  * platform
  *
- * RCS: @(#) $Id: glmwfwWindow.c,v 1.1.2.3 2007/11/04 16:21:32 wiede Exp $
+ * RCS: @(#) $Id: glmwfwWindow.c,v 1.1.2.4 2007/11/24 11:56:44 wiede Exp $
  */
 
 #include "glmwfwInt.h"
@@ -151,9 +151,9 @@ _glmwfwInputKey(
     }
 
     /* Call user callback function */
-    if (winPtr->keyfun &&
+    if (winPtr->keyFunc &&
             (winPtr->input.KeyRepeat || !keyrepeat)) {
-	winPtr->keyfun(winPtr, key, action);
+	winPtr->keyFunc(winPtr, key, action);
     }
 }
 
@@ -189,8 +189,8 @@ _glmwfwInputChar(
     }
 
     /* Call user callback function */
-    if (winPtr->charfun && (winPtr->input.KeyRepeat || !keyrepeat)) {
-        winPtr->charfun(winPtr, character, action);
+    if (winPtr->charFunc && (winPtr->input.KeyRepeat || !keyrepeat)) {
+        winPtr->charFunc(winPtr, character, action);
     }
     return TCL_OK;
 }
@@ -216,8 +216,8 @@ _glmwfwInputMouseClick(
         }
 
         /* Call user callback function */
-        if (winPtr->mousebuttonfun) {
-            winPtr->mousebuttonfun(winPtr, button, action);
+        if (winPtr->mouseButtonFunc) {
+	    winPtr->mouseButtonFunc(winPtr, button, action);
         }
     }
 }
@@ -650,14 +650,14 @@ glmwfwGetWindowParam(
 int
 glmwfwSetWindowSizeCallback(
     GlmwfwWindow *winPtr,
-    glmwfwwindowsizefun cbfun)
+    glmwfwWindowSizeFunc cbfun)
 {
     /* Is Glmwfw initialized? */
     if (!winPtr->Opened) {
         return TCL_OK;
     }
     /* Set callback function */
-    winPtr->windowsizefun = cbfun;
+    winPtr->windowSizeFunc = cbfun;
 
     /* Call the callback function to let the application know the current
      * window size
@@ -678,14 +678,14 @@ glmwfwSetWindowSizeCallback(
 int
 glmwfwSetWindowCloseCallback(
     GlmwfwWindow *winPtr,
-    glmwfwwindowclosefun cbfun)
+    glmwfwWindowCloseFunc cbfun)
 {
     /* Is Glmwfw initialized? */
     if (!winPtr->Opened) {
         return TCL_OK;
     }
     /* Set callback function */
-    winPtr->windowclosefun = cbfun;
+    winPtr->windowCloseFunc = cbfun;
     return TCL_OK;
 }
 
@@ -699,14 +699,14 @@ glmwfwSetWindowCloseCallback(
 int
 glmwfwSetWindowRefreshCallback(
     GlmwfwWindow *winPtr,
-    glmwfwwindowrefreshfun cbfun)
+    glmwfwWindowRefreshFunc cbfun)
 {
     /* Is Glmwfw initialized? */
     if (!winPtr->Opened) {
         return TCL_OK;
     }
     /* Set callback function */
-    winPtr->windowrefreshfun = cbfun;
+    winPtr->windowRefreshFunc = cbfun;
     return TCL_OK;
 }
 

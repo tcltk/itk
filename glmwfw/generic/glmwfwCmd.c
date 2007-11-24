@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.6 2007/11/14 17:46:50 wiede Exp $
+ * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.7 2007/11/24 11:56:41 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -42,10 +42,10 @@ Tcl_ObjCmdProc Glmwfw_DisableCmd;
 Tcl_ObjCmdProc Glmwfw_DefaultCmd;
 Tcl_ObjCmdProc Glmwfw_UnknownCmd;
 Tcl_ObjCmdProc Glmwfw_WaitEventsCmd;
-#ifndef NOTDEF
+#ifdef NOTDEF
 Tcl_ObjCmdProc Glmwfw_DrawMegaimageCmd;
-Tcl_ObjCmdProc Glmwfw_DrawPixels2Cmd;
 #endif
+Tcl_ObjCmdProc Glmwfw_DrawWidgetImagePixelsCmd;
 
 typedef struct GlmwfwMethod {
     char* name;              /* method name */
@@ -91,12 +91,12 @@ static GlmwfwMethod GlmwfwMethodList[] = {
     { "::ntk::glmwfw::Glmwfw::setMouseWheelCallback", "functionName",
             Glmwfw_SetMouseWheelCallbackCmd },
     { "::ntk::glmwfw::Glmwfw::waitEvents", "", Glmwfw_WaitEventsCmd },
-#ifndef NOTDEF
+#ifdef NOTDEF
     { "::ntk::glmwfw::Glmwfw::drawMegaimage", "width height <pixel-list>",
             Glmwfw_DrawMegaimageCmd },
-    { "::ntk::glmwfw::Glmwfw::drawPixels2", "width height <data>",
-            Glmwfw_DrawPixels2Cmd },
 #endif
+    { "::ntk::glmwfw::Glmwfw::drawWidgetImagePixels", "width height <data>",
+            Glmwfw_DrawWidgetImagePixelsCmd },
     { "::ntk::glmwfw::Glmwfw::unknown", "", Glmwfw_UnknownCmd },
     { NULL, NULL, NULL }
 };
@@ -995,6 +995,8 @@ void DispatchKey(
     Tcl_IncrRefCount (statePtr);
     Tcl_ListObjAppendElement (winPtr->infoPtr->interp, listPtr,
             winPtr->keyCallback);
+    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr,
+            winPtr->handlePtr);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, keyPtr);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, statePtr);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, objPtr);
@@ -1031,6 +1033,8 @@ void DispatchMousePos(
     Tcl_IncrRefCount (yPtr);
     Tcl_ListObjAppendElement (winPtr->infoPtr->interp, listPtr,
             winPtr->mousePosCallback);
+    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr,
+            winPtr->handlePtr);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, xPtr);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, yPtr);
     result = Tcl_GlobalEvalObj (winPtr->infoPtr->interp, listPtr);
@@ -1063,8 +1067,11 @@ void DispatchMouseButton(
     Tcl_IncrRefCount (whichPtr);
     whatPtr = Tcl_NewIntObj (what);
     Tcl_IncrRefCount (whatPtr);
+fprintf(stderr, "DispatchMouseButton!%s!%d!%d!\n", Tcl_GetString(winPtr->handlePtr), which, what);
     Tcl_ListObjAppendElement (winPtr->infoPtr->interp, listPtr,
             winPtr->mouseButtonCallback);
+    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr,
+            winPtr->handlePtr);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, whichPtr);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, whatPtr);
     result = Tcl_GlobalEvalObj (winPtr->infoPtr->interp, listPtr);
@@ -1095,6 +1102,8 @@ void DispatchMouseWheel(
     Tcl_IncrRefCount (wherePtr);
     Tcl_ListObjAppendElement (winPtr->infoPtr->interp, listPtr,
             winPtr->mouseWheelCallback);
+    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr,
+            winPtr->handlePtr);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, wherePtr);
     result = Tcl_GlobalEvalObj (winPtr->infoPtr->interp, listPtr);
     Tcl_DecrRefCount (wherePtr);
@@ -1128,6 +1137,8 @@ fprintf(stderr, "INTERNAL DispatchWindowSize\n");
     Tcl_IncrRefCount (heightPtr);
     Tcl_ListObjAppendElement (winPtr->infoPtr->interp, listPtr,
             winPtr->windowSizeCallback);
+    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr,
+            winPtr->handlePtr);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, widthPtr);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, heightPtr);
     result = Tcl_GlobalEvalObj (winPtr->infoPtr->interp, listPtr);
@@ -1154,6 +1165,8 @@ void DispatchWindowRefresh(
     Tcl_IncrRefCount (listPtr);
     Tcl_ListObjAppendElement (winPtr->infoPtr->interp, listPtr,
             winPtr->windowRefreshCallback);
+    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr,
+            winPtr->handlePtr);
     result = Tcl_GlobalEvalObj (winPtr->infoPtr->interp, listPtr);
     Tcl_DecrRefCount (listPtr);
 }
@@ -1177,6 +1190,8 @@ fprintf(stderr, "INTERNAL DispatchWindowClose\n");
     Tcl_IncrRefCount (listPtr);
     Tcl_ListObjAppendElement (winPtr->infoPtr->interp, listPtr,
             winPtr->windowCloseCallback);
+    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr,
+            winPtr->handlePtr);
     result = Tcl_GlobalEvalObj (winPtr->infoPtr->interp, listPtr);
     Tcl_DecrRefCount (listPtr);
     return GL_TRUE;
@@ -1520,7 +1535,7 @@ Glmwfw_WaitEventsCmd(
     glmwfwWaitEvents(infoPtr->currWindow);
     return TCL_OK;
 }
-#ifndef NOTDEF
+#ifdef NOTDEF
 
 #include "/home/arnulf/lib/include/megaimage_shared.h"
 /*
@@ -1563,9 +1578,10 @@ Glmwfw_DrawMegaimageCmd(
             GL_RGBA, GL_UNSIGNED_BYTE, data);
     return result;
 }
+#endif
 /*
  * ------------------------------------------------------------------------
- *  Glmwfw_DrawPixels2Cmd()
+ *  Glmwfw_DrawWidgetImagePixelsCmd()
  *
  *  Handles drawing of a pixel area with rgba values
  *
@@ -1574,7 +1590,7 @@ Glmwfw_DrawMegaimageCmd(
  */
 /* ARGSUSED */
 int
-Glmwfw_DrawPixels2Cmd(
+Glmwfw_DrawWidgetImagePixelsCmd(
     ClientData clientData, /* infoPtr */
     Tcl_Interp *interp,    /* current interpreter */
     int objc,              /* number of arguments */
@@ -1582,6 +1598,10 @@ Glmwfw_DrawPixels2Cmd(
 {
     GlmwfwInfo *infoPtr;
     unsigned char *data;
+    unsigned char *newData;
+    unsigned char *dp;
+    unsigned char *ndp;
+    int copyBytes;
     int width;
     int height;
     int lgth;
@@ -1589,10 +1609,10 @@ Glmwfw_DrawPixels2Cmd(
 
     infoPtr = (GlmwfwInfo *)clientData;
     result = TCL_OK;
-    GlmwfwShowArgs(1, "Glmwfw_DrawPixels2Cmd", objc, objv);
+    GlmwfwShowArgs(1, "Glmwfw_DrawWidgetImagePixelsCmd", objc, objv);
     if (objc != 4) {
 	Tcl_AppendResult(interp,
-	        "wrong # args: should be \"ntk glmwfw drawMegaimage data\"",
+	        "wrong # args: should be \"ntk glmwfw drawWidgetImagePixels width height data\"",
 	        NULL);
         return TCL_ERROR;
     }
@@ -1600,8 +1620,16 @@ Glmwfw_DrawPixels2Cmd(
     Tcl_GetIntFromObj(interp, objv[2], &height);
     data = Tcl_GetByteArrayFromObj(objv[3], &lgth);
 fprintf(stderr, "W!%d!%d!\n", width, height);
-    glDrawPixels(width, height,
-            GL_RGBA, GL_UNSIGNED_BYTE, data);
+    newData = (unsigned char *)ckalloc(sizeof(unsigned char)*width*height*4);
+    copyBytes = width*4;
+    dp = data;
+    ndp = newData + width*height*4 - copyBytes;
+    while(ndp > newData) {
+        memcpy(ndp, dp, copyBytes);
+	dp += copyBytes;
+	ndp -= copyBytes;
+    }
+    glDrawPixels(width, height, GL_RGBA, GL_UNSIGNED_BYTE, newData);
+    ckfree((char *)newData);
     return result;
 }
-#endif
