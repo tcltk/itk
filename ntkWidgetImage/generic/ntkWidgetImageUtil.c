@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageUtil.c,v 1.1.2.1 2007/11/23 18:06:48 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageUtil.c,v 1.1.2.2 2007/11/24 22:19:46 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -226,7 +226,7 @@ WidgetVerticalLine(
 {
     unsigned char *bp;
 
-fprintf(stderr, "WidgetVerticalLine!%d!%d!%d\n", x1, y1, dy);
+//fprintf(stderr, "WidgetVerticalLine!%d!%d!%d\n", x1, y1, dy);
     bp = GET_PIXEL_PTR(wgtPtr, x1, y1);
     while (dy) {
         PUT_PIXEL(bp, rgba);
@@ -252,7 +252,7 @@ WidgetHorizontalLine(
 {
     unsigned char *bp;
 
-fprintf(stderr, "WidgetHorizontalLine!%d!%d!%d\n", x1, y1, dx);
+//fprintf(stderr, "WidgetHorizontalLine!%d!%d!%d\n", x1, y1, dx);
     bp = GET_PIXEL_PTR(wgtPtr, x1, y1);
     while (dx) {
         PUT_PIXEL(bp, rgba);
@@ -277,7 +277,7 @@ WidgetDiagonalLine(
 {
     unsigned char *bp;
 
-fprintf(stderr, "WidgetDiagonalLine!%d!%d!%d!%d\n", x1, y1, dy, xdir);
+//fprintf(stderr, "WidgetDiagonalLine!%d!%d!%d!%d\n", x1, y1, dy, xdir);
     bp = GET_PIXEL_PTR(wgtPtr, x1, y1);
     while (dy) {
         PUT_PIXEL(bp, rgba);
@@ -311,7 +311,7 @@ WidgetAdjustedLine(
     int erroracc;
     int erroradj;
 
-fprintf(stderr, "WidgetAdjustedLine!%d!%d!%d!%d!%d!%d!%d!\n", x1, y1, x2, y2, dx, dy, xdir);
+//fprintf(stderr, "WidgetAdjustedLine!%d!%d!%d!%d!%d!%d!%d!\n", x1, y1, x2, y2, dx, dy, xdir);
     bp = GET_PIXEL_PTR(wgtPtr, x1, y1);
     erroracc = 0;
     if (dy > dx) { // y-major line

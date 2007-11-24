@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageFreeType.c,v 1.1.2.1 2007/11/23 18:06:47 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageFreeType.c,v 1.1.2.2 2007/11/24 22:19:46 wiede Exp $
  */
 
 #include <math.h>
@@ -62,7 +62,7 @@ NtkWidgetImage_InitFreeType(
     int result;
 
     result = FT_Init_FreeType(&library);
-fprintf(stderr, "NtkWidgetImage_InitFreeType\n");
+//fprintf(stderr, "NtkWidgetImage_InitFreeType\n");
     if (result) {
         Tcl_AppendResult(interp, "ERROR during initialisation of FreeType",
 	        NULL);
@@ -173,7 +173,7 @@ LoadString (
     }
     wgtPtr->width += wgtPtr->fontInfo[0].x;
     wgtPtr->height = peakheight;
-fprintf(stderr, "W!%d!%d!\n", wgtPtr->width, wgtPtr->height);
+//fprintf(stderr, "W!%d!%d!\n", wgtPtr->width, wgtPtr->height);
     return TCL_OK;
 }
 
@@ -283,9 +283,15 @@ NtkWidgetImage_GetFreeTypeInfo(
 	int y;
 
         ftInfoPtr = &wgtPtr->fontInfo[i];
+#ifdef ORIGIN_IS_BOTTOM_LEFT
         desty = 0;
         desty -= bottom;
         desty += ftInfoPtr->bottom;
+#else /* top left */
+        desty = ftInfoPtr->vertAdvance;
+        desty -= ftInfoPtr->top;
+        desty += bottom;
+#endif
         if (desty < 0) {
             desty = 0;
 	}
@@ -293,8 +299,13 @@ NtkWidgetImage_GetFreeTypeInfo(
 
 	unsigned char fpdelta;
 	unsigned char finalalpha;
+#ifdef ORIGIN_IS_BOTTOM_LEFT
         for (ty = ftInfoPtr->bitmap.rows-1, y = desty; ty >= 0 &&
 	        y >= 0 && y < wgtPtr->height; --ty, ++y) {
+#else
+        for (ty = 0, y = desty; ty < ftInfoPtr->bitmap.rows &&
+	        y >= 0 && y < wgtPtr->height; ++ty, ++y) {
+#endif
             for (tx = 0, x = destx; tx < ftInfoPtr->bitmap.width && x >= 0 &&
 	            x < wgtPtr->width; ++tx, ++x) {
                 dp = bitmap + (y*wgtPtr->width*numRgbaBytes) + (x*numRgbaBytes);

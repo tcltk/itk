@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.3 2007/11/23 21:01:04 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.4 2007/11/24 22:19:46 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -30,6 +30,7 @@ Tcl_ObjCmdProc NtkWidgetImage_SetDataCmd;
 Tcl_ObjCmdProc NtkWidgetImage_SetSizeCmd;
 Tcl_ObjCmdProc NtkWidgetImage_RectangleCmd;
 Tcl_ObjCmdProc NtkWidgetImage_RotateCmd;
+Tcl_ObjCmdProc NtkWidgetImage_PixelCmd;
 
 typedef struct NtkWidgetImageMethod {
     char *commandName;       /* the command name with the namespace prefix */
@@ -66,6 +67,8 @@ static NtkWidgetImageMethod NtkWidgetImageMethodList[] = {
             "widget", NtkWidgetImage_RectangleCmd },
     { "::ntk::widgetImage::Image::rotate",
             "widget degrees", NtkWidgetImage_RotateCmd },
+    { "::ntk::widgetImage::Image::pixel",
+            "widget x y", NtkWidgetImage_PixelCmd },
     { NULL, NULL, NULL }
 };
 #ifdef NOTDEF
@@ -298,16 +301,12 @@ NtkWidgetImage_CreateCmd(
     NtkWidgetImageInfo *infoPtr;
     NtkWidgetImage *wgtPtr;
     char buf[30];
-#ifdef NOTDEF
-    const char **argv;
-    int argc;
-#endif
     int width;
     int height;
     int isNew;
 
     infoPtr = (NtkWidgetImageInfo *)clientData;
-    NtkWidgetImageShowArgs(0, "NtkWIdget_CreateCmd", objc, objv);
+    NtkWidgetImageShowArgs(1, "NtkWIdget_CreateCmd", objc, objv);
     if (CheckNumParams(interp, infoPtr, "create", objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
@@ -317,29 +316,13 @@ NtkWidgetImage_CreateCmd(
     if (Tcl_GetIntFromObj(interp, objv[2], &height) != TCL_OK) {
         return TCL_ERROR;
     }
-#ifdef NOTDEF
-    if (Tcl_SplitList(NULL, Tcl_GetString(objv[3]), &argc, &argv) != TCL_OK) {
-        return TCL_ERROR;
-    }
-    if (argc != 2) {
-	Tcl_AppendResult(interp, "bad argument value for itemsize \"",
-	        Tcl_GetString(objv[3]), "\"", NULL);
-        ckfree((char *)argv);
-        return TCL_ERROR;
-    }
-#endif
     wgtPtr = (NtkWidgetImage *)ckalloc(sizeof(NtkWidgetImage));
     wgtPtr->width = width;
     wgtPtr->height = height;
-#ifdef NODTEF
-    wgtPtr->numTypeItems = atoi(argv[0]);
-    wgtPtr->numTypeEntryBits =  atoi(argv[1]);
-#else
 #define NUM_TYPE_ITEMS 4
 #define NUM_TYPE_ENTRY_BITS 8
     wgtPtr->numTypeItems = NUM_TYPE_ITEMS;
     wgtPtr->numTypeEntryBits = NUM_TYPE_ENTRY_BITS;
-#endif
     wgtPtr->typeEntryBytes = (wgtPtr->numTypeItems *
             (wgtPtr->numTypeEntryBits / 8));
     wgtPtr->fontInfo = NULL;
@@ -351,13 +334,9 @@ NtkWidgetImage_CreateCmd(
     Tcl_IncrRefCount(objPtr);
     infoPtr->numWidgets++;
     hPtr = Tcl_CreateHashEntry(&infoPtr->widgets, (char *)objPtr, &isNew);
-fprintf(stderr, "HASH FOR %s!\n", Tcl_GetString(objPtr));
     Tcl_SetHashValue(hPtr, wgtPtr);
     Tcl_SetObjResult(interp, objPtr);
-#ifdef NOTDEF
-    ckfree((char *)argv);
-#endif
-fprintf(stderr, "CREAWID!%s!%s!\n", Tcl_GetCurrentNamespace(interp)->fullName, Tcl_GetString(objPtr));
+//fprintf(stderr, "CREAWID!%s!%s!\n", Tcl_GetCurrentNamespace(interp)->fullName, Tcl_GetString(objPtr));
     return TCL_OK;
 }
 
@@ -412,18 +391,9 @@ NtkWidgetImage_CreateTextCmd(
             rgba, objv[4], wgtPtr) != TCL_OK) {
 	return TCL_ERROR;
     }
-fprintf(stderr, "bwidth!%d!%d!\n", wgtPtr->width, wgtPtr->height);
-int i;
-unsigned char *bp;
-bp = wgtPtr->data;
-for(i=0;i<wgtPtr->width*wgtPtr->height*4; i++) {
-//fprintf(stderr, "0x%0x2 0x%02x 0x%02x 0x%02x\n", bp[i], bp[i+1],bp[i+2],bp[i+3]);
-i+= 3;
-}
-fprintf(stderr, "W!%d!%d!\n", wgtPtr->width, wgtPtr->height);
     objPtr = Tcl_NewIntObj(wgtPtr->width);
     Tcl_IncrRefCount(objPtr);
-fprintf(stderr, "SET!%s!%s!\n", Tcl_GetCurrentNamespace(interp)->fullName, Tcl_GetString(objv[6]));
+//fprintf(stderr, "SET!%s!%s!\n", Tcl_GetCurrentNamespace(interp)->fullName, Tcl_GetString(objv[6]));
     varPtr = Tcl_ObjSetVar2(interp, objv[6], NULL, objPtr, /*flags*/0);
     if (varPtr == NULL) {
         result = TCL_ERROR;
@@ -431,7 +401,7 @@ fprintf(stderr, "SET!%s!%s!\n", Tcl_GetCurrentNamespace(interp)->fullName, Tcl_G
     }
     objPtr = Tcl_NewIntObj(wgtPtr->height);
     Tcl_IncrRefCount(objPtr);
-fprintf(stderr, "SET!%s!%s!\n", Tcl_GetCurrentNamespace(interp)->fullName, Tcl_GetString(objv[7]));
+//fprintf(stderr, "SET!%s!%s!\n", Tcl_GetCurrentNamespace(interp)->fullName, Tcl_GetString(objv[7]));
     varPtr = Tcl_ObjSetVar2(interp, objv[7], NULL, objPtr, /*flags*/0);
     if (varPtr == NULL) {
         result = TCL_ERROR;
@@ -629,7 +599,8 @@ NtkWidgetImage_BlendWidgetCmd(
         x2 = wgtPtr->width;
         y2 = wgtPtr->height;
     }
-    NtkWidgetImageBlend(interp, wgtPtr, srcWgtPtr, destx, desty, x1, y1, x2, y2);
+    NtkWidgetImageBlend(interp, wgtPtr, srcWgtPtr, destx, desty,
+            x1, y1, x2, y2);
     return TCL_OK;
 }
 
@@ -773,7 +744,7 @@ NtkWidgetImage_SetDataCmd(
     NtkWidgetImage *srcWgtPtr;
 
     infoPtr = (NtkWidgetImageInfo *)clientData;
-    NtkWidgetImageShowArgs(0, "NtkWIdget_SetDataCmd", objc, objv);
+    NtkWidgetImageShowArgs(1, "NtkWIdget_SetDataCmd", objc, objv);
     if (CheckNumParams(interp, infoPtr, "setdata", objc, 2) != TCL_OK) {
         return TCL_ERROR;
     }
@@ -932,4 +903,78 @@ NtkWidgetImage_RotateCmd(
         return TCL_ERROR;
     }
     return NtkWidgetImageRotate(interp, wgtPtr, degrees);
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  NtkWidgetImage_PixelCmd()
+ *
+ *  Handles the ntk widget pixel command
+ *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+NtkWidgetImage_PixelCmd(
+    ClientData clientData,  /* infoPtr */
+    Tcl_Interp *interp,      /* current interpreter */
+    int objc,                /* number of arguments */
+    Tcl_Obj *CONST objv[])   /* argument objects */
+{
+    Tcl_Obj *rgba;
+    Tcl_Obj *ar[4];
+    Tcl_HashEntry *hPtr;
+    NtkWidgetImage *wgtPtr;
+    NtkWidgetImageInfo *infoPtr;
+    unsigned char *p;
+    int x;
+    int y;
+
+    infoPtr = (NtkWidgetImageInfo *)clientData;
+    NtkWidgetImageShowArgs(1, "NtkWIdget_PixelCmd", objc, objv);
+    if (CheckNumParams(interp, infoPtr, "pixel", objc, 3) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[1]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    wgtPtr = Tcl_GetHashValue(hPtr);
+    if (Tcl_GetIntFromObj (interp, objv[2], &x) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (Tcl_GetIntFromObj (interp, objv[3], &y) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if ((x < 0) || (x >= wgtPtr->width)) {
+        Tcl_SetResult (interp, "invalid x range", TCL_STATIC);
+        return TCL_ERROR;
+    }
+    if ((y < 0) || (y >= wgtPtr->height)) {
+        Tcl_SetResult (interp, "invalid y range", TCL_STATIC);
+        return TCL_ERROR;
+    }
+    p = wgtPtr->data + (wgtPtr->width * 4 * y) + (x * 4);
+    ar[0] = Tcl_NewIntObj (*p & 255);
+    p++;
+    ar[1] = Tcl_NewIntObj (*p & 255);
+    p++;
+    ar[2] = Tcl_NewIntObj (*p & 255);
+    p++;
+    ar[3] = Tcl_NewIntObj (*p & 255);
+    Tcl_IncrRefCount (ar[0]);
+    Tcl_IncrRefCount (ar[1]);
+    Tcl_IncrRefCount (ar[2]);
+    Tcl_IncrRefCount (ar[3]);
+    rgba = Tcl_NewListObj (4, ar);
+    Tcl_IncrRefCount (rgba);
+    Tcl_DecrRefCount (ar[0]);
+    Tcl_DecrRefCount (ar[1]);
+    Tcl_DecrRefCount (ar[2]);
+    Tcl_DecrRefCount (ar[3]);
+    Tcl_SetObjResult (interp, rgba);
+    Tcl_DecrRefCount (rgba);
+    return TCL_OK;
 }
