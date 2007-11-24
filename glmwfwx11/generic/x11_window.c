@@ -38,7 +38,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: x11_window.c,v 1.1.2.8 2007/11/24 22:23:48 wiede Exp $
+ * RCS: @(#) $Id: x11_window.c,v 1.1.2.9 2007/11/24 23:25:55 wiede Exp $
  */
 
 #include "platform.h"
@@ -853,16 +853,12 @@ int _glmwfwHandleNextEvent(
       }
     // Were any of the mouse-buttons pressed?
     case ButtonPress: {
-        XButtonEvent *xbutton = &event->xbutton;
-        winPtr->input.platformInput->CursorPosX = xbutton->x;
-        winPtr->input.platformInput->CursorPosY = xbutton->y;
-        winPtr->input.platformInput->MouseMoved = GL_TRUE;
-        winPtr->input.MousePosX = xbutton->x;
-        winPtr->input.MousePosY = xbutton->y;
-        if (event->xbutton.button == Button1) {
+//        XButtonEvent *xbutton = &event->xbutton;
 //fprintf(stderr, "B1!%d!%d!\n", winPtr->input.MousePosX, winPtr->input.MousePosY);
 //fprintf(stderr, "x:%d!y:%d!x_root:%d!y_root:%d!window:0x%08x!\n", xbutton->x, xbutton->y, xbutton->x_root, xbutton->y_root, (unsigned int)xbutton->window);
-            winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_LEFT, GLMWFW_PRESS );
+        if (event->xbutton.button == Button1) {
+            winPtr->infoPtr->inputMouseClick( winPtr, GLMWFW_MOUSE_BUTTON_LEFT,
+	            GLMWFW_PRESS );
         } else {
 	    if (event->xbutton.button == Button2) {
                 winPtr->infoPtr->inputMouseClick(winPtr,
@@ -913,7 +909,7 @@ int _glmwfwHandleNextEvent(
       }
     // Was the mouse moved?
     case MotionNotify: {
-fprintf(stderr, "MOTION!%d!%d!%d!%d!%d!%d!\n", event->xmotion.x, event->xmotion.y, winPtr->input.platformInput->CursorPosX, winPtr->input.platformInput->CursorPosY, winPtr->input.MousePosX, winPtr->input.MousePosY);
+//fprintf(stderr, "MOTION!%d!%d!%d!%d!%d!%d!\n", event->xmotion.x, event->xmotion.y, winPtr->input.platformInput->CursorPosX, winPtr->input.platformInput->CursorPosY, winPtr->input.MousePosX, winPtr->input.MousePosY);
         if (event->xmotion.x != winPtr->input.platformInput->CursorPosX ||
                 event->xmotion.y != winPtr->input.platformInput->CursorPosY) {
             if (winPtr->MouseLock) {
@@ -1084,7 +1080,7 @@ fprintf(stderr, "VisibilityNotify:\n");
       }
       break;
     case MotionNotify: {
-fprintf(stderr, "MotionNotify:\n");
+//fprintf(stderr, "MotionNotify:\n");
       }
       break;
     case EnterNotify: {
@@ -1096,7 +1092,7 @@ fprintf(stderr, "LeaveNotify:\n");
       }
       break;
     case PropertyNotify: {
-fprintf(stderr, "PropertyNotify:\n");
+//fprintf(stderr, "PropertyNotify:\n");
       }
       break;
     case CreateNotify: {
@@ -1328,6 +1324,8 @@ _glmwfwPlatformOpenWindow(
     // Attributes for window
     wa.colormap = cmap;
     wa.border_pixel = 0;
+// we need all motions, so don't use next lines mask !!
+//	PointerMotionHintMask |
     wa.event_mask = 
 	KeyPressMask |
 	KeyReleaseMask |
@@ -1336,7 +1334,6 @@ _glmwfwPlatformOpenWindow(
 	EnterWindowMask |
 	LeaveWindowMask  |
 	PointerMotionMask |
-	PointerMotionHintMask |
         ExposureMask |
 	VisibilityChangeMask |
         StructureNotifyMask |
