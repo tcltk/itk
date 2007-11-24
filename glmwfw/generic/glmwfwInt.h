@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwInt.h,v 1.1.2.4 2007/11/24 11:56:44 wiede Exp $
+ * RCS: @(#) $Id: glmwfwInt.h,v 1.1.2.5 2007/11/24 19:06:30 wiede Exp $
  */
 
 #include <string.h>
@@ -67,6 +67,13 @@ struct GlmwfwInfo;
 struct _GlmwfwPlatformInput;
 struct _GlmwfwPlatformWindow;
 
+typedef struct KeypressState {
+    unsigned int keycode;
+    Tcl_Obj *string;
+    Tcl_Obj *symobj;
+    struct KeypressState *next;
+} KeypressState;
+
 typedef struct GlmwfwInput {
     /* Mouse status */
     int MousePosX;
@@ -77,6 +84,8 @@ typedef struct GlmwfwInput {
     /* Keyboard status */
     char Key[GLMWFW_KEY_LAST+1];
     int  LastChar;
+
+    KeypressState *keypressState;
 
     /* User selected settings */
     int  StickyKeys;

@@ -38,7 +38,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: x11_init.c,v 1.1.2.3 2007/11/04 13:26:59 wiede Exp $
+ * RCS: @(#) $Id: x11_init.c,v 1.1.2.4 2007/11/24 19:07:08 wiede Exp $
  */
 
 #include "platform.h"
@@ -106,6 +106,8 @@ static int _glmwfwInitDisplay( GlmwfwInfo *infoPtr )
     {
         return GL_FALSE;
     }
+    _glmwfwLibrary.im = XOpenIM (_glmwfwLibrary.Dpy, 0, NULL, NULL);
+fprintf(stderr, "_glmwfwLibrary.im!%p!\n", _glmwfwLibrary.im);
     /* create an event handler for keybord mouse button etc. */
     Tcl_CreateFileHandler(ConnectionNumber(_glmwfwLibrary.Dpy),
             TCL_READABLE | TCL_EXCEPTION,

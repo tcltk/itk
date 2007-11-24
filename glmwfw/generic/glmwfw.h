@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfw.h,v 1.1.2.1 2007/11/02 16:29:38 wiede Exp $
+ * RCS: @(#) $Id: glmwfw.h,v 1.1.2.2 2007/11/24 19:06:29 wiede Exp $
  */
 
 /*
@@ -58,7 +58,7 @@
 // represent special (non-printable) keys (e.g. F1, Page Up etc).
 #define GLMWFW_KEY_UNKNOWN      -1
 #define GLMWFW_KEY_SPACE        32
-#define GLMWFW_KEY_SPECIAL      0x10000
+#define GLMWFW_KEY_SPECIAL      0x5000
 #define GLMWFW_KEY_ESC          (GLMWFW_KEY_SPECIAL+1)
 #define GLMWFW_KEY_F1           (GLMWFW_KEY_SPECIAL+2)
 #define GLMWFW_KEY_F2           (GLMWFW_KEY_SPECIAL+3)
@@ -121,7 +121,8 @@
 #define GLMWFW_KEY_KP_DECIMAL   (GLMWFW_KEY_SPECIAL+60)
 #define GLMWFW_KEY_KP_EQUAL     (GLMWFW_KEY_SPECIAL+61)
 #define GLMWFW_KEY_KP_ENTER     (GLMWFW_KEY_SPECIAL+62)
-#define GLMWFW_KEY_LAST         GLMWFW_KEY_KP_ENTER
+#define GLMWFW_KEY_ALTGR        (GLMWFW_KEY_SPECIAL+63)
+#define GLMWFW_KEY_LAST         GLMWFW_KEY_ALTGR
 
 // Mouse button definitions
 #define GLMWFW_MOUSE_BUTTON_1      0

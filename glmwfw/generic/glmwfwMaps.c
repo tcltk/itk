@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwMaps.c,v 1.1.2.1 2007/11/02 16:29:39 wiede Exp $
+ * RCS: @(#) $Id: glmwfwMaps.c,v 1.1.2.2 2007/11/24 19:06:30 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -84,7 +84,7 @@ define2Key keyMaps[] = {
     { "GLMWFW_KEY_KP_DECIMAL", GLMWFW_KEY_KP_DECIMAL},
     { "GLMWFW_KEY_KP_EQUAL", GLMWFW_KEY_KP_EQUAL},
     { "GLMWFW_KEY_KP_ENTER", GLMWFW_KEY_KP_ENTER},
-    { "GLMWFW_KEY_LAST", GLMWFW_KEY_LAST},
+    { "GLMWFW_KEY_ALTGR", GLMWFW_KEY_ALTGR},
     { NULL, 0}
 };
 

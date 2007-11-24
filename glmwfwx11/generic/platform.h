@@ -147,6 +147,7 @@ typedef struct _GlmwfwPlatformWindow {
     Atom        WMDeleteWindow;  // For WM close detection
     Atom        WMPing;          // For WM ping response
     XSizeHints  *Hints;          // WM size hints
+    XIC         ic;              // input context
 
     // Platform specific extensions
     GLXSWAPINTERVALSGI_T SwapInterval;
@@ -189,8 +190,9 @@ typedef struct _GlmwfwPlatformWindow {
 //------------------------------------------------------------------------
 typedef struct _GlmwfwPlatformInput {
     // Platform specific internal variables
-    int  MouseMoved, CursorPosX, CursorPosY;
-
+    int  MouseMoved;
+    int CursorPosX;
+    int CursorPosY;
 } _GlmwfwPlatformInput;
 
 //------------------------------------------------------------------------
@@ -201,6 +203,7 @@ struct {
 // ========= PLATFORM SPECIFIC PART ======================================
 
     Display     *Dpy;
+    XIM         im; /*input method*/
     int         NumScreens;
     int         DefaultScreen;
 

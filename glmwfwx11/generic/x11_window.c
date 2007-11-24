@@ -38,7 +38,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: x11_window.c,v 1.1.2.6 2007/11/24 11:55:00 wiede Exp $
+ * RCS: @(#) $Id: x11_window.c,v 1.1.2.7 2007/11/24 19:07:08 wiede Exp $
  */
 
 #include "platform.h"
@@ -460,7 +460,7 @@ static int
 _glmwfwTranslateKey(
     int keycode)
 {
-    KeySym key, key_lc, key_uc;
+    KeySym key;
 
     // Try secondary keysym, for numeric keypad keys
     // Note: This way we always force "NumLock = ON", which at least
@@ -502,6 +502,8 @@ _glmwfwTranslateKey(
     key = XKeycodeToKeysym(_glmwfwLibrary.Dpy, keycode, 0);
     switch (key) {
     // Special keys (non character keys)
+    case XK_ISO_Level3_Shift:
+        return GLMWFW_KEY_ALTGR;
     case XK_Escape:
         return GLMWFW_KEY_ESC;
     case XK_Tab:
@@ -621,18 +623,7 @@ _glmwfwTranslateKey(
         return GLMWFW_KEY_KP_ENTER;
     // The rest (should be printable keys)
     default:
-        // Make uppercase
-// ARNULF
-        XConvertCase(key, &key_lc, &key_uc);
-//        key = key_uc;
-        key = key_lc;
-// END ARNULF
-        // Valid ISO 8859-1 character?
-        if ((key >=  32 && key <= 126) ||
-            (key >= 160 && key <= 255)) {
-            return (int)key;
-        }
-        return GLMWFW_KEY_UNKNOWN;
+        return (int)key;
     }
 }
 
@@ -655,6 +646,156 @@ _glmwfwTranslateChar(
 }
 #endif
 
+static Tcl_Obj *
+TranslateKeysym(
+    GlmwfwWindow *winPtr,
+    KeySym ksym)
+{
+    char *str;
+
+    str = XKeysymToString(ksym);
+    if (str == NoSymbol) {
+        return Tcl_NewStringObj("", -1);
+    }
+    switch (ksym) {
+    case XK_Alt_L:
+    case XK_Alt_R:
+        return Tcl_NewStringObj("alt", -1);
+    case XK_ISO_Level3_Shift:
+        return Tcl_NewStringObj("altgr", -1);
+    case XK_BackSpace:
+        return Tcl_NewStringObj("backspace", -1);
+    case XK_Control_L:
+    case XK_Control_R:
+        return Tcl_NewStringObj("control", -1);
+    case XK_Return:
+        return Tcl_NewStringObj("return", -1);
+    case XK_Shift_L:
+    case XK_Shift_R:
+        return Tcl_NewStringObj("shift", -1);
+    case XK_Tab:
+        return Tcl_NewStringObj("tab", -1);
+    case XK_Up:
+        return Tcl_NewStringObj("up", -1);
+    case XK_Down:
+        return Tcl_NewStringObj("down", -1);
+    case XK_Left:
+        return Tcl_NewStringObj("left", -1);
+    case XK_Right:
+        return Tcl_NewStringObj("right", -1);
+    }
+    return Tcl_NewStringObj("normal", -1);
+}
+
+void
+_glmwfwDispatchKeyPress(
+    GlmwfwWindow *winPtr,
+    XKeyPressedEvent *xkey)
+{
+    Tcl_Obj *s = NULL;
+    Tcl_Obj *keycode = NULL;
+    Tcl_Obj *symobj = NULL;
+    KeySym ksym;
+    Status sret;
+    KeypressState *kstate;
+    char *sep;
+    int slen = 1;
+    int dispatchDone;
+
+    s = Tcl_NewStringObj ("", -1);
+    Tcl_IncrRefCount (s);
+    Tcl_SetObjLength (s, slen);
+    keycode = Tcl_NewIntObj (xkey->keycode);
+    Tcl_IncrRefCount (keycode);
+
+    dispatchDone = 1;
+    while (1) {
+        Xutf8LookupString(winPtr->platformWindow->ic, xkey, Tcl_GetString(s),
+	        slen, &ksym, &sret);
+//fprintf(stderr, "S!%s!%d!0x%08x!\n", Tcl_GetString(s), slen, ksym);
+	switch (sret) {
+	case XBufferOverflow:
+            slen += 1;
+            Tcl_SetObjLength(s, slen);
+	    dispatchDone = 0;
+            break;
+        case XLookupNone:
+            Tcl_DecrRefCount(s);
+            Tcl_DecrRefCount(keycode);
+            return;
+        case XLookupChars:
+            symobj = Tcl_NewStringObj("", -1);
+//fprintf(stderr, "+++TranslateKeysym0!%s!%d\n", Tcl_GetString(symobj), ksym);
+            Tcl_IncrRefCount(symobj);
+            break;
+        case XLookupKeySym:
+            symobj = TranslateKeysym(winPtr, ksym);
+//fprintf(stderr, "TranslateKeysym1!%s!%d\n", Tcl_GetString(symobj), ksym);
+	    if (strcmp(Tcl_GetString(symobj), "normal") != 0) {
+                Tcl_SetStringObj(s, "", -1);
+	    }
+            Tcl_IncrRefCount(symobj);
+            break;
+        case XLookupBoth:
+	    if (winPtr->input.keypressState != NULL) {
+	        symobj = Tcl_NewStringObj("", -1);
+                kstate = winPtr->input.keypressState;
+		sep = "";
+		while (kstate != NULL) {
+		    Tcl_AppendToObj(symobj, sep, -1);
+		    Tcl_AppendToObj(symobj, Tcl_GetString(kstate->symobj), -1);
+		    sep = " ";
+		    kstate = kstate->next;
+		}
+                Tcl_SetStringObj(s, XKeysymToString(ksym), -1);
+	    } else {
+                symobj = TranslateKeysym(winPtr, ksym);
+            }
+//fprintf(stderr, "TranslateKeysym2!%s!%d!%p!\n", Tcl_GetString(symobj), ksym, winPtr->input.keypressState);
+            Tcl_IncrRefCount(symobj);
+            break;
+        }
+        if (dispatchDone) {
+            break;
+        }
+    }
+    Tcl_DecrRefCount(keycode);
+    /* Now save the keypress state. */
+    kstate = (KeypressState *)ckalloc(sizeof(KeypressState));
+    kstate->keycode = xkey->keycode;
+    kstate->string = s;
+    kstate->symobj = symobj; /* may be NULL */
+    kstate->next = winPtr->input.keypressState;
+    winPtr->input.keypressState = kstate;
+}
+
+void
+_glmwfwDispatchKeyRelease(
+    GlmwfwWindow *winPtr,
+    XKeyPressedEvent *xkey)
+{
+    KeypressState *currState;
+    KeypressState *prevState;
+
+    currState = winPtr->input.keypressState;
+    prevState = NULL;
+    while (currState != NULL) {
+        if (currState->keycode == xkey->keycode) {
+            winPtr->infoPtr->inputKey(winPtr,
+	            _glmwfwTranslateKey(xkey->keycode), GLMWFW_RELEASE);
+	    if (prevState != NULL) {
+	        prevState->next = currState->next;
+	    } else {
+	        winPtr->input.keypressState = currState->next;
+	    }
+            ckfree((char *)currState);
+	    return;
+        }
+	prevState = currState;
+	currState = currState->next;
+    }
+}
+
 //========================================================================
 // Handle next X event (called by _glmwfwGetNextEvent and event_handler)
 //========================================================================
@@ -670,6 +811,7 @@ int _glmwfwHandleNextEvent(
     // Is a key being pressed?
     case KeyPress: {
         // Translate and report key press
+	_glmwfwDispatchKeyPress(winPtr, &event->xkey);
         winPtr->infoPtr->inputKey(winPtr,
 	        _glmwfwTranslateKey(event->xkey.keycode), GLMWFW_PRESS);
 
@@ -698,7 +840,8 @@ int _glmwfwHandleNextEvent(
             }
         }
         // Translate and report key release
-        winPtr->infoPtr->inputKey( winPtr, _glmwfwTranslateKey( event->xkey.keycode ), GLMWFW_RELEASE );
+	_glmwfwDispatchKeyRelease(winPtr, &event->xkey);
+//        winPtr->infoPtr->inputKey( winPtr, _glmwfwTranslateKey( event->xkey.keycode ), GLMWFW_RELEASE );
 
 #ifdef NOTDEF
         // Translate and report character input
@@ -1107,6 +1250,8 @@ _glmwfwPlatformOpenWindow(
     XSetWindowAttributes wa;
     XEvent      event;
     Atom protocols[2];
+    XIMStyles *imstyles = NULL;
+    unsigned long style = 0;
 
     winPtr->platformWindow = (_GlmwfwPlatformWindow *)
             ckalloc(sizeof(_GlmwfwPlatformWindow));
@@ -1123,7 +1268,6 @@ _glmwfwPlatformOpenWindow(
     winPtr->platformWindow->FS.ModeChanged   = GL_FALSE;
     winPtr->platformWindow->Saver.Changed    = GL_FALSE;
     winPtr->Hints.RefreshRate      = hints->RefreshRate;
-
     // Fullscreen & screen saver settings
     // Check if GLX is supported on this display
     if (!glXQueryExtension(_glmwfwLibrary.Dpy, NULL, NULL)) {
@@ -1216,6 +1360,22 @@ _glmwfwPlatformOpenWindow(
     if (mode == GLMWFW_FULLSCREEN) {
         _glmwfwDisableDecorations(winPtr);
     }
+
+    if (XGetIMValues (_glmwfwLibrary.im, XNQueryInputStyle, &imstyles, NULL) ||
+        (imstyles == NULL)) {
+fprintf(stderr, "problems in getting XGetIMValues\n");
+        return GL_FALSE;
+    }
+    style = imstyles->supported_styles[0];
+    XFree(imstyles);
+    winPtr->platformWindow->ic = XCreateIC(_glmwfwLibrary.im, XNInputStyle,
+            style, XNClientWindow, winPtr->platformWindow->Win, XNFocusWindow,
+	    winPtr->platformWindow->Win, NULL);
+    if (winPtr->platformWindow->ic == NULL) {
+fprintf(stderr, "problems in XCreateIC\n");
+        return GL_FALSE;
+    }
+
     winPtr->platformWindow->Hints = XAllocSizeHints();
     if (hints->WindowNoResize) {
 	winPtr->platformWindow->Hints->flags |= (PMinSize | PMaxSize);

@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.7 2007/11/24 11:56:41 wiede Exp $
+ * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.8 2007/11/24 19:06:30 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -986,10 +986,11 @@ void DispatchKey(
     int result;
 
     objPtr = GlmwfwDefine2Key(key);
-//fprintf(stderr, "DispatchKey!%s!%d!%d!\n", objPtr == NULL ? "(nil)" : Tcl_GetString(objPtr), key, state);
+fprintf(stderr, "DispatchKey!%s!%d!%d!\n", objPtr == NULL ? "(nil)" : Tcl_GetString(objPtr), key, state);
     listPtr = Tcl_NewListObj(0, NULL);
     Tcl_IncrRefCount (listPtr);
-    keyPtr = Tcl_NewIntObj (key);
+//    keyPtr = Tcl_NewIntObj (key);
+    keyPtr = Tcl_NewIntObj (winPtr->input.keypressState->keycode);
     Tcl_IncrRefCount (keyPtr);
     statePtr = Tcl_NewIntObj (state);
     Tcl_IncrRefCount (statePtr);
@@ -997,11 +998,19 @@ void DispatchKey(
             winPtr->keyCallback);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr,
             winPtr->handlePtr);
-    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, keyPtr);
+    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr,
+            winPtr->input.keypressState->string);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, statePtr);
-    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, objPtr);
-//fprintf(stderr, "CALL!%s!\n", Tcl_GetString(listPtr));
+    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr,
+            winPtr->input.keypressState->symobj);
+    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr,
+            keyPtr);
+//    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, keyPtr);
+//    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, statePtr);
+//    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, objPtr);
+fprintf(stderr, "CALL!%s!\n", Tcl_GetString(listPtr));
     result = Tcl_GlobalEvalObj (winPtr->infoPtr->interp, listPtr);
+fprintf(stderr, "RET!%d!%s!\n", result, Tcl_GetStringResult(winPtr->infoPtr->interp));
     Tcl_DecrRefCount (listPtr);
     Tcl_DecrRefCount (statePtr);
     Tcl_DecrRefCount (keyPtr);
