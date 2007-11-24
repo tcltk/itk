@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.8 2007/11/24 19:06:30 wiede Exp $
+ * RCS: @(#) $Id: glmwfwCmd.c,v 1.1.2.9 2007/11/24 22:18:16 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -1068,22 +1068,32 @@ void DispatchMouseButton(
     Tcl_Obj *whichPtr;
     Tcl_Obj *whatPtr;
     Tcl_Obj *listPtr;
+    Tcl_Obj *xPtr;
+    Tcl_Obj *yPtr;
     int result;
 
     listPtr = Tcl_NewListObj(0, NULL);
     Tcl_IncrRefCount (listPtr);
-    whichPtr = Tcl_NewIntObj (which);
+    whichPtr = Tcl_NewIntObj (which+1); /* +1 needed for ntkWidget !! */
     Tcl_IncrRefCount (whichPtr);
     whatPtr = Tcl_NewIntObj (what);
     Tcl_IncrRefCount (whatPtr);
-fprintf(stderr, "DispatchMouseButton!%s!%d!%d!\n", Tcl_GetString(winPtr->handlePtr), which, what);
+    xPtr = Tcl_NewIntObj (winPtr->input.MousePosX);
+    Tcl_IncrRefCount (xPtr);
+    yPtr = Tcl_NewIntObj (winPtr->input.MousePosY);
+    Tcl_IncrRefCount (xPtr);
+//fprintf(stderr, "DispatchMouseButton!%s!%d!%d!\n", Tcl_GetString(winPtr->handlePtr), which, what);
     Tcl_ListObjAppendElement (winPtr->infoPtr->interp, listPtr,
             winPtr->mouseButtonCallback);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr,
             winPtr->handlePtr);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, whichPtr);
     Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, whatPtr);
+    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, xPtr);
+    Tcl_ListObjAppendElement(winPtr->infoPtr->interp, listPtr, yPtr);
+fprintf(stderr, "DispatchMouseButton!%s!\n", Tcl_GetString(listPtr));
     result = Tcl_GlobalEvalObj (winPtr->infoPtr->interp, listPtr);
+fprintf(stderr, "RET!%d!%s!\n", result, Tcl_GetStringResult(winPtr->infoPtr->interp));
     Tcl_DecrRefCount (whichPtr);
     Tcl_DecrRefCount (whatPtr);
     Tcl_DecrRefCount (listPtr);
@@ -1137,7 +1147,7 @@ void DispatchWindowSize(
     Tcl_Obj *listPtr;
     int result;
 
-fprintf(stderr, "INTERNAL DispatchWindowSize\n");
+//fprintf(stderr, "INTERNAL DispatchWindowSize\n");
     listPtr = Tcl_NewListObj(0, NULL);
     Tcl_IncrRefCount (listPtr);
     widthPtr = Tcl_NewIntObj (width);
@@ -1194,7 +1204,7 @@ int DispatchWindowClose(
     Tcl_Obj *listPtr;
     int result;
 
-fprintf(stderr, "INTERNAL DispatchWindowClose\n");
+//fprintf(stderr, "INTERNAL DispatchWindowClose\n");
     listPtr = Tcl_NewListObj(0, NULL);
     Tcl_IncrRefCount (listPtr);
     Tcl_ListObjAppendElement (winPtr->infoPtr->interp, listPtr,
@@ -1628,7 +1638,6 @@ Glmwfw_DrawWidgetImagePixelsCmd(
     Tcl_GetIntFromObj(interp, objv[1], &width);
     Tcl_GetIntFromObj(interp, objv[2], &height);
     data = Tcl_GetByteArrayFromObj(objv[3], &lgth);
-fprintf(stderr, "W!%d!%d!\n", width, height);
     newData = (unsigned char *)ckalloc(sizeof(unsigned char)*width*height*4);
     copyBytes = width*4;
     dp = data;

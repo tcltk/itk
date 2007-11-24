@@ -18,7 +18,7 @@
  * and package require command has to look for the right one dependent on the
  * platform
  *
- * RCS: @(#) $Id: glmwfwWindow.c,v 1.1.2.4 2007/11/24 11:56:44 wiede Exp $
+ * RCS: @(#) $Id: glmwfwWindow.c,v 1.1.2.5 2007/11/24 22:18:16 wiede Exp $
  */
 
 #include "glmwfwInt.h"
@@ -207,9 +207,9 @@ _glmwfwInputMouseClick(
     int button,
     int action)
 {
-    if (button >= 0 && button <= GLMWFW_MOUSE_BUTTON_LAST) {
+    if ((button >= 0) && (button <= GLMWFW_MOUSE_BUTTON_LAST)) {
         /* Register mouse button action */
-        if (action == GLMWFW_RELEASE && winPtr->input.StickyMouseButtons) {
+        if ((action == GLMWFW_RELEASE) && (winPtr->input.StickyMouseButtons)) {
             winPtr->input.MouseButton[button] = GLMWFW_STICK;
         } else {
             winPtr->input.MouseButton[button] = (char)action;

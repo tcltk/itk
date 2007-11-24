@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: glmwfwInt.h,v 1.1.2.5 2007/11/24 19:06:30 wiede Exp $
+ * RCS: @(#) $Id: glmwfwInt.h,v 1.1.2.6 2007/11/24 22:18:16 wiede Exp $
  */
 
 #include <string.h>
@@ -78,6 +78,8 @@ typedef struct GlmwfwInput {
     /* Mouse status */
     int MousePosX;
     int MousePosY;
+    int RootX;
+    int RootY;
     int WheelPos;
     char MouseButton[GLMWFW_MOUSE_BUTTON_LAST+1];
 
