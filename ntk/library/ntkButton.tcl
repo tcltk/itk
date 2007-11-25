@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.15 2007/11/24 22:25:20 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.16 2007/11/25 13:56:45 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::button {
@@ -91,7 +91,9 @@ itcl::extendedclass ::ntk::classes::button {
 	    set cmd $itcl_options(-command)
 #puts stderr "CMD!$cmd!"
 	    if {$cmd ne ""} {
-                uplevel #0 $cmd
+		if {[catch {uplevel #0 $cmd} err]} {
+		    ntk bgerror $::errorInfo
+		}
 	    }
         }
     }

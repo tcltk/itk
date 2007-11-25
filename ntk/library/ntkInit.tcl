@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInit.tcl,v 1.1.2.1 2007/11/24 23:05:01 wiede Exp $
+# RCS: @(#) $Id: ntkInit.tcl,v 1.1.2.2 2007/11/25 13:56:45 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
@@ -84,6 +84,10 @@ puts stderr "::ntk::DispatchWindowRefresh!$winHandle!"
 puts stderr "::ntk::DispatchWindowClose!$winHandle!"
         ::ntk::glmwfw::Glmwfw terminate
         exit 0
+    }
+
+    proc bgerror {args} {
+        puts stderr "bgerror: ERROR: $args"
     }
 
     ntkWidgetInit
