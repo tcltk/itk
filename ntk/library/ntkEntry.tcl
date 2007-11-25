@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.11 2007/11/23 21:02:57 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.12 2007/11/25 17:12:48 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
@@ -47,7 +47,6 @@ itcl::extendedclass ::ntk::classes::entry {
 	set itcl_options(-bg) [list 255 255 255 255]
 	set itcl_options(-keypress) [list $wpath entryKeypress]
 	set itcl_options(-buttonpress) [list $wpath entryButtonpress]
-puts stderr "HH!$itcl_options(-height)!"
 	set themeConfig entryConfig
 	set destroy entryDestroy
 	if {[llength $args] > 0} {
@@ -60,7 +59,7 @@ puts stderr "HH!$itcl_options(-height)!"
     }
 
     public method entryButtonpress {button x y globalx globaly} {
-puts stderr "entryButtonpress"
+#puts stderr "entryButtonpress!$button![getFocus]!"
         foreach path [getFocus] {
             if {$path eq $wpath} {
                 entryCursorSet [expr {$x - $xslide}]
@@ -71,12 +70,10 @@ puts stderr "entryButtonpress"
     }
 
     public method entryCursorIncrOffset {i} {
-puts stderr "entryCursorIncrOffset"
-        set co [$wpath cursoroffset]
-        if {(($i < 0) && ($co > 0)) || (($i > 0) && 
-               (($co < [string length $itcl_options(-text)]))} {
-           incr co $i
-           $wpath cursoroffset $co
+#puts stderr "entryCursorIncrOffset1!$i!$cursoroffset!"
+        if {(($i < 0) && ($cursoroffset > 0)) || (($i > 0) && 
+               (($cursoroffset < [string length $itcl_options(-text)])))} {
+           incr cursoroffset $i
            entryDraw
         }
     }
@@ -86,7 +83,8 @@ puts stderr "entryCursorIncrOffset"
         set cursoroffset 0
         set cursormap [list]
         set map [$wpath offsetmap]
-        lassign [$textobj getsize] myWidth myHeight
+        foreach {myWidth myHeight} \
+	        [::ntk::widgetImage::Image getsize $textImage] break
 
         #
         # Build a map of low and high ranges for each cursor position.
@@ -117,7 +115,7 @@ puts stderr "entryCursorIncrOffset"
     }
 
     public method entryDestroy {} {
-        rename $textobj {}
+        rename $textImage {}
     }
 
     public method entryDraw {} {
@@ -132,7 +130,8 @@ puts stderr "entryCursorIncrOffset"
         if {$cx eq ""} {
             set cx 0
         }
-        lassign [$obj getsize] objw objh
+        foreach {objw objh} \
+	        [::ntk::widgetImage::Image getsize $windowImage] break
         if {$cx > 0} {
             incr cx -1
         }
@@ -140,30 +139,56 @@ puts stderr "entryCursorIncrOffset"
         if {$cx >= $itcl_options(-width)} {
             $wpath xslide [expr {$itcl_options(-width) - $cx}]
         } 
-        $obj fill $itcl_options(-bg)
-        $obj blendwidget $xslide 0 $textobj
+        ::ntk::widgetImage::Image fill $windowImage $itcl_options(-bg)
+        ::ntk::widgetImage::Image blendwidget $windowImage $xslide 0 $textImage
 	set myCursorColor $itcl_options(-cursorcolor)
-        $obj line $cx 0 $cx $objh $myCursorColor
+        ::ntk::widgetImage::Image line $windowImage $cx 0 $cx $objh $myCursorColor
         set cx [expr {$cx + 1}]
-        $obj line $cx 0 $cx $objh $myCursorColor
+        ::ntk::widgetImage::Image line $windowImage $cx 0 $cx $objh $myCursorColor
         render $wpath
     }
 
     public method entryKeypress {value keysym keycode} {
-puts stderr "entryKeypress!$value!$keysym!$keycode!"
-        set myText $itcl_options(-text)
+#puts stderr "entryKeypress!$value!$keysym!$keycode!"
         switch -- $keysym {
         normal {
-            append myText $value
-            set $itcl_options(-text) $myText
+            set myText $itcl_options(-text)
+	    if {$cursoroffset == 0} {
+	        set startStr ""
+		set endStr $myText
+	    } else {
+	        set startStr [string range $myText 0 [expr {$cursoroffset-1}]]
+		if {$cursoroffset == [string length $myText]} {
+		    set endStr ""
+		} else {
+	            set endStr [string range $myText $cursoroffset end]
+	        }
+	    }
+	    configure -text "$startStr$value$endStr"
             entryCursorIncrOffset 1
           } 
         backspace {
-            set co $cursoroffset
-            incr co -1
-            set $itcl_options(-text) [string range $myText 0 \
-	            [expr {$co - 1}]][string range $myText [expr {$co + 1}] \
-		    end]
+            set myText $itcl_options(-text)
+	    switch $cursoroffset {
+	    0 {
+	        set startStr ""
+		set endStr $myText
+	      }
+	    1 {
+	        set startStr ""
+		set endStr [string range $myText 1 end]
+	      }
+	    default {
+		if {$cursoroffset == [string length $myText]} {
+	            set startStr [string range $myText 0 [expr {$cursoroffset-1}]]
+		    set endStr ""
+		} else {
+	            set startStr [string range $myText 0 [expr {$cursoroffset-2}]]
+	            set endStr [string range $myText $cursoroffset end]
+	        }
+	      }
+	    }
+	    configure -text "$startStr$endStr"
             entryCursorIncrOffset -1
           }
         left {
@@ -173,10 +198,27 @@ puts stderr "entryKeypress!$value!$keysym!$keycode!"
             entryCursorIncrOffset 1
           }
         delete {
-            set co $cursoroffset
-            set $itcl_options(-text) [string range $myText 0 \
-	            [expr {$co - 1}]][string range $myText [expr {$co + 1}] \
-		    end]
+            set myText $itcl_options(-text)
+	    switch $cursoroffset {
+	    0 {
+	        set startStr ""
+		set endStr $myText
+	      }
+	    1 {
+	        set startStr ""
+		set endStr [string range $myText 1 end]
+	      }
+	    default {
+		if {$cursoroffset == [string length $myText]} {
+	            set startStr [string range $myText 0 [expr {$cursoroffset-1}]]
+		    set endStr ""
+		} else {
+	            set startStr [string range $myText 0 [expr {$cursoroffset-2}]]
+	            set endStr [string range $myText $cursoroffset end]
+	        }
+	      }
+	    }
+	    configure -text "$startStr$endStr"
           }
         return {
 	    return
@@ -193,12 +235,10 @@ puts stderr "entryKeypress!$value!$keysym!$keycode!"
         if {$value eq ""} {
 	    return
 	}
-puts stderr "FONT!$itcl_options(-font)!$itcl_options(-fontsize)!$itcl_options(-textcolor)!$value!"
-        set rgbadata [freetype $itcl_options(-font) \
+	::ntk::widgetImage::Image createtext $textImage $itcl_options(-font) \
                 $itcl_options(-fontsize) $value $itcl_options(-textcolor) \
-		myWidth myHeight myOffsetmap]
+		myWidth myHeight myOffsetmap
         offsetmap $myOffsetmap
-        $textobj setdata $rgbadata
         requestSize [expr {$myWidth + 2}] [expr {$myHeight + 2}]
         return 1
     }
@@ -210,6 +250,5 @@ puts stderr "FONT!$itcl_options(-font)!$itcl_options(-fontsize)!$itcl_options(-t
 	    entryDraw
         }
     }
-
 }
 

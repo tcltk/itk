@@ -14,12 +14,13 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.10 2007/11/24 22:25:20 wiede Exp $
+# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.11 2007/11/25 17:12:48 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::input {
+    inherit ::ntk::classes::helpers
+
     private common input
-    private common focusList [list]
 
     set input(activewindows) [list]
 
@@ -50,7 +51,7 @@
     }
 
     public proc inputKeyPress {win key keysym keycode} {
-#puts stderr "inputKeyPress!$win!$key!$keysym!$keycode!$focusList!"
+puts stderr "inputKeyPress!$win!$key!$keysym!$keycode!$focusList!"
         foreach path $focusList {
             set callback [$path cget -keypress]
             if {$callback ne ""} {
