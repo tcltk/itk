@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageInt.h,v 1.1.2.1 2007/11/23 18:06:48 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageInt.h,v 1.1.2.2 2007/11/25 19:57:47 wiede Exp $
  */
 
 #include <string.h>
@@ -60,6 +60,8 @@ typedef struct NtkWidgetImage {
     int numTypeEntryBits;
     int typeEntryBytes;
     int dataSize;
+    Tcl_UniChar *unitext;
+    int unitextlen;
     int fontInfoSize;
     struct NtkFreeTypeString *fontInfo;
     void *data;
@@ -98,4 +100,8 @@ MODULE_SCOPE int NtkWidgetImage_InitFreeType(Tcl_Interp *interp,
         NtkWidgetImageInfo *infoPtr);
 MODULE_SCOPE int NtkWidgetImage_GetFreeTypeInfo(Tcl_Interp *interp,
         NtkWidgetImageInfo *infoPtr, const char *fontName, int fontSize,
-        unsigned char *rgbaPtr, Tcl_Obj *textPtr, NtkWidgetImage *wgtPtr);
+        unsigned char *rgbaPtr, Tcl_Obj *textPtr, NtkWidgetImage *wgtPtr,
+	int measureOnly);
+MODULE_SCOPE int NtkWidgetImage_GetFreeTypeOffsetMap(Tcl_Interp *interp,
+        NtkWidgetImage *wgtPtr, Tcl_Obj *listPtr);
+

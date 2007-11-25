@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageFreeType.c,v 1.1.2.2 2007/11/24 22:19:46 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageFreeType.c,v 1.1.2.3 2007/11/25 19:57:47 wiede Exp $
  */
 
 #include <math.h>
@@ -107,9 +107,7 @@ LoadString (
     Tcl_Interp *interp,
     NtkWidgetImage *wgtPtr,
     FT_Face face,
-    Tcl_UniChar *unitext,
-    int unitextlen,
-    int justmeasure)
+    int measureOnly)
 {
     NtkFreeTypeString *ftInfoPtr;
     int i;
@@ -126,8 +124,8 @@ LoadString (
 #define TRUNCATE(val) ((val) >> 6)
  
     peakheight = 1;
-    for (i=0;i<unitextlen;++i) {
-        FT_ULong c = (FT_ULong)unitext[i];
+    for (i=0;i<wgtPtr->unitextlen;++i) {
+        FT_ULong c = (FT_ULong)wgtPtr->unitext[i];
         int totaly = 0;
         result = FT_Load_Char(face, c, FT_LOAD_RENDER);
         if (result != 0) {
@@ -142,7 +140,7 @@ LoadString (
         bottom = FLOOR(face->glyph->metrics.horiBearingY -
 	        face->glyph->metrics.height);
 	ftInfoPtr = &wgtPtr->fontInfo[i];
-        if (justmeasure != 0) {
+        if (!measureOnly) {
             ftInfoPtr->bitmap = face->glyph->bitmap;
             ftInfoPtr->bitmapLength = face->glyph->bitmap.rows *
 	            abs(face->glyph->bitmap.pitch);
@@ -162,7 +160,7 @@ LoadString (
         ftInfoPtr->xOffset = TRUNCATE (ROUND (face->glyph->advance.x));
         ftInfoPtr->yOffset = -TRUNCATE (ROUND (face->glyph->advance.y));
 /* fprintf (stderr, "vertadvance %d\n", f->rendered[i].vertadvance); */
-        if (Tcl_UniCharIsSpace (unitext[i])) {
+        if (Tcl_UniCharIsSpace (wgtPtr->unitext[i])) {
             ftInfoPtr->width = ftInfoPtr->horiAdvance;
         }
         wgtPtr->width += ftInfoPtr->width + abs(ftInfoPtr->x);
@@ -179,7 +177,7 @@ LoadString (
 
 /*
  * ------------------------------------------------------------------------
- *  GetFreeTypeInfo()
+ *  NtkWidgetImage_GetFreeTypeInfo()
  * ------------------------------------------------------------------------
  */
 
@@ -191,19 +189,18 @@ NtkWidgetImage_GetFreeTypeInfo(
     int fontSize,
     unsigned char *rgbaPtr,
     Tcl_Obj *textPtr,
-    NtkWidgetImage *wgtPtr)
+    NtkWidgetImage *wgtPtr,
+    int measureOnly)
 {
-    Tcl_UniChar *unitext;
     NtkFreeTypeString *ftInfoPtr;
     unsigned char *bitmap;
     int numRgbaBytes;
     int result;
-    int unitextlen;
     int bottom;
     int i;
 
-    unitext = Tcl_GetUnicodeFromObj(textPtr, &unitextlen);
-    if (unitextlen <= 0) {
+    wgtPtr->unitext = Tcl_GetUnicodeFromObj(textPtr, &wgtPtr->unitextlen);
+    if (wgtPtr->unitextlen <= 0) {
         Tcl_SetResult (interp, "string must not be empty", TCL_STATIC);
         return TCL_ERROR;
     }
@@ -244,90 +241,123 @@ NtkWidgetImage_GetFreeTypeInfo(
 	    return TCL_ERROR;
 	}
     }
-    if (wgtPtr->fontInfoSize != unitextlen) {
+    if (wgtPtr->fontInfoSize != wgtPtr->unitextlen) {
         if (wgtPtr->fontInfoSize > 0) {
 	    ckfree((char *)wgtPtr->fontInfo);
 	}
-	wgtPtr->fontInfoSize = unitextlen;
+	wgtPtr->fontInfoSize = wgtPtr->unitextlen;
 	wgtPtr->fontInfo = (NtkFreeTypeString *)
-	        ckalloc(sizeof(NtkFreeTypeString)*unitextlen);
+	        ckalloc(sizeof(NtkFreeTypeString)*wgtPtr->unitextlen);
     }
     /* FIX ME !! need to eventually free data !! */
     wgtPtr->width = 1;
     wgtPtr->height = 1;
-    if (LoadString(interp, wgtPtr, CachedFont.face, unitext, unitextlen,
-            /*justmeasure*/1) != TCL_OK) {
+    if (LoadString(interp, wgtPtr, CachedFont.face, measureOnly) != TCL_OK) {
         return TCL_ERROR;
     }
-    bottom = 0;
-    for (i=0;i<unitextlen;++i) {
-        if (wgtPtr->fontInfo[i].bottom < bottom) {
-            bottom = wgtPtr->fontInfo[i].bottom;
-        }
-    }
-    wgtPtr->dataSize = wgtPtr->width * wgtPtr->height *
-            /*RGBA*/wgtPtr->typeEntryBytes;
-    bitmap = (unsigned char *)ckalloc (wgtPtr->dataSize);
-    memset (bitmap, 0, wgtPtr->dataSize);
-    wgtPtr->data = bitmap;
-    numRgbaBytes = wgtPtr->typeEntryBytes;
-    int destx;
-    destx = 0;
-    for (i= 0;i<unitextlen;++i) {
-	unsigned char *dp;
-	unsigned char ch;
-	int desty;
-	int ty;
-	int tx;
-	int x;
-	int y;
-
-        ftInfoPtr = &wgtPtr->fontInfo[i];
-#ifdef ORIGIN_IS_BOTTOM_LEFT
-        desty = 0;
-        desty -= bottom;
-        desty += ftInfoPtr->bottom;
-#else /* top left */
-        desty = ftInfoPtr->vertAdvance;
-        desty -= ftInfoPtr->top;
-        desty += bottom;
-#endif
-        if (desty < 0) {
-            desty = 0;
-	}
-        destx += (ftInfoPtr->x < 0) ? 0 : ftInfoPtr->x;
-
-	unsigned char fpdelta;
-	unsigned char finalalpha;
-#ifdef ORIGIN_IS_BOTTOM_LEFT
-        for (ty = ftInfoPtr->bitmap.rows-1, y = desty; ty >= 0 &&
-	        y >= 0 && y < wgtPtr->height; --ty, ++y) {
-#else
-        for (ty = 0, y = desty; ty < ftInfoPtr->bitmap.rows &&
-	        y >= 0 && y < wgtPtr->height; ++ty, ++y) {
-#endif
-            for (tx = 0, x = destx; tx < ftInfoPtr->bitmap.width && x >= 0 &&
-	            x < wgtPtr->width; ++tx, ++x) {
-                dp = bitmap + (y*wgtPtr->width*numRgbaBytes) + (x*numRgbaBytes);
-                ch = ftInfoPtr->bitmap.buffer[ty*ftInfoPtr->bitmap.pitch+tx];
-                if (ch == 0) {
-	            continue;
-	        }
-                fpdelta = /*peak value*/ 255 - ch;
-                finalalpha = rgbaPtr[3];
-                if (fpdelta > finalalpha) {
-                    finalalpha = 0;
-                } else {
-                    finalalpha -= fpdelta;
-                }
-                dp[0] = rgbaPtr[0];
-                dp[1] = rgbaPtr[1];
-                dp[2] = rgbaPtr[2];
-                dp[3] = finalalpha;
+    if (!measureOnly) {
+        bottom = 0;
+        for (i=0;i<wgtPtr->unitextlen;++i) {
+            if (wgtPtr->fontInfo[i].bottom < bottom) {
+                bottom = wgtPtr->fontInfo[i].bottom;
             }
         }
-        destx += ftInfoPtr->width;
-        ckfree((char *)ftInfoPtr->bitmap.buffer);
+        wgtPtr->dataSize = wgtPtr->width * wgtPtr->height *
+                /*RGBA*/wgtPtr->typeEntryBytes;
+        bitmap = (unsigned char *)ckalloc (wgtPtr->dataSize);
+        memset (bitmap, 0, wgtPtr->dataSize);
+        wgtPtr->data = bitmap;
+        numRgbaBytes = wgtPtr->typeEntryBytes;
+        int destx;
+        destx = 0;
+        for (i= 0;i<wgtPtr->unitextlen;++i) {
+	    unsigned char *dp;
+	    unsigned char ch;
+	    int desty;
+	    int ty;
+	    int tx;
+	    int x;
+	    int y;
+
+            ftInfoPtr = &wgtPtr->fontInfo[i];
+#ifdef ORIGIN_IS_BOTTOM_LEFT
+            desty = 0;
+            desty -= bottom;
+            desty += ftInfoPtr->bottom;
+#else /* top left */
+            desty = ftInfoPtr->vertAdvance;
+            desty -= ftInfoPtr->top;
+            desty += bottom;
+#endif
+            if (desty < 0) {
+                desty = 0;
+	    }
+            destx += (ftInfoPtr->x < 0) ? 0 : ftInfoPtr->x;
+
+	    unsigned char fpdelta;
+	    unsigned char finalalpha;
+#ifdef ORIGIN_IS_BOTTOM_LEFT
+            for (ty = ftInfoPtr->bitmap.rows-1, y = desty; ty >= 0 &&
+	            y >= 0 && y < wgtPtr->height; --ty, ++y) {
+#else
+            for (ty = 0, y = desty; ty < ftInfoPtr->bitmap.rows &&
+	            y >= 0 && y < wgtPtr->height; ++ty, ++y) {
+#endif
+                for (tx = 0, x = destx; tx < ftInfoPtr->bitmap.width && x >= 0 &&
+	                x < wgtPtr->width; ++tx, ++x) {
+                    dp = bitmap + (y*wgtPtr->width*numRgbaBytes) + (x*numRgbaBytes);
+                    ch = ftInfoPtr->bitmap.buffer[ty*ftInfoPtr->bitmap.pitch+tx];
+                    if (ch == 0) {
+	                continue;
+	            }
+                    fpdelta = /*peak value*/ 255 - ch;
+                    finalalpha = rgbaPtr[3];
+                    if (fpdelta > finalalpha) {
+                        finalalpha = 0;
+                    } else {
+                        finalalpha -= fpdelta;
+                    }
+                    dp[0] = rgbaPtr[0];
+                    dp[1] = rgbaPtr[1];
+                    dp[2] = rgbaPtr[2];
+                    dp[3] = finalalpha;
+                }
+            }
+            destx += ftInfoPtr->width;
+            ckfree((char *)ftInfoPtr->bitmap.buffer);
+        }
     }
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  NtkWidgetImage_GetFreeTypeOffsetMap()
+ * ------------------------------------------------------------------------
+ */
+
+int
+NtkWidgetImage_GetFreeTypeOffsetMap(
+    Tcl_Interp *interp,
+    NtkWidgetImage *wgtPtr,
+    Tcl_Obj *listPtr)
+{
+    Tcl_Obj *elemPtr;
+    int xOffset;
+    int i;
+
+    xOffset = 0;
+    for(i=0;i<wgtPtr->unitextlen;i++) {
+            xOffset += wgtPtr->fontInfo[i].x;
+	    elemPtr = Tcl_NewIntObj(xOffset);
+	    Tcl_IncrRefCount(elemPtr);
+	    Tcl_ListObjAppendElement(interp, listPtr, elemPtr);
+	    Tcl_DecrRefCount(elemPtr);
+            xOffset += wgtPtr->fontInfo[i].width;
+    }
+    elemPtr = Tcl_NewIntObj(xOffset);
+    Tcl_IncrRefCount(elemPtr);
+    Tcl_ListObjAppendElement(interp, listPtr, elemPtr);
+    Tcl_DecrRefCount(elemPtr);
     return TCL_OK;
 }
