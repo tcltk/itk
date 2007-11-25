@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.13 2007/11/24 22:25:20 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.14 2007/11/25 15:37:22 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
@@ -86,13 +86,13 @@
     public method themeDrawGenericBorder {} {
         set low [list 20 20 20 255]
         set high [list 200 200 200 255]
-        themeDrawBorder $windowImage 0 0 $itcl_options(-width) \
+        themeDrawBorder 0 0 $itcl_options(-width) \
                 $itcl_options(-height) $high $low $itcl_options(-bd)
     }
 
     public proc themeDrawTextBackground {} {
         # TODO add tile call with nice metallic background.
-        $windowImage fill $itcl_options(-bg)
+        ::ntk::widgetImage::Image fill $windowImage $itcl_options(-bg)
     }
 
     public proc themeGetText {} {
@@ -103,14 +103,14 @@
     public proc themeLabelDrawBorder {} {
         set low [list 20 20 20 255]
         set high [list 200 200 200 255]
-        themeDrawBorder $windowImage 0 0 $itcl_options(-width) \
+        themeDrawBorder 0 0 $itcl_options(-width) \
 	        $itcl_options(-height) $low $high $itcl_options(-bd)
     }
 
     public method themeListboxDrawBorder {} {
          set low [list 20 20 20 255]
          set high [list 200 200 200 255]
-         themeDrawBorder $windowImage 0 0 $itcl_options(-width) \
+         themeDrawBorder 0 0 $itcl_options(-width) \
 	         $itcl_options(-height) $high $low $itcl_options(-bd)
     }
 
@@ -127,12 +127,12 @@
         set high [list 200 200 200 255]
         set w [$path cget -width]
         set h [$path cget -height]
-        [$path windowImage] fill [[$path parent] cget -bg]
+        ::ntk::widgetImage::Image fill [$path windowImage] [[$path parent] cget -bg]
 
         if {[$path pressed] == 0} {
-            themeDrawBorder [$path windowImage] 0 0 $w $h $low $high 1
+            $path themeDrawBorder 0 0 $w $h $low $high 1
         } else {
-            themeDrawBorder [$path windowImage] 0 0 $w $h $high $low 1
+            $path themeDrawBorder 0 0 $w $h $high $low 1
         }
         switch -- [$path direction] {
         up {

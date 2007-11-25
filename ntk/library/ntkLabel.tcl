@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.9 2007/11/23 21:02:57 wiede Exp $
+# RCS: @(#) $Id: ntkLabel.tcl,v 1.1.2.10 2007/11/25 15:37:22 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::label {
@@ -51,31 +51,31 @@ itcl::extendedclass ::ntk::classes::label {
 	}
 	set myColor $itcl_options(-bg)
 	if {[llength $myColor] == 1} {
-	    $obj fill $colors($myColor)
-	} else {
-	    $obj fill $myColor
+	    set myColor $colors($myColor)
 	}
-        themeLabelDrawBorder $wpath
+	::ntk::widgetImage::Image fill $windowImage $myColor
+        themeLabelDrawBorder
         labelDrawText
         render $wpath
     }
 
     public method labelDrawText {} {
-        lassign [$obj getsize] winwidth winheight
-        lassign [$textobj getsize] textwidth textheight
+        foreach {winwidth winheight} \
+	        [::ntk::widgetImage::Image getsize $windowImage] break
+        foreach {textwidth textheight} \
+	        [::ntk::widgetImage::Image getsize $textImage] break
 #puts stderr "labelDrawText!$wpath!$winwidth!$winheight!$textwidth!$textheight!"
         set myX [expr {($winwidth / 2) - ($textwidth / 2)}]
         set myY [expr {($winheight / 2) - ($textheight / 2)}]
-        set myTextObj $textobj
-        $obj blendwidget $myX $myY $myTextObj
+        ::ntk::widgetImage::Image blendwidget $windowImage $myX $myY $textImage
     }
 
     public method labelRequestSize {} {
         if {![string length $itcl_options(-text)]} {
 	    return
 	}
-        freetype-measure $itcl_options(-font) $itcl_options(-fontsize) \
-	        $itcl_options(-text) myWidth myHeight
+        ::ntk::widgetImage::Image measuretext $itcl_options(-font) \
+	        $itcl_options(-fontsize) $itcl_options(-text) myWidth myHeight
         set bdt [expr {$itcl_options(-bd) * 2}]
         set rwidth [expr {$myWidth + $bdt + 2}]
         set rheight [expr {$myHeight + $bdt + 2}]
@@ -84,13 +84,10 @@ itcl::extendedclass ::ntk::classes::label {
 
     public method labelTextCallback {value} {
 #puts stderr "labelTextCallback!$value!"
-	if {$constructing} {
-	    return
-	}
-        set rgbadata [freetype $itcl_options(-font) \
+        ::ntk::widgetImage::Image createtext $textImage $itcl_options(-font) \
                 $itcl_options(-fontsize) $value $itcl_options(-textcolor) \
-		myWidth myHeight myOffsetmap]
-        $textobj setdata $rgbadata
+		myWidth myHeight
+#puts stderr "MYWH!$myWidth!$myHeight!"
         requestSize [expr {$myWidth + 2}] [expr {$myHeight + 2}]
         return 1
     }
