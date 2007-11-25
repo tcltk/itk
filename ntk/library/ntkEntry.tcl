@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.12 2007/11/25 17:12:48 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.13 2007/11/25 20:00:39 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
@@ -70,7 +70,6 @@ itcl::extendedclass ::ntk::classes::entry {
     }
 
     public method entryCursorIncrOffset {i} {
-#puts stderr "entryCursorIncrOffset1!$i!$cursoroffset!"
         if {(($i < 0) && ($cursoroffset > 0)) || (($i > 0) && 
                (($cursoroffset < [string length $itcl_options(-text)])))} {
            incr cursoroffset $i
@@ -142,17 +141,41 @@ itcl::extendedclass ::ntk::classes::entry {
         ::ntk::widgetImage::Image fill $windowImage $itcl_options(-bg)
         ::ntk::widgetImage::Image blendwidget $windowImage $xslide 0 $textImage
 	set myCursorColor $itcl_options(-cursorcolor)
-        ::ntk::widgetImage::Image line $windowImage $cx 0 $cx $objh $myCursorColor
+        ::ntk::widgetImage::Image line $windowImage $cx 0 $cx $objh \
+	        $myCursorColor
         set cx [expr {$cx + 1}]
-        ::ntk::widgetImage::Image line $windowImage $cx 0 $cx $objh $myCursorColor
+        ::ntk::widgetImage::Image line $windowImage $cx 0 $cx $objh \
+	        $myCursorColor
         render $wpath
     }
 
     public method entryKeypress {value keysym keycode} {
-#puts stderr "entryKeypress!$value!$keysym!$keycode!"
+puts stderr "entryKeypress!$value!$keysym!$keycode!"
+	if {$keysym eq "shift"} {
+	    if {$value eq ""} {
+	        return
+	    }
+	}
         switch -- $keysym {
+	alt -
+	altgr -
+	control {
+	    return
+	  }
+	tab {
+	    # ???
+	    return
+	  }
+	notsupported {
+	    return
+	  }
+	shift -
         normal {
             set myText $itcl_options(-text)
+	    set co $cursoroffset
+	    set myText [string range $myText 0 \
+	            [expr {$co - 1}]]$value[string range $myText $co end]
+if {0} {
 	    if {$cursoroffset == 0} {
 	        set startStr ""
 		set endStr $myText
@@ -165,60 +188,31 @@ itcl::extendedclass ::ntk::classes::entry {
 	        }
 	    }
 	    configure -text "$startStr$value$endStr"
+}
+	    configure -text $myText
             entryCursorIncrOffset 1
           } 
+        delete -
         backspace {
-            set myText $itcl_options(-text)
-	    switch $cursoroffset {
-	    0 {
-	        set startStr ""
-		set endStr $myText
-	      }
-	    1 {
-	        set startStr ""
-		set endStr [string range $myText 1 end]
-	      }
-	    default {
-		if {$cursoroffset == [string length $myText]} {
-	            set startStr [string range $myText 0 [expr {$cursoroffset-1}]]
-		    set endStr ""
-		} else {
-	            set startStr [string range $myText 0 [expr {$cursoroffset-2}]]
-	            set endStr [string range $myText $cursoroffset end]
-	        }
-	      }
+	    set co $cursoroffset
+	    if {$keysym eq "backspace"} {
+	       if {$co > 0} {
+	           incr co -1
+	       }
 	    }
-	    configure -text "$startStr$endStr"
-            entryCursorIncrOffset -1
+            set myText $itcl_options(-text)
+	    set myText [string range $myText 0 \
+	            [expr {$co - 1}]][string range $myText [expr {$co + 1}] end]
+	    configure -text $myText
+	    if {$keysym eq "backspace"} {
+                entryCursorIncrOffset -1
+	    }
           }
         left {
             entryCursorIncrOffset -1
           }
         right {
             entryCursorIncrOffset 1
-          }
-        delete {
-            set myText $itcl_options(-text)
-	    switch $cursoroffset {
-	    0 {
-	        set startStr ""
-		set endStr $myText
-	      }
-	    1 {
-	        set startStr ""
-		set endStr [string range $myText 1 end]
-	      }
-	    default {
-		if {$cursoroffset == [string length $myText]} {
-	            set startStr [string range $myText 0 [expr {$cursoroffset-1}]]
-		    set endStr ""
-		} else {
-	            set startStr [string range $myText 0 [expr {$cursoroffset-2}]]
-	            set endStr [string range $myText $cursoroffset end]
-	        }
-	      }
-	    }
-	    configure -text "$startStr$endStr"
           }
         return {
 	    return
@@ -232,9 +226,6 @@ itcl::extendedclass ::ntk::classes::entry {
 	if {$constructing} {
 	    return
 	}
-        if {$value eq ""} {
-	    return
-	}
 	::ntk::widgetImage::Image createtext $textImage $itcl_options(-font) \
                 $itcl_options(-fontsize) $value $itcl_options(-textcolor) \
 		myWidth myHeight myOffsetmap
@@ -245,10 +236,8 @@ itcl::extendedclass ::ntk::classes::entry {
 
     public method entryTrace {} {
 #puts stderr "entryTrace!"
-	if {$itcl_options(-text) ne ""} {
-            entryTextCallback $itcl_options(-text)
-	    entryDraw
-        }
+        entryTextCallback $itcl_options(-text)
+        entryDraw
     }
 }
 

@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInit.tcl,v 1.1.2.2 2007/11/25 13:56:45 wiede Exp $
+# RCS: @(#) $Id: ntkInit.tcl,v 1.1.2.3 2007/11/25 20:00:40 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
@@ -46,7 +46,7 @@ namespace eval ::ntk {
     }
     
     proc DispatchKey {winHandle key state keySym keyVal} {
-puts stderr "::ntk::DispatchKey!$winHandle!$key!$state!$keySym!$keyVal!"
+#puts stderr "::ntk::DispatchKey!$winHandle!$key!$state!$keySym!$keyVal!"
         if {$state} {
 	    return [ntk keyPress $winHandle $key $keySym $keyVal]
 	} else {
