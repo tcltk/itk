@@ -38,7 +38,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: x11_window.c,v 1.1.2.9 2007/11/24 23:25:55 wiede Exp $
+ * RCS: @(#) $Id: x11_window.c,v 1.1.2.10 2007/11/25 19:56:25 wiede Exp $
  */
 
 #include "platform.h"
@@ -653,6 +653,81 @@ TranslateKeysym(
 {
     char *str;
 
+    // Try secondary keysym, for numeric keypad keys
+    // Note: This way we always force "NumLock = ON", which at least
+    // enables Glmwfw users to detect numeric keypad keys
+//fprintf(stderr, "ksym!0x%08x!\n", ksym);
+    switch (ksym) {
+    // Numeric keypad
+    case XK_KP_0:
+    case XK_KP_1:
+    case XK_KP_2:
+    case XK_KP_3:
+    case XK_KP_4:
+    case XK_KP_5:
+    case XK_KP_6:
+    case XK_KP_7:
+    case XK_KP_8:
+    case XK_KP_9:
+    case XK_KP_Separator:
+    case XK_KP_Decimal:
+    case XK_KP_Equal:
+    case XK_KP_Enter:
+        return Tcl_NewStringObj("notsupported", -1);
+    default:
+        break;
+    }
+    // Now try pimary keysym
+//fprintf(stderr, "ksym2!0x%08x!0x%08x!\n", ksym);
+    switch (ksym) {
+    // Special keys (non character keys)
+    case XK_Escape:
+    case XK_Meta_L:
+    case XK_Mode_switch:
+        // Mapped to Alt_R on many keyboards
+    case XK_Meta_R:
+    case XK_KP_Home:
+    case XK_Home:
+    case XK_KP_End:
+    case XK_End:
+    case XK_KP_Page_Up:
+    case XK_Page_Up:
+    case XK_KP_Page_Down:
+    case XK_Page_Down:
+    case XK_KP_Insert:
+    case XK_Insert:
+    case XK_F1:
+    case XK_F2:
+    case XK_F3:
+    case XK_F4:
+    case XK_F5:
+    case XK_F6:
+    case XK_F7:
+    case XK_F8:
+    case XK_F9:
+    case XK_F10:
+    case XK_F11:
+    case XK_F12:
+    case XK_F13:
+    case XK_F14:
+    case XK_F15:
+    case XK_F16:
+    case XK_F17:
+    case XK_F18:
+    case XK_F19:
+    case XK_F20:
+    case XK_F21:
+    case XK_F22:
+    case XK_F23:
+    case XK_F24:
+    case XK_F25:
+    // Numeric keypad (should have been detected in secondary keysym!)
+    case XK_KP_Enter:
+        return Tcl_NewStringObj("notsupported", -1);
+    default:
+        break;
+    }
+
     str = XKeysymToString(ksym);
     if (str == NoSymbol) {
         return Tcl_NewStringObj("", -1);
@@ -665,6 +740,9 @@ TranslateKeysym(
         return Tcl_NewStringObj("altgr", -1);
     case XK_BackSpace:
         return Tcl_NewStringObj("backspace", -1);
+    case XK_KP_Delete:
+    case XK_Delete:
+        return Tcl_NewStringObj("delete", -1);
     case XK_Control_L:
     case XK_Control_R:
         return Tcl_NewStringObj("control", -1);
@@ -675,12 +753,16 @@ TranslateKeysym(
         return Tcl_NewStringObj("shift", -1);
     case XK_Tab:
         return Tcl_NewStringObj("tab", -1);
+    case XK_KP_Up:
     case XK_Up:
         return Tcl_NewStringObj("up", -1);
+    case XK_KP_Down:
     case XK_Down:
         return Tcl_NewStringObj("down", -1);
+    case XK_KP_Left:
     case XK_Left:
         return Tcl_NewStringObj("left", -1);
+    case XK_KP_Right:
     case XK_Right:
         return Tcl_NewStringObj("right", -1);
     }
