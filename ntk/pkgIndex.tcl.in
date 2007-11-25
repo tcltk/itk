@@ -1,0 +1,2 @@
+if {[catch {package present Tcl }]} return
+package ifneeded ntkWidget 0.1  [list source [file join $dir ntk.tcl]] 
