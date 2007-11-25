@@ -3,7 +3,7 @@ dnl	This file is an input file used by the GNU "autoconf" program to
 dnl	generate the file "configure", which is run during Tcl installation
 dnl	to configure the system for the local environment.
 #
-# RCS: @(#) $Id: configure.in,v 1.1.2.1 2007/11/25 13:17:08 wiede Exp $
+# RCS: @(#) $Id: configure.in,v 1.1.2.2 2007/11/25 14:21:16 wiede Exp $
 
 #-----------------------------------------------------------------------
 # ntkWidget configure.in for Tcl Extensions.  The only places you should
@@ -77,7 +77,15 @@ TEA_ADD_INCLUDES([-I/usr/include/freetype2])
 TEA_ADD_LIBS([-L/usr/X11/lib -lGLU -lGL -lX11 -lXrandr -lfreetype -lm])
 TEA_ADD_CFLAGS([-DNTK_WIDGET_IMAGE_DEBUG])
 TEA_ADD_STUB_SOURCES([])
-TEA_ADD_TCL_SOURCES([library/ntk.tcl library/ntkInit.tcl library/ntkBox.tcl library/ntkButton.tcl library/ntkCheckbox.tcl library/ntkClock.tcl library/ntkEntry.tcl library/ntkFrame.tcl library/ntkGridData.tcl library/ntkGrid.tcl library/ntkHelpers.tcl library/ntkInit.tcl library/ntkInput.tcl library/ntkLabel.tcl library/ntkListbox.tcl library/ntkMenu.tcl library/ntkRender.tcl library/ntkScrollbarButton.tcl library/ntkScrollbar.tcl library/ntkSpinbox.tcl library/ntkText.tcl library/ntkTheme.tcl library/ntkToplevel.tcl library/ntkWindow.tcl])
+TEA_ADD_TCL_SOURCES([library/ntk.tcl library/ntkInit.tcl library/ntkBox.tcl \
+library/ntkButton.tcl library/ntkCheckbox.tcl library/ntkClock.tcl \
+library/ntkEntry.tcl library/ntkFrame.tcl library/ntkGridData.tcl \
+library/ntkGridManager.tcl library/ntkGrid.tcl library/ntkHelpers.tcl \
+library/ntkInit.tcl library/ntkInput.tcl library/ntkLabel.tcl \
+library/ntkListbox.tcl library/ntkMenu.tcl library/ntkRender.tcl \
+library/ntkScrollbarButton.tcl library/ntkScrollbar.tcl \
+library/ntkSpinbox.tcl library/ntkText.tcl library/ntkTheme.tcl \
+library/ntkToplevel.tcl library/ntkWindow.tcl])
 
 #--------------------------------------------------------------------
 # __CHANGE__
