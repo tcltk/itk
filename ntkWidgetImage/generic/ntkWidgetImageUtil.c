@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageUtil.c,v 1.1.2.2 2007/11/24 22:19:46 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageUtil.c,v 1.1.2.3 2007/11/27 21:02:00 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -761,5 +761,168 @@ NtkWidgetImageRotate(
     wgtPtr->data = newbytes;
     wgtPtr->width = newwidth;
     wgtPtr->height = newheight;
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  NtkWidgetMakeRectangle()
+ * ------------------------------------------------------------------------
+ */
+
+int
+NtkWidgetImageMakeRectangle(
+    NtkWidgetImage *wgtPtr,
+    int x,
+    int y,
+    int width,
+    int height,
+    unsigned char *rgba)
+{
+    int finalx;
+    int finaly;
+    int viswidth;
+    int visheight;
+    int ylimit;
+    if (x < 0) {
+        /*
+         * The display region is offscreen to the left.
+         * Subtract the offscreen area to the left.
+         */
+        width += x;
+        x = 0;
+    }
+    if (y < 0) {
+         height += y;
+         y = 0;
+    }
+    if ((width < 0) || (height < 0)) {
+        /*
+         * The rectangle has at least one dimension completely offscreen.
+         */
+        return TCL_OK; 
+    }
+    finalx = x + width;
+    finaly = y + height;
+    viswidth = width;
+    visheight = height;
+    if (finalx > wgtPtr->width) {
+        /*
+         * The rectangle exceeds the visible width of the display.
+         */
+        viswidth = wgtPtr->width - x;
+    }
+    if (finaly > wgtPtr->height) {
+        /*
+         * The rectangle exceeds the visible height of the display.
+         */
+        visheight = wgtPtr->height - y;
+    }
+    ylimit = visheight + y;
+    for (; y < ylimit; ++y) {
+        unsigned char *bp;
+        unsigned char *limit;
+	bp = GET_PIXEL_PTR(wgtPtr, x, y);
+	limit = bp + viswidth * /*bytes-per-pixel*/ 4;
+        /* 
+         * Write the row of pixels.
+         */
+        while (bp < limit) {
+            *bp++ = rgba[0];
+            *bp++ = rgba[1];
+            *bp++ = rgba[2];
+            *bp++ = rgba[3];    
+        }
+    }
+    return TCL_OK;
+}
+static int
+InPolygon(
+    int *points,
+    int numPoints,
+    int x,
+    int y)
+{
+    int i;
+    int j;
+    int c;
+    
+    c = 0;
+    for (i = 0, j = numPoints-1; i < numPoints; j = i++) {
+        if ((((points[i] <= y) && (y < points[j+1])) ||
+               ((points[j+1] <= y) && (y < points[i+1]))) &&
+	       (x < (points[j] - points[i]) *
+	       (y - points[i+1]) /
+	       (points[j+1] - points[i+1]) + points[i])) {
+            c = !c;
+        }
+    }
+    return c;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  NtkWidgetMakePolygon()
+ * ------------------------------------------------------------------------
+ */
+
+int
+NtkWidgetImageMakePolygon(
+    NtkWidgetImage *wgtPtr,
+    int numPoints,
+    int *points,
+    unsigned char *rgba)
+{
+    unsigned char *bp;
+    int i;
+    int x;
+    int y;
+    int lowX;
+    int lowY;
+    int highX;
+    int highY;
+
+    lowX = highX = points[0];
+    lowY = highY = points[1];
+    for (i = 2; i < numPoints; i++) {
+fprintf(stderr, "PX!%d!0x%08x!\n", i, points[i]);
+        if (points[i] < lowX) {
+            lowX = points[i];
+        } else {
+	    if (points[i] > highX) {
+                highX = points[i];
+            }
+        } 
+	i++;
+fprintf(stderr, "PY!%d!0x%08x!\n", i, points[i]);
+        if (points[i] < lowY) {
+            lowY = points[i];
+        } else {
+	    if (points[i] > highY) {
+                highY = points[i];
+            }
+        }
+    }
+fprintf(stderr, "HH!%d!%d!%d!%d!%d!\n", lowX, lowY, highX, highY, numPoints);
+    if (lowX < 0) {
+        lowX = 0;
+    }
+    if (lowY < 0) {
+        lowY = 0;
+    }
+    if (highX >= wgtPtr->width) {
+        highX = wgtPtr->width - 1;
+    }
+    if (highY >= wgtPtr->height) {
+        highY = wgtPtr->height - 1;
+    }
+    for (y = lowY; y < highY; ++y) {
+        for (x = lowX; x < highX; ++x) {
+            if (InPolygon (points, numPoints, x, y)) {
+	        bp = GET_PIXEL_PTR(wgtPtr, x, y);
+		PUT_PIXEL(bp, rgba);
+            }
+        }
+    }
     return TCL_OK;
 }

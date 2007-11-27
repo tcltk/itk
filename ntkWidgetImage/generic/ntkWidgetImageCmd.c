@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.5 2007/11/25 19:57:47 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.6 2007/11/27 21:02:00 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -30,6 +30,7 @@ Tcl_ObjCmdProc NtkWidgetImage_FillCmd;
 Tcl_ObjCmdProc NtkWidgetImage_SetDataCmd;
 Tcl_ObjCmdProc NtkWidgetImage_SetSizeCmd;
 Tcl_ObjCmdProc NtkWidgetImage_RectangleCmd;
+Tcl_ObjCmdProc NtkWidgetImage_PolygonCmd;
 Tcl_ObjCmdProc NtkWidgetImage_RotateCmd;
 Tcl_ObjCmdProc NtkWidgetImage_PixelCmd;
 
@@ -68,7 +69,10 @@ static NtkWidgetImageMethod NtkWidgetImageMethodList[] = {
     { "::ntk::widgetImage::Image::setsize",
             "widget width height", NtkWidgetImage_SetSizeCmd },
     { "::ntk::widgetImage::Image::rectangle",
-            "widget", NtkWidgetImage_RectangleCmd },
+            "widget x y width height fillcolor(rgbaList)",
+	    NtkWidgetImage_RectangleCmd },
+    { "::ntk::widgetImage::Image::polygon",
+            "widget color x1 y1 x2 y2 ...", NtkWidgetImage_PolygonCmd },
     { "::ntk::widgetImage::Image::rotate",
             "widget degrees", NtkWidgetImage_RotateCmd },
     { "::ntk::widgetImage::Image::pixel",
@@ -265,7 +269,7 @@ CheckNumParams(
     const char *cp;
     int i;
     
-    if ((objc < numParams+1) || (objc > maxParams+1)) {
+    if ((objc < numParams+1) || ((objc > maxParams+1) && (maxParams != -1))) {
         for (i=0; NtkWidgetImageMethodList[i].commandName != NULL; i++) {
 	    cp = strrchr(NtkWidgetImageMethodList[i].commandName, ':');
 	    if (cp == NULL) {
@@ -955,10 +959,15 @@ NtkWidgetImage_RectangleCmd(
     NtkWidgetImageInfo *infoPtr;
     Tcl_HashEntry *hPtr;
     NtkWidgetImage *wgtPtr;
+    unsigned char rgba[4];
+    int x;
+    int y;
+    int width;
+    int height;
 
     infoPtr = (NtkWidgetImageInfo *)clientData;
     NtkWidgetImageShowArgs(1, "NtkWIdget_RectangleCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, "rectangle", objc, 1, 1) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, "rectangle", objc, 6, 6) != TCL_OK) {
         return TCL_ERROR;
     }
     hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[1]);
@@ -968,8 +977,88 @@ NtkWidgetImage_RectangleCmd(
         return TCL_ERROR;
     }
     wgtPtr = Tcl_GetHashValue(hPtr);
-fprintf(stderr, "rectangle not yet implemented\n");
-    return TCL_OK;
+    if (Tcl_GetIntFromObj (interp, objv[2], &x) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (Tcl_GetIntFromObj (interp, objv[3], &y) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (Tcl_GetIntFromObj (interp, objv[4], &width) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (Tcl_GetIntFromObj (interp, objv[5], &height) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (ExtractRGBAValues(interp, objv[6], &rgba[0], &rgba[1],
+            &rgba[2], &rgba[3]) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    return NtkWidgetImageMakeRectangle(wgtPtr, x, y, width, height, rgba);
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  NtkWidgetImage_PolygonCmd()
+ *
+ *  Handles the ntk widget polygon command
+ *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+NtkWidgetImage_PolygonCmd(
+    ClientData clientData,  /* infoPtr */
+    Tcl_Interp *interp,      /* current interpreter */
+    int objc,                /* number of arguments */
+    Tcl_Obj *CONST objv[])   /* argument objects */
+{
+    NtkWidgetImageInfo *infoPtr;
+    Tcl_HashEntry *hPtr;
+    NtkWidgetImage *wgtPtr;
+    unsigned char rgba[4];
+    int *points;
+    int numPoints;
+    int i;
+    int result;
+
+    infoPtr = (NtkWidgetImageInfo *)clientData;
+    NtkWidgetImageShowArgs(0, "NtkWIdget_PolygonCmd", objc, objv);
+    if (CheckNumParams(interp, infoPtr, "polygon", objc, 8, -1) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if ((objc - 3) % 2) {
+        Tcl_SetResult (interp,
+	        "invalid arguments: uneven number of polygon components",
+		TCL_STATIC);
+        return TCL_ERROR;
+    }
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[1]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    wgtPtr = Tcl_GetHashValue(hPtr);
+    if (ExtractRGBAValues(interp, objv[2], &rgba[0], &rgba[1],
+            &rgba[2], &rgba[3]) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    numPoints = (objc - 3);
+    points = (int *)ckalloc (sizeof (int) * numPoints);
+    for (i = 3; i < objc; i++) {
+        if (Tcl_GetIntFromObj (interp, objv[i], &points[i-3]) != TCL_OK) {
+            ckfree ((char *)points);
+            return TCL_ERROR;
+        }
+        i++;
+        if (Tcl_GetIntFromObj (interp, objv[i], &points[i-3]) != TCL_OK) {
+            ckfree ((char *)points);
+            return TCL_ERROR;
+        }
+    }
+    result = NtkWidgetImageMakePolygon(wgtPtr, numPoints, points, rgba);
+    ckfree ((char *)points);
+    return result;
 }
 
 /*
