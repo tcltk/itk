@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.13 2007/11/25 20:00:39 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.14 2007/11/27 21:02:49 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
@@ -22,7 +22,7 @@ itcl::extendedclass ::ntk::classes::entry {
 
     private variable constructing 1
     public methodvariable cursoroffset -default 0
-    public methodvariable xslide -default 0
+    public methodvariable slidex -default 0
     public methodvariable offsetmap -default [list]
 
     public option -cursorcolor -default [list 255 0 0 255] \
@@ -44,6 +44,7 @@ itcl::extendedclass ::ntk::classes::entry {
     constructor {args} {
 	set itcl_options(-width) 160
 	set reqwidth 160
+	set itcl_options(-bd) 1
 	set itcl_options(-bg) [list 255 255 255 255]
 	set itcl_options(-keypress) [list $wpath entryKeypress]
 	set itcl_options(-buttonpress) [list $wpath entryButtonpress]
@@ -53,6 +54,7 @@ itcl::extendedclass ::ntk::classes::entry {
 	    configure {*}$args
 	}
 	appendRedrawHandler [list $wpath entryDraw]
+	appendDestroyHandler [list $wpath entryDestroy]
 	set constructing 0
 	entryTrace
         return $wpath
@@ -62,7 +64,7 @@ itcl::extendedclass ::ntk::classes::entry {
 #puts stderr "entryButtonpress!$button![getFocus]!"
         foreach path [getFocus] {
             if {$path eq $wpath} {
-                entryCursorSet [expr {$x - $xslide}]
+                entryCursorSet [expr {$x - $slidex}]
                 return
             }
         }
@@ -70,47 +72,47 @@ itcl::extendedclass ::ntk::classes::entry {
     }
 
     public method entryCursorIncrOffset {i} {
-        if {(($i < 0) && ($cursoroffset > 0)) || (($i > 0) && 
-               (($cursoroffset < [string length $itcl_options(-text)])))} {
-           incr cursoroffset $i
+if {[catch {
+	set co $cursoroffset
+	incr co $i
+        if {(($co >= 0) && \
+               ($co <= [string length $itcl_options(-text)]))} {
+           set cursoroffset $co
            entryDraw
         }
+} err ]} {
+puts stderr "ERR!$err!"
+}
     }
 
     public method entryCursorSet {x} {
         set lasti 0
-        set cursoroffset 0
+        set co 0
         set cursormap [list]
-        set map [$wpath offsetmap]
-        foreach {myWidth myHeight} \
-	        [::ntk::widgetImage::Image getsize $textImage] break
-
-        #
-        # Build a map of low and high ranges for each cursor position.
-        #
-        for {set i 0} {$i < [llength $map]} {incr i} {
-            set cur [lindex $map $i]
-            set next [lindex $map [expr {$i + 1}]]
-
-            if {$next eq ""} {
-                lappend cursormap $lasti $myWidth
-                continue
-            }
-	    set myLasti [expr {$cur + (($next - $cur) / 2)}]
-            lappend cursormap $lasti $myLasti
-        }
-        #
-        # Find the cursor offset using the map.
-        #
-        set i 0
-        foreach {x1 x2} $cursormap {
-            if {$x >= $x1 && $x < $x2} {
-                $wpath cursoroffset $i
-                entryDraw
-                return
-            }
-            incr i
-        }
+        set map $offsetmap
+	if {[llength $map] == 0} {
+	    entryDraw
+	    return
+	}
+	foreach hi [lrange $map 1 end] {
+	    set halfwidth [expr {($high - $low) / 2}]
+	    set midx [expr {$low +$halfwidth}]
+	    if {$x  <$midx} {
+	        break
+	    } else {
+	        if {$x < $high} {
+	            incr co
+		    break
+		}
+	    }
+	    incr co
+	    set low $high
+        }	
+	if {$co > [llengthz $map]} {
+	    set co [llength $map]
+	}
+	set cursoroffset $co
+        entryDraw
     }
 
     public method entryDestroy {} {
@@ -121,30 +123,35 @@ itcl::extendedclass ::ntk::classes::entry {
 	if {$constructing} {
 	    return
 	}
+	::ntk::widgetImage::Image fill $windowImage $itcl_options(-bg)
         set myOffsetmap $offsetmap
-        set cx 0
-        if {[llength $myOffsetmap]} {
-            set cx [lindex $myOffsetmap $cursoroffset]
-        }
-        if {$cx eq ""} {
-            set cx 0
-        }
-        foreach {objw objh} \
-	        [::ntk::widgetImage::Image getsize $windowImage] break
-        if {$cx > 0} {
-            incr cx -1
-        }
-        set $xslide 1
-        if {$cx >= $itcl_options(-width)} {
-            $wpath xslide [expr {$itcl_options(-width) - $cx}]
-        } 
-        ::ntk::widgetImage::Image fill $windowImage $itcl_options(-bg)
-        ::ntk::widgetImage::Image blendwidget $windowImage $xslide 0 $textImage
+	set co $cursoroffset
 	set myCursorColor $itcl_options(-cursorcolor)
-        ::ntk::widgetImage::Image line $windowImage $cx 0 $cx $objh \
+        if {[llength $myOffsetmap] == 0} {
+	    set cursorx [expr {$itcl_options(-bd) + 1}]
+        } else {
+puts stderr "SL!$co!$slidex!$myOffsetmap!"
+            set cursorx [expr {([lindex $myOffsetmap $co] - $slidex) + \
+	            $itcl_options(-bd)}]
+            foreach {textWidth textHeight} \
+	            [::ntk::widgetImage::Image getsize $textImage] break
+puts stderr "WH!$textWidth!$textHeight!"
+	    set y [expr {($itcl_options(-height) - $textHeight) / 2}]
+puts stderr "TH!$itcl_options(-height)!$textHeight!"
+	    if {$y < $itcl_options(-bd)} {
+	        set y $itcl_options(-bd)
+	    }
+puts stderr "BL!$slidex $y!"
+	    ::ntk::widgetImage::Image blendwidget $windowImage \
+	            $slidex $y $textImage
+	}
+	# Draw the cursor
+	::ntk::widgetImage::Image line $windowImage $cursorx \
+	        $itcl_options(-bd) $cursorx $itcl_options(-height) \
 	        $myCursorColor
-        set cx [expr {$cx + 1}]
-        ::ntk::widgetImage::Image line $windowImage $cx 0 $cx $objh \
+        incr cursorx
+        ::ntk::widgetImage::Image line $windowImage $cursorx \
+	        $itcl_options(-bd) $cursorx $itcl_options(-height) \
 	        $myCursorColor
         render $wpath
     }
@@ -175,20 +182,6 @@ puts stderr "entryKeypress!$value!$keysym!$keycode!"
 	    set co $cursoroffset
 	    set myText [string range $myText 0 \
 	            [expr {$co - 1}]]$value[string range $myText $co end]
-if {0} {
-	    if {$cursoroffset == 0} {
-	        set startStr ""
-		set endStr $myText
-	    } else {
-	        set startStr [string range $myText 0 [expr {$cursoroffset-1}]]
-		if {$cursoroffset == [string length $myText]} {
-		    set endStr ""
-		} else {
-	            set endStr [string range $myText $cursoroffset end]
-	        }
-	    }
-	    configure -text "$startStr$value$endStr"
-}
 	    configure -text $myText
             entryCursorIncrOffset 1
           } 
@@ -226,12 +219,21 @@ if {0} {
 	if {$constructing} {
 	    return
 	}
+	if {[string length $value] == 0} {
+	    set offsetmap [list]
+	    set slidex 0
+	    set cursoroffset 0
+	    ::ntk::widgetImage::Image setsize $textImage 1 1
+	    return
+	}
 	::ntk::widgetImage::Image createtext $textImage $itcl_options(-font) \
                 $itcl_options(-fontsize) $value $itcl_options(-textcolor) \
 		myWidth myHeight myOffsetmap
-        offsetmap $myOffsetmap
-        requestSize [expr {$myWidth + 2}] [expr {$myHeight + 2}]
-        return 1
+        set offsetmap $myOffsetmap
+	set bd2 [expr {$itcl_options(-bd) * 2}]
+        requestSize [expr {$myWidth + 2 + $bd2}] \
+	        [expr {$myHeight + 2 + $bd2}]
+        return
     }
 
     public method entryTrace {} {

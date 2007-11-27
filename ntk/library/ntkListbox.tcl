@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.10 2007/11/23 21:02:57 wiede Exp $
+# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.11 2007/11/27 21:02:49 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::listbox {
@@ -156,8 +156,8 @@ should be: $wpath delete index ?end-index?"
     }
 
     public method listboxDraw {} {
-        $obj fill $itcl_options(-bg)
-        set tmp [uplevel #0 ntkWidget #auto -width 20 -height 20]
+        ::ntk::widgetImage::Image fill $windowImage $itcl_options(-bg)
+        set tmp [::ntk::widgetImage::Image create 20 20]
         set myX [expr {$xoffset + $itcl_options(-bd) + 1}]
         set myY 0
         set mySelected $selected
@@ -190,16 +190,20 @@ should be: $wpath delete index ?end-index?"
             lassign $sizeset myWidth myHeight
             lassign [listboxLookupContext $myContext] font fontsize \
                     textcolor
-            set buf [freetype $font $fontsize $d $textcolor _ _]
-            $tmp setdata $buf
+            ::ntk::widgetImage::Image createtext $tmp $font $fontsize $d \
+	            $textcolor _ _
             if {[lsearch -exact $mySelected $i] >= 0} {
-                set tmp2 [uplevel #0 ntkWidget #auto -width $myWidth -height $myHeight]
-                $tmp2 fill $itcl_options(-selectioncolor)
-                $tmp2 blendwidget 0 0 $tmp
-                $obj blendwidget $myX $myY $tmp2
-                rename $tmp2 {}
+                set tmp2 [::ntk::widgetImage::Image create $myWidth $myHeight]
+                ::ntk::widgetImage::Image fill $tmp2 \
+		        $itcl_options(-selectioncolor)
+                ::ntk::widgetImage::Image blendwidget $tmp2 0 0 $tmp
+                ::ntk::widgetImage::Image blendwidget $windowImage \
+		        $myX $myY $tmp2
+# FIX ME !!
+#                rename $tmp2 {}
             } else {
-                $obj blendwidget $myX $myY $tmp
+                ::ntk::widgetImage::Image blendwidget $windowImage \
+		        $myX $myY $tmp
             }
             incr i
             incr myY $myHeight
@@ -208,8 +212,9 @@ should be: $wpath delete index ?end-index?"
                 break
             }
         }
-        rename $tmp {}
-        themeListboxDrawBorder $wpath
+# FIX ME !!
+#        rename $tmp {}
+        themeListboxDrawBorder
         listboxUpdateViews
         set pendingAfterId ""
         render $wpath
@@ -281,8 +286,8 @@ should be: $wpath delete index ?end-index?"
         set myPeakwidth 0
         set myPeakheight 0
         foreach line $data {
-            freetype-measure $itcl_options(-font) $itcl_options(-fontsize) \
-	            $line myWidth myHeight
+            ::ntk::widgetImage::Image measuretext $itcl_options(-font) \
+	            $itcl_options(-fontsize) $line myWidth myHeight
             if {$myHeight > $myPeakheight} {
                 set myPeakheight $myHeight
             }
@@ -312,7 +317,8 @@ should be: $wpath delete index ?end-index?"
             }
             set con [lindex $myContextdata $i]
             lassign [listboxLookupContext $con] myFont myFontsize _
-            freetype-measure $myFont $myFontsize $line myWidth myHeight
+            ::ntk::widgetImage::Image measuretext $myFont $myFontsize $line \
+	            myWidth myHeight
             lset mySizes $i [list $myWidth $myHeight]
         }
         set sizedata $mySizes

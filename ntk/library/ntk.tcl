@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.19 2007/11/25 13:56:45 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.20 2007/11/27 21:02:49 wiede Exp $
 #--------------------------------------------------------------------------
 
 package require Itcl 4.0
@@ -29,14 +29,14 @@ namespace eval ::ntk {
         entry ::ntk::classes::entry \
         focus ::ntk::focus \
         frame ::ntk::classes::frame \
-        grid ::ntk::::classes::grid::grid \
+        grid ::ntk::classes::grid::grid \
         input ::ntk::classes::input \
         label ::ntk::classes::label \
         listbox ::ntk::classes::listbox \
         checkbox ::ntk::classes::checkbox \
         spinbox ::ntk::classes::spinbox \
         menu ::ntk::classes::menu \
-        render ::ntk::::classes::render::render \
+        render ::ntk::classes::render::render \
         scrollbar ::ntk::classes::scrollbar \
         text ::ntk::classes::text \
         theme ::ntk::classes::theme \

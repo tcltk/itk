@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.14 2007/11/25 15:37:22 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.15 2007/11/27 21:02:49 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
@@ -115,6 +115,7 @@
     }
 
     public proc themeScrollbarButton {path} {
+puts stderr "themeScrollbarButton!$path!"
         uplevel #0 ntk::classes::scrollbarbutton $path -width 20 -height 20
         $path appendRedrawHandler [list $path themeScrollbarButtonDraw $path]
         foreach key [list pressed direction] {
@@ -136,23 +137,24 @@
         }
         switch -- [$path direction] {
         up {
-            [$path windowImage] polygon [list 0 0 0 255] \
-                    [expr {$w / 2}] 2  \
+            ::ntk::widgetImage::Image polygon [$path windowImage] \
+	            [list 0 0 0 255] [expr {$w / 2}] 2  \
                     2 [expr {$h - 2}]  [expr {$w - 2}] [expr {$h - 2}]
           }
         down {
-            [$path windowImage] polygon [list 0 0 0 255] \
-                    2 2 [expr {$w - 2}] 2 \
+            ::ntk::widgetImage::Image polygon [$path windowImage] \
+	            [list 0 0 0 255] 2 2 [expr {$w - 2}] 2 \
                     [expr {$w / 2}] [expr {$h - 2}]         
           }
         left {
-            [$path windowImage] polygon [list 0 0 0 255] \
-                    2 [expr {$h / 2}] [expr {$w - 2}] 2 \
+            ::ntk::widgetImage::Image polygon [$path windowImage] \
+	            [list 0 0 0 255] 2 [expr {$h / 2}] [expr {$w - 2}] 2 \
 		    [expr {$w - 2}] [expr {$h - 2}]
           }
         right {
-            [$path windowImage] polygon [list 0 0 0 255] \
-                     2 2 [expr {$w - 2}] [expr {$h / 2}] 2 [expr {$h - 2}]
+            ::ntk::widgetImage::Image polygon [$path windowImage] \
+	             [list 0 0 0 255] 2 2 [expr {$w - 2}] [expr {$h / 2}] \
+		     2 [expr {$h - 2}]
           }
         }
         render $path

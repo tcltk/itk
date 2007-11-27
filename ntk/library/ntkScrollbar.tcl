@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.10 2007/11/23 21:02:57 wiede Exp $
+# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.11 2007/11/27 21:02:49 wiede Exp $
 #--------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------
@@ -29,6 +29,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
     inherit ::ntk::classes::theme 
 
     private variable constructing 1
+private variable yyy [list]
 
     public option -orient -default vertical -configuremethod scrollbarConfig
     public option -command -default {} -configuremethod scrollbarConfig
@@ -55,19 +56,27 @@ itcl::extendedclass ::ntk::classes::scrollbar {
             scrollbarOrientCallback $value
           }
         }
+puts stderr "scrollbarConfig!$option!$value!$constructing!"
         scrollbarDraw
     }
 
     constructor {args} {
+puts stderr "CONSTR!START"
+if {$yyy eq ""} {
+set yyy [::ntk::classes::grid #auto]
+}
+	set constructing 1
         set themeConfig scrollbarConfig
 	set itclOptions(-width) 20
 	set itclOptions(-height) 200
+puts stderr "CONSTR!2!$constructing!$args!"
         if {[llength $args]} {
 	    configure {*}$args
 	}
-	set constructing 0
+puts stderr "CONSTR!3"
 	appendRedrawHandler [list $wpath scrollbarDraw]
 
+puts stderr "TSB!$wpath.a"
         themeScrollbarButton $wpath.a
         themeScrollbarTrough $wpath.trough
         $wpath.trough configure \
@@ -89,6 +98,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
         $wpath appendRedrawHandler [list $wpath scrollbarDraw]
         $wpath.trough appendRedrawHandler [list $wpath scrollbarDrawScale]
 
+	set constructing 0
         #Trigger the request sizes, and redraws, just in case -orient wasn't specified in $args.
         configure -orient $itcl_options(-orient)
         return $wpath
@@ -120,6 +130,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
     }
 
     public method scrollbarDraw {} {
+puts stderr "scrollbarDraw!$constructing!"
         if {$constructing} {
 	    return
 	}
@@ -131,7 +142,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
     }
 
     public method scrollbarDrawHorizontal {} {
-        $obj fill $itcl_options(-bg)
+        ::ntk::widgetImage::Image fill $windowImage $itcl_options(-bg)
         render $wpath $wpath.a $wpath.trough $wpath.b
     }
 
@@ -145,21 +156,24 @@ itcl::extendedclass ::ntk::classes::scrollbar {
             set myY [expr {round($rstart * $myHeight)}]
             set yend [expr {round($rend * $myHeight)}]
             set rectheight [expr {$yend - $myY}]
-            [$wpath.trough obj] fill $itcl_options(-bg)
-            [$wpath.trough obj] rectangle 0 $myY $myWidth $rectheight \
+            ::ntk::widgetImage::Image fill [$wpath.trough windowImage] \
+	            $itcl_options(-bg)
+            ::ntk::widgetImage::Image rectangle [$wpath.trough windowImage] \
+	            0 $myY $myWidth $rectheight \
                     $itcl_options(-slidercolor)
-            themeDrawBorder [$wpath.trough obj] 0 $myY $myWidth $rectheight \
-                    $low $high 1
+            $wpath.trough themeDrawBorder 0 $myY $myWidth \
+	            $rectheight $low $high 1
             set y1 $myY
             set y2 [expr {$myY + $rectheight}]
         } else {
             set myX [expr {round($rstart * $myWidth)}]
             set xend [expr {round($rend * $myWidth)}]
             set rectwidth [expr {$xend - $myX}]
-            [$wpath.trough obj] fill $itcl_options(-bg)
-            [$wpath.trough obj] rectangle $myX 0 $rectwidth $myHeight \
-                    $itcl_options(-slidercolor)
-            themeDrawBorder [$wpath.trough obj] $myX 0 $rectwidth \
+            ::ntk::widgetImage::Image fill [$wpath.trough windowImage] \
+	            $itcl_options(-bg)
+            ::ntk::widgetImage::Image rectangle [$wpath.trough windowImage] \
+	            $myX 0 $rectwidth $myHeight $itcl_options(-slidercolor)
+            $wpath.trough themeDrawBorder $myX 0 $rectwidth \
                     $myHeight $low $high 1
             set x1 $myX
             set x2 [expr {$myX + $rectwidth}]
@@ -167,7 +181,7 @@ itcl::extendedclass ::ntk::classes::scrollbar {
     }
 
     public method scrollbarDrawVertical {} {
-        $obj fill $itcl_options(-bg)
+        ::ntk::widgetImage::Image fill $windowImage $itcl_options(-bg)
         render $wpath $wpath.a $wpath.trough $wpath.b
     }
 
@@ -184,9 +198,12 @@ itcl::extendedclass ::ntk::classes::scrollbar {
             $wpath.a requestSize $sw $sw
             $wpath.trough requestSize [expr {200 - ($sw * 2)}] $sw
             $wpath.b requestSize $sw $sw
-            ntk grid $wpath.a -slot {0 0} -sticky height
-            ntk grid $wpath.trough -slot {1 0} -sticky {width height}
-            ntk grid $wpath.b -slot {2 0} -sticky height
+#            ntk grid $wpath.a -slot {0 0} -sticky height
+#            ntk grid $wpath.trough -slot {1 0} -sticky {width height}
+#            ntk grid $wpath.b -slot {2 0} -sticky height
+            $yyy grid $wpath.a -slot {0 0} -sticky height
+            $yyy grid $wpath.trough -slot {1 0} -sticky {width height}
+            $yyy grid $wpath.b -slot {2 0} -sticky height
           }
         vertical {
             $wpath.a direction up
@@ -195,9 +212,16 @@ itcl::extendedclass ::ntk::classes::scrollbar {
             $wpath.a requestSize $sw $sw
             $wpath.trough requestSize $sw [expr {200 - ($sw * 2)}]
             $wpath.b requestSize $sw $sw
-            ntk grid $wpath.a -slot {0 0} -sticky width
-            ntk grid $wpath.trough -slot {0 1} -sticky {width height}
-            ntk grid $wpath.b -slot {0 2} -sticky width
+puts stderr "II![join [lsort [::info comm ::ntk::classes::grid::grid]] \n]!"
+#            ::ntk::classes::grid::grid $wpath.a -slot {0 0} -sticky width
+            $yyy grid $wpath.a -slot {0 0} -sticky width
+puts stderr 1
+#            ntk grid $wpath.trough -slot {0 1} -sticky {width height}
+            $yyy grid $wpath.trough -slot {0 1} -sticky {width height}
+puts stderr 2
+#            ntk grid $wpath.b -slot {0 2} -sticky width
+            $yyy grid $wpath.b -slot {0 2} -sticky width
+puts stderr 3
           }
         default {
             return -code error "invalid argument for -orient: $arg"
