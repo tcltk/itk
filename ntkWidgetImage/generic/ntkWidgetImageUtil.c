@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageUtil.c,v 1.1.2.3 2007/11/27 21:02:00 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageUtil.c,v 1.1.2.4 2007/11/28 21:37:18 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -30,6 +30,36 @@ double round(double);
 
 /* 2^30 */
 #define ROTSCALE 1073741824
+
+#define INIT_OP(xy,xyiter,srcoffset,srcsize,basesize,xystart) do { \
+ if (xy < 0) { 	            			\
+  /* Left or Up */				\
+  xyiter = srcsize;			 	\
+  xyiter += xy; /* adding a negative */		\
+  if (xyiter <= 0) return; /*offscreen*/	\
+  srcoffset = -xy;			 	\
+  if (srcoffset < 0 || srcoffset > srcsize) {   \
+   return; /*offscreen*/			\
+  }                                             \
+  if (xyiter >= basesize) {                     \
+   xyiter = basesize;				\
+  } 						\
+  if ((xyiter + srcoffset) >= srcsize) 		\
+   xyiter = srcsize - srcoffset;		\
+  if (xyiter < 0) return;			\
+  xystart = 0;			    		\
+ } else {			    		\
+  srcoffset = 0;				\
+  if (xy >= basesize)				\
+   return;			    		\
+  xyiter = srcsize;				\
+  if ((xyiter + xy) >= basesize)		\
+   xyiter = basesize - xy;    			\
+  if (xyiter >= srcsize) xyiter = srcsize;	\
+  if (xyiter <= 0) return; /*offscreen*/	\
+  xystart = xy;					\
+ }						\
+} while (0)
 
 static int *cos_table;
 static int *sin_table;
@@ -606,6 +636,79 @@ fprintf (stderr, "dstx %d dsty %d xiter %d yiter %d x1 %d y1 %d srcpyincr %d dst
 
 /*
  * ------------------------------------------------------------------------
+ *  NtkWidgetImageClipCopy()
+ * ------------------------------------------------------------------------
+ */
+
+void
+NtkWidgetImageClipCopy(
+    Tcl_Interp *interp,
+    NtkWidgetImage *dstWgtPtr,
+    NtkWidgetImage *srcWgtPtr,
+    int dstx,
+    int dsty,
+    int srcx,
+    int srcy)
+{
+    int tmp;
+    int y; /* relative to the base */
+    int xiter;
+    int yiter;
+    int srcxoffset;
+    int srcyoffset;
+    int xstart;
+    int ystart;
+    int xdelta;
+    int ydelta;
+    int maxwidth;
+    int maxheight;
+    unsigned char *srcp;
+    unsigned char *dstp;
+    unsigned char *limit;
+
+    if (srcx < dstx) {
+        /*
+         * dstx should be lower than srcx.
+         */
+        tmp = dstx; dstx = srcx; srcx = tmp;
+    }
+    if (srcy < dsty) {
+        /*
+         * dsty should be lower than srcy.
+         */
+        tmp = dsty; dsty = srcy; srcy = tmp;
+    }
+    xdelta = srcx - dstx;
+    ydelta = srcy - dsty;
+    maxwidth = srcWgtPtr->width;
+    if (srcWgtPtr->width > xdelta) {
+        maxwidth = xdelta;
+    }
+    maxheight = srcWgtPtr->height;
+    if (srcWgtPtr->height > ydelta) {
+        maxheight = ydelta;
+    }
+    xiter = maxwidth;
+    yiter = maxheight;
+    INIT_OP (dstx, xiter, srcxoffset, maxwidth, dstWgtPtr->width, xstart);
+    INIT_OP (dsty, yiter, srcyoffset, maxheight, dstWgtPtr->height, ystart);
+    for (y = 0; y < yiter; ++y) {
+        srcp = srcWgtPtr->data + (srcWgtPtr->width * 4 * 
+                (y + srcyoffset) + (srcxoffset * 4));
+        dstp = dstWgtPtr->data + (dstWgtPtr->width * 4 * 
+                (y + ystart)) + (xstart * 4);
+        limit = dstp + xiter * 4;
+        while (dstp < limit) {
+            *dstp++ = *srcp++;
+            *dstp++ = *srcp++;
+            *dstp++ = *srcp++;
+            *dstp++ = *srcp++;
+        }
+    }
+}
+
+/*
+ * ------------------------------------------------------------------------
  *  NtkWidgetImageRotate()
  * ------------------------------------------------------------------------
  */
@@ -849,13 +952,14 @@ InPolygon(
     
     c = 0;
     for (i = 0, j = numPoints-1; i < numPoints; j = i++) {
-        if ((((points[i] <= y) && (y < points[j+1])) ||
-               ((points[j+1] <= y) && (y < points[i+1]))) &&
-	       (x < (points[j] - points[i]) *
+        if ((((points[i+1] <= y) && (y < points[j])) ||
+               ((points[j] <= y) && (y < points[i+1]))) &&
+	       (x < (points[j-1] - points[i]) *
 	       (y - points[i+1]) /
-	       (points[j+1] - points[i+1]) + points[i])) {
+	       (points[j] - points[i+1]) + points[i])) {
             c = !c;
         }
+        i++;
     }
     return c;
 }
@@ -885,7 +989,6 @@ NtkWidgetImageMakePolygon(
     lowX = highX = points[0];
     lowY = highY = points[1];
     for (i = 2; i < numPoints; i++) {
-fprintf(stderr, "PX!%d!0x%08x!\n", i, points[i]);
         if (points[i] < lowX) {
             lowX = points[i];
         } else {
@@ -894,7 +997,6 @@ fprintf(stderr, "PX!%d!0x%08x!\n", i, points[i]);
             }
         } 
 	i++;
-fprintf(stderr, "PY!%d!0x%08x!\n", i, points[i]);
         if (points[i] < lowY) {
             lowY = points[i];
         } else {
@@ -903,7 +1005,6 @@ fprintf(stderr, "PY!%d!0x%08x!\n", i, points[i]);
             }
         }
     }
-fprintf(stderr, "HH!%d!%d!%d!%d!%d!\n", lowX, lowY, highX, highY, numPoints);
     if (lowX < 0) {
         lowX = 0;
     }

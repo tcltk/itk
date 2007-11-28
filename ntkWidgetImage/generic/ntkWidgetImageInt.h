@@ -9,7 +9,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageInt.h,v 1.1.2.3 2007/11/27 21:02:00 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageInt.h,v 1.1.2.4 2007/11/28 21:37:18 wiede Exp $
  */
 
 #include <string.h>
@@ -108,3 +108,6 @@ MODULE_SCOPE int NtkWidgetImageMakeRectangle(NtkWidgetImage *wgtPtr,
         int x, int y, int width, int height, unsigned char *rgba);
 MODULE_SCOPE int NtkWidgetImageMakePolygon(NtkWidgetImage *wgtPtr,
         int numPoints, int *points, unsigned char *rgba);
+MODULE_SCOPE void NtkWidgetImageClipCopy(Tcl_Interp *interp,
+        NtkWidgetImage *dstWgtPtr, NtkWidgetImage *srcWgtPtr,
+        int dstx, int dsty, int x2, int y2);

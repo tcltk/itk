@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.6 2007/11/27 21:02:00 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.7 2007/11/28 21:37:18 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -24,6 +24,7 @@ Tcl_ObjCmdProc NtkWidgetImage_MeasureTextCmd;
 Tcl_ObjCmdProc NtkWidgetImage_LineCmd;
 Tcl_ObjCmdProc NtkWidgetImage_BlendCmd;
 Tcl_ObjCmdProc NtkWidgetImage_BlendWidgetCmd;
+Tcl_ObjCmdProc NtkWidgetImage_ClipCopyWidgetCmd;
 Tcl_ObjCmdProc NtkWidgetImage_GetDataCmd;
 Tcl_ObjCmdProc NtkWidgetImage_GetSizeCmd;
 Tcl_ObjCmdProc NtkWidgetImage_FillCmd;
@@ -58,6 +59,9 @@ static NtkWidgetImageMethod NtkWidgetImageMethodList[] = {
     { "::ntk::widgetImage::Image::blendwidget",
             "destWidget destX destY ?srcX1 srcY1 srcX2 srcY2? srcWidget",
 	    NtkWidgetImage_BlendWidgetCmd },
+    { "::ntk::widgetImage::Image::clipcopy",
+            "destWidget destX destY srcX srcY srcWidget",
+	    NtkWidgetImage_ClipCopyWidgetCmd },
     { "::ntk::widgetImage::Image::getdata",
             "widget", NtkWidgetImage_GetDataCmd },
     { "::ntk::widgetImage::Image::getsize",
@@ -477,7 +481,7 @@ NtkWidgetImage_MeasureTextCmd(
 
     result = TCL_OK;
     infoPtr = (NtkWidgetImageInfo *)clientData;
-    NtkWidgetImageShowArgs(0, "NtkWIdget_MeasueTextCmd", objc, objv);
+    NtkWidgetImageShowArgs(1, "NtkWIdget_MeasueTextCmd", objc, objv);
     if (CheckNumParams(interp, infoPtr, "measuretext", objc, 5, 5) != TCL_OK) {
         return TCL_ERROR;
     }
@@ -711,6 +715,66 @@ NtkWidgetImage_BlendWidgetCmd(
     }
     NtkWidgetImageBlend(interp, wgtPtr, srcWgtPtr, destx, desty,
             x1, y1, x2, y2);
+    return TCL_OK;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ *  NtkWidgetImage_ClipCopyWidgetCmd()
+ *
+ *  Handles the ntk widget clipcopy command
+ *  Returns a status TCL_OK/TCL_ERROR to indicate success/failure.
+ * ------------------------------------------------------------------------
+ */
+/* ARGSUSED */
+int
+NtkWidgetImage_ClipCopyWidgetCmd(
+    ClientData clientData,  /* infoPtr */
+    Tcl_Interp *interp,      /* current interpreter */
+    int objc,                /* number of arguments */
+    Tcl_Obj *CONST objv[])   /* argument objects */
+{
+    NtkWidgetImageInfo *infoPtr;
+    Tcl_HashEntry *hPtr;
+    NtkWidgetImage *wgtPtr;
+    NtkWidgetImage *srcWgtPtr;
+    int srcx;
+    int srcy;
+    int dstx;
+    int dsty;
+
+    infoPtr = (NtkWidgetImageInfo *)clientData;
+    NtkWidgetImageShowArgs(1, "NtkWIdget_ClipCopyWidgetCmd", objc, objv);
+    if (CheckNumParams(interp, infoPtr, "clipcopy", objc, 6, 6) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (Tcl_GetIntFromObj (interp, objv[2], &dstx) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (Tcl_GetIntFromObj (interp, objv[3], &dsty) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (Tcl_GetIntFromObj (interp, objv[4], &srcx) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    if (Tcl_GetIntFromObj (interp, objv[5], &srcy) != TCL_OK) {
+        return TCL_ERROR;
+    }
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[1]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[1]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    wgtPtr = Tcl_GetHashValue(hPtr);
+    hPtr = Tcl_FindHashEntry(&infoPtr->widgets, (char *)objv[6]);
+    if (hPtr == NULL) {
+	Tcl_AppendResult(interp, "no such widget: \"",
+	        Tcl_GetString(objv[6]), "\"", NULL);
+        return TCL_ERROR;
+    }
+    srcWgtPtr = Tcl_GetHashValue(hPtr);
+    NtkWidgetImageClipCopy(interp, wgtPtr, srcWgtPtr, dstx, dsty, srcx, srcy);
     return TCL_OK;
 }
 
@@ -1022,7 +1086,7 @@ NtkWidgetImage_PolygonCmd(
     int result;
 
     infoPtr = (NtkWidgetImageInfo *)clientData;
-    NtkWidgetImageShowArgs(0, "NtkWIdget_PolygonCmd", objc, objv);
+    NtkWidgetImageShowArgs(1, "NtkWIdget_PolygonCmd", objc, objv);
     if (CheckNumParams(interp, infoPtr, "polygon", objc, 8, -1) != TCL_OK) {
         return TCL_ERROR;
     }
