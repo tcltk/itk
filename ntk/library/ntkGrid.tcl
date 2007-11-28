@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.11 2007/11/27 21:02:49 wiede Exp $
+# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.12 2007/11/28 21:38:08 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::grid {
@@ -485,7 +485,7 @@ puts stderr REMANAGE:$c
         # See if the parent has a manager object already.
         # Create a new grid manager object if there isn't one already.
         set myParent [$path parent]
-puts stderr "GRID!$path!$args!$myParent![$myParent manager]!"
+#puts stderr "GRID!$path!$args!$myParent![$myParent manager]!"
         if {[$myParent manager] eq ""} {
 	    set m [uplevel #0 ::ntk::classes::gridManager ${myParent}.__manager $myParent]
 	    $m remanage layout

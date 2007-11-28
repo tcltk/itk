@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.11 2007/11/27 21:02:49 wiede Exp $
+# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.12 2007/11/28 21:38:08 wiede Exp $
 #--------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------
@@ -38,12 +38,16 @@ private variable yyy [list]
             -configuremethod scrollbarConfig
 
     public methodvariable buttonAfterId -default "" 
-    public methodvariable clickx -default 0
-    public methodvariable clicky -default 0
+    public methodvariable clickX -default 0
+    public methodvariable clickY -default 0
     public methodvariable dragging -default 0
-    public methodvariable idleAfterId -default "" 
+    public methodvariable buttonTimerId -default "" 
+    public methodvariable buttonIdleId -default "" 
+    public methodvariable scaleIdleId -default ""
     public methodvariable scale -default [list 0.0 1.0] 
-    public methodvariable scaleoffset -default 0
+    public methodvariable scaleOffset -default 0
+    public methodvariable scaleXDelta -default 0
+    public methodvariable scaleYDelta -default 0
     public methodvariable x1 -default 0
     public methodvariable x2 -default 0
     public methodvariable y1 -default 0
@@ -56,27 +60,20 @@ private variable yyy [list]
             scrollbarOrientCallback $value
           }
         }
-puts stderr "scrollbarConfig!$option!$value!$constructing!"
+#puts stderr "scrollbarConfig!$option!$value!$constructing!"
         scrollbarDraw
     }
 
     constructor {args} {
-puts stderr "CONSTR!START"
-if {$yyy eq ""} {
-set yyy [::ntk::classes::grid #auto]
-}
 	set constructing 1
         set themeConfig scrollbarConfig
 	set itclOptions(-width) 20
 	set itclOptions(-height) 200
-puts stderr "CONSTR!2!$constructing!$args!"
         if {[llength $args]} {
 	    configure {*}$args
 	}
-puts stderr "CONSTR!3"
 	appendRedrawHandler [list $wpath scrollbarDraw]
 
-puts stderr "TSB!$wpath.a"
         themeScrollbarButton $wpath.a
         themeScrollbarTrough $wpath.trough
         $wpath.trough configure \
@@ -105,32 +102,41 @@ puts stderr "TSB!$wpath.a"
     }
 
     public method scrollbarButtonRepeat {delay cmd} {
+#puts stderr "scrollbarButtonRepeat!$delay!$cmd!"
+        set buttonIdleId [after idle [list $wpath scrollbarButtonRepeatIdle $delay $cmd]]
+    }
+
+    public method scrollbarButtonRepeatEval {delay cmd} {
         uplevel #0 $cmd
-        $wpath idleAfterId [after idle [list $wpath buttonAfterId \
-                [after $delay [list $wpath scrollbarButtonRepeat $delay $cmd]]]]
+	set buttonIdleId [after idle [list $wpath scrollbarButtonRepeat $delay $cmd]]
+    }
+
+    public method scrollbarButtonRepeatIdle {delay cmd} {
+        set buttonTimerId [after $delay \
+	        [list $wpath scrollbarButtonRepeatEval $delay $cmd]]
     }
 
     public method scrollbarButtonpress {buttonpath unit button x y globalx globaly} {
-#puts stderr "scrollbarButtonpress!$buttonpath!$unit!$button!"
+#puts stderr "scrollbarButtonpress!$buttonpath!$unit!$button!$itcl_options(-command)!$buttonIdleId!$buttonTimerId!"
         $buttonpath pressed 1
-        if {($itcl_options(-command) ne "") && ($buttonAfterId eq "") && \
-                ($idleAfterId eq "")} {
+        if {($itcl_options(-command) ne "") && ($buttonIdleId eq "") && \
+                ($buttonTimerId eq "")} {
             set cmd [concat $itcl_options(-command) scroll $unit units]
-            scrollbarButtonRepeat 100 $cmd
+            scrollbarButtonRepeat 80 $cmd
         }
     }
 
     public method scrollbarButtonrelease {buttonpath button x y globalx globaly} {
 #puts stderr "scrollbarButtonrelease!$buttonpath!$button!"
         $buttonpath pressed 0
-        after cancel $buttonAfterId
-        set buttonAfterId ""
-        after cancel $idleAfterId
-        set idleAfterId ""
+        catch {after cancel $buttonIdleId}
+        set buttonIdleId ""
+        catch {after cancel $buttonTimerId}
+        set buttonTimerId ""
     }
 
     public method scrollbarDraw {} {
-puts stderr "scrollbarDraw!$constructing!"
+#puts stderr "scrollbarDraw!$constructing!"
         if {$constructing} {
 	    return
 	}
@@ -198,12 +204,9 @@ puts stderr "scrollbarDraw!$constructing!"
             $wpath.a requestSize $sw $sw
             $wpath.trough requestSize [expr {200 - ($sw * 2)}] $sw
             $wpath.b requestSize $sw $sw
-#            ntk grid $wpath.a -slot {0 0} -sticky height
-#            ntk grid $wpath.trough -slot {1 0} -sticky {width height}
-#            ntk grid $wpath.b -slot {2 0} -sticky height
-            $yyy grid $wpath.a -slot {0 0} -sticky height
-            $yyy grid $wpath.trough -slot {1 0} -sticky {width height}
-            $yyy grid $wpath.b -slot {2 0} -sticky height
+            ntk grid $wpath.a -slot {0 0} -sticky height
+            ntk grid $wpath.trough -slot {1 0} -sticky {width height}
+            ntk grid $wpath.b -slot {2 0} -sticky height
           }
         vertical {
             $wpath.a direction up
@@ -212,16 +215,9 @@ puts stderr "scrollbarDraw!$constructing!"
             $wpath.a requestSize $sw $sw
             $wpath.trough requestSize $sw [expr {200 - ($sw * 2)}]
             $wpath.b requestSize $sw $sw
-puts stderr "II![join [lsort [::info comm ::ntk::classes::grid::grid]] \n]!"
-#            ::ntk::classes::grid::grid $wpath.a -slot {0 0} -sticky width
-            $yyy grid $wpath.a -slot {0 0} -sticky width
-puts stderr 1
-#            ntk grid $wpath.trough -slot {0 1} -sticky {width height}
-            $yyy grid $wpath.trough -slot {0 1} -sticky {width height}
-puts stderr 2
-#            ntk grid $wpath.b -slot {0 2} -sticky width
-            $yyy grid $wpath.b -slot {0 2} -sticky width
-puts stderr 3
+            ntk grid $wpath.a -slot {0 0} -sticky width
+            ntk grid $wpath.trough -slot {0 1} -sticky {width height}
+            ntk grid $wpath.b -slot {0 2} -sticky width
           }
         default {
             return -code error "invalid argument for -orient: $arg"
@@ -231,37 +227,60 @@ puts stderr 3
     }
 
     public method scrollbarScaleButtonpress {button x y globalx globaly} {
-#puts stderr "scrollbarScaleButtonpress!$button!"
+puts stderr "scrollbarScaleButtonpress!$button!"
         lassign $scale start end
         if {$itcl_options(-orient) eq "vertical"} {
             if {($y >= $y1) && ($y < $y2)} {
-                set clickx $x
-                set clicky $y
+                set clickX $x
+                set clickY $y
                 set dragging 1
-                set scaleoffset $y1
+                set scaleOffset $y1
             }
         } else {
             if {($x >= $x1) && ($x < $x2)} {
-                set clickx $x
-                set clicky $y
+                set clickX $x
+                set clickY $y
                 set dragging 1
-                set scaleoffset $x1
+                set scaleOffset $x1
             }
         }
     }
 
     public method scrollbarScaleButtonrelease {button x y globalx globaly} {
-#puts stderr "scrollbarScaleButtonrelease!$button!"
+puts stderr "scrollbarScaleButtonrelease!$button!"
         set dragging 0
     }
 
+    public method scrollbarScaleIdle {} {
+        foreach {rstart rend} $scale break
+        set xd [$scaleXDelta]
+        set yd [$scaleYDelta]
+        if {($xd == 0) || ($yd == 0)} {
+            set scaleIdleId ""
+            return
+        }
+        set myWidth [$wpath.trough cget -width]
+        set myHeight [$wpath.trough cget -height]
+        if {$itcl_options(-orient) eq "vertical"} {
+            set rat [expr {1.0 / $myHeight}]
+            set moveto [expr {($yd + $scaleOffset) * $rat}]
+            set cmd $itcl_options(-command)
+            uplevel #0 $cmd moveto [list $moveto]
+        } else {
+           set rat [expr {1.0 / $myWidth}]
+           set moveto [expr {($xd + $scaleOffset) * $rat}]
+           set cmd $itcl_options(-command)
+           uplevel #0 $cmd moveto [list $moveto]
+        }
+    }
+
     public method scrollbarScaleMotion {x y globalx globaly} {
-#puts stderr "scrollbarScaleMotion!$dragging!"
+puts stderr "scrollbarScaleMotion!$dragging!"
        if {$dragging == 0} {
            return
 	}
-        set xd [expr {$x - $clickx}]
-        set yd [expr {$y - $clicky}]
+        set xd [expr {$x - $clickX}]
+        set yd [expr {$y - $clickY}]
         lassign $scale rstart rend
         set myWidth [$wpath.trough cget -width]
         set myHeight [$wpath.trough cget -height]

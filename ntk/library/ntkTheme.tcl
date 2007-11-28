@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.15 2007/11/27 21:02:49 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.16 2007/11/28 21:38:08 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
@@ -115,7 +115,7 @@
     }
 
     public proc themeScrollbarButton {path} {
-puts stderr "themeScrollbarButton!$path!"
+#puts stderr "themeScrollbarButton!$path!"
         uplevel #0 ntk::classes::scrollbarbutton $path -width 20 -height 20
         $path appendRedrawHandler [list $path themeScrollbarButtonDraw $path]
         foreach key [list pressed direction] {

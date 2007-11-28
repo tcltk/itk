@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.11 2007/11/27 21:02:49 wiede Exp $
+# RCS: @(#) $Id: ntkListbox.tcl,v 1.1.2.12 2007/11/28 21:38:08 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::listbox {
@@ -153,11 +153,15 @@ should be: $wpath delete index ?end-index?"
 
     public method listboxDestroy {} {
         #Cleanup any ntkWidget or freetype objects
+	# cleanup windowImage
     }
 
     public method listboxDraw {} {
+#puts stderr "listboxDraw"
         ::ntk::widgetImage::Image fill $windowImage $itcl_options(-bg)
-        set tmp [::ntk::widgetImage::Image create 20 20]
+	::ntk::widgetImage::Image setsize $windowImage \
+	        $itcl_options(-width) $itcl_options(-height)
+	::ntk::widgetImage::Image fill $windowImage [list 0 0 0 0]
         set myX [expr {$xoffset + $itcl_options(-bd) + 1}]
         set myY 0
         set mySelected $selected
@@ -190,20 +194,18 @@ should be: $wpath delete index ?end-index?"
             lassign $sizeset myWidth myHeight
             lassign [listboxLookupContext $myContext] font fontsize \
                     textcolor
-            ::ntk::widgetImage::Image createtext $tmp $font $fontsize $d \
-	            $textcolor _ _
+	    set buf [::ntk::widgetImage::Image create 1 1]
+            ::ntk::widgetImage::Image createtext $buf $font $fontsize $d \
+	            $textcolor bufWidth bufHeight
             if {[lsearch -exact $mySelected $i] >= 0} {
-                set tmp2 [::ntk::widgetImage::Image create $myWidth $myHeight]
-                ::ntk::widgetImage::Image fill $tmp2 \
-		        $itcl_options(-selectioncolor)
-                ::ntk::widgetImage::Image blendwidget $tmp2 0 0 $tmp
-                ::ntk::widgetImage::Image blendwidget $windowImage \
-		        $myX $myY $tmp2
-# FIX ME !!
-#                rename $tmp2 {}
+                ::ntk::widgetImage::Image rectangle $windowImage \
+		        $myX $myY $bufWidth $bufHeight \
+			$itcl_options(-selectioncolor)
+                ::ntk::widgetImage::Image blendwidget $windowImage $myX $myY $buf
             } else {
-                ::ntk::widgetImage::Image blendwidget $windowImage \
-		        $myX $myY $tmp
+                ::ntk::widgetImage::Image clipcopy $windowImage \
+		        $myX $myY [expr {$myX + $bufWidth}] \
+			[expr {$myY + $bufHeight}] $buf
             }
             incr i
             incr myY $myHeight
@@ -213,7 +215,7 @@ should be: $wpath delete index ?end-index?"
             }
         }
 # FIX ME !!
-#        rename $tmp {}
+#        rename $buf {}
         themeListboxDrawBorder
         listboxUpdateViews
         set pendingAfterId ""
