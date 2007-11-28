@@ -8,7 +8,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: entry_1.tcl,v 1.1.2.1 2007/11/25 17:11:34 wiede Exp $
+# RCS: @(#) $Id: entry_1.tcl,v 1.1.2.2 2007/11/28 21:38:42 wiede Exp $
 #--------------------------------------------------------------------------
 
 # optional command line parameter: rotate 
@@ -46,7 +46,7 @@ set rotate 0
 if {[llength $argv] > 0} {
     set rotate [lindex $argv 0]
 }
-set wPath [ntk entry .w -width 100 -height 100 -xoffset 50 -yoffset 50 \
+set wPath [ntk entry .w -width 50 -height 20 -xoffset 50 -yoffset 50 \
 -text Arnulf -textcolor [list 0 0 0 255] -bd 2 -bg [list 255 255 255 255]]
 $wPath configure -rotate $rotate
 
