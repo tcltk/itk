@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.18 2007/11/27 21:02:49 wiede Exp $
+# RCS: @(#) $Id: ntkRender.tcl,v 1.1.2.19 2007/11/29 20:17:47 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::render {
@@ -41,9 +41,6 @@
         ::ntk::widgetImage::Image fill $myObj [. cget -bg]
         renderTree $myObj .
         set myWinId [. id]
-#puts stderr "====renderNow!$myWinId $myObj!"
-#	    ntk-resize-image $myWinId [. cget -width] [. cget -height]
-#	    ntk-put-image  $myWinId $myObj
         . drawPixels $myWinId .
 	set rendering 0
 #puts stderr "renderNow END"

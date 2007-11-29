@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.16 2007/11/28 21:38:08 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.17 2007/11/29 20:17:47 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
@@ -92,6 +92,7 @@
 
     public proc themeDrawTextBackground {} {
         # TODO add tile call with nice metallic background.
+puts stderr "themeDrawTextBackground!$itcl_options(-bg)!"
         ::ntk::widgetImage::Image fill $windowImage $itcl_options(-bg)
     }
 
@@ -177,25 +178,26 @@
     public method themeSpinboxButtonDownDraw {path} {
         set w [$path cget -width]
         set h [$path cget -height]
-        [$path windowImage] polygon [list 0 0 0 255] \
-                2 2       [expr {$w - 2}] 2 \
+        ::ntk::widgetImage::Image polygon [$path windowImage] \
+	        [list 0 0 0 255] 2 2 \
+		[expr {$w - 2}] 2 \
                 [expr {$w / 2}] [expr {$h - 2}]
     }
   
     public method themeSpinboxButtonUpDraw {path} {
         set w [$path width]
         set h [$path height]
-  
-        [$path windowImage] polygon [list 0 0 0 255] \
-             [expr {$w / 2}] 2 \
-             2 [expr {$h - 2}]  [expr {$w - 2}] [expr {$h - 2}]
+        ::ntk::widgetImage::Image polygon [$path windowImage] \
+	        [list 0 0 0 255] [expr {$w / 2}] 2 \
+		2 [expr {$h - 2}] \
+		[expr {$w - 2}] [expr {$h - 2}]
         render $path
     }
   
     public method themeSpinboxDrawTextareaBorder {path} {
         set low [list 20 20 20 255]
         set high [list 200 200 200 255]
-        themeDrawBorder [$path.textarea windowImage] 0 0 \
+        $path.textarea themeDrawBorder 0 0 \
                 [expr {[$path.textarea cget -width] - 1}] \
                 [$path.textarea cget -height] $high $low [$path cget -bd]
    }
@@ -203,14 +205,14 @@
    public method themeSpinboxMakeButtonImage {direction} {
        set w 18
        set h 12
-       set myWidgetImage [uplevel #0 ntkWidget #auto -width $w -height $h]
+       set myWidgetImage [::ntk::widgetImage::Image create $w $h]
        if {$direction eq "up"} {
-           $myWidgetImage polygon [list 0 0 0 255] \
-                   [expr {$w / 2}] 2 \
+           ::ntk::widgetImage::Image polygon $myWidgetImage \
+	           [list 0 0 0 255] [expr {$w / 2}] 2 \
                    2 [expr {$h - 2}]  [expr {$w - 2}] [expr {$h - 2}]
        } else {
-               $myWidgetImage polygon [list 0 0 0 255] \
-                   2 2 [expr {$w - 2}] 2 \
+           ::ntk::widgetImage::Image polygon $myWidgetImage \
+	           [list 0 0 0 255] 2 2 [expr {$w - 2}] 2 \
                    [expr {$w / 2}] [expr {$h - 2}]
        }
        return $myWidgetImage

@@ -1,7 +1,7 @@
 #---------------------------------------------------------------------------
 # ntkWidget ntkSpinbox.tcl --
 #
-# This file contains a ntkWidget label command implementation
+# This file contains a ntkWidget spinbox command implementation
 #
 # ntkWidget is derived from the NexTk implementation written by
 # George Peter Staplin
@@ -14,18 +14,20 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkSpinbox.tcl,v 1.1.2.3 2007/11/23 21:02:57 wiede Exp $
+# RCS: @(#) $Id: ntkSpinbox.tcl,v 1.1.2.4 2007/11/29 20:17:47 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::spinbox {
     inherit ::ntk::classes::theme 
 
     private variable constructing 1
+    private variable drawing 0
 
     public option -items -default [list] -configuremethod spinboxConfig
-    public option -itemindex -default -1 -configuremethod spinboxConfig
+    public option -itemindex -default 1 -configuremethod spinboxConfig
 
     private method spinboxConfig {option value} {
+#puts stderr "spinboxConfig!$option!$value!"
         set itcl_options($option) $value
 	switch -- $option {
 	-text {
@@ -38,18 +40,25 @@ itcl::extendedclass ::ntk::classes::spinbox {
     }
 
     constructor {args} {
-	set themeConfig labelConfig
-	set itcl_options(-width) 100
-	set itcl_options(-height) 24
-	eval configure $args
-        ntk grid [ntk window $wpath.textarea -width 90 -height 24] -slot {0 0} \
+	set constructing 1
+	set themeConfig spinboxConfig
+	configure -width 100
+	configure -height 24
+	configure {*}$args
+        ::ntk::widgetImage::Image fill $windowImage $itcl_options(-bg)
+#	        -width 90 -height 24 -bg [list 255 255 255 255]] -slot {0 0} \
+
+        ntk grid [uplevel #0 ntk theme $wpath.textarea \
+	        -width 90 -height 24] -slot {0 0} \
                 -rowspan 2 -sticky width
-	appendRedrawHandler [list $wpath labelDraw]
+	appendRedrawHandler [list $wpath spinboxDraw]
 	$wpath.textarea appendRedrawHandler [list $wpath spinboxDraw]
-        ntk button $wpath.up -image [themeSpinboxMakeButtonImage up] \
-	       -command [list $wpath spinboxUp]
-        ntk button $wpath.down -image [themeSpinboxMakeButtonImage down] \
-	       -command [list $wpath spinboxDown]
+        uplevel #0 [list ntk button $wpath.up \
+	        -image [themeSpinboxMakeButtonImage up] \
+	        -command [list $wpath spinboxUp]]
+        uplevel #0 [list ntk button $wpath.down \
+	        -image [themeSpinboxMakeButtonImage down] \
+	        -command [list $wpath spinboxDown]]
         ntk grid $wpath.up -slot {1 0} -sticky height
         ntk grid $wpath.down -slot {1 1} -sticky height
 	set constructing 0
@@ -69,7 +78,7 @@ itcl::extendedclass ::ntk::classes::spinbox {
     }
 
     public method spinboxUp {} {
-        set i [$path -itemindex]
+        set i $itcl_options(-itemindex)
         incr i -1
         if {$i < 0} {
              set i 0
@@ -79,23 +88,32 @@ itcl::extendedclass ::ntk::classes::spinbox {
     }
 
     proc spinboxDraw {} {
-        [$wpath.textarea obj] fill [$wpath -bg]
+#puts stderr "spinboxDraw!$constructing!$drawing!"
+	if {$constructing} {
+	    return
+	}
+	if {$drawing} {
+	    return
+	}
+	set drawing 1
+        ::ntk::widgetImage::Image fill [$wpath.textarea windowImage] \
+	        $itcl_options(-bg)
         themeSpinboxDrawTextareaBorder $wpath
         set item [lindex $itcl_options(-items) $itcl_options(-itemindex)]
         if {$item ne ""} {
-	    set data [freetype $itcl_options(-font) \
-	            $itcl_options(-fontsize) $item $itcl_options(-textcolor) \
-	            textwidth textheight]
-            set textobj [uplevel #0 ntkWidget #auto -width 1 -height 1]
-	    # TO BE FIXED, NEED width and height here !!
-	    $textobj setdata $data
+	    ::ntk::widgetImage::Image createtext $textImage \
+	            $itcl_options(-font) $itcl_options(-fontsize) \
+		    $item $itcl_options(-textcolor) textwidth textheight
             $wpath.textarea requestSize [expr {$textwidth + 2}] \
 	            [expr {$textheight + 2}]
-            set myX [expr {($itcl_options(-width) / 2) - ($textwidth / 2)}]
-            set myY [expr {($itcl_options(-height) / 2) - ($textheight / 2)}]
-            [$wpath.textarea obj] blendwidget $myX $myY $textobj
-            rename $textobj {}
+            set myX [expr {([$wpath.textarea cget -width] / 2) - \
+	            ($textwidth / 2)}]
+            set myY [expr {([$wpath.textarea cget -height] / 2) - \
+	            ($textheight / 2)}]
+            ::ntk::widgetImage::Image blendwidget \
+	            [$wpath.textarea windowImage] $myX $myY $textImage
         }
-        render $path.textarea
+        render $wpath.textarea
+	set drawing 0
     }
 }

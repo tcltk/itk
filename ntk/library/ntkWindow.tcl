@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.19 2007/11/24 22:25:20 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.20 2007/11/29 20:17:47 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::window {
@@ -219,6 +219,7 @@
 	    if {$h <= 0} {
 	        set h 1
 	    }
+puts stderr "remanageWindow!$windowImage!$w!$h!"
 	    ::ntk::widgetImage::Image setsize $windowImage $w $h
 	    dispatchRedraw
 	    return

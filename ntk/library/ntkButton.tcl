@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.16 2007/11/25 13:56:45 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.17 2007/11/29 20:17:47 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::button {
@@ -26,6 +26,7 @@ itcl::extendedclass ::ntk::classes::button {
     public option -textheight -default 0 -configuremethod buttonConfig
     public option -command -default {} -configuremethod buttonConfig
     public option -state -default released -configuremethod buttonConfig
+    public option -image -default [list] -configuremethod buttonConfig
 
     private method buttonConfig {option value} {
 #puts stderr "buttonConfig!$option!$value!"
@@ -109,13 +110,16 @@ itcl::extendedclass ::ntk::classes::button {
 	}
 	set myColor $itcl_options(-bg)
 	if {[llength $myColor] == 1} {
-	    ::ntk::widgetImage::Image fill $windowImage $colors($myColor)
-	} else {
-	    ::ntk::widgetImage::Image fill $windowImage $myColor
+	    set myColor $colors($myColor)
 	}
+	::ntk::widgetImage::Image fill $windowImage $myColor
 #puts stderr "themeButtonDrawBorder"
         themeButtonDrawBorder
-        buttonDrawText
+	if {$itcl_options(-image) eq ""} {
+            buttonDrawText
+	} else {
+            buttonDrawImage
+	}
         render $wpath
     }
 
@@ -142,6 +146,16 @@ itcl::extendedclass ::ntk::classes::button {
         set myY [expr {($winheight / 2) - ($textheight / 2)}]
 #puts stderr "TextObj!$textImage!$myX!$myY!$obj!"
         ::ntk::widgetImage::Image blendwidget $windowImage $myX $myY $textImage
+    }
+
+    public method buttonDrawImage {} {
+        set x [expr {$itcl_options(-bd) + 1}]
+        set w $itcl_options(-width)
+        set h $itcl_options(-height)
+	set img $itcl_options(-image)
+	lassign [::ntk::widgetImage::Image getsize $img] iw ih
+	::ntk::widgetImage::Image blendwidget $windowImage \
+	        [expr {($w / 2) - ($iw / 2)}] [expr {($h / 2) - ($ih / 2)}] $img
     }
 
     public method buttonRedraw {} {
