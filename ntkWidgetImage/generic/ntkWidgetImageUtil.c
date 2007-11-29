@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageUtil.c,v 1.1.2.4 2007/11/28 21:37:18 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageUtil.c,v 1.1.2.5 2007/11/29 20:38:46 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -345,7 +345,6 @@ WidgetAdjustedLine(
     bp = GET_PIXEL_PTR(wgtPtr, x1, y1);
     erroracc = 0;
     if (dy > dx) { // y-major line
-fprintf(stderr, "dy > dx\n");
         erroradj = (dx << 16) / dy;
         if (xdir < 0) {
             while (dy) {
