@@ -14,13 +14,13 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInit.tcl,v 1.1.2.3 2007/11/25 20:00:40 wiede Exp $
+# RCS: @(#) $Id: ntkInit.tcl,v 1.1.2.4 2007/11/29 18:17:11 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
     proc ntkWidgetInit {} {
-	set _w 200
-	set _h 200
+	set _w 400
+	set _h 400
         set ::ntk::_win [::ntk::glmwfw::Glmwfw openWindow $_w $_h]
         set _win $::ntk::_win
 	::ntk::glmwfw::Glmwfw setWindowTitle $_win "ntkWidget"

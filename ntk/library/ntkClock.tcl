@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkClock.tcl,v 1.1.2.4 2007/11/23 21:02:57 wiede Exp $
+# RCS: @(#) $Id: ntkClock.tcl,v 1.1.2.5 2007/11/29 18:17:11 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::clock {
@@ -30,7 +30,7 @@ itcl::extendedclass ::ntk::classes::clock {
             -validatemethod verifyColor -configuremethod clockConfig
     public option -secondcolor -default [list 255 100 100 255] \
             -validatemethod verifyColor -configuremethod clockConfig
-    public option -ringcolor -default [list 0 0 0 255] \
+    public option -ringcolor -default [list 255 255 255 255] \
             -validatemethod verifyColor -configuremethod clockConfig
 
     private method clockConfig {option value} {
@@ -47,15 +47,15 @@ itcl::extendedclass ::ntk::classes::clock {
     }
 
     constructor {args} {
-	set itcl_options(-width) 200
-	set itcl_options(-height) 200
+	configure -width 200
+	configure -height 200
 	set themeConfig clockConfig
 	set destroy clockDestroy
 	if {[llength $args] > 0} {
 	    configure {*}$args
 	}
-#	appendDestroyHandler [list $wpath clockDestroy $wpath]
-	appendRedrawHandler [list $wpath clockRedraw $wpath]
+#	appendDestroyHandler [list $wpath clockDestroy]
+	appendRedrawHandler [list $wpath clockRedraw]
 	set constructing 0
 	clockDraw $wpath
 	set afterId [after 1000 [list $wpath clockCycle]]
@@ -98,8 +98,7 @@ itcl::extendedclass ::ntk::classes::clock {
         # Draw the outside ring of the clock.
         #
         set radius [expr {($min - 6) / 2}]
-        set obj [$wpath obj]
-        $obj fill [list 0 0 0 0]
+        ::ntk::widgetImage::Image fill $windowImage [list 0 0 0 0]
         set offset [expr {$radius + 2}]
         for {set r 0} {$r < 4} {incr r} {
             set lastx [expr {$offset + round(cos(6.28318530718) * $radius)}]
@@ -107,7 +106,8 @@ itcl::extendedclass ::ntk::classes::clock {
             for {set a 0} {$a < 7.28318530718} {set a [expr {$a + 0.17}]} {
                 set myX [expr {$offset + round(cos($a) * $radius)}]
                 set myY [expr {$offset + round(sin($a) * $radius)}]
-	        $obj line $lastx $lasty $myX $myY [$wpath cget -ringcolor]
+	        ::ntk::widgetImage::Image line $windowImage \
+		        $lastx $lasty $myX $myY [$wpath cget -ringcolor]
                 set lastx $myX 
                 set lasty $myY
             }
@@ -123,24 +123,30 @@ itcl::extendedclass ::ntk::classes::clock {
         set theta [expr {$s * $twopi / 60.0 / 60.0 / 12.0}]
         set x2 [expr {round($offset + $radius * sin($theta))}]
         set y2 [expr {round($offset - $radius * cos($theta))}]
-        $obj line $half $half $x2 $y2 [$wpath cget -hourcolor]
-        $obj line $half $half [incr x2] [incr y2] [$wpath cget -hourcolor]
+        ::ntk::widgetImage::Image line $windowImage \
+	        $half $half $x2 $y2 [$wpath cget -hourcolor]
+        ::ntk::widgetImage::Image line $windowImage \
+	        $half $half [incr x2] [incr y2] [$wpath cget -hourcolor]
         # 
         # Draw the minute hand
         #
         set theta [expr {$s * $twopi / 60.0 / 60.0}]
         set x2 [expr {round($offset + $radius * sin($theta))}]
         set y2 [expr {round($offset - $radius * cos($theta))}]
-        $obj line $half $half $x2 $y2 [$wpath cget -minutecolor]
-        $obj line $half $half [incr x2] [incr y2] [$wpath cget -minutecolor]
+        ::ntk::widgetImage::Image line $windowImage \
+	        $half $half $x2 $y2 [$wpath cget -minutecolor]
+        ::ntk::widgetImage::Image line $windowImage \
+	        $half $half [incr x2] [incr y2] [$wpath cget -minutecolor]
         #
         # Draw the second hand
         #
         set theta [expr {$s * $twopi / 60.0}]
         set x2 [expr {round($offset + $radius * sin($theta))}]
         set y2 [expr {round($offset - $radius * cos($theta))}]
-        $obj line $half $half $x2 $y2 [$wpath cget -secondcolor]
-        $obj line $half $half [incr x2] [incr y2] [$wpath cget -secondcolor]
+        ::ntk::widgetImage::Image line $windowImage \
+	        $half $half $x2 $y2 [$wpath cget -secondcolor]
+        ::ntk::widgetImage::Image line $windowImage \
+	        $half $half [incr x2] [incr y2] [$wpath cget -secondcolor]
         render $wpath
     }
 

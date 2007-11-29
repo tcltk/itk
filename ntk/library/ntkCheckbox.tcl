@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkCheckbox.tcl,v 1.1.2.2 2007/11/23 21:02:57 wiede Exp $
+# RCS: @(#) $Id: ntkCheckbox.tcl,v 1.1.2.3 2007/11/29 18:17:11 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::checkbox {
@@ -33,7 +33,7 @@ itcl::extendedclass ::ntk::classes::checkbox {
 	    labelTrace
 	  }
 	default {
-            labelDraw
+            checkboxDraw
 	  }
 	}
     }
@@ -52,29 +52,40 @@ itcl::extendedclass ::ntk::classes::checkbox {
     }
  
     public method checkboxButtonpress {button x y globalx globaly} {
+puts stderr "checkboxButtonpress!$button!$x!$y!$globalx!$globaly!"
         set itcl_options(-check) [expr {!$itcl_options(-check)}]
+        checkboxDraw
     }
 
     public method checkboxDraw {} {
-        $obj fill $itcl_options(-bg)
-        themeDrawGenericBorder $wpath
+        ::ntk::widgetImage::Image fill $windowImage $itcl_options(-bg)
+        themeDrawGenericBorder
         if {$itcl_options(-check)} {
             set w $itcl_options(-width)
             set h $itcl_options(-height)
             set bd $itcl_options(-bd)
             set y1 [expr {$bd - 1}]
             set y2 [expr {$h - $bd - 1}]
-            $obj line [expr {$w - $bd - 1}] $y1 [expr {$w / 3}] $y2 \
+puts stderr "w!$w!h!$h!bd!$bd!y1!$y1!y2!$y2!"
+puts stderr "L1![expr {$w - $bd - 1}] $y1 [expr {$w / 3}] $y2!"
+            ::ntk::widgetImage::Image line $windowImage \
+	            [expr {$w - $bd - 1}] $y1 [expr {$w / 3}] $y2 \
 	            $itcl_options(-checkcolor)
-            $obj line [expr {$w - $bd - 2}] $y1 [expr {($w / 3) - 1}] $y2 \
+puts stderr "L2![expr {$w - $bd - 2}] $y1 [expr {($w / 3) - 1}] $y2!"
+            ::ntk::widgetImage::Image line $windowImage \
+	            [expr {$w - $bd - 2}] $y1 [expr {($w / 3) - 1}] $y2 \
 	            $itcl_options(-checkcolor)
             set x1 [expr {($w / 3) - 1}]
-            $obj line $x1 $y2 [expr {$bd + 1}] [expr {$h - $bd - ($h / 4)}] \
+puts stderr "L3!$x1 $y2 [expr {$bd + 1}] [expr {$h - $bd - ($h / 4)}]!"
+            ::ntk::widgetImage::Image line $windowImage \
+	            $x1 $y2 [expr {$bd + 1}] [expr {$h - $bd - ($h / 4)}] \
 	            $itcl_options(-checkcolor)
-            $obj line $x1 [expr {$y2 - 1}] [expr {$bd + 1}] \
+puts stderr "L4!$x1 [expr {$y2 - 1}] [expr {$bd + 1}] [expr {$h - $bd - ($h / 4) - 1}]!"
+            ::ntk::widgetImage::Image line $windowImage \
+	            $x1 [expr {$y2 - 1}] [expr {$bd + 1}] \
 	            [expr {$h - $bd - ($h / 4) - 1}] $itcl_options(-checkcolor)
         }
-        render $path
+        render $wpath
     }
 }
 
