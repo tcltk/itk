@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkMenu.tcl,v 1.1.2.2 2007/10/27 20:30:00 wiede Exp $
+# RCS: @(#) $Id: ntkMenu.tcl,v 1.1.2.3 2007/11/29 21:09:13 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::menu {
@@ -39,11 +39,12 @@ itcl::extendedclass ::ntk::classes::menu {
     }
 
     constructor {args} {
+set constructing 1
 	set themeConfig menuConfig
 	set itcl_options(-width) 50
 	set itcl_options(-height) 30
 	eval configure $args
-	appendRedrawHandler [list $wpath labelDraw]
+	appendRedrawHandler [list $wpath menuDraw]
 	set constructing 0
 	menuTrace
         return $wpath
@@ -56,12 +57,48 @@ itcl::extendedclass ::ntk::classes::menu {
         menuDraw
     }
 
-    public method addmenu {path text} {
+    public method addmenu {text} {
+        lappend items $text
+	lappend itemTypes menu
+	lappend itemCallbacks [list]
+        menuDraw
+    }
 
+    public method addseparator {} {
+        lappend items ""
+	lappend itemTypes separator
+	lappend itemCallbacks [list]
+        menuDraw
     }
 
     public method menuDraw {} {
+puts stderr "menuDraw"
+	if {$constructing} {
+	    return
+	}
+	set idx 0
+	set lgth [llength $items]
+	while {$idx < $lgth} {
+	    set item [lindex $items $idx]
+	    set itemType [lindex $itemTypes $idx]
+	    set itemCallback [lindex $itemCallbacks $idx]
+# FIX ME to be coded !!
+	    switch $itemType {
+	    entry {
+	      }
+	    menu {
+	      }
+	    separator {
+	      }
+	    }
+	    
+	    incr idx
+	}
+        render $wpath
+    }
 
+    public method menuTrace {} {
+        menuDraw
     }
 }
 
