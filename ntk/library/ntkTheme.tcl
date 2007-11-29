@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.17 2007/11/29 20:17:47 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.18 2007/11/29 20:37:53 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
@@ -92,7 +92,7 @@
 
     public proc themeDrawTextBackground {} {
         # TODO add tile call with nice metallic background.
-puts stderr "themeDrawTextBackground!$itcl_options(-bg)!"
+#puts stderr "themeDrawTextBackground!$itcl_options(-bg)!"
         ::ntk::widgetImage::Image fill $windowImage $itcl_options(-bg)
     }
 

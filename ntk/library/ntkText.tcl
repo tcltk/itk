@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.6 2007/11/23 21:02:57 wiede Exp $
+# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.7 2007/11/29 20:37:53 wiede Exp $
 #--------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------
@@ -66,10 +66,7 @@ itcl::extendedclass ::ntk::classes::text {
 	set themeConfig textConfig
 	set destroy entryDestroy
         if {[llength $args]} {
-            if {[catch {configure {*}$args} err]} {
-                destroyWindow
-                return -code error $err
-            }
+            configure {*}$args
         }
 	appendRedrawHandler [list $wpath textDraw]
 	set constructing 0
@@ -83,9 +80,8 @@ itcl::extendedclass ::ntk::classes::text {
 
     public method textDraw {} {
 #puts stderr "textDraw!w!$itcl_options(-width)!h!$itcl_options(-height)!"
-        themeDrawTextBackground $wpath
+        themeDrawTextBackground
         set linemap [list]
-        set textobj [uplevel #0 ntkWidget #auto -width 1 -height1]
         set myY 0
 	set myContexts $contexts
         foreach line $text {
@@ -98,18 +94,18 @@ itcl::extendedclass ::ntk::classes::text {
 	    lassign $line w h
             foreach seg [lrange $line 2 end] {
                 set context [lindex $myContexts [lindex $seg 0]]
-                lassign $context font size color
+                lassign [lindex $context 0] font size color
                 set txt [lindex $seg 1]
                 if {[string length $txt] == 0} {
                     set txt " "
                 }
-                set textdata [freetype $font $size $txt $color \
-		        myWidth myHeight offsetmap]
+                ::ntk::widgetImage::Image createtext $textImage \
+		        $font $size $txt $color myWidth myHeight offsetmap
                 if {$myHeight > $lineheight} {
 		    set lineheight $myHeight
 		}
-                $textobj setdata $textdata
-                $obj blendwidget $myX $myY $textobj
+                ::ntk::widgetImage::Image blendwidget $windowImage \
+		        $myX $myY $textImage
                 incr myX $myWidth
                 lappend lineoffsetmap $offsetmap
                 if {$myWidth > $linewidth} {
@@ -137,6 +133,7 @@ itcl::extendedclass ::ntk::classes::text {
         set myText [lreplace $myText $myY $myY]
         set myText [linsert $myText $myY {*}$newlinelist]
         set text $myText
+	textDraw
         return 0
     }
 
