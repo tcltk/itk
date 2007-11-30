@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.14 2007/11/27 21:02:49 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.15 2007/11/30 19:14:44 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
@@ -130,18 +130,14 @@ puts stderr "ERR!$err!"
         if {[llength $myOffsetmap] == 0} {
 	    set cursorx [expr {$itcl_options(-bd) + 1}]
         } else {
-puts stderr "SL!$co!$slidex!$myOffsetmap!"
             set cursorx [expr {([lindex $myOffsetmap $co] - $slidex) + \
 	            $itcl_options(-bd)}]
             foreach {textWidth textHeight} \
 	            [::ntk::widgetImage::Image getsize $textImage] break
-puts stderr "WH!$textWidth!$textHeight!"
 	    set y [expr {($itcl_options(-height) - $textHeight) / 2}]
-puts stderr "TH!$itcl_options(-height)!$textHeight!"
 	    if {$y < $itcl_options(-bd)} {
 	        set y $itcl_options(-bd)
 	    }
-puts stderr "BL!$slidex $y!"
 	    ::ntk::widgetImage::Image blendwidget $windowImage \
 	            $slidex $y $textImage
 	}
@@ -157,8 +153,8 @@ puts stderr "BL!$slidex $y!"
     }
 
     public method entryKeypress {value keysym keycode} {
-puts stderr "entryKeypress!$value!$keysym!$keycode!"
-	if {$keysym eq "shift"} {
+#puts stderr "entryKeypress!$value!$keysym!$keycode!"
+	if {$keysym eq ""} {
 	    if {$value eq ""} {
 	        return
 	    }
@@ -176,15 +172,6 @@ puts stderr "entryKeypress!$value!$keysym!$keycode!"
 	notsupported {
 	    return
 	  }
-	shift -
-        normal {
-            set myText $itcl_options(-text)
-	    set co $cursoroffset
-	    set myText [string range $myText 0 \
-	            [expr {$co - 1}]]$value[string range $myText $co end]
-	    configure -text $myText
-            entryCursorIncrOffset 1
-          } 
         delete -
         backspace {
 	    set co $cursoroffset
@@ -210,6 +197,14 @@ puts stderr "entryKeypress!$value!$keysym!$keycode!"
         return {
 	    return
 	  }
+        default {
+            set myText $itcl_options(-text)
+	    set co $cursoroffset
+	    set myText [string range $myText 0 \
+	            [expr {$co - 1}]]$value[string range $myText $co end]
+	    configure -text $myText
+            entryCursorIncrOffset 1
+          } 
         }
         entryDraw
     }

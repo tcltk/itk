@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInit.tcl,v 1.1.2.4 2007/11/29 18:17:11 wiede Exp $
+# RCS: @(#) $Id: ntkInit.tcl,v 1.1.2.5 2007/11/30 19:14:44 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
@@ -27,7 +27,7 @@ namespace eval ::ntk {
 	uplevel #0 [list ntk toplevel .  -width $_w -height $_h -bg [list 0 255 0 0]]
 	. id $_win
         ::ntk::glmwfw::Glmwfw enable GLMWFW_STICKY_KEYS
-        ::ntk::glmwfw::Glmwfw disable GLMWFW_KEY_REPEAT
+        ::ntk::glmwfw::Glmwfw enable GLMWFW_KEY_REPEAT
         ::ntk::glmwfw::Glmwfw enable GLMWFW_MOUSE_CURSOR
         ::ntk::glmwfw::Glmwfw setKeyCallback $_win \
                 ::ntk::DispatchKey

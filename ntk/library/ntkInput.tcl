@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.12 2007/11/25 20:00:40 wiede Exp $
+# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.13 2007/11/30 19:14:44 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::input {
@@ -61,6 +61,7 @@
     }
 
     public proc inputKeyRelease {win key keysym keycode} {
+#puts stderr "inputKeyRelease!$win!$key!$keysym!$keycode!focus!$focusList!"
         foreach path $focusList {
             set callback [$path cget -keyrelease]
             if {$callback ne ""} {

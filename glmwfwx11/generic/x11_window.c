@@ -38,7 +38,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: x11_window.c,v 1.1.2.10 2007/11/25 19:56:25 wiede Exp $
+ * RCS: @(#) $Id: x11_window.c,v 1.1.2.11 2007/11/30 19:13:19 wiede Exp $
  */
 
 #include "platform.h"
@@ -728,10 +728,10 @@ TranslateKeysym(
         break;
     }
 
-    str = XKeysymToString(ksym);
-    if (str == NoSymbol) {
+    if (ksym == NoSymbol) {
         return Tcl_NewStringObj("", -1);
     }
+    str = XKeysymToString(ksym);
     switch (ksym) {
     case XK_Alt_L:
     case XK_Alt_R:
@@ -766,7 +766,7 @@ TranslateKeysym(
     case XK_Right:
         return Tcl_NewStringObj("right", -1);
     }
-    return Tcl_NewStringObj("normal", -1);
+    return Tcl_NewStringObj(str, -1);
 }
 
 void
@@ -775,73 +775,56 @@ _glmwfwDispatchKeyPress(
     XKeyPressedEvent *xkey)
 {
     Tcl_Obj *s = NULL;
-    Tcl_Obj *keycode = NULL;
     Tcl_Obj *symobj = NULL;
     KeySym ksym;
     Status sret;
     KeypressState *kstate;
-    char *sep;
     int slen = 1;
     int dispatchDone;
 
+//fprintf(stderr, "_glmwfwDispatchKeyPress\n");
     s = Tcl_NewStringObj ("", -1);
     Tcl_IncrRefCount (s);
     Tcl_SetObjLength (s, slen);
-    keycode = Tcl_NewIntObj (xkey->keycode);
-    Tcl_IncrRefCount (keycode);
 
     dispatchDone = 1;
     while (1) {
         Xutf8LookupString(winPtr->platformWindow->ic, xkey, Tcl_GetString(s),
 	        slen, &ksym, &sret);
-//fprintf(stderr, "S!%s!%d!0x%08x!\n", Tcl_GetString(s), slen, ksym);
+//fprintf(stderr, "PREbuf!%s!%d!%s!%d!\n", Tcl_GetString(s), slen, XKeysymToString(ksym), xkey->keycode);
 	switch (sret) {
 	case XBufferOverflow:
+fprintf(stderr, "XBufferOverflow:\n");
             slen += 1;
             Tcl_SetObjLength(s, slen);
 	    dispatchDone = 0;
             break;
         case XLookupNone:
+fprintf(stderr, "XLookupNone:\n");
             Tcl_DecrRefCount(s);
-            Tcl_DecrRefCount(keycode);
             return;
         case XLookupChars:
             symobj = Tcl_NewStringObj("", -1);
-//fprintf(stderr, "+++TranslateKeysym0!%s!%d\n", Tcl_GetString(symobj), ksym);
+fprintf(stderr, "XLookupChars:\n");
             Tcl_IncrRefCount(symobj);
             break;
         case XLookupKeySym:
             symobj = TranslateKeysym(winPtr, ksym);
-//fprintf(stderr, "TranslateKeysym1!%s!%d\n", Tcl_GetString(symobj), ksym);
-	    if (strcmp(Tcl_GetString(symobj), "normal") != 0) {
-                Tcl_SetStringObj(s, "", -1);
-	    }
+//fprintf(stderr, "XLookupKeySym:\n");
             Tcl_IncrRefCount(symobj);
+            Tcl_SetStringObj(s, "", -1);
             break;
         case XLookupBoth:
-	    if (winPtr->input.keypressState != NULL) {
-	        symobj = Tcl_NewStringObj("", -1);
-                kstate = winPtr->input.keypressState;
-		sep = "";
-		while (kstate != NULL) {
-		    Tcl_AppendToObj(symobj, sep, -1);
-		    Tcl_AppendToObj(symobj, Tcl_GetString(kstate->symobj), -1);
-		    sep = " ";
-		    kstate = kstate->next;
-		}
-                Tcl_SetStringObj(s, XKeysymToString(ksym), -1);
-	    } else {
-                symobj = TranslateKeysym(winPtr, ksym);
-            }
-//fprintf(stderr, "TranslateKeysym2!%s!%d!%p!\n", Tcl_GetString(symobj), ksym, winPtr->input.keypressState);
+//fprintf(stderr, "XLookupBoth:\n");
+            symobj = TranslateKeysym(winPtr, ksym);
             Tcl_IncrRefCount(symobj);
+//fprintf(stderr, "TranslateKeysym2!%s!%p!\n", Tcl_GetString(symobj), winPtr->input.keypressState);
             break;
         }
         if (dispatchDone) {
             break;
         }
     }
-    Tcl_DecrRefCount(keycode);
     /* Now save the keypress state. */
     kstate = (KeypressState *)ckalloc(sizeof(KeypressState));
     kstate->keycode = xkey->keycode;
@@ -858,7 +841,6 @@ _glmwfwDispatchKeyRelease(
 {
     KeypressState *currState;
     KeypressState *prevState;
-
     currState = winPtr->input.keypressState;
     prevState = NULL;
     while (currState != NULL) {
@@ -877,6 +859,65 @@ _glmwfwDispatchKeyRelease(
 	currState = currState->next;
     }
 }
+
+typedef struct glmwfwXEventMap {
+    const char *str;
+    int value;
+} glmwfwXEventMap;
+
+glmwfwXEventMap _glmwfwXEventMap[] = {
+    { "KeyPress", KeyPress },
+    { "KeyRelease", KeyRelease },
+    { "ButtonPress", ButtonPress },
+    { "ButtonRelease", ButtonRelease },
+    { "MotionNotify", MotionNotify },
+    { "EnterNotify", EnterNotify },
+    { "LeaveNotify", LeaveNotify },
+    { "FocusIn", FocusIn },
+    { "FocusOut", FocusOut },
+    { "KeymapNotify", KeymapNotify },
+    { "Expose", Expose },
+    { "GraphicsExpose", GraphicsExpose },
+    { "NoExpose", NoExpose },
+    { "VisibilityNotify", VisibilityNotify },
+    { "CreateNotify", CreateNotify },
+    { "DestroyNotify", DestroyNotify },
+    { "UnmapNotify", UnmapNotify },
+    { "MapNotify", MapNotify },
+    { "MapRequest", MapRequest },
+    { "ReparentNotify", ReparentNotify },
+    { "ConfigureNotify", ConfigureNotify },
+    { "ConfigureRequest", ConfigureRequest },
+    { "GravityNotify", GravityNotify },
+    { "ResizeRequest", ResizeRequest },
+    { "CirculateNotify", CirculateNotify },
+    { "CirculateRequest", CirculateRequest },
+    { "PropertyNotify", PropertyNotify },
+    { "SelectionClear", SelectionClear },
+    { "SelectionRequest", SelectionRequest },
+    { "SelectionNotify", SelectionNotify },
+    { "ColormapNotify", ColormapNotify },
+    { "ClientMessage", ClientMessage },
+    { "MappingNotify", MappingNotify },
+    { NULL, 0},
+};
+
+static const char *
+GetEventName(
+    int value)
+{
+    glmwfwXEventMap *ptr;
+
+    ptr = &_glmwfwXEventMap[0];
+    while (ptr->str != NULL) {
+	if (ptr->value == value) {
+	    return ptr->str;
+	}
+        ptr++;
+    }
+    return "???";
+}
+
 
 //========================================================================
 // Handle next X event (called by _glmwfwGetNextEvent and event_handler)
@@ -1105,6 +1146,7 @@ dispatch_event(
     GlmwfwWindow *winPtr;
     int result;
 
+//fprintf(stderr, "dispatch_event!%s!\n", GetEventName(xe->type));
     result = _glmwfwHandleNextEvent(infoPtr->currWindow, xe);
     winPtr = infoPtr->currWindow;
 //fprintf(stderr, "dispatch_event!%p!0x%08x\n", winPtr, xe->type);
@@ -1150,11 +1192,11 @@ fprintf(stderr, "NoExpose:\n");
       }
       break;
     case KeyPress: {
-fprintf(stderr, "KeyPress:\n");
+//fprintf(stderr, "KeyPress:\n");
       }
       break;
     case KeyRelease: {
-fprintf(stderr, "KeyRelease:\n");
+//fprintf(stderr, "KeyRelease:\n");
       }
       break;
     case VisibilityNotify: {
@@ -1229,6 +1271,7 @@ event_handler (
     infoPtr = (GlmwfwInfo *) cdata;
 
     allResult = 0;
+//fprintf(stderr, "event_handler!0x%08x\n", mask);
 again:
     while (XPending (_glmwfwLibrary.Dpy)) {
         XNextEvent (_glmwfwLibrary.Dpy, &xe);
