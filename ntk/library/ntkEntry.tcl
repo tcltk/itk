@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.15 2007/11/30 19:14:44 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.16 2007/11/30 19:36:14 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
@@ -127,9 +127,13 @@ puts stderr "ERR!$err!"
         set myOffsetmap $offsetmap
 	set co $cursoroffset
 	set myCursorColor $itcl_options(-cursorcolor)
+
         if {[llength $myOffsetmap] == 0} {
 	    set cursorx [expr {$itcl_options(-bd) + 1}]
         } else {
+	    if {$co >= [llength $myOffsetmap]} {
+	        set co [expr {[llength $myOffsetmap] - 1}]
+	    }
             set cursorx [expr {([lindex $myOffsetmap $co] - $slidex) + \
 	            $itcl_options(-bd)}]
             foreach {textWidth textHeight} \
