@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.21 2007/11/29 20:37:53 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.22 2007/11/30 21:15:48 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::window {
@@ -44,6 +44,7 @@
 
     public option -bg -default [list 16 33 65 255] \
                 -validatemethod verifyColor -configuremethod windowConfig
+    public option -bindings -default [list] -configuremethod windowConfig
     public option -buttonpress -default [list] -configuremethod windowConfig
     public option -buttonrelease -default [list] -configuremethod windowConfig
     public option -keypress -default [list] -configuremethod windowConfig
@@ -250,6 +251,34 @@
 
     public method setGeometryManager {manager} {
         set geometryManager $manager
+    }
+
+    public method bind {sequence script} {
+	set isGeneratedEvent 0
+        if {[regexp {<<(.*)>>$} $sequence -> seqKey]} {
+	    set isGeneratedEvent 1
+	} else {
+            if {[regexp {<(.*)>$} $sequence -> seqKey]} {
+	    } else {
+	        return -code error "funny sequence in bind command \"$sequence\""
+	    }
+	}
+	set appendScript 0
+        switch -glob -- $script {
+	+* {
+	    set appendScript 1
+	    set script [string range $script 1 end]
+	  }
+	}
+        if {$appendScript} {
+	    if {[dict exists $itcl_options(-bindings) $sequence]} {
+	        dict lappend itcl_options(-bindings) $sequence $script
+	    } else {
+	        dict append itcl_options(-bindings) $sequence $script
+	    }
+	} else {
+	    dict set itcl_options(-bindings) $sequence $script
+	}
     }
 }
 if {0} {

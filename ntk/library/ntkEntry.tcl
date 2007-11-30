@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.16 2007/11/30 19:36:14 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.17 2007/11/30 21:15:48 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
@@ -162,6 +162,12 @@ puts stderr "ERR!$err!"
 	    if {$value eq ""} {
 	        return
 	    }
+	}
+# FIX ME need direct call have to repair ITCL!!
+set xx [uplevel #0 ::ntk::classes::input #auto]
+	if {[$xx inputIsControlKey]} {
+#	if {[uplevel #0 ntk isControlKey]} 
+	    return
 	}
         switch -- $keysym {
 	alt -

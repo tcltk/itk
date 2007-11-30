@@ -14,13 +14,14 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.13 2007/11/30 19:14:44 wiede Exp $
+# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.14 2007/11/30 21:15:48 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::input {
     inherit ::ntk::classes::helpers
 
     private common input
+    private common modifiers [list]
 
     set input(activewindows) [list]
 
@@ -51,8 +52,37 @@
     }
 
     public proc inputKeyPress {win key keysym keycode} {
-#puts stderr "inputKeyPress!$win!$key!$keysym!$keycode!$focusList!"
+#puts stderr "inputKeyPress!$win!$key!$keysym!$keycode!$focusList!mod!$modifiers!"
+	switch $keysym {
+	shift {
+	    set modifier Shift
+	    if {[lsearch $modifiers $keysym] < 0} {
+	        lappend modifiers Shift
+	    }
+	  }
+	control {
+	    set modifier Control
+	    if {[lsearch $modifiers $keysym] < 0} {
+	        lappend modifiers Control
+	    }
+	  }
+	}
+	set bindKey "<KeyPress-"
+	foreach val [lsort $modifiers] {
+	    append bindKey ${val}-
+	}
+	if {[lsearch $modifiers Control] >= 0} {
+	    append bindKey ${keysym}>
+	} else {
+	    append bindKey ${key}>
+	}
         foreach path $focusList {
+            if {[dict exists [$path cget -bindings] $bindKey]} {
+               uplevel #0 [dict get [$path cget -bindings] $bindKey]
+	    } else {
+               if {[dict exists [$path cget -bindings] <${bindKey}>]} {
+	       }
+            }
             set callback [$path cget -keypress]
             if {$callback ne ""} {
                 uplevel #0 [linsert $callback end $key $keysym $keycode]
@@ -68,11 +98,29 @@
                 uplevel #0 [linsert $callback end $key $keysym $keycode]
             }
         }
+	switch $keysym {
+	shift {
+	    set modifier Shift
+	    set idx [lsearch $modifiers $modifier]
+	    if {$idx >= 0} {
+	        set modifiers [lreplace $modifiers $idx $idx]
+	    }
+	  }
+	control {
+	    set modifier Control
+	    set idx [lsearch $modifiers $modifier]
+	    if {$idx >= 0} {
+	        set modifiers [lreplace $modifiers $idx $idx]
+	    }
+	  }
+	}
     }
 
     public proc inputMotion {win x y} {
+puts stderr "inputMotion!$x!$y!$input(activewindows)!"
         foreach path $input(activewindows) {
             lassign [inputTranslateXyFromRoot $path $x $y] px py
+puts stderr "inputMotion!$path!$x!$y!$px!$py!"
             set callback [$path cget -motion]
             if {$callback ne ""} {
                 uplevel #0 $callback $px $py $x $y
@@ -398,5 +446,9 @@
         bind $win <Motion> {inputMotion . %x %y}
         bind $win <ButtonPress> {inputMousePress . %b %x %y}
         bind $win <ButtonRelease> {inputMouseRelease . %b %x %y}
+    }
+
+    public proc inputIsControlKey {} {
+        return [expr [lsearch $modifiers Control] >= 0]
     }
 }

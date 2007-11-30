@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.20 2007/11/27 21:02:49 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.21 2007/11/30 21:15:48 wiede Exp $
 #--------------------------------------------------------------------------
 
 package require Itcl 4.0
@@ -47,6 +47,7 @@ namespace eval ::ntk {
         mousePress ::ntk::classes::input::inputMousePress \
         mouseRelease ::ntk::classes::input::inputMouseRelease \
         motion ::ntk::classes::input::inputMotion \
+        isControlKey ::ntk::classes::input::inputIsControlKey \
         widget ::ntk::widget::Widget \
 	bgerror ::ntk::bgerror \
     ]
