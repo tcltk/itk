@@ -8,7 +8,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: entry_1.tcl,v 1.1.2.2 2007/11/28 21:38:42 wiede Exp $
+# RCS: @(#) $Id: entry_1.tcl,v 1.1.2.3 2007/11/30 21:15:13 wiede Exp $
 #--------------------------------------------------------------------------
 
 # optional command line parameter: rotate 
@@ -52,6 +52,8 @@ $wPath configure -rotate $rotate
 
 # pack the widget using ntkWidget grid manager
 ntk grid $wPath
+
+$wPath bind <KeyPress-Control-a> {puts "Hello Arnulf"}
 
 fileevent stdin readable eval_stdin
 vwait forever
