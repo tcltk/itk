@@ -11,29 +11,29 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.7 2007/11/28 21:37:18 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.8 2007/12/01 22:52:27 wiede Exp $
  */
 
 #include <stdlib.h>
 #include "ntkWidgetImageInt.h"
 
 Tcl_ObjCmdProc NtkWidgetImage_UnknownCmd;
-Tcl_ObjCmdProc NtkWidgetImage_CreateCmd;
-Tcl_ObjCmdProc NtkWidgetImage_CreateTextCmd;
-Tcl_ObjCmdProc NtkWidgetImage_MeasureTextCmd;
-Tcl_ObjCmdProc NtkWidgetImage_LineCmd;
 Tcl_ObjCmdProc NtkWidgetImage_BlendCmd;
 Tcl_ObjCmdProc NtkWidgetImage_BlendWidgetCmd;
+Tcl_ObjCmdProc NtkWidgetImage_CreateCmd;
+Tcl_ObjCmdProc NtkWidgetImage_CreateTextCmd;
 Tcl_ObjCmdProc NtkWidgetImage_ClipCopyWidgetCmd;
+Tcl_ObjCmdProc NtkWidgetImage_FillCmd;
 Tcl_ObjCmdProc NtkWidgetImage_GetDataCmd;
 Tcl_ObjCmdProc NtkWidgetImage_GetSizeCmd;
-Tcl_ObjCmdProc NtkWidgetImage_FillCmd;
+Tcl_ObjCmdProc NtkWidgetImage_LineCmd;
+Tcl_ObjCmdProc NtkWidgetImage_MeasureTextCmd;
+Tcl_ObjCmdProc NtkWidgetImage_PixelCmd;
+Tcl_ObjCmdProc NtkWidgetImage_PolygonCmd;
+Tcl_ObjCmdProc NtkWidgetImage_RectangleCmd;
+Tcl_ObjCmdProc NtkWidgetImage_RotateCmd;
 Tcl_ObjCmdProc NtkWidgetImage_SetDataCmd;
 Tcl_ObjCmdProc NtkWidgetImage_SetSizeCmd;
-Tcl_ObjCmdProc NtkWidgetImage_RectangleCmd;
-Tcl_ObjCmdProc NtkWidgetImage_PolygonCmd;
-Tcl_ObjCmdProc NtkWidgetImage_RotateCmd;
-Tcl_ObjCmdProc NtkWidgetImage_PixelCmd;
 
 typedef struct NtkWidgetImageMethod {
     char *commandName;       /* the command name with the namespace prefix */
@@ -44,43 +44,44 @@ typedef struct NtkWidgetImageMethod {
 static NtkWidgetImageMethod NtkWidgetImageMethodList[] = {
     { "::ntk::widgetImage::Image::unknown",
             "", NtkWidgetImage_UnknownCmd },
+    { "::ntk::widgetImage::Image::blend",
+            "dstWidgetImage", NtkWidgetImage_BlendCmd },
+    { "::ntk::widgetImage::Image::blendwidget",
+            "dstWidgetImage destX destY ?srcX1 srcY1 srcX2 srcY2? srcWidget",
+	    NtkWidgetImage_BlendWidgetCmd },
+    { "::ntk::widgetImage::Image::clipcopy",
+            "dstWidgetImage destX destY srcX srcY srcWidget",
+	    NtkWidgetImage_ClipCopyWidgetCmd },
     { "::ntk::widgetImage::Image::create",
             "width height", NtkWidgetImage_CreateCmd },
     { "::ntk::widgetImage::Image::createtext",
-            "font fontsize text textcolor widthVar heightVar",
+            "dstWidgetImage font fontsize text textcolor widthVar heightVar",
 	    NtkWidgetImage_CreateTextCmd },
-    { "::ntk::widgetImage::Image::measuretext",
-            "font fontsize text widthVar heightVar",
-	    NtkWidgetImage_MeasureTextCmd },
-    { "::ntk::widgetImage::Image::line",
-            "widget x1 y1 x2 y2 rgbaList", NtkWidgetImage_LineCmd },
-    { "::ntk::widgetImage::Image::blend",
-            "widget", NtkWidgetImage_BlendCmd },
-    { "::ntk::widgetImage::Image::blendwidget",
-            "destWidget destX destY ?srcX1 srcY1 srcX2 srcY2? srcWidget",
-	    NtkWidgetImage_BlendWidgetCmd },
-    { "::ntk::widgetImage::Image::clipcopy",
-            "destWidget destX destY srcX srcY srcWidget",
-	    NtkWidgetImage_ClipCopyWidgetCmd },
-    { "::ntk::widgetImage::Image::getdata",
-            "widget", NtkWidgetImage_GetDataCmd },
-    { "::ntk::widgetImage::Image::getsize",
-            "widget", NtkWidgetImage_GetSizeCmd },
     { "::ntk::widgetImage::Image::fill",
-            "widget", NtkWidgetImage_FillCmd },
-    { "::ntk::widgetImage::Image::setdata",
-            "widget data", NtkWidgetImage_SetDataCmd },
-    { "::ntk::widgetImage::Image::setsize",
-            "widget width height", NtkWidgetImage_SetSizeCmd },
-    { "::ntk::widgetImage::Image::rectangle",
-            "widget x y width height fillcolor(rgbaList)",
-	    NtkWidgetImage_RectangleCmd },
-    { "::ntk::widgetImage::Image::polygon",
-            "widget color x1 y1 x2 y2 ...", NtkWidgetImage_PolygonCmd },
-    { "::ntk::widgetImage::Image::rotate",
-            "widget degrees", NtkWidgetImage_RotateCmd },
+            "dstWidgetImage rgbaList", NtkWidgetImage_FillCmd },
+    { "::ntk::widgetImage::Image::getdata",
+            "dstWidgetImage", NtkWidgetImage_GetDataCmd },
+    { "::ntk::widgetImage::Image::getsize",
+            "dstWidgetImage", NtkWidgetImage_GetSizeCmd },
+    { "::ntk::widgetImage::Image::line",
+            "dstWidgetImage x1 y1 x2 y2 rgbaList", NtkWidgetImage_LineCmd },
+    { "::ntk::widgetImage::Image::measuretext",
+            "dstWidgetImage font fontsize text widthVar heightVar",
+	    NtkWidgetImage_MeasureTextCmd },
     { "::ntk::widgetImage::Image::pixel",
-            "widget x y", NtkWidgetImage_PixelCmd },
+            "dstWidgetImage x y", NtkWidgetImage_PixelCmd },
+    { "::ntk::widgetImage::Image::polygon",
+            "dstWwidgetImage rgbaList x1 y1 x2 y2 ...", \
+	    NtkWidgetImage_PolygonCmd },
+    { "::ntk::widgetImage::Image::rectangle",
+            "dstWidgetImage x y width height rgbaList",
+	    NtkWidgetImage_RectangleCmd },
+    { "::ntk::widgetImage::Image::rotate",
+            "dstWidgetImage degrees", NtkWidgetImage_RotateCmd },
+    { "::ntk::widgetImage::Image::setdata",
+            "dstWidgetImage data", NtkWidgetImage_SetDataCmd },
+    { "::ntk::widgetImage::Image::setsize",
+            "dstWidgetImage width height", NtkWidgetImage_SetSizeCmd },
     { NULL, NULL, NULL }
 };
 #ifdef NOTDEF
