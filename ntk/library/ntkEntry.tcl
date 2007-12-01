@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.18 2007/12/01 18:59:10 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.19 2007/12/01 23:13:05 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
@@ -159,7 +159,7 @@ puts stderr "ERR!$err!"
     public method entryKeypress {value keysym keycode} {
 	set xx ""
         binary scan $value H2 xx
-puts stderr "entryKeypress!$value!$xx!$keysym!$keycode!"
+#puts stderr "entryKeypress!$value!$xx!$keysym!$keycode!"
 	if {$keysym eq ""} {
 	    if {$value eq ""} {
 	        return
@@ -184,7 +184,7 @@ puts stderr "entryKeypress!$value!$xx!$keysym!$keycode!"
         Delete -
         Backspace {
 	    set co $cursoroffset
-	    if {$keysym eq "backspace"} {
+	    if {$keysym eq "Backspace"} {
 	       if {$co > 0} {
 	           incr co -1
 	       }
@@ -193,7 +193,7 @@ puts stderr "entryKeypress!$value!$xx!$keysym!$keycode!"
 	    set myText [string range $myText 0 \
 	            [expr {$co - 1}]][string range $myText [expr {$co + 1}] end]
 	    configure -text $myText
-	    if {$keysym eq "backspace"} {
+	    if {$keysym eq "Backspace"} {
                 entryCursorIncrOffset -1
 	    }
           }
