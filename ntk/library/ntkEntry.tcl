@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.17 2007/11/30 21:15:48 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.18 2007/12/01 18:59:10 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
@@ -157,33 +157,32 @@ puts stderr "ERR!$err!"
     }
 
     public method entryKeypress {value keysym keycode} {
-#puts stderr "entryKeypress!$value!$keysym!$keycode!"
+	set xx ""
+        binary scan $value H2 xx
+puts stderr "entryKeypress!$value!$xx!$keysym!$keycode!"
 	if {$keysym eq ""} {
 	    if {$value eq ""} {
 	        return
 	    }
 	}
-# FIX ME need direct call have to repair ITCL!!
-set xx [uplevel #0 ::ntk::classes::input #auto]
-	if {[$xx inputIsControlKey]} {
-#	if {[uplevel #0 ntk isControlKey]} 
+	if {[uplevel #0 ntk isControlKey]} {
 	    return
 	}
         switch -- $keysym {
-	alt -
-	altgr -
-	control {
+	Alt -
+	Altgr -
+	Control {
 	    return
 	  }
-	tab {
+	Tab {
 	    # ???
 	    return
 	  }
 	notsupported {
 	    return
 	  }
-        delete -
-        backspace {
+        Delete -
+        Backspace {
 	    set co $cursoroffset
 	    if {$keysym eq "backspace"} {
 	       if {$co > 0} {
@@ -198,13 +197,13 @@ set xx [uplevel #0 ::ntk::classes::input #auto]
                 entryCursorIncrOffset -1
 	    }
           }
-        left {
+        Left {
             entryCursorIncrOffset -1
           }
-        right {
+        Right {
             entryCursorIncrOffset 1
           }
-        return {
+        Return {
 	    return
 	  }
         default {

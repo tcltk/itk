@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.14 2007/11/30 21:15:48 wiede Exp $
+# RCS: @(#) $Id: ntkInput.tcl,v 1.1.2.15 2007/12/01 18:59:10 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::input {
@@ -52,18 +52,17 @@
     }
 
     public proc inputKeyPress {win key keysym keycode} {
+if {[catch {
 #puts stderr "inputKeyPress!$win!$key!$keysym!$keycode!$focusList!mod!$modifiers!"
 	switch $keysym {
-	shift {
-	    set modifier Shift
+	Shift {
 	    if {[lsearch $modifiers $keysym] < 0} {
-	        lappend modifiers Shift
+	        lappend modifiers $keysym
 	    }
 	  }
-	control {
-	    set modifier Control
+	Control {
 	    if {[lsearch $modifiers $keysym] < 0} {
-	        lappend modifiers Control
+	        lappend modifiers $keysym
 	    }
 	  }
 	}
@@ -88,9 +87,13 @@
                 uplevel #0 [linsert $callback end $key $keysym $keycode]
             }
         }
+} err]} {
+puts stderr "ERROR!keyPress!$err!$::errorInfo"
+}
     }
 
     public proc inputKeyRelease {win key keysym keycode} {
+if {[catch {
 #puts stderr "inputKeyRelease!$win!$key!$keysym!$keycode!focus!$focusList!"
         foreach path $focusList {
             set callback [$path cget -keyrelease]
@@ -99,25 +102,26 @@
             }
         }
 	switch $keysym {
-	shift {
-	    set modifier Shift
-	    set idx [lsearch $modifiers $modifier]
+	Shift {
+	    set idx [lsearch $modifiers $keysym]
 	    if {$idx >= 0} {
 	        set modifiers [lreplace $modifiers $idx $idx]
 	    }
 	  }
-	control {
-	    set modifier Control
-	    set idx [lsearch $modifiers $modifier]
+	Control {
+	    set idx [lsearch $modifiers $keysym]
 	    if {$idx >= 0} {
 	        set modifiers [lreplace $modifiers $idx $idx]
 	    }
 	  }
 	}
+} err]} {
+puts stderr "ERROR!keyRelease!$err!"
+}
     }
 
     public proc inputMotion {win x y} {
-puts stderr "inputMotion!$x!$y!$input(activewindows)!"
+#puts stderr "inputMotion!$x!$y!$input(activewindows)!"
         foreach path $input(activewindows) {
             lassign [inputTranslateXyFromRoot $path $x $y] px py
 puts stderr "inputMotion!$path!$x!$y!$px!$py!"

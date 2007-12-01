@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkInit.tcl,v 1.1.2.5 2007/11/30 19:14:44 wiede Exp $
+# RCS: @(#) $Id: ntkInit.tcl,v 1.1.2.6 2007/12/01 18:59:10 wiede Exp $
 #--------------------------------------------------------------------------
 
 namespace eval ::ntk {
@@ -55,7 +55,8 @@ namespace eval ::ntk {
     }
 
     proc DispatchMousePos {winHandle x y} {
-#    puts stderr "::ntk::DispatchMousePos!$winHandle!$x!$y!"
+#puts stderr "::ntk::DispatchMousePos!$winHandle!$x!$y!"
+        return [ntk motion $winHandle $x $y]
     }
 
     proc DispatchMouseButton {winHandle num state x y} {
