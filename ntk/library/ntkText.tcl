@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.7 2007/11/29 20:37:53 wiede Exp $
+# RCS: @(#) $Id: ntkText.tcl,v 1.1.2.8 2007/12/01 22:53:27 wiede Exp $
 #--------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------
@@ -168,7 +168,7 @@ itcl::extendedclass ::ntk::classes::text {
         return $result
     }
 
-    public method textInsertSegments2 {resultvar resultlinevar newcontext newtextlist context textchars} {
+    public proc textInsertSegments2 {resultvar resultlinevar newcontext newtextlist context textchars} {
         upvar $resultvar result
         upvar $resultlinevar resultline
  

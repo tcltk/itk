@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.22 2007/11/30 21:15:48 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.23 2007/12/01 22:53:27 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::window {
@@ -30,10 +30,10 @@
     protected methodvariable toplevel -default 0
 
     public methodvariable children -default [list]
-    public methodvariable removeFromManager -default [list]
-    public methodvariable renderTreeData -default [list]
     public methodvariable manager -default [list]
     public methodvariable parent -default [list]
+    public methodvariable removeFromManager -default [list]
+    public methodvariable renderTreeData -default [list]
     public methodvariable update -default 1
     public methodvariable windowImage -default [list]
     public methodvariable wpath -default [list]

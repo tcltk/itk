@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.17 2007/11/29 20:17:47 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.18 2007/12/01 22:53:27 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::button {
@@ -22,23 +22,22 @@ itcl::extendedclass ::ntk::classes::button {
 
     private variable constructing 1
 
+    public option -command -default {} -configuremethod buttonConfig
+    public option -image -default [list] -configuremethod buttonConfig
+    public option -state -default released -configuremethod buttonConfig
     public option -textwidth -default 0 -configuremethod buttonConfig
     public option -textheight -default 0 -configuremethod buttonConfig
-    public option -command -default {} -configuremethod buttonConfig
-    public option -state -default released -configuremethod buttonConfig
-    public option -image -default [list] -configuremethod buttonConfig
 
     private method buttonConfig {option value} {
 #puts stderr "buttonConfig!$option!$value!"
         set itcl_options($option) $value
         switch -- $option {
-	-font -
-	-fontsize -
-	-bg -
-	-bd -
-	-textcolor -
-	-state -
-	-text {
+        -bd -
+        -font -
+        -fontsize -
+        -textcolor -
+        -text -
+	-state {
 	    buttonTrace
 	  }
 	default {

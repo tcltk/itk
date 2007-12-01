@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkSpinbox.tcl,v 1.1.2.4 2007/11/29 20:17:47 wiede Exp $
+# RCS: @(#) $Id: ntkSpinbox.tcl,v 1.1.2.5 2007/12/01 22:53:27 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::spinbox {
@@ -87,7 +87,7 @@ itcl::extendedclass ::ntk::classes::spinbox {
         spinboxDraw
     }
 
-    proc spinboxDraw {} {
+    public method spinboxDraw {} {
 #puts stderr "spinboxDraw!$constructing!$drawing!"
 	if {$constructing} {
 	    return

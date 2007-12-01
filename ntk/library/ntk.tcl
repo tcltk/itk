@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.21 2007/11/30 21:15:48 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.22 2007/12/01 22:53:27 wiede Exp $
 #--------------------------------------------------------------------------
 
 package require Itcl 4.0
@@ -25,6 +25,7 @@ package require ntkWidgetImage
 namespace eval ::ntk {
     namespace ensemble create -map [list \
         button ::ntk::classes::button \
+        checkbox ::ntk::classes::checkbox \
         clock ::ntk::classes::clock \
         entry ::ntk::classes::entry \
         focus ::ntk::focus \
@@ -33,11 +34,10 @@ namespace eval ::ntk {
         input ::ntk::classes::input \
         label ::ntk::classes::label \
         listbox ::ntk::classes::listbox \
-        checkbox ::ntk::classes::checkbox \
-        spinbox ::ntk::classes::spinbox \
         menu ::ntk::classes::menu \
         render ::ntk::classes::render::render \
         scrollbar ::ntk::classes::scrollbar \
+        spinbox ::ntk::classes::spinbox \
         text ::ntk::classes::text \
         theme ::ntk::classes::theme \
         toplevel ::ntk::classes::toplevel \
@@ -48,7 +48,7 @@ namespace eval ::ntk {
         mouseRelease ::ntk::classes::input::inputMouseRelease \
         motion ::ntk::classes::input::inputMotion \
         isControlKey ::ntk::classes::input::inputIsControlKey \
-        widget ::ntk::widget::Widget \
+        widgetImage ::ntk::widgetImage::Image \
 	bgerror ::ntk::bgerror \
     ]
 }
