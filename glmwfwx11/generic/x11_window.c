@@ -28,7 +28,7 @@
 //
 //========================================================================
 
-/*
+/*------------------------------------------------------------------------
  * This file contains the C-implemented part of 
  * a Tcl interface to the GLFW X11 OpenGL library
  * This is a modified version of the original version adapted for use with Tcl
@@ -38,7 +38,8 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: x11_window.c,v 1.1.2.11 2007/11/30 19:13:19 wiede Exp $
+ * RCS: @(#) $Id: x11_window.c,v 1.1.2.12 2007/12/01 18:57:56 wiede Exp $
+ *------------------------------------------------------------------------
  */
 
 #include "platform.h"
@@ -735,36 +736,36 @@ TranslateKeysym(
     switch (ksym) {
     case XK_Alt_L:
     case XK_Alt_R:
-        return Tcl_NewStringObj("alt", -1);
+        return Tcl_NewStringObj("Alt", -1);
     case XK_ISO_Level3_Shift:
-        return Tcl_NewStringObj("altgr", -1);
+        return Tcl_NewStringObj("Altgr", -1);
     case XK_BackSpace:
-        return Tcl_NewStringObj("backspace", -1);
+        return Tcl_NewStringObj("Backspace", -1);
     case XK_KP_Delete:
     case XK_Delete:
-        return Tcl_NewStringObj("delete", -1);
+        return Tcl_NewStringObj("Delete", -1);
     case XK_Control_L:
     case XK_Control_R:
-        return Tcl_NewStringObj("control", -1);
+        return Tcl_NewStringObj("Control", -1);
     case XK_Return:
-        return Tcl_NewStringObj("return", -1);
+        return Tcl_NewStringObj("Return", -1);
     case XK_Shift_L:
     case XK_Shift_R:
-        return Tcl_NewStringObj("shift", -1);
+        return Tcl_NewStringObj("Shift", -1);
     case XK_Tab:
-        return Tcl_NewStringObj("tab", -1);
+        return Tcl_NewStringObj("Tab", -1);
     case XK_KP_Up:
     case XK_Up:
-        return Tcl_NewStringObj("up", -1);
+        return Tcl_NewStringObj("Up", -1);
     case XK_KP_Down:
     case XK_Down:
-        return Tcl_NewStringObj("down", -1);
+        return Tcl_NewStringObj("Down", -1);
     case XK_KP_Left:
     case XK_Left:
-        return Tcl_NewStringObj("left", -1);
+        return Tcl_NewStringObj("Left", -1);
     case XK_KP_Right:
     case XK_Right:
-        return Tcl_NewStringObj("right", -1);
+        return Tcl_NewStringObj("Right", -1);
     }
     return Tcl_NewStringObj(str, -1);
 }
