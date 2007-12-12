@@ -14,13 +14,14 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.19 2007/12/01 23:13:05 wiede Exp $
+# RCS: @(#) $Id: ntkEntry.tcl,v 1.1.2.20 2007/12/12 15:51:47 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::entry {
     inherit ::ntk::classes::theme 
 
     private variable constructing 1
+
     public methodvariable cursoroffset -default 0
     public methodvariable slidex -default 0
     public methodvariable offsetmap -default [list]

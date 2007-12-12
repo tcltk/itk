@@ -14,10 +14,11 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.12 2007/11/25 17:12:48 wiede Exp $
+# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.13 2007/12/12 15:51:47 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::helpers {
+    private common _fontPath
     protected common colors
 
     private common rendering 0
@@ -44,6 +45,12 @@
 	    royalblue {65 105 225 255}
 	    hummeryellow {... ... ... ...}
         }
+        if {[info exists ::env(NTK_FONT_PATH)]} {
+	    set _fontPath $::env(NTK_FONT_PATH) 
+	} else {
+	    set _fontPath /usr/X11R6/lib/X11/fonts/truetype/
+	}
+        set defaultFont [file join $_fontPath Vera.ttf]
     }
     protected proc verifyColor {option value} {
         switch -- [llength $value] {

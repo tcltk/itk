@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.12 2007/11/28 21:38:08 wiede Exp $
+# RCS: @(#) $Id: ntkScrollbar.tcl,v 1.1.2.13 2007/12/12 15:51:47 wiede Exp $
 #--------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ private variable yyy [list]
     public option -orient -default vertical -configuremethod scrollbarConfig
     public option -command -default {} -configuremethod scrollbarConfig
     public option -scrollbarwidth -default 20 -configuremethod scrollbarConfig
-    public option -slidercolor -default [list 127 127 150 255] i\
+    public option -slidercolor -default [list 127 127 150 255] \
             -configuremethod scrollbarConfig
 
     public methodvariable buttonAfterId -default "" 
