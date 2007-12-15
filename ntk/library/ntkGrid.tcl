@@ -14,11 +14,16 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.12 2007/11/28 21:38:08 wiede Exp $
+# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.13 2007/12/15 21:55:16 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::grid {
     private common gridLock
+    private common slotInfos
+    private common numCalls 0
+    private common layoutId 0
+    private common currentLayout
+    set currentLayout(.) 0
 #    private common xsizes
 #    private common ysizes
 #    private common ratios
@@ -117,10 +122,24 @@ itcl::extendedclass ::ntk::classes::grid {
     }
 
     public proc layout {parent} {
+#puts stderr "LAYOUT!$parent!"
+	incr layoutId
+        set currentLayout($parent) $layoutId
+	after idle [list ::ntk::classes::grid::layoutNow $parent $layoutId]
+    }
+
+    public proc layoutNow {parent id} {
+#puts stderr "LAYOUT!$parent!$id![info exists currentLayout($parent)]!"
+        if {[info exists currentLayout($parent)]} {
+	    if {$currentLayout($parent) > $id} {
+                return
+	    }
+	}
 	if {[info exists gridLock($parent)]} {
 #puts stderr "gridLock $parent exists"
 	    return
 	}
+#puts stderr "layout2!$parent!"
 	set gridLock($parent) $parent
         set m [$parent manager]
         set myGrid [$m grid]
@@ -149,7 +168,15 @@ itcl::extendedclass ::ntk::classes::grid {
         }
 
 #puts stderr "    CWORK!$cwork!"
-        layoutDirection $cwork -columnspan reqwidth width $pwidth 0 xsizes
+        set tim1 [time {
+	if {![layoutDirection $cwork columnspan reqwidth width $pwidth 0 xsizes]} {
+	    return
+	}
+	}]
+#puts stderr "tim1!$tim1!$currentLayout($parent)!$id!"
+        if {$currentLayout($parent) > $id} {
+            return
+        }
 #puts stderr "    xsizes!"
 #parray xsizes
         set rwork [list]
@@ -166,30 +193,47 @@ itcl::extendedclass ::ntk::classes::grid {
              }
         }
 #puts stderr "    RWORK!$rwork!"
-        layoutDirection $rwork -rowspan reqheight height $pheight 1 ysizes
+        set tim2 [time {
+        if {![layoutDirection $rwork rowspan reqheight height $pheight 1 ysizes]} {
+	    return
+	}
+	}]
+#puts stderr "tim2!$tim2!"
 #puts stderr "    ysizes!"
 #parray ysizes
+        set tim3 [time {
         layoutXy $myGrid xsizes ysizes
+	}]
+#puts stderr "tim3!$tim3!"
 	unset gridLock($parent)
         gridRedraw $myGrid
     }
 
     protected proc layoutDirection {worklist spankey reqdim wdir psize slotoffset sizesvar} {
         upvar $sizesvar sizes
+	upvar parent parent
+	upvar id id
         array set ratios {}
         array set sticky {}
         set units 5000
 
+set tim11 [time {
         # Set ratios for the windows that span 1 column/row.
         foreach dim $worklist {
             foreach path $dim {
-                if {[$path cget $spankey] > 1} {
-	            continue
-                }
-                set s [lindex [$path cget -slot] $slotoffset]
-		set myReqDim [$path cget -$reqdim]
+		if {$currentLayout($parent) != $id} {
+		    return 0
+		}
+		if {![info exists winRatio($path)]} {
+                    if {[$path cget -$spankey] > 1} {
+	                continue
+                    }
+                    set s [lindex [$path cget -slot] $slotoffset]
+		    set myReqDim [$path cget -$reqdim]
 #puts stderr "      set set myReqDim [$path cget -$reqdim]!$reqdim!$psize!$s!"
-                set ratio [expr {$myReqDim * $units / $psize}]
+                    set winRatio($path) [expr {$myReqDim * $units / $psize}]
+		}
+		set ratio $winRatio($path)
                 if {[lsearch -exact [$path cget -sticky] $wdir] >= 0} {
                     set sticky($s) 1
 #puts stderr "      set sticky($s) 1"
@@ -200,37 +244,51 @@ itcl::extendedclass ::ntk::classes::grid {
                 }
             }
         }
+}]
+#puts stderr "tim11!$tim11"
 
         # Now handle the multiple span windows.
+set tim12 [time {
         foreach dim $worklist {
             foreach path $dim {
-                if {[$path cget $spankey] == 1} {
-		    continue
-	        }
-                set s [lindex [$path cget -slot] $slotoffset]
-                set es [expr {$s + [$path cget $spankey]}]
-                set st [expr {[lsearch -exact [$path cget -sticky] $wdir] >= 0}]
-                for {set i $s} {$i < $es} {incr i} {
-                    if {![info exists ratios($i)]} {
-                        set wratio [expr {[$path cget -$reqdim] * $units / $psize}]
-                        for {set subi $s} {$subi < $es} {incr subi} {
-                            if {[info exists ratios($subi)]} {
-                                set wratio [expr {$wratio - $ratios($subi)}]
+		if {$currentLayout($parent) != $id} {
+		    return 0
+		}
+		if {![info exists winRatio($path)]} {
+                    if {[$path cget -$spankey] == 1} {
+		        continue
+	            }
+                    set s [lindex [set [set slots($path)]] $slotoffset]
+                    set es [expr {$s + [set _${spankey}($path)]}]
+                    set st [expr {[lsearch -exact [set stickys($path)] $wdir] >= 0}]
+                    for {set i $s} {$i < $es} {incr i} {
+                        if {![info exists ratios($i)]} {
+                            set wratio [expr {[set [set _${reqdim}($path)]] * $units / $psize}]
+                            for {set subi $s} {$subi < $es} {incr subi} {
+                                if {[info exists ratios($subi)]} {
+                                    set wratio [expr {$wratio - $ratios($subi)}]
+                                }
                             }
+                            set wratio [expr {($wratio > 0) ? $wratio : 0}]
+                            set ratios($i) $wratio
+                        } 
+                        if {$st} {
+                            set sticky($i) 1
                         }
-                        set wratio [expr {($wratio > 0) ? $wratio : 0}]
-                        set ratios($i) $wratio
-                    } 
-                    if {$st} {
-                        set sticky($i) 1
                     }
-                }
+	        }
             }
         }
+}]
+#puts stderr "tim12!$tim12"
         set totalcells [llength [array names ratios]]
         if {$totalcells <= 0} {
-	    return
+	    return 1
         }
+	if {$currentLayout($parent) != $id} {
+	    return 0
+	}
+set tim121 [time {
         set totalratio [sumRatios ratios]
 
 #puts stderr "      totalratio!$totalratio!"
@@ -277,15 +335,26 @@ itcl::extendedclass ::ntk::classes::grid {
                 }
             }  
         }
+}]
+#puts stderr "tim121!$tim121!"
+	if {$currentLayout($parent) != $id} {
+	    return 0
+	}
         # Now calculate the size for each cell.
         foreach i [array names ratios] {
              set sizes($i) [expr {$ratios($i) * $psize / $units}]
         }
         #Set the size for this dimension of the widget.
+#puts stderr "SLOT!$spankey!$slotoffset!$worklist!"
+set tim13 [time {
         foreach dim $worklist {
+#puts stderr "dim![llength $dim]!"
             foreach path $dim {
+	        if {$currentLayout($parent) != $id} {
+	            return 0
+	        }
                 set s [lindex [$path cget -slot] $slotoffset]
-                set es [expr {$s + [$path cget $spankey]}]
+                set es [expr {$s + [$path cget -$spankey]}]
                 set totalsize 0
                 for {set i $s} {$i < $es} {incr i} {
                     incr totalsize $sizes($i)
@@ -294,11 +363,18 @@ itcl::extendedclass ::ntk::classes::grid {
                     set totalsize 1
                 }
                 set gridLock($path) $path
-                $path configure -$wdir $totalsize
+                $path $wdir $totalsize
+#                $path configure -$wdir $totalsize
 #puts stderr "      $path configure -$wdir $totalsize"
                 unset gridLock($path)
             }
         }
+}]
+#puts stderr "tim13!$tim13"
+#puts stderr C
+#parray sizes
+#puts stderr D
+        return 1
     }
 
     private proc layoutXy {grid xsizesvar ysizesvar} {
@@ -356,7 +432,6 @@ itcl::extendedclass ::ntk::classes::grid {
     }
 
     public proc relayoutTrace {path} {
-puts stderr "relayoutTrace!$path!"
         layout [$path parent]
     }
 
@@ -485,6 +560,7 @@ puts stderr REMANAGE:$c
         # See if the parent has a manager object already.
         # Create a new grid manager object if there isn't one already.
         set myParent [$path parent]
+set tim0 [time {
 #puts stderr "GRID!$path!$args!$myParent![$myParent manager]!"
         if {[$myParent manager] eq ""} {
 	    set m [uplevel #0 ::ntk::classes::gridManager ${myParent}.__manager $myParent]
@@ -499,6 +575,7 @@ puts stderr REMANAGE:$c
 	    $path configure {*}$args
 	}
 	$m2 wpath $path
+#::ntk::widget::Widget gridregister $path [$path getScope itcl_options] [$m2 getScope itcl_options]
         $path removeFromManager gridRemove
 
         # Get the manager and set the peaks.
@@ -513,9 +590,12 @@ puts stderr REMANAGE:$c
 #puts stderr "myGrid2!$myGrid!"
         # Set the new grid list.
         $m grid $myGrid
+#puts stderr "LAYOUT![$path parent]!"
         layout [$path parent]
 #dump $myGrid
 #dumpSizes $myGrid
+}]
+#puts stderr "tim0!$tim0!"
         return $path
     }
 }

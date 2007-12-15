@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.23 2007/12/01 22:53:27 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.24 2007/12/15 21:55:16 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::window {
@@ -59,7 +59,7 @@
     public option -rotate -default 0 -configuremethod windowConfig
     public option -xoffset -default 0 -configuremethod windowConfig
     public option -yoffset -default 0 -configuremethod windowConfig
-    
+
     public method windowConfig {option value} {
 #puts stderr "windowConfig!$wpath!$option!$value!"
         set itcl_options($option) $value
@@ -225,6 +225,7 @@
 	    dispatchRedraw
 	    return
 	}
+#puts stderr "WINDOW REMANAGE $wpath"
         [$myManager remanage] $p
     }
 
@@ -279,6 +280,50 @@
 	} else {
 	    dict set itcl_options(-bindings) $sequence $script
 	}
+    }
+
+    public method slotinfo {slotoffset spankey} {
+        return [$geometryManager slotinfo $slotoffset $spankey]
+    }
+
+    public method height {val} {
+        set itcl_options(-height) $val
+    }
+
+    public method width {val} {
+        set itcl_options(-width) $val
+    }
+
+    public method reqheight {} {
+        return $itcl_options(-reqheight)
+    }
+
+    public method reqwidth {} {
+        return $itcl_options(-reqwidth)
+    }
+
+    public method rowspan {} {
+        return [$geometryManager rowspan]
+    }
+
+    public method columnspan {} {
+        return [$geometryManager columnspan]
+    }
+
+    public method sticky {} {
+        return [$geometryManager sticky]
+    }
+
+    public method slot {} {
+        return [$geometryManager slot]
+    }
+
+    public method getScope {varname} {
+        return [::itcl::scope $varname]
+    }
+
+    public method gM {} {
+        return $geometryManager
     }
 }
 if {0} {

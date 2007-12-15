@@ -13,11 +13,11 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntk.tcl,v 1.1.2.22 2007/12/01 22:53:27 wiede Exp $
+# RCS: @(#) $Id: ntk.tcl,v 1.1.2.23 2007/12/15 21:55:15 wiede Exp $
 #--------------------------------------------------------------------------
 
 package require Itcl 4.0
-package require TclGL
+#package require TclGL
 package require GlmwfwX11
 package require Glmwfw
 package require ntkWidgetImage

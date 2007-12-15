@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGridData.tcl,v 1.1.2.1 2007/10/18 21:41:06 wiede Exp $
+# RCS: @(#) $Id: ntkGridData.tcl,v 1.1.2.2 2007/12/15 21:55:16 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::gridData {
@@ -68,6 +68,8 @@
 
     constructor {path args} {
 	::itcl::setcomponent $path geometryManager $this
+	::itcl::adddelegatedoption $path delegate option -slot \
+	        to geometryManager
 	::itcl::adddelegatedoption $path delegate option -sticky \
 	        to geometryManager
 	::itcl::adddelegatedoption $path delegate option -columnspan \
@@ -78,8 +80,6 @@
 	        to geometryManager
 	::itcl::adddelegatedoption $path delegate option -rowratio \
 	        to geometryManager
-	::itcl::adddelegatedoption $path delegate option -slot \
-	        to geometryManager
 	::itcl::adddelegatedmethod $path delegate method peakcolumn \
 	        to geometryManager
 	::itcl::adddelegatedmethod $path delegate method peakrow \
@@ -87,5 +87,32 @@
         set constructing 0
         return $this
     }
+
+    public method slotinfo {slotoffset spankey} {
+        set s [lindex $itcl_options(-slot) $slotoffset]
+	set es [expr {$s + $itcl_options($spankey)}]
+	return [list $s $es]
+    }
+
+    public method rowspan {} {
+        return $itcl_options(-rowspan)
+    }
+
+    public method columnspan {} {
+        return $itcl_options(-columnspan)
+    }
+
+    public method sticky {} {
+        return $itcl_options(-sticky)
+    }
+
+    public method slot {} {
+        return $itcl_options(-slot)
+    }
+
+    public method getScope {varname} {
+        return [::itcl::scope $varname]
+    }
+
 }
 
