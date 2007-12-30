@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.18 2007/12/01 22:53:27 wiede Exp $
+# RCS: @(#) $Id: ntkButton.tcl,v 1.1.2.19 2007/12/30 23:02:30 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::button {
@@ -32,11 +32,6 @@ itcl::extendedclass ::ntk::classes::button {
 #puts stderr "buttonConfig!$option!$value!"
         set itcl_options($option) $value
         switch -- $option {
-        -bd -
-        -font -
-        -fontsize -
-        -textcolor -
-        -text -
 	-state {
 	    buttonTrace
 	  }
@@ -107,12 +102,8 @@ itcl::extendedclass ::ntk::classes::button {
 	if {$constructing} {
 	    return
 	}
-	set myColor $itcl_options(-bg)
-	if {[llength $myColor] == 1} {
-	    set myColor $colors($myColor)
-	}
-	::ntk::widgetImage::Image fill $windowImage $myColor
 #puts stderr "themeButtonDrawBorder"
+	::ntk::classes::window::windowDraw
         themeButtonDrawBorder
 	if {$itcl_options(-image) eq ""} {
             buttonDrawText
@@ -124,12 +115,7 @@ itcl::extendedclass ::ntk::classes::button {
 
     public method buttonDrawPressed {} {
 #puts stderr "buttonDrawPressed!"
-	set myColor $itcl_options(-bg)
-	if {[llength $myColor] == 1} {
-	    ::ntk::widgetImage::Image fill $windowImage $colors($myColor)
-	} else {
-	    ::ntk::widgetImage::Image fill $windowImage $myColor
-	}
+	::ntk::classes::window::windowDraw
 #puts stderr "themeButtonDrawPressedBorder"
         themeButtonDrawPressedBorder
         buttonDrawText
@@ -197,4 +183,11 @@ itcl::extendedclass ::ntk::classes::button {
         buttonRedraw
 #puts stderr "buttonTrace END!"
     }
+public method ii {} {
+puts stderr "PI![info option -xoffset]!"
+puts stderr "PI![info option -opttest]!"
+}
+public method aa {args} {
+puts stderr "AA!$args!$itcl_options($args)!"
+}
 }

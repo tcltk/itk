@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.13 2007/12/15 21:55:16 wiede Exp $
+# RCS: @(#) $Id: ntkGrid.tcl,v 1.1.2.14 2007/12/30 23:02:30 wiede Exp $
 #--------------------------------------------------------------------------
 
 itcl::extendedclass ::ntk::classes::grid {
@@ -122,30 +122,23 @@ itcl::extendedclass ::ntk::classes::grid {
     }
 
     public proc layout {parent} {
-#puts stderr "LAYOUT!$parent!"
 	incr layoutId
         set currentLayout($parent) $layoutId
 	after idle [list ::ntk::classes::grid::layoutNow $parent $layoutId]
     }
 
     public proc layoutNow {parent id} {
-#puts stderr "LAYOUT!$parent!$id![info exists currentLayout($parent)]!"
-        if {[info exists currentLayout($parent)]} {
-	    if {$currentLayout($parent) > $id} {
-                return
-	    }
+	if {$currentLayout($parent) > $id} {
+            return
 	}
 	if {[info exists gridLock($parent)]} {
-#puts stderr "gridLock $parent exists"
 	    return
 	}
-#puts stderr "layout2!$parent!"
 	set gridLock($parent) $parent
         set m [$parent manager]
         set myGrid [$m grid]
         set pwidth [$parent cget -width]
         set pheight [$parent cget -height]
-# puts stderr "  LAYOUT!P!$parent!$pwidth!$pheight!$myGrid!"
         if {$pwidth <= 0 || $pheight <= 0} {
 	    unset gridLock($parent)
 	    return
@@ -167,18 +160,12 @@ itcl::extendedclass ::ntk::classes::grid {
             }
         }
 
-#puts stderr "    CWORK!$cwork!"
-        set tim1 [time {
 	if {![layoutDirection $cwork columnspan reqwidth width $pwidth 0 xsizes]} {
 	    return
 	}
-	}]
-#puts stderr "tim1!$tim1!$currentLayout($parent)!$id!"
         if {$currentLayout($parent) > $id} {
             return
         }
-#puts stderr "    xsizes!"
-#parray xsizes
         set rwork [list]
         foreach row $myGrid {
              set rbuf [list]
@@ -192,19 +179,10 @@ itcl::extendedclass ::ntk::classes::grid {
                  lappend rwork $rbuf
              }
         }
-#puts stderr "    RWORK!$rwork!"
-        set tim2 [time {
         if {![layoutDirection $rwork rowspan reqheight height $pheight 1 ysizes]} {
 	    return
 	}
-	}]
-#puts stderr "tim2!$tim2!"
-#puts stderr "    ysizes!"
-#parray ysizes
-        set tim3 [time {
         layoutXy $myGrid xsizes ysizes
-	}]
-#puts stderr "tim3!$tim3!"
 	unset gridLock($parent)
         gridRedraw $myGrid
     }
@@ -217,7 +195,6 @@ itcl::extendedclass ::ntk::classes::grid {
         array set sticky {}
         set units 5000
 
-set tim11 [time {
         # Set ratios for the windows that span 1 column/row.
         foreach dim $worklist {
             foreach path $dim {
@@ -229,26 +206,19 @@ set tim11 [time {
 	                continue
                     }
                     set s [lindex [$path cget -slot] $slotoffset]
-		    set myReqDim [$path cget -$reqdim]
-#puts stderr "      set set myReqDim [$path cget -$reqdim]!$reqdim!$psize!$s!"
-                    set winRatio($path) [expr {$myReqDim * $units / $psize}]
+                    set winRatio($path) [expr {[$path cget -$reqdim] * $units / $psize}]
 		}
 		set ratio $winRatio($path)
                 if {[lsearch -exact [$path cget -sticky] $wdir] >= 0} {
                     set sticky($s) 1
-#puts stderr "      set sticky($s) 1"
                 }
                 if {![::info exists ratios($s)] || $ratio > $ratios($s)} {
                     set ratios($s) $ratio 
-#puts stderr "      set ratios($s) $ratio"
                 }
             }
         }
-}]
-#puts stderr "tim11!$tim11"
 
         # Now handle the multiple span windows.
-set tim12 [time {
         foreach dim $worklist {
             foreach path $dim {
 		if {$currentLayout($parent) != $id} {
@@ -279,8 +249,6 @@ set tim12 [time {
 	        }
             }
         }
-}]
-#puts stderr "tim12!$tim12"
         set totalcells [llength [array names ratios]]
         if {$totalcells <= 0} {
 	    return 1
@@ -288,10 +256,8 @@ set tim12 [time {
 	if {$currentLayout($parent) != $id} {
 	    return 0
 	}
-set tim121 [time {
         set totalratio [sumRatios ratios]
 
-#puts stderr "      totalratio!$totalratio!"
         if {$totalratio > $units} {
             # The widgets will all have to be bumped down in ratio.
             # Try to shrink sticky widgets more than others.
@@ -305,13 +271,11 @@ set tim121 [time {
                 set bump [expr {($totalratio - $units) / $totalstickycells}]
                 foreach key [array names sticky] {
                     set ratios($key) [expr {$ratios($key) - $bump}]
-#puts stderr "      2 set ratios($key) [expr {$ratios($key) - $bump}]"
                 }
 	    } else {
 	        set bump [expr {($totalratio - $units) / $totalcells}]
 		foreach key [array names ratios] {
 		    set ratios($key) [expr {$ratios($key) - $bump}]
-#puts stderr "      3 set ratios($key) [expr {$ratios($key) - $bump}]"
 		}
 	    }
         } else {
@@ -331,12 +295,9 @@ set tim121 [time {
                 set bump [expr {$ratiodelta / $fillcells}]
                 foreach i [array names sticky] {
                     set ratios($i) [expr {$ratios($i) + $bump}]
-#puts stderr "      4 set ratios($i) [expr {$ratios($i) + $bump}]"
                 }
             }  
         }
-}]
-#puts stderr "tim121!$tim121!"
 	if {$currentLayout($parent) != $id} {
 	    return 0
 	}
@@ -345,10 +306,7 @@ set tim121 [time {
              set sizes($i) [expr {$ratios($i) * $psize / $units}]
         }
         #Set the size for this dimension of the widget.
-#puts stderr "SLOT!$spankey!$slotoffset!$worklist!"
-set tim13 [time {
         foreach dim $worklist {
-#puts stderr "dim![llength $dim]!"
             foreach path $dim {
 	        if {$currentLayout($parent) != $id} {
 	            return 0
@@ -369,11 +327,6 @@ set tim13 [time {
                 unset gridLock($path)
             }
         }
-}]
-#puts stderr "tim13!$tim13"
-#puts stderr C
-#parray sizes
-#puts stderr D
         return 1
     }
 
@@ -574,6 +527,7 @@ set tim0 [time {
         if {[llength $args] > 0} {
 	    $path configure {*}$args
 	}
+::itcl::addobjectoption $path public option -opttest -default xx -configuremethod yy -validatemethod zz -readonly
 	$m2 wpath $path
 #::ntk::widget::Widget gridregister $path [$path getScope itcl_options] [$m2 getScope itcl_options]
         $path removeFromManager gridRemove
