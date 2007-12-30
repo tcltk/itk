@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.18 2007/11/29 20:37:53 wiede Exp $
+# RCS: @(#) $Id: ntkTheme.tcl,v 1.1.2.19 2007/12/30 23:04:52 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::theme {
@@ -83,6 +83,7 @@
             incr bd -1
         }
     }
+
     public method themeDrawGenericBorder {} {
         set low [list 20 20 20 255]
         set high [list 200 200 200 255]

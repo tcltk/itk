@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.24 2007/12/15 21:55:16 wiede Exp $
+# RCS: @(#) $Id: ntkWindow.tcl,v 1.1.2.25 2007/12/30 23:04:52 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::window {
@@ -243,10 +243,10 @@
 	}
         set myColor $itcl_options(-bg)
         if {[llength $myColor] == 1} {
-            ::ntk::widgetImage::Image fill $windowImage $colors($myColor)
-        } else {
-            ::ntk::widgetImage::Image fill $windowImage $myColor
+            set myColor $colors($myColor)
         }
+set myColor [list 0 255 255 255]
+        ::ntk::widgetImage::Image fill $windowImage $myColor
         render $wpath
     }
 

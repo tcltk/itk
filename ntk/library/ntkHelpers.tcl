@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.13 2007/12/12 15:51:47 wiede Exp $
+# RCS: @(#) $Id: ntkHelpers.tcl,v 1.1.2.14 2007/12/30 23:04:52 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::helpers {
@@ -133,15 +133,15 @@ proc dumpMegaimage {obj} {
     lassign [$obj getsize] width height
 puts stderr "height!$height!"
     for {set y 0} {$y < $height} {incr y} {
-        puts stderr "row!$y![$obj getrow $y]!"
+        puts stderr "row!$y![$windowImage getrow $y]!"
     }
 }
 
 proc dumpMegaimage2 {obj} {
-    lassign [$obj getsize] width height
+    lassign [$windowImage getsize] width height
     for {set y 0} {$y < $height} {incr y} {
         puts -nonewline stderr "$y!"
-        foreach {r g b a} [$obj getrow $y] {
+        foreach {r g b a} [$windowImage getrow $y] {
             puts -nonewline stderr "[format {%x %x %x %x  } $r $g $b $a] "
         }
         puts stderr ""
