@@ -11,7 +11,7 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.8 2007/12/01 22:52:27 wiede Exp $
+ * RCS: @(#) $Id: ntkWidgetImageCmd.c,v 1.1.2.9 2007/12/30 23:09:50 wiede Exp $
  */
 
 #include <stdlib.h>
@@ -483,11 +483,11 @@ NtkWidgetImage_MeasureTextCmd(
     result = TCL_OK;
     infoPtr = (NtkWidgetImageInfo *)clientData;
     NtkWidgetImageShowArgs(1, "NtkWIdget_MeasueTextCmd", objc, objv);
-    if (CheckNumParams(interp, infoPtr, "measuretext", objc, 5, 5) != TCL_OK) {
+    if (CheckNumParams(interp, infoPtr, "measuretext", objc, 6, 6) != TCL_OK) {
         return TCL_ERROR;
     }
-    fontName = Tcl_GetString(objv[1]);
-    if (Tcl_GetIntFromObj(interp, objv[2], &fontSize) != TCL_OK) {
+    fontName = Tcl_GetString(objv[2]);
+    if (Tcl_GetIntFromObj(interp, objv[3], &fontSize) != TCL_OK) {
         return TCL_ERROR;
     }
     wgtPtr = (NtkWidgetImage *)ckalloc(sizeof(NtkWidgetImage));
@@ -505,19 +505,19 @@ NtkWidgetImage_MeasureTextCmd(
     wgtPtr->data = NULL;
 
     if (NtkWidgetImage_GetFreeTypeInfo(interp, infoPtr, fontName, fontSize,
-            rgba, objv[3], wgtPtr, 1) != TCL_OK) {
+            rgba, objv[4], wgtPtr, 1) != TCL_OK) {
 	return TCL_ERROR;
     }
     objPtr = Tcl_NewIntObj(wgtPtr->width);
     Tcl_IncrRefCount(objPtr);
-    varPtr = Tcl_ObjSetVar2(interp, objv[4], NULL, objPtr, /*flags*/0);
+    varPtr = Tcl_ObjSetVar2(interp, objv[5], NULL, objPtr, /*flags*/0);
     if (varPtr == NULL) {
         result = TCL_ERROR;
 	goto outerr;
     }
     objPtr = Tcl_NewIntObj(wgtPtr->height);
     Tcl_IncrRefCount(objPtr);
-    varPtr = Tcl_ObjSetVar2(interp, objv[5], NULL, objPtr, /*flags*/0);
+    varPtr = Tcl_ObjSetVar2(interp, objv[6], NULL, objPtr, /*flags*/0);
     if (varPtr == NULL) {
         result = TCL_ERROR;
 	goto outerr;
