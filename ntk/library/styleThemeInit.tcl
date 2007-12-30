@@ -9,11 +9,22 @@ array set colors {
         -indicator      "#4a6984"
 }
 
-set defaultTheme [::ntk::classes::styleTheme ::ntk::theme::default default [array get colors]]
-$defaultTheme configure TButton \
+set defaultTheme [::ntk::classes::styleTheme ::ntk::theme::default default "" [array get colors]]
+$defaultTheme styleConfigure . \
+            -borderwidth        1 \
+            -background         $colors(-frame) \
+            -foreground         black \
+            -troughcolor        $colors(-darker) \
+            -font               Vera.ttf \
+            -selectborderwidth  1 \
+            -selectbackground   $colors(-selectbg) \
+            -selectforeground   $colors(-selectfg) \
+            -insertwidth        1 \
+            -indicatordiameter  10
+$defaultTheme styleConfigure TButton \
     -anchor center -padding "3 3" -width -9 \
     -relief raised -shiftrelief 1
-$defaultTheme map TButton -relief [list {!disabled pressed} sunken]
+$defaultTheme styleMap TButton -relief [list {!disabled pressed} sunken]
 
 array set colors {
         -frame          "#d9d9d9"
@@ -26,10 +37,10 @@ array set colors {
         -indicator      "#b03060"
 }
 
-set classicTheme [::ntk::classes::styleTheme ::ntk::theme::classic classic [array get colors]]
-$classicTheme configure TButton \
+set classicTheme [::ntk::classes::styleTheme ::ntk::theme::classic classic default [array get colors]]
+$classicTheme styleConfigure TButton \
     -anchor center -padding "3m 1m" -relief raised -shiftrelief 1
-$classicTheme map TButton -relief [list {!disabled pressed} sunken]
+$classicTheme styleMap TButton -relief [list {!disabled pressed} sunken]
 
 array set colors {
         -disabledfg     "#999999"
@@ -44,10 +55,10 @@ array set colors {
         -selectfg       "#ffffff"
 }
 
-set clamTheme [::ntk::classes::styleTheme ::ntk::theme::clam clam [array get colors]]
-$clamTheme configure TButton \
+set clamTheme [::ntk::classes::styleTheme ::ntk::theme::clam clam default [array get colors]]
+$clamTheme styleConfigure TButton \
     -anchor center -width -11 -padding 5 -relief raised
-$clamTheme map TButton \
+$clamTheme styleMap TButton \
             -background [list \
                              disabled $colors(-frame) \
                              pressed $colors(-darker) \
@@ -58,7 +69,7 @@ $clamTheme map TButton \
 
 ::ntk::classes::styleTheme::registerElement default background ::ntk::classes::defaultBackgroundElement
 ::ntk::classes::styleTheme::registerElement default border ::ntk::classes::defaultBorderElement
-::ntk::classes::styleTheme::registerElement default focus ::ntk::classes::defaultFocusElement
+::ntk::classes::styleTheme::registerElement default focusring ::ntk::classes::defaultFocusringElement
 ::ntk::classes::styleTheme::registerElement default padding ::ntk::classes::defaultPaddingElement
 ::ntk::classes::styleTheme::registerElement default text ::ntk::classes::defaultTextElement
 ::ntk::classes::styleTheme::registerElement default image ::ntk::classes::defaultImageElement
@@ -66,10 +77,12 @@ $clamTheme map TButton \
 ::ntk::classes::styleTheme::registerElement default textarea ::ntk::classes::defaultTextareaElement
 
 ::ntk::classes::styleTheme::registerLayout default TButton \
-[list Button.border [list -sticky nswe -border 1 -children \
-    [list Button.focus [list -sticky nswe -children \
+[list Button.background [list -sticky nswe -border 1 -children \
+  [list Button.border [list -sticky nswe -border 1 -children \
+    [list Button.focusring [list -sticky nswe -children \
         [list Button.padding [list -sticky nswe -children \
 	    [list Button.label [list -sticky nswe]] \
 	]] \
     ]] \
+  ]] \
 ]]
