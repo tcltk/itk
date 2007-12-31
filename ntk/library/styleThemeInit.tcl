@@ -76,7 +76,47 @@ $clamTheme styleMap TButton \
 ::ntk::classes::styleTheme::registerElement default label ::ntk::classes::defaultLabelElement
 ::ntk::classes::styleTheme::registerElement default textarea ::ntk::classes::defaultTextareaElement
 
+::ntk::classes::styleTheme::registerElement classic background ::ntk::classes::classicBackgroundElement
+::ntk::classes::styleTheme::registerElement classic border ::ntk::classes::classicBorderElement
+::ntk::classes::styleTheme::registerElement classic focusring ::ntk::classes::classicFocusringElement
+::ntk::classes::styleTheme::registerElement classic padding ::ntk::classes::classicPaddingElement
+::ntk::classes::styleTheme::registerElement classic text ::ntk::classes::classicTextElement
+::ntk::classes::styleTheme::registerElement classic image ::ntk::classes::classicImageElement
+::ntk::classes::styleTheme::registerElement classic label ::ntk::classes::classicLabelElement
+::ntk::classes::styleTheme::registerElement classic textarea ::ntk::classes::classicTextareaElement
+
+::ntk::classes::styleTheme::registerElement clam background ::ntk::classes::clamBackgroundElement
+::ntk::classes::styleTheme::registerElement clam border ::ntk::classes::clamBorderElement
+::ntk::classes::styleTheme::registerElement clam focusring ::ntk::classes::clamFocusringElement
+::ntk::classes::styleTheme::registerElement clam padding ::ntk::classes::clamPaddingElement
+::ntk::classes::styleTheme::registerElement clam text ::ntk::classes::clamTextElement
+::ntk::classes::styleTheme::registerElement clam image ::ntk::classes::clamImageElement
+::ntk::classes::styleTheme::registerElement clam label ::ntk::classes::clamLabelElement
+::ntk::classes::styleTheme::registerElement clam textarea ::ntk::classes::clamTextareaElement
+
 ::ntk::classes::styleTheme::registerLayout default TButton \
+[list Button.background [list -sticky nswe -border 1 -children \
+  [list Button.border [list -sticky nswe -border 1 -children \
+    [list Button.focusring [list -sticky nswe -children \
+        [list Button.padding [list -sticky nswe -children \
+	    [list Button.label [list -sticky nswe]] \
+	]] \
+    ]] \
+  ]] \
+]]
+
+::ntk::classes::styleTheme::registerLayout clam TButton \
+[list Button.background [list -sticky nswe -border 1 -children \
+  [list Button.border [list -sticky nswe -border 1 -children \
+    [list Button.focusring [list -sticky nswe -children \
+        [list Button.padding [list -sticky nswe -children \
+	    [list Button.label [list -sticky nswe]] \
+	]] \
+    ]] \
+  ]] \
+]]
+
+::ntk::classes::styleTheme::registerLayout classic TButton \
 [list Button.background [list -sticky nswe -border 1 -children \
   [list Button.border [list -sticky nswe -border 1 -children \
     [list Button.focusring [list -sticky nswe -children \

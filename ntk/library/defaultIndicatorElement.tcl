@@ -1,7 +1,7 @@
 #---------------------------------------------------------------------------
-# ntkWidget ntkIndicatorElement.tcl --
+# ntkWidget defaultIndicatorElement.tcl --
 #
-# This file contains a ntkWidget IndicatorElement commands implementation
+# This file contains a ntkWidget defaultIndicatorElement commands implementation
 #
 # this code is influenced by the tile/ttk implementation written by
 # Joe English
@@ -11,10 +11,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: defaultIndicatorElement.tcl,v 1.1.2.1 2007/12/29 19:58:27 wiede Exp $
+# RCS: @(#) $Id: defaultIndicatorElement.tcl,v 1.1.2.2 2007/12/31 14:52:12 wiede Exp $
 #--------------------------------------------------------------------------
 
-::itcl::extendedclass ::ntk::classes::IndicatorElement {
+::itcl::extendedclass ::ntk::classes::defaultIndicatorElement {
 
     protected option -background -default [list 157 157 157 0] \
             -configurecommand indicatorElementConfigure
@@ -32,13 +32,13 @@
     public method indicatorElementConfigure {option value} {
     }
 
-    public method IndicatorElementSize {widthVar heightVar paddingVar} {
+    public method ElementSize {widthVar heightVar paddingVar} {
         upvar $widthVar width
         upvar $heightVar height
         upvar $paddingVar padding
     }
 
-    public method IndicatorElementDraw {box state} {
+    public method ElementDraw {box state} {
         foreach {x y width height} $box break
     }
 }

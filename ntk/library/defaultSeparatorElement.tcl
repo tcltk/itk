@@ -1,7 +1,7 @@
 #---------------------------------------------------------------------------
-# ntkWidget ntkSeparatorElement.tcl --
+# ntkWidget defaultSeparatorElement.tcl --
 #
-# This file contains a ntkWidget SeparatorElement commands implementation
+# This file contains a ntkWidget defaultSeparatorElement commands implementation
 #
 # this code is influenced by the tile/ttk implementation written by
 # Joe English
@@ -11,10 +11,10 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: defaultSeparatorElement.tcl,v 1.1.2.1 2007/12/29 19:58:27 wiede Exp $
+# RCS: @(#) $Id: defaultSeparatorElement.tcl,v 1.1.2.2 2007/12/31 14:52:12 wiede Exp $
 #--------------------------------------------------------------------------
 
-::itcl::extendedclass ::ntk::classes::separatorElement {
+::itcl::extendedclass ::ntk::classes::defaultSeparatorElement {
 
     protected option -orient -default horizontal \
             -configurecommand separatorElementConfigure
@@ -24,13 +24,13 @@
     public method separatorElementConfigure {option value} {
     }
 
-    public method SeparatorElementSize {widthVar heightVar paddingVar} {
+    public method ElementSize {widthVar heightVar paddingVar} {
         upvar $widthVar width
         upvar $heightVar height
         upvar $paddingVar padding
     }
 
-    public method SeparatorElementDraw {box state} {
+    public method ElementDraw {box state} {
         foreach {x y width height} $box break
     }
 }

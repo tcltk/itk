@@ -11,7 +11,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkStyleTheme.tcl,v 1.1.2.2 2007/12/30 22:58:19 wiede Exp $
+# RCS: @(#) $Id: ntkStyleTheme.tcl,v 1.1.2.3 2007/12/31 14:52:12 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::styleTheme {
@@ -44,7 +44,7 @@
         uplevel 0 array set colors [list $theColors]
     }
 
-    public method styleConfigure {styleName args} {
+    public proc styleConfigure {styleName args} {
        if {![::info exists _styles($objectTheme,$styleName)]} {
            set _styles($objectTheme,$styleName) $styleName
 	   set parentStyle .
@@ -61,7 +61,7 @@ puts stderr "configure!$styleName!$optionName!$value!"
 	}
     }
 
-    public method styleMap {styleName args} {
+    public proc styleMap {styleName args} {
        foreach {optionName value} $args {
 #puts stderr "map!$styleName!$optionName!$value!"
            uplevel 0 set _styleMaps($styleName,$optionName) [list $value]
