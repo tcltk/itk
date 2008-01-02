@@ -11,7 +11,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: ntkStyleTheme.tcl,v 1.1.2.3 2007/12/31 14:52:12 wiede Exp $
+# RCS: @(#) $Id: ntkStyleTheme.tcl,v 1.1.2.4 2008/01/02 19:58:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::styleTheme {
@@ -56,7 +56,7 @@
            set _styleParents($objectTheme,$styleName) $parentStyle
        }
        foreach {optionName value} $args {
-puts stderr "configure!$styleName!$optionName!$value!"
+#puts stderr "configure!$styleName!$optionName!$value!"
            uplevel 0 set _styleOptions($objectTheme,$styleName,$optionName) [list $value]
 	}
     }

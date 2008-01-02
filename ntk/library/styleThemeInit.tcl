@@ -95,34 +95,34 @@ $clamTheme styleMap TButton \
 ::ntk::classes::styleTheme::registerElement clam textarea ::ntk::classes::clamTextareaElement
 
 ::ntk::classes::styleTheme::registerLayout default TButton \
-[list Button.background [list -sticky nswe -border 1 -children \
-  [list Button.border [list -sticky nswe -border 1 -children \
-    [list Button.focusring [list -sticky nswe -children \
-        [list Button.padding [list -sticky nswe -children \
-	    [list Button.label [list -sticky nswe]] \
+[list Button.background [list -sticky nswe -border 1 -parcel [list] -children [list]] \
+    Button.border [list -sticky nswe -border 1 -parcel [list] -children \
+      [list Button.focusring [list -sticky nswe -parcel [list] -children \
+        [list Button.padding [list -sticky nswe -parcel [list] -children \
+	    [list Button.label [list -sticky nswe -parcel [list]]] \
 	]] \
-    ]] \
-  ]] \
-]]
+      ]] \
+    ] \
+]
 
 ::ntk::classes::styleTheme::registerLayout clam TButton \
-[list Button.background [list -sticky nswe -border 1 -children \
-  [list Button.border [list -sticky nswe -border 1 -children \
-    [list Button.focusring [list -sticky nswe -children \
-        [list Button.padding [list -sticky nswe -children \
-	    [list Button.label [list -sticky nswe]] \
+[list Button.background [list -sticky nswe -border 1 -parcel [list] -children [list]] \
+    Button.border [list -sticky nswe -border 1 -parcel [list] -children \
+      [list Button.focusring [list -sticky nswe -parcel [list] -children \
+        [list Button.padding [list -sticky nswe -parcel [list] -children \
+	    [list Button.label [list -sticky nswe -parcel [list]]] \
 	]] \
     ]] \
-  ]] \
-]]
+  ] \
+]
 
 ::ntk::classes::styleTheme::registerLayout classic TButton \
-[list Button.background [list -sticky nswe -border 1 -children \
-  [list Button.border [list -sticky nswe -border 1 -children \
-    [list Button.focusring [list -sticky nswe -children \
-        [list Button.padding [list -sticky nswe -children \
-	    [list Button.label [list -sticky nswe]] \
+[list Button.background [list -sticky nswe -border 1 -parcel [list] -children [list]] \
+    Button.border [list -sticky nswe -border 1 -parcel [list] -children \
+      [list Button.focusring [list -sticky nswe -parcel [list] -children \
+        [list Button.padding [list -sticky nswe -parcel [list] -children \
+	    [list Button.label [list -sticky nswe -parcel [list]]] \
 	]] \
     ]] \
-  ]] \
-]]
+  ] \
+]

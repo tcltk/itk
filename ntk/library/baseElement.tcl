@@ -11,7 +11,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: baseElement.tcl,v 1.1.2.1 2007/12/30 22:55:58 wiede Exp $
+# RCS: @(#) $Id: baseElement.tcl,v 1.1.2.2 2008/01/02 19:58:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::baseElement {
@@ -41,8 +41,50 @@ puts stderr "STDEF!$styleDefault!"
 		    
 		}
 	    }
-#puts stderr "FINAL!$itcl_options($optionName)!"
+puts stderr "FINAL!$itcl_options($optionName)!"
 	}
+    }
+    
+    protected method ReliefPadding {padding relief shiftRelief} {
+	switch [llength $padding] {
+	1 {
+	    set leftPad [lindex $padding 0]
+	    set rightPad $leftPad
+	    set topPad $leftPad
+	    set bottomPad $leftPad
+	  }
+	2 {
+	    set leftPad [lindex $padding 0]
+	    set topPad [lindex $padding 1]
+	    set rightPad $leftPad
+	    set bottomPad $topPad
+	  }
+	4 {
+	    set leftPad [lindex $padding 0]
+	    set topPad [lindex $padding 1]
+	    set rightPad [lindex $padding 2]
+	    set bottomPad [lindex $padding 3]
+	  }
+	}
+        switch $relief {
+	raised {
+	    incr rightPad $shiftRelief
+	    incr bottomPad $shiftRelief
+	  }
+	sunken {
+	    incr leftPad $shiftRelief
+	    incr topPad $shiftRelief
+	  }
+	default {
+	    set h1 [expr {$shiftRelief / 2}]
+	    set h2 [expr {$shiftRelief % 2}]
+	    incr leftPad $h1
+	    incr topPad $h1
+	    incr rightPad $h2
+	    incr bottomPad $h2
+	  }
+	}
+        return [list $leftPad $topPad $rightPad $bottomPad]
     }
 
 }

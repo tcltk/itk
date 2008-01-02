@@ -11,7 +11,7 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: defaultPaddingElement.tcl,v 1.1.2.2 2007/12/30 22:58:19 wiede Exp $
+# RCS: @(#) $Id: defaultPaddingElement.tcl,v 1.1.2.3 2008/01/02 19:58:57 wiede Exp $
 #--------------------------------------------------------------------------
 
 ::itcl::extendedclass ::ntk::classes::defaultPaddingElement {
@@ -30,13 +30,14 @@
     public method InitializeOptionValues {styleName widget state} {
 	InitializeOptionValuesBase $styleName $widget $state
 puts stderr "PADDING!$this!relief!$itcl_options(-relief)!"
+puts stderr "PADDING!$this!padding!$itcl_options(-padding)!"
 	return
     }
 
     public method ElementSize {widthVar heightVar paddingVar} {
-        upvar $widthVar width
-        upvar $heightVar height
         upvar $paddingVar padding
+
+        set padding [ReliefPadding $itcl_options(-padding) $itcl_options(-relief) $itcl_options(-shiftrelief)]
     }
 
     public method ElementDraw {box state} {
