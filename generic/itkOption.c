@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkOption.c,v 1.1.2.1 2007/09/08 12:03:23 wiede Exp $
+ *     RCS:  $Id: itkOption.c,v 1.1.2.2 2008/09/28 19:51:32 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -76,6 +76,7 @@ Itk_ClassOptionDefineCmd(
     Tcl_HashEntry *entry;
     ItkClassOption *opt;
 
+    ItclShowArgs(1, "Itk_ClassOptionDefineCmd", objc, objv);
     /*
      *  Make sure that the arguments look right.  The option switch
      *  name must start with a '-'.
@@ -137,7 +138,7 @@ Itk_ClassOptionDefineCmd(
     if (!newEntry) {
         Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
                 "option \"", switchName, "\" already defined in class \"",
-                Tcl_GetString(iclsPtr->fullname), "\"",
+                Tcl_GetString(iclsPtr->fullNamePtr), "\"",
                 (char*)NULL);
         return TCL_ERROR;
     }
@@ -229,7 +230,7 @@ Itk_ConfigClassOption(
         Itcl_SetCallFrameResolver(interp, opt->iclsPtr->resolvePtr);
         Tcl_Namespace *saveNsPtr = Tcl_GetCurrentNamespace(interp);
 //fprintf(stderr, "MCNS!%s!\n", saveNsPtr->fullName);
-        Itcl_SetCallFrameNamespace(interp, opt->iclsPtr->namesp);
+        Itcl_SetCallFrameNamespace(interp, opt->iclsPtr->nsPtr);
         result = Tcl_EvalObjEx(interp, mcode->bodyPtr, 0);
         Itcl_SetCallFrameNamespace(interp, saveNsPtr);
 #ifdef NOTDEF
@@ -289,14 +290,14 @@ Itk_CreateClassOptTable(
 
         Tcl_SetHashValue(entry, (ClientData)optTable);
 
-        result = Tcl_PushCallFrame(interp, &frame,
-             iclsPtr->namesp, /* isProcCallFrame */ 0);
+        result = Itcl_PushCallFrame(interp, &frame,
+             iclsPtr->nsPtr, /* isProcCallFrame */ 0);
 
         if (result == TCL_OK) {
             Tcl_TraceVar(interp, "_itk_option_data",
                     (TCL_TRACE_UNSETS | TCL_NAMESPACE_ONLY),
                     ItkTraceClassDestroy, (ClientData)iclsPtr);
-            Tcl_PopCallFrame(interp);
+            Itcl_PopCallFrame(interp);
         }
     } else {
         optTable = (ItkClassOptTable*)Tcl_GetHashValue(entry);
@@ -450,7 +451,7 @@ Itk_CreateClassOption(
     opt->protection   = Itcl_Protection(interp, 0);
     opt->namePtr      = Tcl_NewStringObj(switchName, -1);
     Tcl_IncrRefCount(opt->namePtr);
-    opt->fullNamePtr = Tcl_NewStringObj(Tcl_GetString(iclsPtr->fullname), -1);
+    opt->fullNamePtr = Tcl_NewStringObj(Tcl_GetString(iclsPtr->fullNamePtr), -1);
     Tcl_AppendToObj(opt->fullNamePtr, "::", 2);
     Tcl_AppendToObj(opt->fullNamePtr, switchName, -1);
     Tcl_IncrRefCount(opt->fullNamePtr);

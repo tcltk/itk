@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkArchBase.c,v 1.1.2.4 2007/10/03 17:01:27 wiede Exp $
+ *     RCS:  $Id: itkArchBase.c,v 1.1.2.5 2008/09/28 19:51:26 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -182,7 +182,7 @@ Itk_ArchCompAddCmd(
     Tcl_Obj *hullNamePtr = NULL;
     int pLevel = ITCL_PUBLIC;
 
-    ItclShowArgs(2, "Itk_ArchCompAddCmd", objc, objv);
+    ItclShowArgs(1, "Itk_ArchCompAddCmd", objc, objv);
     int newEntry;
     int result;
     CONST char *cmd;
@@ -259,7 +259,7 @@ Itk_ArchCompAddCmd(
         return TCL_ERROR;
     }
 
-    ItclShowArgs(2, "COMPADD2", objc, objv);
+    ItclShowArgs(1, "COMPADD2", objc, objv);
     /*
      *  See if a component already exists with the symbolic name.
      */
@@ -291,7 +291,7 @@ Itk_ArchCompAddCmd(
         Tcl_AppendToObj(tmpNamePtr, "-widget-", -1);
         Tcl_IncrRefCount(tmpNamePtr);
         
-        result = TclRenameCommand(interp, Tcl_GetString(objNamePtr),
+        result = Itcl_RenameCommand(interp, Tcl_GetString(objNamePtr),
                 Tcl_GetString(tmpNamePtr));
 
         if (result != TCL_OK) {
@@ -396,7 +396,7 @@ Itk_ArchCompAddCmd(
         Tcl_AppendToObj(hullNamePtr, "-itk_hull", -1);
         Tcl_IncrRefCount(hullNamePtr);
 
-        result = TclRenameCommand(interp, Tcl_GetString(winNamePtr),
+        result = Itcl_RenameCommand(interp, Tcl_GetString(winNamePtr),
                 Tcl_GetString(hullNamePtr));
 
         if (result != TCL_OK) {
@@ -407,7 +407,7 @@ Itk_ArchCompAddCmd(
         winNamePtr = hullNamePtr;
         hullNamePtr = NULL;
 
-        result = TclRenameCommand(interp, Tcl_GetString(tmpNamePtr),
+        result = Itcl_RenameCommand(interp, Tcl_GetString(tmpNamePtr),
                 Tcl_GetString(objNamePtr));
 
         if (result != TCL_OK) {
@@ -510,12 +510,12 @@ Itk_ArchCompAddCmd(
         objPtr = objv[3];
     }
 
-    result = Tcl_PushCallFrame(interp, &frame, parserNs,
+    result = Itcl_PushCallFrame(interp, &frame, parserNs,
             /* isProcCallFrame */ 0);
 
     if (result == TCL_OK) {
         result = Tcl_EvalObj(interp, objPtr);
-        Tcl_PopCallFrame(interp);
+        Itcl_PopCallFrame(interp);
     }
 
     if (objPtr != objv[3]) {
@@ -1625,7 +1625,7 @@ Itk_PropagatePublicVar(
      *  is the most-specific class, so that the public variable can
      *  be found.
      */
-    result = Tcl_PushCallFrame(interp, &frame, contextObj->iclsPtr->nsPtr,
+    result = Itcl_PushCallFrame(interp, &frame, contextObj->iclsPtr->nsPtr,
             /*isProcCallFrame*/0);
 
     if (result == TCL_OK) {
@@ -1639,7 +1639,7 @@ Itk_PropagatePublicVar(
         if (!val) {
             result = TCL_ERROR;
         }
-        Tcl_PopCallFrame(interp);
+        Itcl_PopCallFrame(interp);
     }
 
     if (result != TCL_OK) {
@@ -2177,7 +2177,7 @@ Itk_InitArchOption(
      *  Since this might be called from the itk::option-parser
      *  namespace, reinstall the object context.
      */
-    result = Tcl_PushCallFrame(interp, &frame, info->itclObj->iclsPtr->nsPtr, /*isProcCallFrame*/0);
+    result = Itcl_PushCallFrame(interp, &frame, info->itclObj->iclsPtr->nsPtr, /*isProcCallFrame*/0);
 
     if (result == TCL_OK) {
 	/*
@@ -2186,7 +2186,7 @@ Itk_InitArchOption(
 	 */
         Tcl_SetVar2(interp, "itk_option", archOpt->switchName,
             (char *)((ival) ? ival : ""), 0);
-    Tcl_PopCallFrame(interp);
+    Itcl_PopCallFrame(interp);
     }
 
     if (ival) {
@@ -2335,11 +2335,11 @@ Itk_AddOptionPart(
 
     if ((archOpt->flags & ITK_ARCHOPT_INIT) != 0) {
 
-        result = Tcl_PushCallFrame(interp, &frame, info->itclObj->iclsPtr->nsPtr, /*isProcCallFrame*/0);
+        result = Itcl_PushCallFrame(interp, &frame, info->itclObj->iclsPtr->nsPtr, /*isProcCallFrame*/0);
 
         if (result == TCL_OK) {
             init = Tcl_GetVar2(interp, "itk_option", archOpt->switchName, 0);
-            Tcl_PopCallFrame(interp);
+            Itcl_PopCallFrame(interp);
         }
 
         if (!init) {

@@ -26,7 +26,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkArchetype.c,v 1.1.2.2 2007/09/08 12:32:42 wiede Exp $
+ *     RCS:  $Id: itkArchetype.c,v 1.1.2.3 2008/09/28 19:51:29 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -323,7 +323,7 @@ Itk_ArchInitOptsCmd(
             Tcl_GetCommandName(interp, contextObj->accessCmd), -1);
         Tcl_IncrRefCount(newNamePtr);
 
-        result = TclRenameCommand(interp, Tcl_GetString(oldNamePtr),
+        result = Itcl_RenameCommand(interp, Tcl_GetString(oldNamePtr),
                 Tcl_GetString(newNamePtr));
 
         Tcl_DecrRefCount(oldNamePtr);
@@ -527,6 +527,9 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
     ItclVariable *ivPtr;
     Tcl_HashSearch place;
     Tcl_HashEntry *entry;
+    ItclObjectInfo *infoPtr;
+    ItclCallContext *callContextPtr;
+    Tcl_HashEntry *hPtr;
 
     ItclShowArgs(2, "Itk_ArchInitCmd", objc, objv);
     contextClass = NULL;
@@ -542,7 +545,6 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
         return TCL_ERROR;
     }
 
-    ItclObjectInfo *infoPtr;
     infoPtr = (ItclObjectInfo *)Tcl_GetAssocData(interp,
             ITCL_INTERP_DATA, NULL);
     if (Itk_GetArchInfo(interp, contextObj, &info) != TCL_OK) {
@@ -554,15 +556,14 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
      *  for the calling context.
      */
     infoPtr = Tcl_GetAssocData(interp, ITCL_INTERP_DATA, NULL);
-    ItclCallContext *callContextPtr;
     callContextPtr = Itcl_GetStackValue(&infoPtr->contextStack,
             Itcl_GetStackSize(&infoPtr->contextStack)-2);
-    if (callContextPtr->iclsPtr != NULL) {
-        contextClass = callContextPtr->iclsPtr;
-    } else {
-        contextClass = callContextPtr->ioPtr->iclsPtr;
+    hPtr = Tcl_FindHashEntry(
+            &callContextPtr->ioPtr->iclsPtr->infoPtr->namespaceClasses,
+            (char *)callContextPtr->nsPtr);
+    if (hPtr != NULL) {
+        contextClass = (ItclClass *)Tcl_GetHashValue(hPtr);
     }
-
 
 
     /*
@@ -956,14 +957,14 @@ fprintf(stderr, "ERR 2 archComp == NULL\n");
 	Tcl_DStringAppend(&buffer, ITCL_VARIABLES_NAMESPACE, -1);
 	Tcl_DStringAppend(&buffer, Tcl_GetString(objPtr), -1);
 	Tcl_DecrRefCount(objPtr);
-	Tcl_DStringAppend(&buffer, archComp->iclsPtr->namesp->fullName, -1);
+	Tcl_DStringAppend(&buffer, archComp->iclsPtr->nsPtr->fullName, -1);
 	Tcl_Namespace *nsPtr;
 	Tcl_CallFrame frame;
 	nsPtr = Tcl_FindNamespace(interp, Tcl_DStringValue(&buffer), NULL, 0);
-	Tcl_PushCallFrame(interp, &frame, nsPtr, /*isProcCallFrame*/0);
+	Itcl_PushCallFrame(interp, &frame, nsPtr, /*isProcCallFrame*/0);
         val = Tcl_GetVar2(interp, "itk_component", token, 0);
 	Tcl_DStringFree(&buffer);
-	Tcl_PopCallFrame(interp);
+	Itcl_PopCallFrame(interp);
         if (!val) {
             Tcl_ResetResult(interp);
             Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
@@ -1045,6 +1046,7 @@ Itk_ArchConfigureCmd(
     ArchOption *archOpt;
     Tcl_DString buffer;
 
+    ItclShowArgs(1, "Itk_ArchConfigureCmd", objc, objv);
     contextClass = NULL;
     if (Itcl_GetContext(interp, &contextClass, &contextObj) != TCL_OK ||
         !contextObj) {
@@ -1074,7 +1076,7 @@ Itk_ArchConfigureCmd(
 	    objc--;
 	}
     }
-    ItclShowArgs(2, "Itk_ArchConfigureCmd", objc, objv);
+    ItclShowArgs(1, "Itk_ArchConfigureCmd2", objc, objv);
     if (objc == 1) {
         Tcl_DStringInit(&buffer);
 
