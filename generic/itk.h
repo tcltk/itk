@@ -38,7 +38,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itk.h,v 1.18.2.2 2007/09/08 12:32:42 wiede Exp $
+ *     RCS:  $Id: itk.h,v 1.18.2.3 2008/10/17 17:02:57 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -73,7 +73,7 @@
 #define ITK_RELEASE_SERIAL	0
 
 #define ITK_VERSION		"4.0"
-#define ITK_PATCH_LEVEL		"4.0.0.0"
+#define ITK_PATCH_LEVEL		"4.0a0"
 
 
 /*
