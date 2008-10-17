@@ -26,7 +26,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkArchetype.c,v 1.1.2.3 2008/09/28 19:51:29 wiede Exp $
+ *     RCS:  $Id: itkArchetype.c,v 1.1.2.4 2008/10/17 23:33:11 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -38,10 +38,11 @@
 
 int _itcl_debug_level = 0;
 
+#ifdef ITCL_DEBUG
 void
 ItclShowArgs(
     int level,
-    const char *str,
+    CONST84 char *str,
     int objc,
     Tcl_Obj * const* objv)
 {
@@ -57,6 +58,7 @@ ItclShowArgs(
     }
     fprintf(stderr, "!\n");
 }
+#endif
 
 struct NameProcMap { const char *name; Tcl_ObjCmdProc *proc; };
 

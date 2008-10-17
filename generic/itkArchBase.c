@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkArchBase.c,v 1.1.2.5 2008/09/28 19:51:26 wiede Exp $
+ *     RCS:  $Id: itkArchBase.c,v 1.1.2.6 2008/10/17 23:33:11 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -2710,9 +2710,9 @@ Itk_CreateGenericOptTable(interp, options)
     char *options;               /* string description of config options */
 {
     int confc;
-    const char **confv = NULL;
+    CONST84 char **confv = NULL;
     int optc;
-    const char **optv = NULL;
+    CONST84 char **optv = NULL;
 
     int i, newEntry;
     Tcl_HashTable *tPtr;
@@ -2827,7 +2827,7 @@ Itk_CreateGenericOpt(interp, switchName, accessCmd)
     Tcl_Obj *codePtr = NULL;
 
     int optc, result;
-    const char **optv;
+    CONST84 char **optv;
     char *name;
     char *info;
     Tcl_Obj *resultPtr;

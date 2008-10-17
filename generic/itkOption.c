@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkOption.c,v 1.1.2.2 2008/09/28 19:51:32 wiede Exp $
+ *     RCS:  $Id: itkOption.c,v 1.1.2.3 2008/10/17 23:33:11 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -29,7 +29,7 @@
  *  FORWARD DECLARATIONS
  */
 static char* ItkTraceClassDestroy _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, CONST char *name1, CONST char *name2, int flags));
+    Tcl_Interp *interp, CONST84 char *name1, CONST84 char *name2, int flags));
 static Tcl_HashTable* ItkGetClassesWithOptInfo _ANSI_ARGS_((
     Tcl_Interp *interp));
 static void ItkFreeClassesWithOptInfo _ANSI_ARGS_((ClientData cdata,
@@ -358,8 +358,8 @@ static char*
 ItkTraceClassDestroy(
     ClientData cdata,          /* class definition data */
     Tcl_Interp *interp,        /* interpreter managing the class */
-    CONST char *name1,               /* name of variable involved in trace */
-    CONST char *name2,         /* name of array element within variable */
+    CONST84 char *name1,       /* name of variable involved in trace */
+    CONST84 char *name2,       /* name of array element within variable */
     int flags)                 /* flags describing trace */
 {
     ItclClass *iclsPtr = (ItclClass*)cdata;
