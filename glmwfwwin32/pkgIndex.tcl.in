@@ -1,2 +1,0 @@
-if {[catch {package present Tcl }]} return
-package ifneeded GlmwfwWin32 0.1  [list load [file join $dir libGlmwfwWin32.1.so] GlmwfwWin32] 
