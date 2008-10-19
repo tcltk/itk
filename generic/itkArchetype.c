@@ -26,7 +26,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkArchetype.c,v 1.1.2.4 2008/10/17 23:33:11 wiede Exp $
+ *     RCS:  $Id: itkArchetype.c,v 1.1.2.5 2008/10/19 16:56:34 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -42,7 +42,7 @@ int _itcl_debug_level = 0;
 void
 ItclShowArgs(
     int level,
-    CONST84 char *str,
+    const char *str,
     int objc,
     Tcl_Obj * const* objv)
 {
@@ -911,7 +911,7 @@ fprintf(stderr, "ERR 2 archComp == NULL\n");
             if (Itcl_CanAccess2(archComp->iclsPtr, archComp->protection,
 	            callingNs)) {
                 name = Tcl_GetHashKey(&info->components, entry);
-                Tcl_AppendElement(interp, (CONST84 char *)name);
+                Tcl_AppendElement(interp, (const char *)name);
             }
 }
             entry = Tcl_NextHashEntry(&place);
@@ -1136,7 +1136,7 @@ Itk_ArchConfigureCmd(
                 (archOpt->resClass) ? archOpt->resClass : "");
             Tcl_AppendElement(interp,
                 (archOpt->init) ? archOpt->init : "");
-            Tcl_AppendElement(interp, (CONST84 char *)val);
+            Tcl_AppendElement(interp, (const char *)val);
             return TCL_OK;
         } 
     }

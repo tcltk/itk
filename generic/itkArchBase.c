@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkArchBase.c,v 1.1.2.6 2008/10/17 23:33:11 wiede Exp $
+ *     RCS:  $Id: itkArchBase.c,v 1.1.2.7 2008/10/19 16:56:34 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -1579,7 +1579,7 @@ Itk_PropagateOption(
     int result;
     Tcl_Obj *objPtr;
 
-    objPtr = Tcl_NewStringObj((CONST84 char *)newval, -1);
+    objPtr = Tcl_NewStringObj((const char *)newval, -1);
     Tcl_IncrRefCount(objPtr);
 
     cmdlinePtr->objv[3] = objPtr;
@@ -1719,7 +1719,7 @@ Itk_ArchSetOption(
     archOpt = (ArchOption*)Tcl_GetHashValue(entry);
 
     if (!Tcl_SetVar2(interp, "itk_option", archOpt->switchName,
-	    (CONST84 char *)value, 0)) {
+	    (const char *)value, 0)) {
         Itk_ArchOptAccessError(interp, info, archOpt);
         return TCL_ERROR;
     }
@@ -2710,9 +2710,9 @@ Itk_CreateGenericOptTable(interp, options)
     char *options;               /* string description of config options */
 {
     int confc;
-    CONST84 char **confv = NULL;
+    const char **confv = NULL;
     int optc;
-    CONST84 char **optv = NULL;
+    const char **optv = NULL;
 
     int i, newEntry;
     Tcl_HashTable *tPtr;
@@ -2827,7 +2827,7 @@ Itk_CreateGenericOpt(interp, switchName, accessCmd)
     Tcl_Obj *codePtr = NULL;
 
     int optc, result;
-    CONST84 char **optv;
+    const char **optv;
     char *name;
     char *info;
     Tcl_Obj *resultPtr;
