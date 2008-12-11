@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkBase.c,v 1.1.2.1 2007/09/08 12:03:22 wiede Exp $
+ *     RCS:  $Id: itkBase.c,v 1.1.2.2 2008/12/11 11:24:45 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -128,7 +128,7 @@ fprintf(stderr, "NO STUBS\n");
     if (Tcl_PkgRequire(interp, "Tk", TK_VERSION, 0) == NULL) {
       return TCL_ERROR;
     }
-    if (Tcl_PkgRequire(interp, "Itcl", ITCL_VERSION, 1) == NULL) {
+    if (Tcl_PkgRequire(interp, "itcl", ITCL_VERSION, 1) == NULL) {
       return TCL_ERROR;
     }
 #else
@@ -233,7 +233,7 @@ fprintf(stderr, "ERROR in loading Itcl!%s!\n", Tcl_GetStringResult(interp));
      *  end-of-the-line?
      */
 
-    return Tcl_PkgProvideEx(interp, "Itk", ITK_VERSION,
+    return Tcl_PkgProvideEx(interp, "itk", ITK_VERSION,
             (ClientData) &itkStubAPI);
 }
 
