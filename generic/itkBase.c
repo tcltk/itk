@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkBase.c,v 1.1.2.2 2008/12/11 11:24:45 wiede Exp $
+ *     RCS:  $Id: itkBase.c,v 1.1.2.3 2008/12/31 22:56:47 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -56,7 +56,7 @@ namespace eval ::itk {\n\
     proc _find_init {} {\n\
         global env tcl_library\n\
         variable library\n\
-        variable version\n\
+        variable patchLevel\n\
         rename _find_init {}\n\
         if {[info exists library]} {\n\
             lappend dirs $library\n\
@@ -68,9 +68,9 @@ namespace eval ::itk {\n\
             if {[info exists env(ITK_LIBRARY)]} {\n\
                 lappend dirs $env(ITK_LIBRARY)\n\
             }\n\
-            lappend dirs [file join [file dirname $tcl_library] Itk$version]\n\
+            lappend dirs [file join [file dirname $tcl_library] itk$patchLevel]\n\
             set bindir [file dirname [info nameofexecutable]]\n\
-            lappend dirs [file join $bindir .. lib Itk$version]\n\
+            lappend dirs [file join $bindir .. lib itk$patchLevel]\n\
             lappend dirs [file join $bindir .. library]\n\
             lappend dirs [file join $bindir .. .. library]\n\
             lappend dirs [file join $bindir .. .. itk library]\n\
@@ -78,7 +78,7 @@ namespace eval ::itk {\n\
             if {[string equal $::tcl_platform(platform) \"unix\"] && \
                     [string equal $::tcl_platform(os) \"Darwin\"]} {\n\
                 foreach d $::tcl_pkgPath {\n\
-                    lappend dirs [file join $d Itk$version]\n\
+                    lappend dirs [file join $d itk$patchLevel]\n\
                 }\n\
             }\n\
         }\n\
@@ -128,7 +128,7 @@ fprintf(stderr, "NO STUBS\n");
     if (Tcl_PkgRequire(interp, "Tk", TK_VERSION, 0) == NULL) {
       return TCL_ERROR;
     }
-    if (Tcl_PkgRequire(interp, "itcl", ITCL_VERSION, 1) == NULL) {
+    if (Tcl_PkgRequire(interp, "itcl", ITCL_PATCH_LEVEL, 1) == NULL) {
       return TCL_ERROR;
     }
 #else
@@ -140,7 +140,7 @@ fprintf(stderr, "ERROR in loading Tcl!%s!\n", Tcl_GetStringResult(interp));
 fprintf(stderr, "ERROR in loading TK!%s!\n", Tcl_GetStringResult(interp));
 	return TCL_ERROR;
     };
-    if (Itcl_InitStubs(interp, ITCL_VERSION, 1) == NULL) {
+    if (Itcl_InitStubs(interp, ITCL_PATCH_LEVEL, 0) == NULL) {
 fprintf(stderr, "ERROR in loading Itcl!%s!\n", Tcl_GetStringResult(interp));
 	return TCL_ERROR;
     }
@@ -233,7 +233,7 @@ fprintf(stderr, "ERROR in loading Itcl!%s!\n", Tcl_GetStringResult(interp));
      *  end-of-the-line?
      */
 
-    return Tcl_PkgProvideEx(interp, "itk", ITK_VERSION,
+    return Tcl_PkgProvideEx(interp, "itk", ITK_PATCH_LEVEL,
             (ClientData) &itkStubAPI);
 }
 
