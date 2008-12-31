@@ -26,7 +26,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkArchetype.c,v 1.1.2.5 2008/10/19 16:56:34 wiede Exp $
+ *     RCS:  $Id: itkArchetype.c,v 1.1.2.6 2008/12/31 23:16:10 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -142,6 +142,9 @@ Itk_ArchetypeInit(
 
     nsPtr = Tcl_CreateNamespace(interp, "::itcl::builtin::Archetype",
         NULL, NULL);
+    if (nsPtr == NULL) {
+        nsPtr = Tcl_FindNamespace(interp, "::itcl::builtin::Archetype", NULL, 0);
+    }
 if (nsPtr == NULL) {
 fprintf(stderr, "error in creating namespace: ::itcl::builtin::Archetype \n");
 }
