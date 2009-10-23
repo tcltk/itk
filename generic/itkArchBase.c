@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkArchBase.c,v 1.1.2.7 2008/10/19 16:56:34 wiede Exp $
+ *     RCS:  $Id: itkArchBase.c,v 1.1.2.8 2009/10/23 16:37:35 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -198,6 +198,10 @@ Itk_ArchCompAddCmd(
     Tcl_Command accessCmd;
     Tcl_Obj *objPtr;
     Tcl_DString buffer;
+    Tcl_CallFrame *uplevelFramePtr;
+    Tcl_CallFrame *oldFramePtr;
+    ItclObjectInfo *infoPtr;
+    ItclCallContext *callContextPtr;
 
     /*
      *  Get the Archetype info associated with this widget.
@@ -304,20 +308,10 @@ Itk_ArchCompAddCmd(
      *  Do this one level up, in the scope of the calling routine.
      */
     Itcl_SetCallFrameResolver(interp, contextClass->resolvePtr);
-    Tcl_Namespace *saveNsPtr = Tcl_GetCurrentNamespace(interp);
-    ItclObjectInfo *infoPtr;
     infoPtr = Tcl_GetAssocData(interp, ITCL_INTERP_DATA, NULL);
-    int idx;
-    idx = 2;
-    if (Itcl_GetStackSize(&infoPtr->contextStack) == 1) {
-	    idx = 1;
-    }
-    ItclCallContext *callContextPtr;
-    callContextPtr = Itcl_GetStackValue(&infoPtr->contextStack,
-            Itcl_GetStackSize(&infoPtr->contextStack)-idx);
-    Itcl_SetCallFrameNamespace(interp, callContextPtr->nsPtr);
+    uplevelFramePtr = Itcl_GetUplevelCallFrame(interp, 1);
+    oldFramePtr = Itcl_ActivateCallFrame(interp, uplevelFramePtr);
     result = Tcl_EvalObjEx(interp, objv[2], 0);
-    Itcl_SetCallFrameNamespace(interp, saveNsPtr);
     if (result != TCL_OK) {
         goto compFail;
     }
@@ -347,6 +341,7 @@ Itk_ArchCompAddCmd(
         goto compFail;
     }
 
+    (void) Itcl_ActivateCallFrame(interp, oldFramePtr);
     winNamePtr = Tcl_NewStringObj((char*)NULL, 0);
     Tcl_GetCommandFullName(interp, accessCmd, winNamePtr);
     Tcl_IncrRefCount(winNamePtr);
