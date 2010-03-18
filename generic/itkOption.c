@@ -16,7 +16,7 @@
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
  *
- *     RCS:  $Id: itkOption.c,v 1.1.2.4 2008/10/19 16:56:34 wiede Exp $
+ *     RCS:  $Id: itkOption.c,v 1.1.2.5 2010/03/18 10:03:56 wiede Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------
@@ -375,7 +375,7 @@ ItkTraceClassDestroy(
      *  If it is found, delete all the option records and tear
      *  down the table.
      */
-    itkClasses = ItkGetClassesWithOptInfo(iclsPtr->interp);
+    itkClasses = ItkGetClassesWithOptInfo(interp);
     entry = Tcl_FindHashEntry(itkClasses, (char*)iclsPtr);
     if (entry) {
         optTable = (ItkClassOptTable*)Tcl_GetHashValue(entry);
