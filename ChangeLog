@@ -1,4 +1,9 @@
-RCS: @(#) $Id: ChangeLog,v 1.1.2.1 2007/09/09 12:27:13 wiede Exp $
+2010-08-17  Jeff Hobbs  <jeffh@ActiveState.com>
+
+	* configure, configure.in, generic/itk.h: Bump version to 4.0b5
+	* tclconfig/tcl.m4: full update to TEA 3.9
+
+RCS: @(#) $Id: ChangeLog,v 1.1.2.2 2010/08/17 21:29:30 hobbs Exp $
 2007-09-08 Arnulf P. Wiedemann <wiede@users.sf.net>
     * all new modules installed and added
 This is the ChangeLog file for itcl-ng/itk

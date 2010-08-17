@@ -10,7 +10,7 @@
 # so you can encode the package version directly into the source files.
 #-----------------------------------------------------------------------
 
-AC_INIT([itk], [4.0b4])
+AC_INIT([itk], [4.0b5])
 
 #--------------------------------------------------------------------
 # Call TEA_INIT as the first TEA_ macro to set up initial vars.
@@ -18,7 +18,7 @@ AC_INIT([itk], [4.0b4])
 # as well as PKG_LIB_FILE and PKG_STUB_LIB_FILE.
 #--------------------------------------------------------------------
 
-TEA_INIT([3.7])
+TEA_INIT([3.9])
 
 AC_PROG_LN_S
 CONFIG_CLEAN_FILES=
@@ -116,14 +116,8 @@ TEA_ADD_TCL_SOURCES([library/Archetype.itk
 #--------------------------------------------------------------------
 
 if test "${TEA_PLATFORM}" = "windows" ; then
-    AC_DEFINE(BUILD_itk)
-    CLEANFILES="*.lib *.dll *.exp *.ilk *.pdb vc*.pch"
     TEA_ADD_SOURCES([dllEntryPoint.c])
-else
-    CLEANFILES=
 fi
-
-AC_SUBST(CLEANFILES)
 
 #--------------------------------------------------------------------
 # __CHANGE__
@@ -205,17 +199,6 @@ fi
 #--------------------------------------------------------------------
 
 TEA_MAKE_LIB
-
-#--------------------------------------------------------------------
-# __CHANGE__
-# Add platform libs to LIBS or SHLIB_LD_LIBS as necessary.
-#--------------------------------------------------------------------
-
-if test "${TEA_PLATFORM}" = "windows" -a "$GCC" != "yes" ; then
-    SHLIB_LD_LIBS="${SHLIB_LD_LIBS} \"`${CYGPATH} ${itcl_STUB_LIB_PATH}`\""
-else
-    SHLIB_LD_LIBS="${SHLIB_LD_LIBS} ${itcl_STUB_LIB_SPEC}"
-fi
 
 #--------------------------------------------------------------------
 # __CHANGE__
