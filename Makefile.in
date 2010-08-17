@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.32 2010/08/17 01:20:49 hobbs Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.33 2010/08/17 21:20:26 hobbs Exp $
 
 #========================================================================
 # The names of the source files is defined in the configure script.
@@ -130,9 +130,6 @@ TCL_BIN_DIR	= @TCL_BIN_DIR@
 TCL_SRC_DIR	= @TCL_SRC_DIR@
 TK_SRC_DIR	= @TK_SRC_DIR@
 TK_BIN_DIR	= @TK_BIN_DIR@
-# This is necessary for packages that use private headers
-TCL_TOP_DIR_NATIVE = @TCL_TOP_DIR_NATIVE@
-TK_TOP_DIR_NATIVE = @TK_TOP_DIR_NATIVE@
 
 # Not used, but retained for reference of what libs Tcl required
 TCL_LIBS	= @TCL_LIBS@
