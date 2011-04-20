@@ -25,8 +25,6 @@
  *           Bell Labs Innovations for Lucent Technologies
  *           mmclennan@lucent.com
  *           http://www.tcltk.com/itcl
- *
- *     RCS:  $Id: itk_archetype.c,v 1.12 2007/05/24 22:12:55 hobbs Exp $
  * ========================================================================
  *           Copyright (c) 1993-1998  Lucent Technologies, Inc.
  * ------------------------------------------------------------------------

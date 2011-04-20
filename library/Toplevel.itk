@@ -23,8 +23,6 @@
 #            Bell Labs Innovations for Lucent Technologies
 #            mmclennan@lucent.com
 #            http://www.tcltk.com/itcl
-#
-#      RCS:  $Id: Toplevel.itk,v 1.4 2007/05/24 23:29:30 hobbs Exp $
 # ----------------------------------------------------------------------
 #            Copyright (c) 1993-1998  Lucent Technologies, Inc.
 # ======================================================================
