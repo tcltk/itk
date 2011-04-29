@@ -1,3 +1,6 @@
+2011-04-29 Arnulf P. Wiedemann <wiede@users.sf.net>
+	* configure, configure.in, generic/itk.h: Bump version to 4.0b6
+
 2010-08-17  Jeff Hobbs  <jeffh@ActiveState.com>
 
 	* configure, configure.in, generic/itk.h: Bump version to 4.0b5
