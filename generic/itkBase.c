@@ -23,7 +23,7 @@
  */
 #include "itkInt.h"
 
-extern struct ItkStubAPI itkStubAPI;
+MODULE_SCOPE const ItkStubs itkStubs;
 /*  
  * The following script is used to initialize Itcl in a safe interpreter.
  */
@@ -232,7 +232,7 @@ fprintf(stderr, "ERROR in loading Itcl!%s!\n", Tcl_GetStringResult(interp));
      */
 
     return Tcl_PkgProvideEx(interp, "itk", ITK_PATCH_LEVEL,
-            (ClientData) &itkStubAPI);
+            (ClientData) &itkStubs);
 }
 
 /*

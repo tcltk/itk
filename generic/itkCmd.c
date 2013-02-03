@@ -56,8 +56,8 @@ Itk_ConfigBodyCmd(
     int result = TCL_OK;
 
     char *token;
-    char *head;
-    char *tail;
+    const char *head;
+    const char *tail;
     ItclClass *iclsPtr;
     ItclMemberCode *mcode;
     ItkClassOptTable *optTable;

@@ -57,11 +57,11 @@ static ConfigCmdline* Itk_CreateConfigCmdline _ANSI_ARGS_((
 static void Itk_DeleteConfigCmdline _ANSI_ARGS_((ClientData cdata));
 
 static Tcl_HashTable* Itk_CreateGenericOptTable _ANSI_ARGS_((Tcl_Interp *interp,
-    char *options));
+    const char *options));
 static void Itk_DelGenericOptTable _ANSI_ARGS_((Tcl_HashTable *tPtr));
 
 static GenericConfigOpt* Itk_CreateGenericOpt _ANSI_ARGS_((Tcl_Interp *interp,
-    char *switchName, Tcl_Command accessCmd));
+    const char *switchName, Tcl_Command accessCmd));
 static void Itk_DelGenericOpt _ANSI_ARGS_((GenericConfigOpt* opt));
 
 
@@ -1242,8 +1242,8 @@ Itk_ArchOptionAddCmd(
     int i;
     int result;
     char *token;
-    char *head;
-    char *tail;
+    const char *head;
+    const char *tail;
     char *sep;
     char tmp;
     ItkClassOption *opt;
@@ -1430,8 +1430,8 @@ Itk_ArchOptionRemoveCmd(dummy, interp, objc, objv)
 
     int i;
     char *name;
-    char *head;
-    char *tail;
+    const char *head;
+    const char *tail;
     char *sep;
     char tmp;
     ItkClassOption *opt;
@@ -2700,7 +2700,7 @@ Itk_DeleteConfigCmdline(cdata)
 static Tcl_HashTable*
 Itk_CreateGenericOptTable(interp, options)
     Tcl_Interp *interp;          /* interpreter handling this request */
-    char *options;               /* string description of config options */
+    const char *options;               /* string description of config options */
 {
     int confc;
     const char **confv = NULL;
@@ -2813,7 +2813,7 @@ Itk_DelGenericOptTable(tPtr)
 static GenericConfigOpt*
 Itk_CreateGenericOpt(interp, switchName, accessCmd)
     Tcl_Interp *interp;          /* interpreter handling this request */
-    char *switchName;            /* command-line switch for option */
+    const char *switchName;      /* command-line switch for option */
     Tcl_Command accessCmd;       /* access command for component */
 {
     GenericConfigOpt *genericOpt = NULL;
@@ -2822,6 +2822,7 @@ Itk_CreateGenericOpt(interp, switchName, accessCmd)
     int optc, result;
     const char **optv;
     char *name;
+    const char *my_name;
     char *info;
     Tcl_Obj *resultPtr;
 
@@ -2832,8 +2833,9 @@ Itk_CreateGenericOpt(interp, switchName, accessCmd)
         name = ckalloc((unsigned)(strlen(switchName)+2));
         *name = '-';
         strcpy(name+1, switchName);
+	my_name = name;
     } else {
-        name = switchName;
+        my_name = switchName;
     }
 
     /*
@@ -2845,7 +2847,7 @@ Itk_CreateGenericOpt(interp, switchName, accessCmd)
 
     Tcl_GetCommandFullName(interp, accessCmd, codePtr);
     Tcl_AppendToObj(codePtr, " configure ", -1);
-    Tcl_AppendToObj(codePtr, name, -1);
+    Tcl_AppendToObj(codePtr, my_name, -1);
 
     if (Tcl_EvalObj(interp, codePtr) != TCL_OK) {
         goto optionDone;
@@ -2882,8 +2884,8 @@ Itk_CreateGenericOpt(interp, switchName, accessCmd)
     }
 
 optionDone:
-    if (name != switchName) {
-        ckfree(name);
+    if (my_name != switchName) {
+        ckfree(my_name);
     }
     if (codePtr) {
         Tcl_DecrRefCount(codePtr);
