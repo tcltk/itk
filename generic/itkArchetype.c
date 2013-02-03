@@ -423,8 +423,8 @@ Itk_ArchComponentCmd(
      *  Check arguments and handle the various options...
      */
     Tcl_DString buffer;
-    char *head;
-    char *tail;
+    const char *head;
+    const char *tail;
     cmd = Tcl_GetString(objv[0]);
     Itcl_ParseNamespPath(cmd, &buffer, &head, &tail);
     Tcl_DStringFree(&buffer);

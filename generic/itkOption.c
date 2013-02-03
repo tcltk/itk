@@ -485,7 +485,7 @@ Itk_CreateClassOption(
 ItkClassOption*
 Itk_FindClassOption(
     ItclClass *iclsPtr,            /* class containing this option */
-    char *switchName)              /* name of command-line switch */
+    const char *switchName)        /* name of command-line switch */
 {
     ItkClassOption *opt = NULL;
 
