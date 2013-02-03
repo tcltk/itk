@@ -1,3 +1,9 @@
+2013-02-03 Arnulf P. Wiedemann <wiede@users.sf.net>
+	* bumped version to 4.0.0 for release
+	* added tools directory
+	* Makefile.in: added genstubs tag for generating stubs entries
+	* generic/itkArchBase.c: fixed some param types to fit to itcl changes
+
 2011-04-29 Arnulf P. Wiedemann <wiede@users.sf.net>
 	* configure, configure.in, generic/itk.h: Bump version to 4.0b6
 
@@ -7,7 +13,7 @@
 	* tclconfig/tcl.m4: full update to TEA 3.9
 
 2007-09-08 Arnulf P. Wiedemann <wiede@users.sf.net>
-    * all new modules installed and added
+	* all new modules installed and added
 This is the ChangeLog file for itcl-ng/itk
 it is here as Itk and itcl-ng/itk will be different modules in the future
 
