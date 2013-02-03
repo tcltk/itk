@@ -1,0 +1,7 @@
+This is the first stable release of Itk 4.0.
+It is a new major release of Itk.
+
+The difference to 4.0b6: Updated TEA system and related build system changes.
+
+There is no known incompatibility.
+
