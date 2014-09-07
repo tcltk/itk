@@ -589,7 +589,7 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
                         (ClientData)ivPtr);
 
                     val = Itcl_GetInstanceVar(interp,
-		            Tcl_GetString(ivPtr->fullNamePtr),
+		            Tcl_GetString(ivPtr->namePtr),
                             contextObj, contextObj->iclsPtr);
 
                     result = Itk_AddOptionPart(interp, info,
