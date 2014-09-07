@@ -1,3 +1,6 @@
+2014-09-07 Arnulf P. Wiedemann <wiede@users.sf.net>
+	* generic/itkArchetype.c: Fix for SF bug #253.
+
 2013-02-03 Arnulf P. Wiedemann <wiede@users.sf.net>
 	* bumped version to 4.0.0 for release
 	* added tools directory
