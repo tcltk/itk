@@ -197,7 +197,7 @@ Itk_ArchCompAddCmd(
     Tcl_Obj *objPtr;
     Tcl_DString buffer;
     Tcl_CallFrame *uplevelFramePtr;
-    Tcl_CallFrame *oldFramePtr;
+    Tcl_CallFrame *oldFramePtr = NULL;
     ItclObjectInfo *infoPtr;
     ItclCallContext *callContextPtr;
 
@@ -340,6 +340,7 @@ Itk_ArchCompAddCmd(
     }
 
     (void) Itcl_ActivateCallFrame(interp, oldFramePtr);
+    oldFramePtr = NULL;
     winNamePtr = Tcl_NewStringObj((char*)NULL, 0);
     Tcl_GetCommandFullName(interp, accessCmd, winNamePtr);
     Tcl_IncrRefCount(winNamePtr);
@@ -546,6 +547,9 @@ Itk_ArchCompAddCmd(
      *  If any errors were encountered, clean up and return.
      */
 compFail:
+    if (oldFramePtr) {
+	(void) Itcl_ActivateCallFrame(interp, oldFramePtr);
+    }
     if (archComp) {
         Itk_DelArchComponent(archComp);
     }
