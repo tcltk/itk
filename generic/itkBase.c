@@ -257,7 +257,6 @@ Itk_Init(
 	return TCL_ERROR;
     }
     return Tcl_Eval(interp, initScript);
-    return TCL_OK;
 }
 
 
