@@ -92,7 +92,6 @@ Itk_ArchetypeInit(
     ArchMergeInfo *mergeInfo;
     Tcl_Namespace *parserNs;
     Tcl_Namespace *nsPtr;
-    Tcl_Command cmd;
     int i;
 
     /*
@@ -146,8 +145,7 @@ Itk_ArchetypeInit(
 if (nsPtr == NULL) {
 fprintf(stderr, "error in creating namespace: ::itcl::builtin::Archetype \n");
 }
-    cmd = Tcl_CreateEnsemble(interp, nsPtr->fullName, nsPtr,
-       TCL_ENSEMBLE_PREFIX);
+    Tcl_CreateEnsemble(interp, nsPtr->fullName, nsPtr, TCL_ENSEMBLE_PREFIX);
     Tcl_Export(interp, nsPtr, "[a-z]*", 1);
     for (i=0 ; archetypeCmds[i].name!=NULL ; i++) {
         Tcl_CreateObjCommand(interp, archetypeCmds[i].name,
