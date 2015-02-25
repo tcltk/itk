@@ -4,6 +4,10 @@
 #define ITK_STUBS_EPOCH 0
 #define ITK_STUBS_REVISION 17
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Exported function declarations:
  */
@@ -26,7 +30,7 @@ ITKAPI int		Itk_SafeInit(Tcl_Interp *interp);
 /* 13 */
 ITKAPI int		Itk_ArchetypeInit(Tcl_Interp*interp);
 
-typedef struct ItkStubHooks {
+typedef struct {
     const struct ItkIntStubs *itkIntStubs;
 } ItkStubHooks;
 
@@ -34,7 +38,7 @@ typedef struct ItkStubs {
     int magic;
     int epoch;
     int revision;
-    const struct ItkStubHooks *hooks;
+    const ItkStubHooks *hooks;
 
     int (*itk_Init) (Tcl_Interp *interp); /* 0 */
     int (*itk_SafeInit) (Tcl_Interp *interp); /* 1 */
@@ -52,10 +56,8 @@ typedef struct ItkStubs {
     int (*itk_ArchetypeInit) (Tcl_Interp*interp); /* 13 */
 } ItkStubs;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern const ItkStubs *itkStubsPtr;
+
 #ifdef __cplusplus
 }
 #endif
