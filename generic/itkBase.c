@@ -118,32 +118,15 @@ Initialize(
     Tcl_Namespace *itkNs, *parserNs;
     ClientData parserInfo;
 
-#ifndef USE_TCL_STUBS
-fprintf(stderr, "NO STUBS\n");
-    if (Tcl_PkgRequire(interp, "Tcl", TCL_VERSION, 0) == NULL) {
-      return TCL_ERROR;
-    }
-    if (Tcl_PkgRequire(interp, "Tk", TK_VERSION, 0) == NULL) {
-      return TCL_ERROR;
-    }
-    if (Tcl_PkgRequire(interp, "itcl", ITCL_PATCH_LEVEL, 1) == NULL) {
-      return TCL_ERROR;
-    }
-#else
     if (Tcl_InitStubs(interp, TCL_VERSION, 0) == NULL) {
-fprintf(stderr, "ERROR in loading Tcl!%s!\n", Tcl_GetStringResult(interp));
       return TCL_ERROR;
     }
     if (Tk_InitStubs(interp, TK_VERSION, 0) == NULL) {
-fprintf(stderr, "ERROR in loading TK!%s!\n", Tcl_GetStringResult(interp));
 	return TCL_ERROR;
     };
-    if (Itcl_InitStubs(interp, ITCL_PATCH_LEVEL, 0) == NULL) {
-fprintf(stderr, "ERROR in loading Itcl!%s!\n", Tcl_GetStringResult(interp));
+    if (Itcl_InitStubs(interp, ITCL_VERSION, 0) == NULL) {
 	return TCL_ERROR;
     }
-
-#endif
 
     /*
      *  Add the "itk_option" ensemble to the itcl class definition parser.
@@ -257,7 +240,6 @@ Itk_Init(
 	return TCL_ERROR;
     }
     return Tcl_Eval(interp, initScript);
-    return TCL_OK;
 }
 
 

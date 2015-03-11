@@ -4,6 +4,10 @@
 #define ITKINT_STUBS_EPOCH 0
 #define ITKINT_STUBS_REVISION 17
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Exported function declarations:
  */
@@ -62,7 +66,7 @@ typedef struct ItkIntStubs {
     int magic;
     int epoch;
     int revision;
-    const struct ItkIntStubHooks *hooks;
+    void *hooks;
 
     void (*reserved0)(void);
     void (*reserved1)(void);
@@ -84,10 +88,8 @@ typedef struct ItkIntStubs {
     void (*itk_OptListRemove) (ItkOptList*olist, Tcl_HashEntry *entry); /* 17 */
 } ItkIntStubs;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern const ItkIntStubs *itkIntStubsPtr;
+
 #ifdef __cplusplus
 }
 #endif
