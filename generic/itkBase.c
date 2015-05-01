@@ -214,6 +214,7 @@ Initialize(
      *  end-of-the-line?
      */
 
+    Tcl_PkgProvideEx(interp, "Itk", ITK_PATCH_LEVEL, (ClientData) &itkStubs);
     return Tcl_PkgProvideEx(interp, "itk", ITK_PATCH_LEVEL,
             (ClientData) &itkStubs);
 }
