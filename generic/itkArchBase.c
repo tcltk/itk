@@ -305,10 +305,12 @@ Itk_ArchCompAddCmd(
      *  Execute the <createCmds> to create the component widget.
      *  Do this one level up, in the scope of the calling routine.
      */
+#if 0
     Itcl_SetCallFrameResolver(interp, contextClass->resolvePtr);
     infoPtr = Tcl_GetAssocData(interp, ITCL_INTERP_DATA, NULL);
     uplevelFramePtr = Itcl_GetUplevelCallFrame(interp, 1);
     oldFramePtr = Itcl_ActivateCallFrame(interp, uplevelFramePtr);
+#endif
     result = Tcl_EvalObjEx(interp, objv[2], 0);
     if (result != TCL_OK) {
         goto compFail;
@@ -339,8 +341,10 @@ Itk_ArchCompAddCmd(
         goto compFail;
     }
 
+#if 0
     (void) Itcl_ActivateCallFrame(interp, oldFramePtr);
     oldFramePtr = NULL;
+#endif
     winNamePtr = Tcl_NewStringObj((char*)NULL, 0);
     Tcl_GetCommandFullName(interp, accessCmd, winNamePtr);
     Tcl_IncrRefCount(winNamePtr);
@@ -351,6 +355,7 @@ Itk_ArchCompAddCmd(
      *  according to the "-protected" or "-private" option.
      */
     ownerClass = contextClass;
+#if 0
     Tcl_Namespace *ownerNsPtr;
     callContextPtr = Itcl_PeekStack(&infoPtr->contextStack);
     ownerNsPtr = callContextPtr->nsPtr;
@@ -366,6 +371,7 @@ Itk_ArchCompAddCmd(
                 (char *)callContextPtr->nsPtr);
         ownerClass = (ItclClass*)Tcl_GetHashValue(hPtr);
     }
+#endif
 
     archComp = Itk_CreateArchComponent(interp, info, name, ownerClass,
             accessCmd);
