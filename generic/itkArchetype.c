@@ -556,6 +556,7 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
      *  See what class is being initialized by getting the namespace
      *  for the calling context.
      */
+#if 0
     infoPtr = Tcl_GetAssocData(interp, ITCL_INTERP_DATA, NULL);
     callContextPtr = Itcl_GetStackValue(&infoPtr->contextStack,
             Itcl_GetStackSize(&infoPtr->contextStack)-2);
@@ -565,6 +566,7 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
     if (hPtr != NULL) {
         contextClass = (ItclClass *)Tcl_GetHashValue(hPtr);
     }
+#endif
 
 
     /*
@@ -874,6 +876,9 @@ Itk_ArchCompAccessCmd(
         return TCL_ERROR;
     }
 
+callingNs = Tcl_GetCurrentNamespace(interp);
+
+#if 0
     ItclObjectInfo *infoPtr;
     infoPtr = (ItclObjectInfo *)Tcl_GetAssocData(interp,
             ITCL_INTERP_DATA, NULL);
@@ -890,6 +895,7 @@ Itk_ArchCompAccessCmd(
 #endif
         callingNs = callContextPtr->nsPtr;
     }
+#endif
     /*
      *  With no arguments, return a list of components that can be
      *  accessed from the calling scope.
