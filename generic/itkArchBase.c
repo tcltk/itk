@@ -518,7 +518,7 @@ Itk_ArchCompAddCmd(
         Itcl_PopCallFrame(interp);
     }
 
-    if (objPtr != objv[3]) {
+    if (objc != 4) {
         Tcl_DecrRefCount(objPtr);
     }
     if (result != TCL_OK) {
