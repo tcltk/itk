@@ -171,6 +171,7 @@ fprintf(stderr, "error in creating namespace: ::itcl::builtin::Archetype \n");
     }
     Itcl_PreserveData((ClientData)mergeInfo);
     Itcl_EventuallyFree((ClientData)mergeInfo, Itk_DelMergeInfo);
+    Tcl_Export(interp, parserNs, "[a-z]*", 1);
 
     Tcl_CreateObjCommand(interp, "::itk::option-parser::keep",
         Itk_ArchOptKeepCmd,
@@ -569,6 +570,8 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
 #endif
 
 
+fprintf(stdout, "INIT context class = '%s'\n",
+Tcl_GetString(contextClass->fullNamePtr)); fflush(stdout);
     /*
      *  Integrate all public variables for the current class
      *  context into the composite option list.
@@ -677,10 +680,15 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
         for (i=0; i < info->order.len; i++) {
             archOpt = (ArchOption*)Tcl_GetHashValue(info->order.list[i]);
 
+fprintf(stdout, "GETTING VAR...\n"); fflush(stdout);
             if ((archOpt->flags & ITK_ARCHOPT_INIT) == 0) {
                 val = Tcl_GetVar2(interp, "itk_option", archOpt->switchName, 0);
 
                 if (!val) {
+fprintf(stdout, "INIT context class = '%s' object='%s'\n",
+Tcl_GetString(contextClass->fullNamePtr),
+Tcl_GetString(contextObj->namePtr)
+); fflush(stdout);
                     Itk_ArchOptAccessError(interp, info, archOpt);
                     return TCL_ERROR;
                 }
