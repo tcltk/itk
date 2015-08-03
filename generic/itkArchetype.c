@@ -529,9 +529,11 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
     ItclVariable *ivPtr;
     Tcl_HashSearch place;
     Tcl_HashEntry *entry;
+#if 0
     ItclObjectInfo *infoPtr;
     ItclCallContext *callContextPtr;
     Tcl_HashEntry *hPtr;
+#endif
 
     ItclShowArgs(2, "Itk_ArchInitCmd", objc, objv);
     contextClass = NULL;
@@ -547,8 +549,10 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
         return TCL_ERROR;
     }
 
+#if 0
     infoPtr = (ItclObjectInfo *)Tcl_GetAssocData(interp,
             ITCL_INTERP_DATA, NULL);
+#endif
     if (Itk_GetArchInfo(interp, contextObj, &info) != TCL_OK) {
         return TCL_ERROR;
     }
@@ -570,8 +574,8 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
 #endif
 
 
-fprintf(stdout, "INIT context class = '%s'\n",
-Tcl_GetString(contextClass->fullNamePtr)); fflush(stdout);
+//fprintf(stdout, "INIT context class = '%s'\n",
+//Tcl_GetString(contextClass->fullNamePtr)); fflush(stdout);
     /*
      *  Integrate all public variables for the current class
      *  context into the composite option list.
@@ -680,15 +684,15 @@ Tcl_GetString(contextClass->fullNamePtr)); fflush(stdout);
         for (i=0; i < info->order.len; i++) {
             archOpt = (ArchOption*)Tcl_GetHashValue(info->order.list[i]);
 
-fprintf(stdout, "GETTING VAR...\n"); fflush(stdout);
+//fprintf(stdout, "GETTING VAR...\n"); fflush(stdout);
             if ((archOpt->flags & ITK_ARCHOPT_INIT) == 0) {
                 val = Tcl_GetVar2(interp, "itk_option", archOpt->switchName, 0);
 
                 if (!val) {
-fprintf(stdout, "INIT context class = '%s' object='%s'\n",
-Tcl_GetString(contextClass->fullNamePtr),
-Tcl_GetString(contextObj->namePtr)
-); fflush(stdout);
+//fprintf(stdout, "INIT context class = '%s' object='%s'\n",
+//Tcl_GetString(contextClass->fullNamePtr),
+//Tcl_GetString(contextObj->namePtr)
+//); fflush(stdout);
                     Itk_ArchOptAccessError(interp, info, archOpt);
                     return TCL_ERROR;
                 }
