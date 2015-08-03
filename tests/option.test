@@ -70,9 +70,9 @@ test option-1.2 {"keep" can be called more than once} {
             TestOptComp $itk_interior.k0 -status "create"
         } {
             keep -background -foreground -cursor
-#            keep -background -foreground -cursor
-#            keep -status
-#            keep -status
+            keep -background -foreground -cursor
+            keep -status
+            keep -status
         }
         pack $itk_component(k0)
     }

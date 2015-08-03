@@ -186,7 +186,6 @@ Itk_ArchCompAddCmd(
     CONST char *cmd;
     CONST char *token;
     CONST char *resultStr;
-    Tcl_CallFrame frame;
     char *name;
     Tcl_Namespace *parserNs;
     ItclClass *contextClass;
@@ -196,10 +195,13 @@ Itk_ArchCompAddCmd(
     Tcl_Command accessCmd;
     Tcl_Obj *objPtr;
     Tcl_DString buffer;
+#if 0
+    Tcl_CallFrame frame;
     Tcl_CallFrame *uplevelFramePtr;
     Tcl_CallFrame *oldFramePtr = NULL;
     ItclObjectInfo *infoPtr;
     ItclCallContext *callContextPtr;
+#endif
 
     /*
      *  Get the Archetype info associated with this widget.
@@ -313,7 +315,6 @@ Itk_ArchCompAddCmd(
 #endif
     result = Tcl_EvalObjEx(interp, objv[2], 0);
     if (result != TCL_OK) {
-fprintf(stdout, "FAIL '%s'!\n", Tcl_GetString(objv[2])); fflush(stdout);
         goto compFail;
     }
 
@@ -557,9 +558,11 @@ fprintf(stdout, "FAIL '%s'!\n", Tcl_GetString(objv[2])); fflush(stdout);
      *  If any errors were encountered, clean up and return.
      */
 compFail:
+#if 0
     if (oldFramePtr) {
 	(void) Itcl_ActivateCallFrame(interp, oldFramePtr);
     }
+#endif
     if (archComp) {
         Itk_DelArchComponent(archComp);
     }
@@ -829,20 +832,15 @@ Itk_ArchOptKeepCmd(clientData, interp, objc, objv)
             Itk_PropagateOption, Itk_DeleteConfigCmdline,
             (ClientData)mergeInfo->archComp);
 
-fprintf(stdout, "KEEP 4 '%s' '%s'\n", token,
-Tcl_GetCurrentNamespace(interp)->fullName); fflush(stdout);
-
         result = Itk_AddOptionPart(interp, mergeInfo->archInfo,
             opt->switchName, opt->resName, opt->resClass,
             opt->init, opt->value, optPart, &archOpt);
 
-fprintf(stdout, "KEEP 5 '%s'\n", token); fflush(stdout);
         if (result == TCL_OK) {
             opt->integrated = archOpt;
             opt->optPart    = optPart;
         } else {
             Itk_DelOptionPart(optPart);
-fprintf(stdout, "KEEP ERROR '%s'\n", token); fflush(stdout);
             result = TCL_ERROR;
             break;
         }
@@ -1730,8 +1728,6 @@ Itk_ArchSetOption(
     }
     archOpt = (ArchOption*)Tcl_GetHashValue(entry);
 
-fprintf(stdout, "ARCH SET OPTION '%s'\n", archOpt->switchName);
-fflush(stdout);
     if (!Tcl_SetVar2(interp, "itk_option", archOpt->switchName,
 	    (const char *)value, 0)) {
         Itk_ArchOptAccessError(interp, info, archOpt);
@@ -1805,8 +1801,6 @@ Itk_ArchConfigOption(
     /*
      *  Update the "itk_option" array with the new setting.
      */
-fprintf(stdout, "ARCH CONFIG OPTION '%s'\n", archOpt->switchName);
-fflush(stdout);
     if (!Tcl_SetVar2(interp, "itk_option", archOpt->switchName, value, 0)) {
         Itk_ArchOptAccessError(interp, info, archOpt);
         result = TCL_ERROR;
@@ -1839,8 +1833,6 @@ fflush(stdout);
     if (result == TCL_ERROR) {
         istate = Itcl_SaveInterpState(interp, result);
 
-fprintf(stdout, "ARCH CONFIG OPTION 2 '%s'\n", archOpt->switchName);
-fflush(stdout);
         Tcl_SetVar2(interp, "itk_option", archOpt->switchName, lastval, 0);
 
         part = Itcl_FirstListElem(&archOpt->parts);
@@ -2148,8 +2140,10 @@ Itk_InitArchOption(
 {
     CONST char *init = NULL;
 
+#if 0
     Tcl_CallFrame frame;
     int result;
+#endif
     CONST char *ival;
     char c;
 
@@ -2191,17 +2185,8 @@ Itk_InitArchOption(
     }
 
 #if 1
-{
-//    Tcl_CallFrame *up = Itcl_GetUplevelCallFrame(interp, 1);
-//    Tcl_CallFrame *save = Itcl_ActivateCallFrame(interp, up);
-
-fprintf(stdout, "ARCH INIT OPTION '%s'\n", archOpt->switchName);
-fflush(stdout);
     Tcl_SetVar2(interp, "itk_option", archOpt->switchName,
             (char *)((ival) ? ival : ""), 0);
-
-//    Itcl_ActivateCallFrame(interp, save);
-}
 #else
     /*
      *  Set the initial value in the itk_option array.
@@ -2344,7 +2329,9 @@ Itk_AddOptionPart(
 {
     CONST char *init = NULL;
 
+#if 0
     Tcl_CallFrame frame;
+#endif
     int result;
     ArchOption *archOpt;
 
@@ -2371,11 +2358,11 @@ Itk_AddOptionPart(
 
     if ((archOpt->flags & ITK_ARCHOPT_INIT) != 0) {
 
-        result = Itcl_PushCallFrame(interp, &frame, info->itclObj->iclsPtr->nsPtr, /*isProcCallFrame*/0);
+//        result = Itcl_PushCallFrame(interp, &frame, info->itclObj->iclsPtr->nsPtr, /*isProcCallFrame*/0);
 
         if (result == TCL_OK) {
             init = Tcl_GetVar2(interp, "itk_option", archOpt->switchName, 0);
-            Itcl_PopCallFrame(interp);
+ //           Itcl_PopCallFrame(interp);
         }
 
         if (!init) {
