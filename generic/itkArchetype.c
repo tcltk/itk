@@ -574,8 +574,6 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
 #endif
 
 
-//fprintf(stdout, "INIT context class = '%s'\n",
-//Tcl_GetString(contextClass->fullNamePtr)); fflush(stdout);
     /*
      *  Integrate all public variables for the current class
      *  context into the composite option list.
@@ -684,15 +682,10 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
         for (i=0; i < info->order.len; i++) {
             archOpt = (ArchOption*)Tcl_GetHashValue(info->order.list[i]);
 
-//fprintf(stdout, "GETTING VAR...\n"); fflush(stdout);
             if ((archOpt->flags & ITK_ARCHOPT_INIT) == 0) {
                 val = Tcl_GetVar2(interp, "itk_option", archOpt->switchName, 0);
 
                 if (!val) {
-//fprintf(stdout, "INIT context class = '%s' object='%s'\n",
-//Tcl_GetString(contextClass->fullNamePtr),
-//Tcl_GetString(contextObj->namePtr)
-//); fflush(stdout);
                     Itk_ArchOptAccessError(interp, info, archOpt);
                     return TCL_ERROR;
                 }
@@ -967,23 +960,26 @@ fprintf(stderr, "ERR 2 archComp == NULL\n");
      *  window name for this component.
      */
     if (objc == 2) {
-	Tcl_Obj *objPtr;
-	objPtr = Tcl_NewObj();
-	Tcl_GetCommandFullName(interp, archComp->accessCmd, objPtr);
-	Tcl_IncrRefCount(objPtr);
-	Tcl_DString buffer;
-	Tcl_DStringInit(&buffer);
-	Tcl_DStringAppend(&buffer, ITCL_VARIABLES_NAMESPACE, -1);
-	Tcl_DStringAppend(&buffer, Tcl_GetString(objPtr), -1);
-	Tcl_DecrRefCount(objPtr);
-	Tcl_DStringAppend(&buffer, archComp->iclsPtr->nsPtr->fullName, -1);
-	Tcl_Namespace *nsPtr;
-	Tcl_CallFrame frame;
-	nsPtr = Tcl_FindNamespace(interp, Tcl_DStringValue(&buffer), NULL, 0);
-	Itcl_PushCallFrame(interp, &frame, nsPtr, /*isProcCallFrame*/0);
+
+	/*
+ 	 * This is moderately ugly.  We want to resolve the instance
+ 	 * variable "itk_component".  We have the contextObj context,
+ 	 * but the only way to make that context control variable
+ 	 * resolution is to force the context namespace to be the class
+ 	 * namespace of the contextObj, while at the same time, not
+ 	 * pushing any frame, so that the same contextObj context is
+ 	 * still in force, when that custom resolver attached to that
+ 	 * namespace finally gets the chance to resolve.
+ 	 *
+ 	 * Instance variable resolution, even (especially?) in C code,
+ 	 * shouldn't need quite so many contortions.
+ 	 */
+
+	Tcl_Namespace *save = Tcl_GetCurrentNamespace(interp);
+
+	Itcl_SetCallFrameNamespace(interp, contextObj->iclsPtr->nsPtr);
         val = Tcl_GetVar2(interp, "itk_component", token, 0);
-	Tcl_DStringFree(&buffer);
-	Itcl_PopCallFrame(interp);
+	Itcl_SetCallFrameNamespace(interp, save);
         if (!val) {
             Tcl_ResetResult(interp);
             Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
