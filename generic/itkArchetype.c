@@ -426,13 +426,13 @@ Itk_ArchComponentCmd(
     const char *tail;
     cmd = Tcl_GetString(objv[0]);
     Itcl_ParseNamespPath(cmd, &buffer, &head, &tail);
-    Tcl_DStringFree(&buffer);
     if (objc < 2) {
         Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
             "wrong # args: should be one of...\n",
             "  ", tail, " add ?-protected? ?-private? ?--? name createCmds ?optionCmds?\n",
             "  ", tail, " delete name ?name name...?",
             (char*)NULL);
+    Tcl_DStringFree(&buffer);
         return TCL_ERROR;
     }
 
@@ -451,8 +451,10 @@ Itk_ArchComponentCmd(
 		" add ?-protected? ?-private? ?--?",
 		" name createCmds ?optionCmds?\"",
                 (char*)NULL);
+    Tcl_DStringFree(&buffer);
             return TCL_ERROR;
         }
+    Tcl_DStringFree(&buffer);
         return Itk_ArchCompAddCmd(dummy, interp, objc-1, objv+1);
     } else {
 
@@ -466,11 +468,14 @@ Itk_ArchComponentCmd(
                     tail,
 		    " delete name ?name name...?\"",
                     (char*)NULL);
+    Tcl_DStringFree(&buffer);
                 return TCL_ERROR;
             }
+    Tcl_DStringFree(&buffer);
             return Itk_ArchCompDeleteCmd(dummy, interp, objc-1, objv+1);
         }
     }
+    Tcl_DStringFree(&buffer);
 
     /*
      *  Flag any errors.
