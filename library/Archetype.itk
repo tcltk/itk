@@ -74,9 +74,10 @@ itcl::class itk::Archetype {
         eval configure $option $args
     }
 
-    method component {{name ""} args} {
-        ::itcl::builtin::Archetype component $name {*}$args
-    }
+#    method component {{name ""} args} {
+#        ::itcl::builtin::Archetype component $name {*}$args
+#    }
+    method component {{name ""} args} @Archetype-component
 
 #    protected method itk_component {option args} {
 #        ::itcl::builtin::Archetype itk_component $option {*}$args
