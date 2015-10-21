@@ -1624,7 +1624,7 @@ Itk_PropagatePublicVar(
     ItclVariable *ivPtr = (ItclVariable*)cdata;
 
     Tcl_CallFrame frame;
-    int result;
+    int result = TCL_OK;
     CONST char *val;
     ItclMemberCode *mcode;
 
@@ -1635,8 +1635,10 @@ Itk_PropagatePublicVar(
      *  is the most-specific class, so that the public variable can
      *  be found.
      */
+#if 0
     result = Itcl_PushCallFrame(interp, &frame, contextObj->iclsPtr->nsPtr,
             /*isProcCallFrame*/0);
+#endif
 
     if (result == TCL_OK) {
 	/*
@@ -1649,7 +1651,9 @@ Itk_PropagatePublicVar(
         if (!val) {
             result = TCL_ERROR;
         }
+#if 0
         Itcl_PopCallFrame(interp);
+#endif
     }
 
     if (result != TCL_OK) {
