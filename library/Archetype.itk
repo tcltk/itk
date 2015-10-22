@@ -66,13 +66,15 @@ itcl::class itk::Archetype {
         ::itcl::builtin::Archetype cget $option
     }
 
-    method configure {{option ""} args} {
-        ::itcl::builtin::Archetype configure $option {*}$args
-    }
+#    method configure {{option ""} args} {
+#        ::itcl::builtin::Archetype configure $option {*}$args
+#    }
+    method configure {{option ""} args} @Archetype-configure
 
-    method config {{option ""} args} {
-        eval configure $option $args
-    }
+#    method config {{option ""} args} {
+#        eval configure $option $args
+#    }
+    method config {{option ""} args} @Archetype-configure
 
 #    method component {{name ""} args} {
 #        ::itcl::builtin::Archetype component $name {*}$args
