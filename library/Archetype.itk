@@ -62,9 +62,7 @@ itcl::class itk::Archetype {
         ::itcl::builtin::Archetype delete
     }
 
-    method cget {option} {
-        ::itcl::builtin::Archetype cget $option
-    }
+    method cget {option} @Archetype-cget
 
     method configure {{option ""} args} @Archetype-configure
 
