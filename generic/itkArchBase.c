@@ -1623,7 +1623,6 @@ Itk_PropagatePublicVar(
 {
     ItclVariable *ivPtr = (ItclVariable*)cdata;
 
-    Tcl_CallFrame frame;
     int result = TCL_OK;
     CONST char *val;
     ItclMemberCode *mcode;
