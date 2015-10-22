@@ -66,34 +66,16 @@ itcl::class itk::Archetype {
         ::itcl::builtin::Archetype cget $option
     }
 
-#    method configure {{option ""} args} {
-#        ::itcl::builtin::Archetype configure $option {*}$args
-#    }
     method configure {{option ""} args} @Archetype-configure
 
-#    method config {{option ""} args} {
-#        eval configure $option $args
-#    }
     method config {{option ""} args} @Archetype-configure
 
-#    method component {{name ""} args} {
-#        ::itcl::builtin::Archetype component $name {*}$args
-#    }
     method component {{name ""} args} @Archetype-component
 
-#    protected method itk_component {option args} {
-#        ::itcl::builtin::Archetype itk_component $option {*}$args
-#    }
     protected method itk_component {option args} @Archetype-itk_component
 
-#    protected method itk_option {option args} {
-#        ::itcl::builtin::Archetype itk_option $option {*}$args
-#    }
     protected method itk_option {option args} @Archetype-itk_option
 
-#    protected method itk_initialize {args} {
-#        ::itcl::builtin::Archetype itk_initialize {*}$args
-#    }
     protected method itk_initialize {args} @Archetype-itk_initialize
 
     protected variable itk_option
