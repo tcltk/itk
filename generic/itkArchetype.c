@@ -65,7 +65,6 @@ struct NameProcMap { const char *name; Tcl_ObjCmdProc *proc; };
  */
 
 static const struct NameProcMap archetypeCmds[] = {
-    { "::itcl::builtin::Archetype::cget", Itk_ArchCgetCmd },
     { "::itcl::builtin::Archetype::delete", Itk_ArchDeleteOptsCmd },
     { "::itcl::builtin::Archetype::init", Itk_ArchInitOptsCmd },
     { NULL, NULL }
@@ -1217,6 +1216,7 @@ Itk_ArchCgetCmd(
     ArchInfo *info;
     Tcl_HashEntry *entry;
     ArchOption *archOpt;
+    Tcl_Namespace *save = Tcl_GetCurrentNamespace(interp);
 
     ItclShowArgs(2, "Itk_ArchCgetCmd", objc, objv);
     contextClass = NULL;
@@ -1253,7 +1253,9 @@ Itk_ArchCgetCmd(
     }
 
     archOpt = (ArchOption*)Tcl_GetHashValue(entry);
+    Itcl_SetCallFrameNamespace(interp, contextObj->iclsPtr->nsPtr);
     val = Tcl_GetVar2(interp, "itk_option", archOpt->switchName, 0);
+    Itcl_SetCallFrameNamespace(interp, save);
     if (!val) {
         Itk_ArchOptAccessError(interp, info, archOpt);
         return TCL_ERROR;
