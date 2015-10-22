@@ -66,13 +66,8 @@ struct NameProcMap { const char *name; Tcl_ObjCmdProc *proc; };
 
 static const struct NameProcMap archetypeCmds[] = {
     { "::itcl::builtin::Archetype::cget", Itk_ArchCgetCmd },
-    { "::itcl::builtin::Archetype::component", Itk_ArchCompAccessCmd },
-    { "::itcl::builtin::Archetype::configure", Itk_ArchConfigureCmd },
     { "::itcl::builtin::Archetype::delete", Itk_ArchDeleteOptsCmd },
     { "::itcl::builtin::Archetype::init", Itk_ArchInitOptsCmd },
-    { "::itcl::builtin::Archetype::itk_component", Itk_ArchComponentCmd },
-    { "::itcl::builtin::Archetype::itk_initialize", Itk_ArchInitCmd },
-    { "::itcl::builtin::Archetype::itk_option", Itk_ArchOptionCmd },
     { NULL, NULL }
 };
 
