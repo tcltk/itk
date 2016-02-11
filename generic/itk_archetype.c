@@ -1746,11 +1746,24 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
      */
     Itcl_InitHierIter(&hier, contextClass);
     while ((cdefn=Itcl_AdvanceHierIter(&hier)) != NULL) {
-        entry = Tcl_FirstHashEntry(&cdefn->variables, &place);
-        while (entry) {
+
+	for (entry = Tcl_FirstHashEntry(&cdefn->variables, &place);
+		entry; entry = Tcl_NextHashEntry(&place)) {
+	    Var *arrayPtr, *varPtr = NULL;
+
             vdefn = (ItclVarDefn*)Tcl_GetHashValue(entry);
 
-            if (vdefn->member->protection == ITCL_PUBLIC) {
+            if (vdefn->member->protection != ITCL_PUBLIC) {
+		continue;
+	    }
+
+	    varPtr = TclLookupVar(interp, vdefn->member->fullname, NULL, 0,
+		    NULL, 0, 0, &arrayPtr);
+
+	    if (varPtr && TclIsVarArray(varPtr)) {
+		continue;
+	    }
+
                 optPart = Itk_FindArchOptionPart(info,
                     vdefn->member->name, (ClientData)vdefn);
 
@@ -1771,8 +1784,6 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
                         return TCL_ERROR;
                     }
                 }
-            }
-            entry = Tcl_NextHashEntry(&place);
         }
     }
     Itcl_DeleteHierIter(&hier);
