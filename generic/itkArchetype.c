@@ -32,6 +32,7 @@
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  */
 #include <assert.h>
+#include <tclInt.h>
 #include "itkInt.h"
 
 int _itcl_debug_level = 0;
@@ -573,11 +574,24 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
      */
     Itcl_InitHierIter(&hier, contextClass);
     while ((iclsPtr=Itcl_AdvanceHierIter(&hier)) != NULL) {
-        entry = Tcl_FirstHashEntry(&iclsPtr->variables, &place);
-        while (entry) {
+
+	for (entry = Tcl_FirstHashEntry(&iclsPtr->variables, &place);
+		entry; entry = Tcl_NextHashEntry(&place)) {
+	    Var *arrayPtr, *varPtr = NULL;
+
             ivPtr = (ItclVariable*)Tcl_GetHashValue(entry);
 
-            if (ivPtr->protection == ITCL_PUBLIC) {
+            if (ivPtr->protection != ITCL_PUBLIC) {
+		continue;
+	    }
+
+	    varPtr = TclObjLookupVar(interp, ivPtr->fullNamePtr, NULL, 0,
+		    NULL, 0, 0, &arrayPtr);
+
+	    if (varPtr && TclIsVarArray(varPtr)) {
+		continue;
+	    }
+
                 optPart = Itk_FindArchOptionPart(info,
                     Tcl_GetString(ivPtr->namePtr), (ClientData)ivPtr);
 
@@ -600,8 +614,6 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
                         return TCL_ERROR;
                     }
                 }
-            }
-            entry = Tcl_NextHashEntry(&place);
         }
     }
     Itcl_DeleteHierIter(&hier);
