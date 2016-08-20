@@ -1,13 +1,15 @@
 #------------------------------------------------------------------------------
-# Visual C++ 5.0+ makefile for [Incr Tk]
+# Visual C++ 6.0+ makefile for [Incr Tk]
 #
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
 #------------------------------------------------------------------------------
-#  Do not modify this file!
-#------------------------------------------------------------------------------
+# To build (after setting up Visual C++ command line environment),
+#   nmake -f makefile.vc TCLDIR=path_to_tcl_sources TKDIR=path_to_tk_sources
+# To install
+#   nmake -f makefile.vc TCLDIR=path_to_tcl_sources TKDIR=path_to_tk_sources INSTALLDIR=path_to_install_dir install
 
 !if !exist("makefile.vc")
 MSG = ^
@@ -27,7 +29,7 @@ ITCLDIR		= ..\..\itcl
 !message ***    to the sources.
 !endif
 
-!if [echo REM = This file is generated from rules.vc > versions.vc]
+!if [echo REM = This file is generated from makefile.vc > versions.vc]
 !endif
 !if [echo ITCL_MAJOR_VERSION = \>> versions.vc] \
    && [nmakehlp -V $(ITCLDIR)\generic\itcl.h ITCL_MAJOR_VERSION >> versions.vc]
