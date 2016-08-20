@@ -180,7 +180,6 @@ Itk_ArchCompAddCmd(
     Tcl_Obj *hullNamePtr = NULL;
     int pLevel = ITCL_PUBLIC;
 
-    ItclShowArgs(1, "Itk_ArchCompAddCmd", objc, objv);
     int newEntry;
     int result;
     CONST char *cmd;
@@ -200,7 +199,9 @@ Itk_ArchCompAddCmd(
     Tcl_CallFrame *oldFramePtr = NULL;
     ItclObjectInfo *infoPtr;
     ItclCallContext *callContextPtr;
+    Tcl_Namespace *ownerNsPtr;
 
+    ItclShowArgs(1, "Itk_ArchCompAddCmd", objc, objv);
     /*
      *  Get the Archetype info associated with this widget.
      */
@@ -351,7 +352,6 @@ Itk_ArchCompAddCmd(
      *  according to the "-protected" or "-private" option.
      */
     ownerClass = contextClass;
-    Tcl_Namespace *ownerNsPtr;
     callContextPtr = Itcl_PeekStack(&infoPtr->contextStack);
     ownerNsPtr = callContextPtr->nsPtr;
     if (ownerNsPtr != NULL) {
@@ -1654,9 +1654,9 @@ Itk_PropagatePublicVar(
      */
     mcode = ivPtr->codePtr;
     if (mcode && mcode->bodyPtr) {
-
+        Tcl_Namespace *saveNsPtr;
         Itcl_SetCallFrameResolver(interp, ivPtr->iclsPtr->resolvePtr);
-        Tcl_Namespace *saveNsPtr = Tcl_GetCurrentNamespace(interp);
+        saveNsPtr = Tcl_GetCurrentNamespace(interp);
         Itcl_SetCallFrameNamespace(interp, ivPtr->iclsPtr->nsPtr);
         result = Tcl_EvalObjEx(interp, mcode->bodyPtr, 0);
         Itcl_SetCallFrameNamespace(interp, saveNsPtr);

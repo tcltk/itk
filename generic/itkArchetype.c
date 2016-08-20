@@ -266,6 +266,7 @@ Itk_ArchInitOptsCmd(
     ItclObject *contextObj;
     Tcl_HashTable *objsWithArchInfo;
     Tcl_HashEntry *entry;
+    Tcl_CmdInfo cmdInfo;
 
     ItclShowArgs(2, "Itk_ArchInitOptsCmd", objc, objv);
     if (objc != 1) {
@@ -311,7 +312,6 @@ Itk_ArchInitOptsCmd(
      */
     result = TCL_OK;
 
-    Tcl_CmdInfo cmdInfo;
     Tcl_GetCommandInfoFromToken(contextObj->accessCmd, &cmdInfo);
     if (cmdInfo.namespacePtr != Tcl_GetGlobalNamespace(interp)) {
         Tcl_Obj *oldNamePtr, *newNamePtr;
@@ -416,14 +416,14 @@ Itk_ArchComponentCmd(
     char *token;
     char c;
     int length;
+    Tcl_DString buffer;
+    const char *head;
+    const char *tail;
 
     ItclShowArgs(2, "Itk_ArchComponentCmd", objc, objv);
     /*
      *  Check arguments and handle the various options...
      */
-    Tcl_DString buffer;
-    const char *head;
-    const char *tail;
     cmd = Tcl_GetString(objv[0]);
     Itcl_ParseNamespPath(cmd, &buffer, &head, &tail);
     Tcl_DStringFree(&buffer);
@@ -867,6 +867,7 @@ Itk_ArchCompAccessCmd(
     Tcl_Obj *objPtr;
     Tcl_Obj *cmdlinePtr;
     Tcl_Obj **cmdlinev;
+    ItclObjectInfo *infoPtr;
 
     ItclShowArgs(2, "Itk_ArchCompAccessCmd", objc, objv);
     contextClass = NULL;
@@ -886,7 +887,6 @@ Itk_ArchCompAccessCmd(
         return TCL_ERROR;
     }
 
-    ItclObjectInfo *infoPtr;
     infoPtr = (ItclObjectInfo *)Tcl_GetAssocData(interp,
             ITCL_INTERP_DATA, NULL);
     if (Itcl_GetStackSize(&infoPtr->contextStack) == 1) {
@@ -962,17 +962,17 @@ fprintf(stderr, "ERR 2 archComp == NULL\n");
      */
     if (objc == 2) {
 	Tcl_Obj *objPtr;
+	Tcl_DString buffer;
+	Tcl_Namespace *nsPtr;
+	Tcl_CallFrame frame;
 	objPtr = Tcl_NewObj();
 	Tcl_GetCommandFullName(interp, archComp->accessCmd, objPtr);
 	Tcl_IncrRefCount(objPtr);
-	Tcl_DString buffer;
 	Tcl_DStringInit(&buffer);
 	Tcl_DStringAppend(&buffer, ITCL_VARIABLES_NAMESPACE, -1);
 	Tcl_DStringAppend(&buffer, Tcl_GetString(objPtr), -1);
 	Tcl_DecrRefCount(objPtr);
 	Tcl_DStringAppend(&buffer, archComp->iclsPtr->nsPtr->fullName, -1);
-	Tcl_Namespace *nsPtr;
-	Tcl_CallFrame frame;
 	nsPtr = Tcl_FindNamespace(interp, Tcl_DStringValue(&buffer), NULL, 0);
 	Itcl_PushCallFrame(interp, &frame, nsPtr, /*isProcCallFrame*/0);
         val = Tcl_GetVar2(interp, "itk_component", token, 0);
