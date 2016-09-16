@@ -261,6 +261,7 @@ Itk_ArchInitOptsCmd(
     ItclObject *contextObj;
     Tcl_HashTable *objsWithArchInfo;
     Tcl_HashEntry *entry;
+    Tcl_CmdInfo cmdInfo;
 
     ItclShowArgs(2, "Itk_ArchInitOptsCmd", objc, objv);
     if (objc != 1) {
@@ -306,7 +307,6 @@ Itk_ArchInitOptsCmd(
      */
     result = TCL_OK;
 
-    Tcl_CmdInfo cmdInfo;
     Tcl_GetCommandInfoFromToken(contextObj->accessCmd, &cmdInfo);
     if (cmdInfo.namespacePtr != Tcl_GetGlobalNamespace(interp)) {
         Tcl_Obj *oldNamePtr, *newNamePtr;
@@ -411,14 +411,14 @@ Itk_ArchComponentCmd(
     char *token;
     char c;
     int length;
+    Tcl_DString buffer;
+    const char *head;
+    const char *tail;
 
     ItclShowArgs(2, "Itk_ArchComponentCmd", objc, objv);
     /*
      *  Check arguments and handle the various options...
      */
-    Tcl_DString buffer;
-    const char *head;
-    const char *tail;
     cmd = Tcl_GetString(objv[0]);
     Itcl_ParseNamespPath(cmd, &buffer, &head, &tail);
     if (objc < 2) {
@@ -895,7 +895,6 @@ Itk_ArchCompAccessCmd(
 callingNs = Tcl_GetCurrentNamespace(interp);
 
 #if 0
-    ItclObjectInfo *infoPtr;
     infoPtr = (ItclObjectInfo *)Tcl_GetAssocData(interp,
             ITCL_INTERP_DATA, NULL);
     if (Itcl_GetStackSize(&infoPtr->contextStack) == 1) {
