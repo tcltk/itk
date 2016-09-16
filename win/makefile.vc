@@ -1,13 +1,15 @@
 #------------------------------------------------------------------------------
-# Visual C++ 5.0+ makefile for [Incr Tk]
+# Visual C++ 6.0+ makefile for [Incr Tk]
 #
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
 # Copyright (c) 1993-1998 Lucent Technologies, Inc.
 #------------------------------------------------------------------------------
-#  Do not modify this file!
-#------------------------------------------------------------------------------
+# To build (after setting up Visual C++ command line environment),
+#   nmake -f makefile.vc TCLDIR=path_to_tcl_sources TKDIR=path_to_tk_sources
+# To install
+#   nmake -f makefile.vc TCLDIR=path_to_tcl_sources TKDIR=path_to_tk_sources INSTALLDIR=path_to_install_dir install
 
 !if !exist("makefile.vc")
 MSG = ^
@@ -17,8 +19,9 @@ Please `cd` to its location first.
 !endif
 
 PROJECT	= itk
-!include "..\..\rules.vc"
-
+PROJECT_REQUIRES_TK = 1
+ITCLDIR		= ..\..\itcl
+!include "$(ITCLDIR)\win\rules.vc"
 
 !if $(TCLINSTALL)
 !message *** Warning: [Incr Tk] requires the source distribution of Tcl to build from,
@@ -26,35 +29,30 @@ PROJECT	= itk
 !message ***    to the sources.
 !endif
 
-ITCLDIR		= ..\..\itcl
-
-
-!if [nmakehlp -g $(ITCLDIR)\generic\itcl.h ITCL_VERSION] == 33
-ITCL_DOTVERSION	= 3.3
-!elseif [nmakehlp -g $(ITCLDIR)\generic\itcl.h ITCL_VERSION] == 34
-ITCL_DOTVERSION	= 3.4
-!elseif [nmakehlp -g $(ITCLDIR)\generic\itcl.h ITCL_VERSION] == 35
-ITCL_DOTVERSION	= 3.5
-!elseif [nmakehlp -g $(ITCLDIR)\generic\itcl.h ITCL_VERSION] == 0
-MSG =^
-Can't get version string from ..\generic\itcl.h
-!error $(MSG)
+!if [echo REM = This file is generated from makefile.vc > versions.vc]
 !endif
-ITCL_VERSION	= $(ITCL_DOTVERSION:.=)
-
-!if [nmakehlp -g ..\generic\itk.h ITK_VERSION] == 33
-ITK_DOTVERSION	= 3.3
-!elseif [nmakehlp -g ..\generic\itk.h ITK_VERSION] == 34
-ITK_DOTVERSION	= 3.4
-!elseif [nmakehlp -g ..\generic\itk.h ITK_VERSION] == 35
-ITK_DOTVERSION	= 3.5
-!elseif [nmakehlp -g ..\generic\itk.h ITK_VERSION] == 0
-MSG =^
-Can't get version string from ..\generic\itk.h
-!error $(MSG)
+!if [echo ITCL_MAJOR_VERSION = \>> versions.vc] \
+   && [nmakehlp -V $(ITCLDIR)\generic\itcl.h ITCL_MAJOR_VERSION >> versions.vc]
 !endif
-ITK_VERSION	= $(ITK_DOTVERSION:.=)
-
+!if [echo ITCL_MINOR_VERSION = \>> versions.vc] \
+   && [nmakehlp -V $(ITCLDIR)\generic\itcl.h ITCL_MINOR_VERSION >> versions.vc]
+!endif
+!if [echo ITCL_PATCH_LEVEL = \>> versions.vc] \
+   && [nmakehlp -V $(ITCLDIR)\generic\itcl.h ITCL_PATCH_LEVEL >> versions.vc]
+!endif
+!if [echo ITK_MAJOR_VERSION = \>> versions.vc] \
+   && [nmakehlp -V ..\generic\itk.h ITK_MAJOR_VERSION >> versions.vc]
+!endif
+!if [echo ITK_MINOR_VERSION = \>> versions.vc] \
+   && [nmakehlp -V ..\generic\itk.h ITK_MINOR_VERSION >> versions.vc]
+!endif
+!if [echo ITK_PATCH_LEVEL = \>> versions.vc] \
+   && [nmakehlp -V ..\generic\itk.h ITK_PATCH_LEVEL >> versions.vc]
+!endif
+!include "versions.vc"
+ITCL_VERSION   = $(ITCL_MAJOR_VERSION)$(ITCL_MINOR_VERSION)
+ITK_VERSION    = $(ITK_MAJOR_VERSION)$(ITK_MINOR_VERSION)
+DOTVERSION = $(ITK_PATCH_LEVEL)
 
 BINROOT		= .
 ROOT		= ..
@@ -68,67 +66,45 @@ ITKIMPLIB	= "$(OUT_DIR)\$(PROJECT)$(ITK_VERSION)$(SUFX).lib"
 ITKSTUBLIBNAME	= $(STUBPREFIX)$(ITK_VERSION).lib
 ITKSTUBLIB	= "$(OUT_DIR)\$(ITKSTUBLIBNAME)"
 
-!if $(TCL_DOES_STUBS)
 ITKLIBNAME	= $(PROJECT)$(ITK_VERSION)$(SUFX).$(EXT)
 ITCLIMPLIBNAME	= itcl$(ITCL_VERSION)$(SUFX).$(EXT)
-!else
-ITKLIBNAME	= $(PROJECT)$(ITK_VERSION)80$(SUFX).$(EXT)
-ITCLIMPLIBNAME	= itcl$(ITCL_VERSION)80$(SUFX).lib
-!endif
 ITKLIB		= "$(OUT_DIR)\$(ITKLIBNAME)"
-ITCLIMPLIB	= "$(ITCLDIR)\win\Release\$(ITCLIMPLIBNAME)"
+ITCLIMPLIB	= "$(ITCLDIR)\win\$(BUILDDIRTOP)\$(ITCLIMPLIBNAME)"
 
 
-!if $(TCLINSTALL)
-TKSTUBLIB	= "$(TCLDIR)\lib\tkstub$(TCL_VERSION).lib"
-TKIMPLIB	= "$(TCLDIR)\lib\tk$(TCL_VERSION)$(DBGX).lib"
-WISH		= "$(TCLDIR)\bin\wish$(TCL_VERSION)$(DBGX).exe"
-TCL_LIBRARY	= 
-TK_LIBRARY	= 
-!else
-TKSTUBLIB	= "$(TKDIR)\win\Release\tkstub$(TCL_VERSION).lib"
-TKIMPLIB	= "$(TKDIR)\win\$(OUT_DIR)\tk$(TCL_VERSION)$(DBGX).lib"
-WISH		= "$(TKDIR)\win\$(OUT_DIR)\wish$(TCL_VERSION)$(DBGX).exe"
-TCL_LIBRARY	= "$(TCLDIR)\library"
-TK_LIBRARY	= "$(TKDIR)\library"
-!endif
-ITCL_LIBRARY	= "$(ITCLDIR:\=/)/library"
-ITK_LIBRARY	= "$(ROOT)/library
+TKSTUBLIB	= $(TKDIR)\win\$(BUILDDIRTOP)\tkstub$(TCL_VERSION).lib
+TKIMPLIB	= $(TKDIR)\win\$(BUILDDIRTOP)\tk$(TCL_VERSION)$(DBGX).lib
+WISH		= $(TKDIR)\win\$(BUILDDIRTOP)\wish$(TCL_VERSION)$(DBGX).exe
+TCL_LIBRARY	= $(TCLDIR)\library
+TK_LIBRARY	= $(TKDIR)\library
+ITCL_LIBRARY	= $(ITCLDIR:\=/)/library
+ITK_LIBRARY	= $(ROOT)/library
 
 ITCLSTUBLIBNAME	= itclstub$(ITCL_VERSION).lib
-ITCLSTUBLIB	= "$(ITCLDIR)\win\Release\$(ITCLSTUBLIBNAME)"
+ITCLSTUBLIB	= $(ITCLDIR)\win\$(BUILDDIRTOP)\$(ITCLSTUBLIBNAME)
 
-### For Tcl 8.0
-!if !$(TCL_DOES_STUBS)
-TCLSTUBLIB	= $(TCLIMPLIB)
-TKSTUBLIB	= $(TKIMPLIB)
-ITCLSTUBLIB	= $(ITCLIMPLIB)
-!endif
-
-
-BIN_INSTALL_DIR		= $(_INSTALLDIR)\bin
-DOC_INSTALL_DIR		= $(_INSTALLDIR)\doc
-LIB_INSTALL_DIR		= $(_INSTALLDIR)\lib
-SCRIPT_INSTALL_DIR	= $(_INSTALLDIR)\lib\itk$(ITK_DOTVERSION)
-INCLUDE_INSTALL_DIR	= $(_INSTALLDIR)\include
+BIN_INSTALL_DIR		= $(_INSTALLDIR)\..\bin
+DOC_INSTALL_DIR		= $(_INSTALLDIR)\..\doc
+LIB_INSTALL_DIR		= $(_INSTALLDIR)
+SCRIPT_INSTALL_DIR	= $(_INSTALLDIR)\$(PROJECT)$(DOTVERSION)
+INCLUDE_INSTALL_DIR	= $(_INSTALLDIR)\..\include
 
 ITKOBJS = \
-	$(TMP_DIR)\itk_archetype.obj \
-	$(TMP_DIR)\itk_cmds.obj \
-	$(TMP_DIR)\itk_option.obj \
-	$(TMP_DIR)\itk_util.obj \
+	$(TMP_DIR)\itkArchBase.obj \
+	$(TMP_DIR)\itkArchetype.obj \
+	$(TMP_DIR)\itkBase.obj \
+	$(TMP_DIR)\itkCmd.obj \
+	$(TMP_DIR)\itkHelpers.obj \
+	$(TMP_DIR)\itkOption.obj \
+	$(TMP_DIR)\itkUtil.obj \
 !if !$(STATIC_BUILD)
 	$(TMP_DIR)\dllEntryPoint.obj \
 	$(TMP_DIR)\itk.res \
 !endif
-!if $(TCL_DOES_STUBS)
 	$(TMP_DIR)\itkStubInit.obj
-!endif
 
 ITKSTUBOBJS = \
-!if $(TCL_DOES_STUBS)
     $(TMP_DIR)\itkStubLib.obj
-!endif
 
 GENERICDIR	= $(ROOT)\generic
 DOCDIR		= $(ROOT)\doc
@@ -174,36 +150,52 @@ ITK_DLLBASE	= -base:@$(TCLDIR)\win\coffbase.txt,itk
 ITK_DLLBASE	=
 !endif
 
+baselibs   = 
+# Avoid 'unresolved external symbol __security_cookie' errors.
+# c.f. http://support.microsoft.com/?id=894573
+!if "$(MACHINE)" == "IA64" || "$(MACHINE)" == "AMD64"
+!if $(VCVERSION) > 1399 && $(VCVERSION) < 1500
+baselibs   = $(baselibs) bufferoverflowU.lib
+!endif
+!endif
+
 #---------------------------------------------------------------------
 # Compile flags
 #---------------------------------------------------------------------
 
-!if $(DEBUG)
-!if "$(MACHINE)" == "IA64"
-cdebug = -Od -Zi
+!if !$(DEBUG)
+!if $(OPTIMIZING)
+### This cranks the optimization level to maximize speed
+cdebug	= -O2 $(OPTIMIZATIONS)
 !else
-cdebug = -Z7 -Od -WX
+cdebug	= 
 !endif
+!if $(SYMBOLS)
+cdebug	= $(cdebug) -Zi
+!endif
+!else if "$(MACHINE)" == "IA64" || "$(MACHINE)" == "AMD64"
+### Warnings are too many, can't support warnings into errors.
+cdebug	= -Zi -Od $(DEBUGFLAGS)
 !else
-# This cranks the optimization level up to max.
-cdebug = -O2
+cdebug	= -Zi -WX $(DEBUGFLAGS)
 !endif
 
-# declarations common to all compiler options
-cflags = -nologo -c -W3 -YX -Fp$(TMP_DIR)^\
-
-!if $(PENT_0F_ERRATA)
-cflags = $(cflags) -QI0f
-!endif
-
-!if $(ITAN_B_ERRATA)
-cflags = $(cflags) -QIA64_Bx
-!endif
+### Declarations common to all compiler options
+cwarn = $(WARNINGS) -D _CRT_SECURE_NO_DEPRECATE -D _CRT_NONSTDC_NO_DEPRECATE
+cflags = -nologo -c $(COMPILERFLAGS) $(cwarn) -Fp$(TMP_DIR)^\
 
 !if $(MSVCRT)
-crt = -MD$(DBGX)
+!if $(DEBUG) && !$(UNCHECKED)
+crt = -MDd
 !else
-crt = -MT$(DBGX)
+crt = -MD
+!endif
+!else
+!if $(DEBUG) && !$(UNCHECKED)
+crt = -MTd
+!else
+crt = -MT
+!endif
 !endif
 
 !if $(TCLINSTALL)
@@ -224,10 +216,8 @@ ITK_EXE_CFLAGS	= $(cdebug) $(cflags) $(crt) $(ITCL_INCLUDES) $(ITK_INCLUDES) \
 ### not a technical limitation.
 !if $(STATIC_BUILD)
 ITK_CFLAGS	= $(ITK_EXE_CFLAGS) -DSTATIC_BUILD $(OPTDEFINES)
-!elseif $(TCL_DOES_STUBS)
-ITK_CFLAGS	= $(ITK_EXE_CFLAGS) -DUSE_TCL_STUBS -DUSE_TK_STUBS -DUSE_ITCL_STUBS $(OPTDEFINES)
 !else
-ITK_CFLAGS	= $(ITK_EXE_CFLAGS) $(OPTDEFINES)
+ITK_CFLAGS	= $(ITK_EXE_CFLAGS) -DUSE_TCL_STUBS -DUSE_TK_STUBS -DUSE_ITCL_STUBS $(OPTDEFINES)
 !endif
 
 #---------------------------------------------------------------------
@@ -261,16 +251,14 @@ $(ITKLIB): $(ITKOBJS)
 !if $(STATIC_BUILD)
 	$(lib32) -nologo -machine:$(MACHINE) -out:$@ @<<
 !else
-	$(link32) $(ITK_LFLAGS) $(ITK_DLLBASE) -out:$@ $(ITK_LLIBS) @<<
+	$(link32) $(ITK_LFLAGS) $(ITK_DLLBASE) -out:$@ $(ITK_LLIBS) $(baselibs) @<<
 !endif
 		$(ITKOBJS)
 <<
 
 
-!if $(TCL_DOES_STUBS)
 $(ITKSTUBLIB) : $(ITKSTUBOBJS)
 	$(lib32) -nologo -out:$@ $(ITKSTUBOBJS)
-!endif
 
 install-binaries:
 	if not exist "$(_INSTALLDIR)" mkdir "$(_INSTALLDIR)"
@@ -289,18 +277,18 @@ install-binaries:
 		> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 	echo ^ ^ ^ ^ set add 80>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 	echo } else {>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo ^ ^ ^ ^ set add {}>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
+	echo ^ ^ ^ ^ set add {$(SUFX:g=)}>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 	echo }>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 	echo if {[info exists ::tcl_platform(debug)] ^&^&\
 		$$::tcl_platform(debug)	^&^& \>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 	echo ^ ^ ^ ^ ^ ^ ^ ^ [file exists [file join $$dir\
 		$(PROJECT)$(ITK_VERSION)$${add}g.dll]]}\
 		{>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo ^ ^ ^ ^ package ifneeded Itk $(ITK_DOTVERSION) [list load\
+	echo ^ ^ ^ ^ package ifneeded Itk $(DOTVERSION) [list load\
 		[file join $$dir $(PROJECT)$(ITK_VERSION)$${add}g.dll]\
 		Itk]>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 	echo } else {>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo ^ ^ ^ ^ package ifneeded Itk $(ITK_DOTVERSION) [list load\
+	echo ^ ^ ^ ^ package ifneeded Itk $(DOTVERSION) [list load\
 		[file join $$dir $(PROJECT)$(ITK_VERSION)$${add}.dll]\
 		Itk]>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 	echo }>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
@@ -404,11 +392,11 @@ CreateButton(4, "FAQ", ExecFile("http://www.purl.org/NET/Tcl-FAQ/"))
 	copy "$(DOCTMP_DIR)\$(@B).cnt" "$(OUT_DIR)"
 
 $(MAN2TCL): $(TCLTOOLSDIR)\$$(@B).c
-	$(cc32) -nologo -G4 -ML -O2 -Fo$(@D)\ $(TCLTOOLSDIR)\$(@B).c -link -out:$@
+	$(cc32) -nologo -G4 -ML -O2 -Fo$(@D)\ $(TCLTOOLSDIR)\$(@B).c $(baselibs) -link -out:$@
 
 $(HELPRTF): $(MAN2TCL) $(MAN2HELP) $(MAN2HELP2) $(INDEX)
 	$(TCLSH) $(MAN2HELP) -bitmap $(BMP_NOPATH) $(PROJECT) $(ITK_VERSION) $(DOCDIR:\=/)
-
+	
 install-docs:
 !if exist($(HELPFILE))
 	@xcopy /i /y "$(HELPFILE)" "$(DOC_INSTALL_DIR)\"
