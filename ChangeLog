@@ -1,3 +1,8 @@
+NOTICE: This ChangeLog is no longer being maintained. To examine
+the series of changes checked into Itk sources, follow the Timeline
+
+https://core.tcl.tk/itk/timeline
+
 2014-09-07 Arnulf P. Wiedemann <wiede@users.sf.net>
 	* generic/itkArchetype.c: Fix for SF bug #253.
 

@@ -232,10 +232,55 @@ Itk_ConfigClassOption(
         Itcl_SetCallFrameNamespace(interp, opt->iclsPtr->nsPtr);
         result = Tcl_EvalObjEx(interp, mcode->bodyPtr, 0);
         Itcl_SetCallFrameNamespace(interp, saveNsPtr);
-#ifdef NOTDEF
+
+	/* 
+	 * Here we engage in some ugly hackery workaround until
+	 * someone has time to come back and implement this
+	 * properly.
+	 *
+	 * In Itcl/Itk 3, the same machinery was used to implement
+	 * method invocation and configbody invocation, and the
+	 * code here looked like:
+	 *
+	 
         result = Itcl_EvalMemberCode(interp, (ItclMemberFunc*)NULL,
             opt->member, contextObj, 0, (Tcl_Obj**)NULL);
-#endif
+
+	 *
+	 * In Itcl 4, Itcl methods have become (a particular variant)
+	 * of TclOO methods.  It's not clear whether config bodies
+	 * should also do that, or what?
+	 *
+	 * Instead the existing solution above has been to just "eval"
+	 * the configbody body script in a suitable context, which
+	 * works very nearly correctly.  The trouble is that unlike
+	 * method invocation, we've not pushed a proper frame, nor
+	 * have we unwound a return level, so when the "eval" returns
+	 * TCL_RETURN we've not been handling that right.  You will
+	 * find some configbody bodies out there that expect to be
+	 * able to use [return] for early exit.  Iwidgets test
+	 * Extbutton-2.8 is an example.
+	 *
+	 * As a cheap workaround, we put in explicit special treatment
+	 * for (result == TCL_RETURN) here.  This is essentially a
+	 * reproduction of the Tcl internal routine TclUpdateReturnInfo()
+	 * but without the benefit of internals access.
+ 	 */
+
+	if (result == TCL_RETURN) {
+	    Tcl_Obj *opts = Tcl_GetReturnOptions(interp, TCL_RETURN);
+	    Tcl_Obj *levelKey = Tcl_NewStringObj("-level", -1);
+	    Tcl_Obj *levelObj;
+	    int level;
+
+	    Tcl_DictObjGet(NULL, opts, levelKey, &levelObj);
+	    Tcl_GetIntFromObj(NULL, levelObj, &level);
+
+	    Tcl_DictObjPut(NULL, opts, levelKey, Tcl_NewIntObj(--level));
+	    result = Tcl_SetReturnOptions(interp, opts);
+	    
+	    Tcl_DecrRefCount(levelKey);
+	}
     }
     return result;
 }
