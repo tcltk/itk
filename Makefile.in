@@ -230,7 +230,7 @@ install-doc: doc
 	done
 
 test: binaries libraries
-	$(WISH) `@CYGPATH@ $(srcdir)/tests/all.tcl` -load "package require itk $(PACKAGE_VERSION)" $(TESTFLAGS)
+	$(WISH) `@CYGPATH@ $(srcdir)/tests/all.tcl` -load "package require -exact itk $(PACKAGE_VERSION)" $(TESTFLAGS)
 
 shell: binaries libraries
 	@$(WISH) $(SCRIPT)
