@@ -2255,6 +2255,7 @@ Itk_AddOptionPart(
     CONST char *init = NULL;
     int result;
     ArchOption *archOpt;
+    Itcl_ListElem *elemPtr;
 
     *raOpt = NULL;
     archOpt = NULL;
@@ -2275,7 +2276,7 @@ Itk_AddOptionPart(
      *  simply update this part to the current value.  Otherwise,
      *  leave the configuration to Itk_ArchInitCmd().
      */
-    Itcl_AppendList(&archOpt->parts, (ClientData)optPart);
+    elemPtr = Itcl_AppendList(&archOpt->parts, (ClientData)optPart);
 
     if ((archOpt->flags & ITK_ARCHOPT_INIT) != 0) {
 
@@ -2285,6 +2286,7 @@ Itk_AddOptionPart(
 
         if (!init) {
             Itk_ArchOptAccessError(interp, info, archOpt);
+	    Itcl_DeleteListElem(elemPtr);
             return TCL_ERROR;
         }
 
@@ -2294,6 +2296,7 @@ Itk_AddOptionPart(
 
             if (result != TCL_OK) {
                 Itk_ArchOptConfigError(interp, info, archOpt);
+		Itcl_DeleteListElem(elemPtr);
                 return TCL_ERROR;
             }
         }
