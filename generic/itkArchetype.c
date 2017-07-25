@@ -1068,12 +1068,10 @@ Itk_ArchConfigureCmd(
         Tcl_DStringInit(&buffer);
 
         for (i=0; i < info->order.len; i++) {
-	    Tcl_Namespace *save = Tcl_GetCurrentNamespace(interp);
             archOpt = (ArchOption*)Tcl_GetHashValue(info->order.list[i]);
 
-	    Itcl_SetCallFrameNamespace(interp, contextObj->iclsPtr->nsPtr);
-            val = Tcl_GetVar2(interp, "itk_option", archOpt->switchName, 0);
-	    Itcl_SetCallFrameNamespace(interp, save);
+	    val = ItclGetInstanceVar(interp, "itk_option", archOpt->switchName,
+		    contextObj, contextClass);
             if (!val) {
                 Itk_ArchOptAccessError(interp, info, archOpt);
                 Tcl_DStringFree(&buffer);
@@ -1102,7 +1100,6 @@ Itk_ArchConfigureCmd(
          *    {name resName resClass init value}
          */
         if (objc == 2) {
-	    Tcl_Namespace *save = Tcl_GetCurrentNamespace(interp);
             token = Tcl_GetString(objv[1]);
             entry = Tcl_FindHashEntry(&info->options, token);
             if (!entry) {
@@ -1113,9 +1110,9 @@ Itk_ArchConfigureCmd(
             }
 
             archOpt = (ArchOption*)Tcl_GetHashValue(entry);
-	    Itcl_SetCallFrameNamespace(interp, contextObj->iclsPtr->nsPtr);
-            val = Tcl_GetVar2(interp, "itk_option", archOpt->switchName, 0);
-	    Itcl_SetCallFrameNamespace(interp, save);
+
+	    val = ItclGetInstanceVar(interp, "itk_option", archOpt->switchName,
+		    contextObj, contextClass);
             if (!val) {
                 Itk_ArchOptAccessError(interp, info, archOpt);
                 return TCL_ERROR;
@@ -1140,7 +1137,7 @@ Itk_ArchConfigureCmd(
     for (objc--,objv++; objc > 0; objc-=2, objv+=2) {
 	char *value;
 	int code;
-	Tcl_Namespace *save = Tcl_GetCurrentNamespace(interp);
+//	Tcl_Namespace *save = Tcl_GetCurrentNamespace(interp);
         token = Tcl_GetString(objv[0]);
         if (objc < 2) {
             Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
@@ -1150,9 +1147,9 @@ Itk_ArchConfigureCmd(
         }
         value = Tcl_GetString(objv[1]);
 
-	Itcl_SetCallFrameNamespace(interp, contextObj->iclsPtr->nsPtr);
+//	Itcl_SetCallFrameNamespace(interp, contextObj->iclsPtr->nsPtr);
         code = Itk_ArchConfigOption(interp, info, token, value);
-	Itcl_SetCallFrameNamespace(interp, save);
+//	Itcl_SetCallFrameNamespace(interp, save);
         if (code != TCL_OK) {
             return TCL_ERROR;
         }
