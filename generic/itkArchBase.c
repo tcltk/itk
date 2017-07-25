@@ -1725,6 +1725,8 @@ Itk_ArchConfigOption(
     Itcl_ListElem *part;
     ArchOptionPart *optPart;
     Itcl_InterpState istate;
+    ItclClass *iclsPtr;
+    ItclObject *ioPtr;
 
     /*
      *  Query the "itk_option" array to get the current setting.
@@ -1743,7 +1745,15 @@ Itk_ArchConfigOption(
     }
     archOpt = (ArchOption*)Tcl_GetHashValue(entry);
 
+#if 0
     v = Tcl_GetVar2(interp, "itk_option", archOpt->switchName, 0);
+#else
+    Itcl_GetContext(interp, &iclsPtr, &ioPtr);
+
+    v = ItclGetInstanceVar(interp, "itk_option", archOpt->switchName,
+	    ioPtr, iclsPtr);
+#endif
+
     if (v) {
         lastval = (char*)ckalloc((unsigned)(strlen(v)+1));
         strcpy(lastval, v);
@@ -1754,7 +1764,12 @@ Itk_ArchConfigOption(
     /*
      *  Update the "itk_option" array with the new setting.
      */
+#if 0
     if (!Tcl_SetVar2(interp, "itk_option", archOpt->switchName, value, 0)) {
+#else
+    if (!ItclSetInstanceVar(interp, "itk_option", archOpt->switchName, value,
+	    ioPtr, iclsPtr)) {
+#endif
         Itk_ArchOptAccessError(interp, info, archOpt);
         result = TCL_ERROR;
         goto configDone;
@@ -1786,7 +1801,12 @@ Itk_ArchConfigOption(
     if (result == TCL_ERROR) {
         istate = Itcl_SaveInterpState(interp, result);
 
+#if 0
         Tcl_SetVar2(interp, "itk_option", archOpt->switchName, lastval, 0);
+#else
+	ItclSetInstanceVar(interp, "itk_option", archOpt->switchName, lastval,
+	    ioPtr, iclsPtr);
+#endif
 
         part = Itcl_FirstListElem(&archOpt->parts);
         while (part) {
