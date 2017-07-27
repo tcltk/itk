@@ -1597,8 +1597,14 @@ Itk_PropagatePublicVar(
 	 * Casting away CONST of newval only to satisfy Tcl 8.3 and
 	 * earlier headers.
 	 */
+
+#if 1
+	val = ItclSetInstanceVar(interp, Tcl_GetString(ivPtr->fullNamePtr),
+		NULL, newval, contextObj, ivPtr->iclsPtr);
+#else
         val = Tcl_SetVar2(interp, Tcl_GetString(ivPtr->fullNamePtr), (char *) NULL,
             (char *) newval, TCL_LEAVE_ERR_MSG);
+#endif
 
         if (!val) {
             result = TCL_ERROR;
@@ -1620,12 +1626,15 @@ Itk_PropagatePublicVar(
      */
     mcode = ivPtr->codePtr;
     if (mcode && mcode->bodyPtr) {
-        Tcl_Namespace *saveNsPtr;
-        Itcl_SetCallFrameResolver(interp, ivPtr->iclsPtr->resolvePtr);
-        saveNsPtr = Tcl_GetCurrentNamespace(interp);
-        Itcl_SetCallFrameNamespace(interp, ivPtr->iclsPtr->nsPtr);
+	Tcl_CallFrame frame;
+
+	Itcl_PushCallFrame(interp, &frame, ivPtr->iclsPtr->nsPtr, 1);
+	Itcl_SetContext(interp, contextObj);
+
         result = Tcl_EvalObjEx(interp, mcode->bodyPtr, 0);
-        Itcl_SetCallFrameNamespace(interp, saveNsPtr);
+
+	Itcl_UnsetContext(interp);
+	Itcl_PopCallFrame(interp);
 
         if (result == TCL_OK) {
             Tcl_ResetResult(interp);
