@@ -217,6 +217,7 @@ Itk_ConfigClassOption(
     ItkClassOption *opt = (ItkClassOption*)cdata;
     int result = TCL_OK;
     ItclMemberCode *mcode;
+    Tcl_CallFrame frame;
 
     /*
      *  If the option has any config code, execute it now.
@@ -224,14 +225,14 @@ Itk_ConfigClassOption(
      */
     mcode = opt->codePtr;
     if (mcode && mcode->bodyPtr) {
-        Tcl_Namespace *saveNsPtr;
-//fprintf(stderr, "EXE!%s!\n", Tcl_GetString(mcode->bodyPtr));
-        Itcl_SetCallFrameResolver(interp, opt->iclsPtr->resolvePtr);
-        saveNsPtr = Tcl_GetCurrentNamespace(interp);
-//fprintf(stderr, "MCNS!%s!\n", saveNsPtr->fullName);
-        Itcl_SetCallFrameNamespace(interp, opt->iclsPtr->nsPtr);
+
+	Itcl_PushCallFrame(interp, &frame, opt->iclsPtr->nsPtr, 1);
+	Itcl_SetContext(interp, contextObj);
+
         result = Tcl_EvalObjEx(interp, mcode->bodyPtr, 0);
-        Itcl_SetCallFrameNamespace(interp, saveNsPtr);
+
+	Itcl_UnsetContext(interp);
+	Itcl_PopCallFrame(interp);
 
 	/* 
 	 * Here we engage in some ugly hackery workaround until
