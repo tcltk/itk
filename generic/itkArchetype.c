@@ -166,7 +166,6 @@ fprintf(stderr, "error in creating namespace: ::itcl::builtin::Archetype \n");
     }
     Itcl_PreserveData((ClientData)mergeInfo);
     Itcl_EventuallyFree((ClientData)mergeInfo, Itk_DelMergeInfo);
-    Tcl_Export(interp, parserNs, "[a-z]*", 1);
 
     Tcl_CreateObjCommand(interp, "::itk::option-parser::keep",
         Itk_ArchOptKeepCmd,
