@@ -391,16 +391,21 @@ Itk_ArchCompAddCmd(
          *  these things are not really necessary.
          */
         Tcl_DStringSetLength(&buffer, 0);
-        Tcl_DStringAppend(&buffer, "bindtags ", -1);
+        Tcl_DStringAppend(&buffer, "::bindtags ", -1);
         Tcl_DStringAppend(&buffer, path, -1);
         if (Tcl_Eval(interp, Tcl_DStringValue(&buffer)) != TCL_OK) {
             goto compFail;
         }
 
+	/*
+	 * NOTE: We need the [::itcl::code] because the itk_component
+	 * method is protected.
+	 */
+
         Tcl_DStringSetLength(&buffer, 0);
-        Tcl_DStringAppend(&buffer, "bind itk-destroy-", -1);
+        Tcl_DStringAppend(&buffer, "::bind itk-destroy-", -1);
         Tcl_DStringAppend(&buffer, path, -1);
-        Tcl_DStringAppend(&buffer, " <Destroy> [itcl::code ", -1);
+        Tcl_DStringAppend(&buffer, " <Destroy> [::itcl::code ", -1);
 
         Tcl_DStringAppend(&buffer,
             Tcl_GetStringFromObj(objNamePtr,(int*)NULL), -1);
@@ -408,13 +413,14 @@ Itk_ArchCompAddCmd(
         Tcl_DStringAppend(&buffer, " itk_component delete ", -1);
         Tcl_DStringAppend(&buffer, name, -1);
         Tcl_DStringAppend(&buffer, "]\n", -1);
-        Tcl_DStringAppend(&buffer, "bindtags ", -1);
+        Tcl_DStringAppend(&buffer, "::bindtags ", -1);
         Tcl_DStringAppend(&buffer, path, -1);
         Tcl_DStringAppend(&buffer, " {itk-destroy-", -1);
         Tcl_DStringAppend(&buffer, path, -1);
         Tcl_DStringAppend(&buffer, " ", -1);
         Tcl_DStringAppend(&buffer, Tcl_GetStringResult(interp), -1);
         Tcl_DStringAppend(&buffer, "}", -1);
+
         if (Tcl_Eval(interp, Tcl_DStringValue(&buffer)) != TCL_OK) {
             goto compFail;
         }
@@ -478,12 +484,9 @@ Itk_ArchCompAddCmd(
         objPtr = objv[3];
     }
 
-    Tcl_Import(interp, NULL, "::itk::option-parser::*", 1);
-
-    if (result == TCL_OK) {
-        result = Tcl_EvalObj(interp, objPtr);
-	Tcl_ForgetImport(interp, NULL, "::itk::option-parser::*");
-    }
+    Tcl_Eval(interp, "::namespace path [::lreplace [::namespace path] end+1 end ::itk::option-parser]");
+    result = Tcl_EvalObj(interp, objPtr);
+    Tcl_Eval(interp, "::namespace path [::lrange [::namespace path] 0 end-1]");
 
     if (objc != 4) {
         Tcl_DecrRefCount(objPtr);
@@ -647,7 +650,7 @@ if (archComp == NULL) {
         *  Ignore errors if anything goes wrong.
         */
         Tcl_DStringInit(&buffer);
-        Tcl_DStringAppend(&buffer, "itk::remove_destroy_hook ", -1);
+        Tcl_DStringAppend(&buffer, "::itk::remove_destroy_hook ", -1);
         Tcl_DStringAppend(&buffer, archComp->pathName, -1);
         (void) Tcl_Eval(interp, Tcl_DStringValue(&buffer));
         Tcl_ResetResult(interp);
