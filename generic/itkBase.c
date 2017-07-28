@@ -124,7 +124,7 @@ Initialize(
     if (Tk_InitStubs(interp, TK_VERSION, 0) == NULL) {
 	return TCL_ERROR;
     };
-    if (Itcl_InitStubs(interp, "4.0-4.1", 0) == NULL) {
+    if (Itcl_InitStubs(interp, "4.1", 0) == NULL) {
 	return TCL_ERROR;
     }
 

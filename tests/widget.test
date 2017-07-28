@@ -260,7 +260,7 @@ test widget-1.26 {when an internal component is deleted (but not destroyed) it i
          [bindtags $comp] \
          [bind itk-destroy-$comp <Destroy>] \
          [.testWidget configure]
-} {{itk-destroy-.testWidget.t2 .testWidget.t2 Button . all} {namespace inscope ::itk::Archetype {::.testWidget itk_component delete test2}} 0 {.testWidget.t2 Button . all} {} {{-background background Background linen linen} {-clientdata clientData ClientData {} {}} {-cursor cursor Cursor {} {}} {-status status Status {} {}}}}
+} {{itk-destroy-.testWidget.t2 .testWidget.t2 Button . all} {namespace inscope ::TestWidget {::.testWidget itk_component delete test2}} 0 {.testWidget.t2 Button . all} {} {{-background background Background linen linen} {-clientdata clientData ClientData {} {}} {-cursor cursor Cursor {} {}} {-status status Status {} {}}}}
 
 test widget-1.27 {when a mega-widget object is deleted, its window and any
         components are destroyed (even if in another window) } {
