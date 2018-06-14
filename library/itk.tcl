@@ -18,11 +18,7 @@ package require -exact Itk 4.1.0
 #
 # Provide transparent access to all [incr Tk] commands
 #
-if {$tcl_platform(os) == "MacOS"} {
-    source -rsrc itk:tclIndex
-} else {
-    lappend auto_path ${itk::library}
-}
+lappend auto_path ${itk::library}
 
 # ----------------------------------------------------------------------
 #  USAGE:  itk::remove_destroy_hook <widget>
