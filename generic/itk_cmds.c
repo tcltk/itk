@@ -58,9 +58,6 @@ namespace eval ::itk {\n\
         if {[info exists library]} {\n\
             lappend dirs $library\n\
         } else {\n\
-            if {[catch {uplevel #0 source -rsrc itk}] == 0} {\n\
-                return\n\
-            }\n\
             set dirs {}\n\
             if {[info exists env(ITK_LIBRARY)]} {\n\
                 lappend dirs $env(ITK_LIBRARY)\n\
