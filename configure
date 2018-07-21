@@ -620,6 +620,19 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+itk_STUB_LIB_FILE
+itk_LIB_FILE
+itk_SRC_DIR
+ITCL_VERSION
+PATCHLEVEL
+MINOR_VERSION
+MAJOR_VERSION
+itk_STUB_LIB_PATH
+itk_BUILD_STUB_LIB_PATH
+itk_STUB_LIB_SPEC
+itk_BUILD_STUB_LIB_SPEC
+itk_LIB_SPEC
+itk_BUILD_LIB_SPEC
 WISH_PROG
 TCLSH_PROG
 VC_MANIFEST_EMBED_EXE
@@ -2426,6 +2439,9 @@ $as_echo "$as_me: WARNING: --with-tcl argument should refer to directory contain
 			`ls -d /Library/Frameworks 2>/dev/null` \
 			`ls -d /Network/Library/Frameworks 2>/dev/null` \
 			`ls -d /System/Library/Frameworks 2>/dev/null` \
+			`ls -d /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Library/Frameworks/Tcl.framework 2>/dev/null` \
+			`ls -d /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Network/Library/Frameworks/Tcl.framework 2>/dev/null` \
+			`ls -d /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Tcl.framework 2>/dev/null` \
 			; do
 		    if test -f "$i/Tcl.framework/tclConfig.sh" ; then
 			ac_cv_c_tclconfig="`(cd $i/Tcl.framework; pwd)`"
@@ -2452,8 +2468,8 @@ $as_echo "$as_me: WARNING: --with-tcl argument should refer to directory contain
 		for i in `ls -d ${libdir} 2>/dev/null` \
 			`ls -d ${exec_prefix}/lib 2>/dev/null` \
 			`ls -d ${prefix}/lib 2>/dev/null` \
-			`ls -d /usr/contrib/lib 2>/dev/null` \
 			`ls -d /usr/local/lib 2>/dev/null` \
+			`ls -d /usr/contrib/lib 2>/dev/null` \
 			`ls -d /usr/pkg/lib 2>/dev/null` \
 			`ls -d /usr/lib 2>/dev/null` \
 			`ls -d /usr/lib64 2>/dev/null` \
@@ -3533,6 +3549,9 @@ $as_echo "$as_me: WARNING: --with-tk argument should refer to directory containi
 			`ls -d /Library/Frameworks 2>/dev/null` \
 			`ls -d /Network/Library/Frameworks 2>/dev/null` \
 			`ls -d /System/Library/Frameworks 2>/dev/null` \
+			`ls -d /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Library/Frameworks/Tcl.framework 2>/dev/null` \
+			`ls -d /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Network/Library/Frameworks/Tcl.framework 2>/dev/null` \
+			`ls -d /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Tcl.framework 2>/dev/null` \
 			; do
 		    if test -f "$i/Tk.framework/tkConfig.sh" ; then
 			ac_cv_c_tkconfig="`(cd $i/Tk.framework; pwd)`"
@@ -3546,8 +3565,8 @@ $as_echo "$as_me: WARNING: --with-tk argument should refer to directory containi
 		for i in `ls -d ${libdir} 2>/dev/null` \
 			`ls -d ${exec_prefix}/lib 2>/dev/null` \
 			`ls -d ${prefix}/lib 2>/dev/null` \
-			`ls -d /usr/contrib/lib 2>/dev/null` \
 			`ls -d /usr/local/lib 2>/dev/null` \
+			`ls -d /usr/contrib/lib 2>/dev/null` \
 			`ls -d /usr/pkg/lib 2>/dev/null` \
 			`ls -d /usr/lib 2>/dev/null` \
 			`ls -d /usr/lib64 2>/dev/null` \
@@ -3787,6 +3806,7 @@ $as_echo "$as_me: WARNING: --with-itcl argument should refer to directory contai
 			`ls -d ${prefix}/lib 2>/dev/null` \
 			`ls -d /usr/local/lib 2>/dev/null` \
 			`ls -d /usr/contrib/lib 2>/dev/null` \
+			`ls -d /usr/pkg/lib 2>/dev/null` \
 			`ls -d /usr/lib 2>/dev/null` \
 			`ls -d /usr/lib64 2>/dev/null` \
 			; do
@@ -8946,12 +8966,68 @@ $as_echo "${WISH_PROG}" >&6; }
 
 
 #--------------------------------------------------------------------
-# Finally, substitute all of the various values into the Makefile.
-# You may alternatively have a special pkgIndex.tcl.in or other files
-# which require substituting the AC variables in. Include these here.
+# Setup a *Config.sh.in configuration file.
 #--------------------------------------------------------------------
 
-ac_config_files="$ac_config_files Makefile pkgIndex.tcl itkConfig.sh"
+# itk_SRC_DIR must be a fully qualified path
+eval itk_SRC_DIR="$srcdir"
+itk_SRC_DIR="`(cd "${itk_SRC_DIR}"; pwd)`"
+
+itk_LIB_FILE="${PKG_LIB_FILE}"
+itk_STUB_LIB_FILE="${PKG_STUB_LIB_FILE}"
+
+
+    #--------------------------------------------------------------------
+    # These are for itkConfig.sh
+    #--------------------------------------------------------------------
+
+    # pkglibdir must be a fully qualified path and (not ${exec_prefix}/lib)
+    eval pkglibdir="${libdir}/itk${PACKAGE_VERSION}"
+    if test "${TCL_LIB_VERSIONS_OK}" = "ok"; then
+	eval itk_LIB_FLAG="-litk${PACKAGE_VERSION}${DBGX}"
+	eval itk_STUB_LIB_FLAG="-litkstub${PACKAGE_VERSION}${DBGX}"
+    else
+	eval itk_LIB_FLAG="-litk`echo ${PACKAGE_VERSION} | tr -d .`${DBGX}"
+	eval itk_STUB_LIB_FLAG="-litkstub`echo ${PACKAGE_VERSION} | tr -d .`${DBGX}"
+    fi
+    itk_BUILD_LIB_SPEC="-L`$CYGPATH $(pwd)` ${itk_LIB_FLAG}"
+    itk_LIB_SPEC="-L`$CYGPATH ${pkglibdir}` ${itk_LIB_FLAG}"
+    itk_BUILD_STUB_LIB_SPEC="-L`$CYGPATH $(pwd)` ${itk_STUB_LIB_FLAG}"
+    itk_STUB_LIB_SPEC="-L`$CYGPATH ${pkglibdir}` ${itk_STUB_LIB_FLAG}"
+    itk_BUILD_STUB_LIB_PATH="`$CYGPATH $(pwd)`/${PKG_STUB_LIB_FILE}"
+    itk_STUB_LIB_PATH="`$CYGPATH ${pkglibdir}`/${PKG_STUB_LIB_FILE}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#--------------------------------------------------------------------
+# Specify files to substitute AC variables in. You may alternatively
+# have a special pkgIndex.tcl.in or other files which require
+# substituting the AC variables in. Include these here.
+#--------------------------------------------------------------------
+
+ac_config_files="$ac_config_files Makefile pkgIndex.tcl"
+
+ac_config_files="$ac_config_files itkConfig.sh"
+
+
+#--------------------------------------------------------------------
+# Finally, substitute all of the various values into the files
+# specified with AC_CONFIG_FILES.
+#--------------------------------------------------------------------
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure

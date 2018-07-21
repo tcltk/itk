@@ -418,7 +418,7 @@ install-lib-binaries: binaries
 	    echo " Install pkgIndex.tcl $(DESTDIR)$(pkglibdir)"; \
 	    $(INSTALL_DATA) pkgIndex.tcl $(DESTDIR)$(pkglibdir); \
 	fi
-	: $(INSTALL_DATA) itkConfig.sh $(DESTDIR)$(pkglibdir)
+	$(INSTALL_DATA) itkConfig.sh $(DESTDIR)$(pkglibdir)
 
 #========================================================================
 # Install binary executables (e.g. .exe files and dependent .dll files)

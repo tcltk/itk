@@ -229,9 +229,34 @@ TEA_PROG_TCLSH
 TEA_PROG_WISH
 
 #--------------------------------------------------------------------
-# Finally, substitute all of the various values into the Makefile.
-# You may alternatively have a special pkgIndex.tcl.in or other files
-# which require substituting the AC variables in. Include these here.
+# Setup a *Config.sh.in configuration file.
 #--------------------------------------------------------------------
 
-AC_OUTPUT([Makefile pkgIndex.tcl itkConfig.sh])
+# itk_SRC_DIR must be a fully qualified path
+eval itk_SRC_DIR="$srcdir"
+itk_SRC_DIR="`(cd "${itk_SRC_DIR}"; pwd)`"
+
+itk_LIB_FILE="${PKG_LIB_FILE}"
+itk_STUB_LIB_FILE="${PKG_STUB_LIB_FILE}"
+
+TEA_EXPORT_CONFIG([itk])
+AC_SUBST(ITCL_VERSION)
+AC_SUBST(itk_SRC_DIR)
+AC_SUBST(itk_LIB_FILE)
+AC_SUBST(itk_STUB_LIB_FILE)
+
+#--------------------------------------------------------------------
+# Specify files to substitute AC variables in. You may alternatively
+# have a special pkgIndex.tcl.in or other files which require
+# substituting the AC variables in. Include these here.
+#--------------------------------------------------------------------
+
+AC_CONFIG_FILES([Makefile pkgIndex.tcl])
+AC_CONFIG_FILES([itkConfig.sh])
+
+#--------------------------------------------------------------------
+# Finally, substitute all of the various values into the files
+# specified with AC_CONFIG_FILES.
+#--------------------------------------------------------------------
+
+AC_OUTPUT()
