@@ -107,8 +107,8 @@ typedef struct ArchOption {
 /*
  *  Various parts of a composite option in an Archetype mega-widget:
  */
-typedef int (Itk_ConfigOptionPartProc) _ANSI_ARGS_((Tcl_Interp *interp,
-    ItclObject *contextObj, ClientData cdata, CONST char* newVal));
+typedef int (Itk_ConfigOptionPartProc) (Tcl_Interp *interp,
+    ItclObject *contextObj, ClientData cdata, const char* newVal);
 
 typedef struct ArchOptionPart {
     ClientData clientData;                 /* data associated with this part */
@@ -157,65 +157,65 @@ typedef struct ConfigCmdline {
     Tcl_Obj *objv[4];           /* objects representing "configure" command */
 } ConfigCmdline;
 
-MODULE_SCOPE int Itk_ArchInitOptsCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_ArchDeleteOptsCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_ArchComponentCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_ArchInitCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_ArchOptionCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_ArchCompAccessCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_ArchConfigureCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_ArchCgetCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
+MODULE_SCOPE int Itk_ArchInitOptsCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchDeleteOptsCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchComponentCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchInitCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchOptionCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchCompAccessCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchConfigureCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchCgetCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 
-MODULE_SCOPE int Itk_ArchCompAddCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_ArchCompDeleteCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_ArchConfigOption _ANSI_ARGS_((Tcl_Interp *interp,
-    ArchInfo *info, char *name, char *value));
-MODULE_SCOPE int Itk_ArchOptionAddCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_ArchOptionRemoveCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_PropagatePublicVar _ANSI_ARGS_((Tcl_Interp *interp,
-    ItclObject *contextObj, ClientData cdata, CONST char *newval));
-MODULE_SCOPE int Itk_GetArchInfo _ANSI_ARGS_((Tcl_Interp *interp,
-    ItclObject* contextObj, ArchInfo **infoPtr));
-MODULE_SCOPE void Itk_ArchOptConfigError _ANSI_ARGS_((Tcl_Interp *interp,
-    ArchInfo *info, ArchOption *archOpt));
-MODULE_SCOPE void Itk_ArchOptAccessError _ANSI_ARGS_((Tcl_Interp *interp,
-    ArchInfo *info, ArchOption *archOpt));
-MODULE_SCOPE ArchOptionPart* Itk_CreateOptionPart _ANSI_ARGS_((
+MODULE_SCOPE int Itk_ArchCompAddCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchCompDeleteCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchConfigOption (Tcl_Interp *interp,
+    ArchInfo *info, char *name, char *value);
+MODULE_SCOPE int Itk_ArchOptionAddCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchOptionRemoveCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_PropagatePublicVar (Tcl_Interp *interp,
+    ItclObject *contextObj, ClientData cdata, const char *newval);
+MODULE_SCOPE int Itk_GetArchInfo (Tcl_Interp *interp,
+    ItclObject* contextObj, ArchInfo **infoPtr);
+MODULE_SCOPE void Itk_ArchOptConfigError (Tcl_Interp *interp,
+    ArchInfo *info, ArchOption *archOpt);
+MODULE_SCOPE void Itk_ArchOptAccessError (Tcl_Interp *interp,
+    ArchInfo *info, ArchOption *archOpt);
+MODULE_SCOPE ArchOptionPart* Itk_CreateOptionPart (
     Tcl_Interp *interp, ClientData cdata, Itk_ConfigOptionPartProc* cproc,
-    Tcl_CmdDeleteProc *dproc, ClientData from));
-MODULE_SCOPE int Itk_AddOptionPart _ANSI_ARGS_((Tcl_Interp *interp,
+    Tcl_CmdDeleteProc *dproc, ClientData from);
+MODULE_SCOPE int Itk_AddOptionPart (Tcl_Interp *interp,
     ArchInfo *info, char *switchName, char *resName, char *resClass,
-    CONST char *defVal, char *currVal, ArchOptionPart *optPart,
-    ArchOption **raOpt));
-MODULE_SCOPE ArchOptionPart* Itk_FindArchOptionPart _ANSI_ARGS_((
-    ArchInfo *info, char *switchName, ClientData from));
-MODULE_SCOPE void Itk_DelOptionPart _ANSI_ARGS_((ArchOptionPart *optPart));
-MODULE_SCOPE void Itk_DelArchInfo _ANSI_ARGS_((ClientData cdata));
+    const char *defVal, char *currVal, ArchOptionPart *optPart,
+    ArchOption **raOpt);
+MODULE_SCOPE ArchOptionPart* Itk_FindArchOptionPart (
+    ArchInfo *info, char *switchName, ClientData from);
+MODULE_SCOPE void Itk_DelOptionPart (ArchOptionPart *optPart);
+MODULE_SCOPE void Itk_DelArchInfo (ClientData cdata);
 MODULE_SCOPE Tcl_HashTable* ItkGetObjsWithArchInfo
-    _ANSI_ARGS_((Tcl_Interp *interp));
-MODULE_SCOPE void ItkFreeObjsWithArchInfo _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp));
-MODULE_SCOPE void Itk_DelMergeInfo _ANSI_ARGS_((char* cdata));
-MODULE_SCOPE int Itk_ArchOptKeepCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_ArchOptIgnoreCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_ArchOptRenameCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
-MODULE_SCOPE int Itk_ArchOptUsualCmd _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]));
+    (Tcl_Interp *interp);
+MODULE_SCOPE void ItkFreeObjsWithArchInfo (ClientData cdata,
+    Tcl_Interp *interp);
+MODULE_SCOPE void Itk_DelMergeInfo (void* cdata);
+MODULE_SCOPE int Itk_ArchOptKeepCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchOptIgnoreCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchOptRenameCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchOptUsualCmd (ClientData cdata,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 
 
 #include "itkIntDecls.h"

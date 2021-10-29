@@ -24,10 +24,10 @@
 #include "itkInt.h"
 
 MODULE_SCOPE const ItkStubs itkStubs;
-/*  
+/*
  * The following script is used to initialize Itcl in a safe interpreter.
  */
- 
+
 static char safeInitScript[] =
 "proc ::itcl::local {class name args} {\n\
     set ptr [uplevel [list $class $name] $args]\n\
@@ -35,12 +35,12 @@ static char safeInitScript[] =
     set cmd [uplevel namespace which -command $ptr]\n\
     uplevel [list trace variable itcl-local-$ptr u \"::itcl::delete object $cmd; list\"]\n\
     return $ptr\n\
-}";  
+}";
 
 /*
  *  FORWARD DECLARATIONS
  */
-static int Initialize _ANSI_ARGS_((Tcl_Interp *interp));
+static int Initialize (Tcl_Interp *interp);
 /*
  * The following string is the startup script executed in new
  * interpreters.  It looks on disk in several different directories
@@ -244,21 +244,21 @@ Itk_Init(
 /*
  * ------------------------------------------------------------------------
  *  Itk_SafeInit()
- *   
+ *
  *  Invoked whenever a new SAFE INTERPRETER is created to install
  *  the [incr Tcl] package.
- *      
+ *
  *  Creates the "::itk" namespace and installs access commands for
  *  creating classes and querying info.
- *  
- *  Returns TCL_OK on success, or TCL_ERROR (along with an error 
+ *
+ *  Returns TCL_OK on success, or TCL_ERROR (along with an error
  *  message in the interpreter) if anything goes wrong.
  * ------------------------------------------------------------------------
- */  
-int 
+ */
+int
 Itk_SafeInit(
-    Tcl_Interp *interp)  /* interpreter to be updated */ 
-{   
+    Tcl_Interp *interp)  /* interpreter to be updated */
+{
     if (Initialize(interp) != TCL_OK) {
         return TCL_ERROR;
     }

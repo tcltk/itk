@@ -1,7 +1,15 @@
+# -*- tcl -*-
+# Tcl package index file, version 1.1
 #
-# Tcl package index file
-#
-if {![package vsatisfies [package provide Tcl] 8.6]} return
+
+if {![package vsatisfies [package provide Tcl] 8.6-]} {return}
 if {[string length [package provide Itcl]] && ![package vsatisfies [package provide Itcl] 4.1]} return
-package ifneeded itk @PACKAGE_VERSION@ [list load [file join $dir "@PKG_LIB_FILE@"] Itk]
-package ifneeded Itk @PACKAGE_VERSION@ [list load [file join $dir "@PKG_LIB_FILE@"] Itk]
+if {[package vsatisfies [package provide Tcl] 9.0-]} {
+    package ifneeded itk @PACKAGE_VERSION@ \
+	    [list load [file join $dir @PKG_LIB_FILE9@] Itk]
+} else {
+    package ifneeded itk @PACKAGE_VERSION@ \
+	    [list load [file join $dir @PKG_LIB_FILE8@] Itk]
+}
+
+package ifneeded Itk @PACKAGE_VERSION@ [list package require -exact itk @PACKAGE_VERSION@]

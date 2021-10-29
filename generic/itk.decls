@@ -5,7 +5,7 @@
 #	This file contains the declarations for all supported public
 #	functions that are exported by the Itk library via the stubs table.
 #	This file is used to generate the itkDecls.h file.
-#	
+#
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
@@ -56,11 +56,11 @@ interface itkInt
 
 declare 2 {
     int Itk_ConfigBodyCmd (ClientData cdata, Tcl_Interp *interp, \
-        int objc, Tcl_Obj *CONST objv[])
+        int objc, Tcl_Obj *const objv[])
 }
 declare 3 {
     int Itk_UsualCmd (ClientData cdata, Tcl_Interp *interp, int objc, \
-        Tcl_Obj *CONST objv[])
+        Tcl_Obj *const objv[])
 }
 
 #
@@ -69,15 +69,15 @@ declare 3 {
 
 declare 4 {
     int Itk_ClassOptionDefineCmd (ClientData cdata, Tcl_Interp *interp, \
-        int objc, Tcl_Obj *CONST objv[])
+        int objc, Tcl_Obj *const objv[])
 }
 declare 5 {
     int Itk_ClassOptionIllegalCmd (ClientData cdata, Tcl_Interp *interp, \
-        int objc, Tcl_Obj *CONST objv[])
+        int objc, Tcl_Obj *const objv[])
 }
 declare 6 {
     int Itk_ConfigClassOption (Tcl_Interp *interp, ItclObject *contextObj, \
-        ClientData cdata, CONST char* newVal)
+        ClientData cdata, const char* newVal)
 }
 declare 7 {
     ItkClassOptTable* Itk_CreateClassOptTable( Tcl_Interp *interp, \

@@ -26,12 +26,12 @@
 /*
  *  FORWARD DECLARATIONS
  */
-static char* ItkTraceClassDestroy _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp, const char *name1, const char *name2, int flags));
-static Tcl_HashTable* ItkGetClassesWithOptInfo _ANSI_ARGS_((
-    Tcl_Interp *interp));
-static void ItkFreeClassesWithOptInfo _ANSI_ARGS_((ClientData cdata,
-    Tcl_Interp *interp));
+static char* ItkTraceClassDestroy (ClientData cdata,
+    Tcl_Interp *interp, const char *name1, const char *name2, int flags);
+static Tcl_HashTable* ItkGetClassesWithOptInfo (
+    Tcl_Interp *interp);
+static void ItkFreeClassesWithOptInfo (ClientData cdata,
+    Tcl_Interp *interp);
 
 
 /*
@@ -59,7 +59,7 @@ Itk_ClassOptionDefineCmd(
     ClientData clientData,   /* class parser info */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
-    Tcl_Obj *CONST objv[])   /* argument objects */
+    Tcl_Obj *const objv[])   /* argument objects */
 {
     ItclObjectInfo *info = (ItclObjectInfo*)clientData;
     ItclClass *iclsPtr = (ItclClass*)Itcl_PeekStack(&info->clsStack);
@@ -180,7 +180,7 @@ Itk_ClassOptionIllegalCmd(
     ClientData clientData,   /* class parser info */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
-    Tcl_Obj *CONST objv[])   /* argument objects */
+    Tcl_Obj *const objv[])   /* argument objects */
 {
     char *op = Tcl_GetString(objv[0]);
 
@@ -212,7 +212,7 @@ Itk_ConfigClassOption(
     Tcl_Interp *interp,        /* interpreter managing the class */
     ItclObject *contextObj,    /* object being configured */
     ClientData cdata,          /* class option */
-    CONST char *newval)        /* new value for this option */
+    const char *newval)        /* new value for this option */
 {
     ItkClassOption *opt = (ItkClassOption*)cdata;
     int result = TCL_OK;
@@ -234,7 +234,7 @@ Itk_ConfigClassOption(
 	Itcl_UnsetContext(interp);
 	Itcl_PopCallFrame(interp);
 
-	/* 
+	/*
 	 * Here we engage in some ugly hackery workaround until
 	 * someone has time to come back and implement this
 	 * properly.
@@ -243,7 +243,7 @@ Itk_ConfigClassOption(
 	 * method invocation and configbody invocation, and the
 	 * code here looked like:
 	 *
-	 
+
         result = Itcl_EvalMemberCode(interp, (ItclMemberFunc*)NULL,
             opt->member, contextObj, 0, (Tcl_Obj**)NULL);
 
@@ -279,7 +279,7 @@ Itk_ConfigClassOption(
 
 	    Tcl_DictObjPut(NULL, opts, levelKey, Tcl_NewIntObj(--level));
 	    result = Tcl_SetReturnOptions(interp, opts);
-	    
+
 	    Tcl_DecrRefCount(levelKey);
 	}
     }

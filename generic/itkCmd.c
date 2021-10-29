@@ -51,7 +51,7 @@ Itk_ConfigBodyCmd(
     ClientData dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
-    Tcl_Obj *CONST objv[])   /* argument objects */
+    Tcl_Obj *const objv[])   /* argument objects */
 {
     int result = TCL_OK;
 

@@ -66,12 +66,12 @@
 
 
 #define ITK_MAJOR_VERSION	4
-#define ITK_MINOR_VERSION	1
+#define ITK_MINOR_VERSION	2
 #define ITK_RELEASE_LEVEL	TCL_FINAL_RELEASE
-#define ITK_RELEASE_SERIAL	0
+#define ITK_RELEASE_SERIAL	2
 
-#define ITK_VERSION		"4.1"
-#define ITK_PATCH_LEVEL		"4.1.0"
+#define ITK_VERSION		"4.2"
+#define ITK_PATCH_LEVEL		"4.2.2"
 
 
 /*
@@ -101,9 +101,9 @@
  */
 
 #ifdef USE_ITK_STUBS
-EXTERN CONST char *
-	Itk_InitStubs _ANSI_ARGS_((Tcl_Interp *interp,
-			    CONST char *version, int exact));
+EXTERN const char *
+	Itk_InitStubs(Tcl_Interp *interp,
+			    const char *version, int exact);
 #else
 #define Itk_InitStubs(interp, version, exact) \
       Tcl_PkgRequire(interp, "Itk", version, exact)

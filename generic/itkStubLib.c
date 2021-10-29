@@ -1,4 +1,4 @@
-/* 
+/*
  * itkStubLib.c --
  *
  *	Stub object that will be statically linked into extensions that wish
@@ -50,20 +50,20 @@
  *----------------------------------------------------------------------
  */
 
-CONST char *
+const char *
 Itk_InitStubs (
     Tcl_Interp *interp,
     const char *version,
     int exact)
 {
-    CONST char *actualVersion;
-    
+    const char *actualVersion;
+
     actualVersion = Tcl_PkgRequireEx(interp, "itk", (const char *)version,
             exact, (ClientData *) &itkStubsPtr);
     if (actualVersion == NULL) {
 	itkStubsPtr = NULL;
 	return NULL;
     }
-    
+
     return actualVersion;
 }

@@ -160,7 +160,7 @@ fprintf(stderr, "error in creating namespace: ::itcl::builtin::Archetype \n");
         (ClientData)mergeInfo, Itcl_ReleaseData);
 
     if (!parserNs) {
-        Itk_DelMergeInfo((char*)mergeInfo);
+        Itk_DelMergeInfo(mergeInfo);
         Tcl_AddErrorInfo(interp, "\n    (while initializing itk)");
         return TCL_ERROR;
     }
@@ -217,7 +217,7 @@ Itk_ArchetypeCmd(
     ClientData clientData,   /* class definition */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
-    Tcl_Obj *CONST objv[])   /* argument objects */
+    Tcl_Obj *const objv[])   /* argument objects */
 {
     ItclShowArgs(2, "Itk_ArchetypeCmd", objc, objv);
     if (objc == 1) {
@@ -251,7 +251,7 @@ Itk_ArchInitOptsCmd(
     ClientData dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
-    Tcl_Obj *CONST objv[])   /* argument objects */
+    Tcl_Obj *const objv[])   /* argument objects */
 {
     int newEntry;
     int result;
@@ -346,7 +346,7 @@ Itk_ArchDeleteOptsCmd(
     ClientData dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
-    Tcl_Obj *CONST objv[])   /* argument objects */
+    Tcl_Obj *const objv[])   /* argument objects */
 {
     ItclClass *contextClass;
     ItclObject *contextObj;
@@ -404,7 +404,7 @@ Itk_ArchComponentCmd(
     ClientData dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
-    Tcl_Obj *CONST objv[])   /* argument objects */
+    Tcl_Obj *const objv[])   /* argument objects */
 {
     char *cmd;
     char *token;
@@ -504,11 +504,11 @@ Itk_ArchComponentCmd(
  */
 /* ARGSUSED */
 int
-Itk_ArchInitCmd(dummy, interp, objc, objv)
-    ClientData dummy;        /* unused */
-    Tcl_Interp *interp;      /* current interpreter */
-    int objc;                /* number of arguments */
-    Tcl_Obj *CONST objv[];   /* argument objects */
+Itk_ArchInitCmd(
+    ClientData dummy,        /* unused */
+    Tcl_Interp *interp,      /* current interpreter */
+    int objc,                /* number of arguments */
+    Tcl_Obj *const objv[])   /* argument objects */
 {
     ItclClass *contextClass;
     ItclClass *iclsPtr;
@@ -517,7 +517,7 @@ Itk_ArchInitCmd(dummy, interp, objc, objv)
 
     int i;
     int result;
-    CONST char *val;
+    const char *val;
     char *token;
     ItkClassOption *opt;
     ItkClassOptTable *optTable;
@@ -724,7 +724,7 @@ Itk_ArchOptionCmd(
     ClientData dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
-    Tcl_Obj *CONST objv[])   /* argument objects */
+    Tcl_Obj *const objv[])   /* argument objects */
 {
     char *cmd;
     char *token;
@@ -833,13 +833,13 @@ Itk_ArchCompAccessCmd(
     ClientData dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
-    Tcl_Obj *CONST objv[])   /* argument objects */
+    Tcl_Obj *const objv[])   /* argument objects */
 {
     int i;
     int result;
     char *token;
-    CONST char *name;
-    CONST char *val;
+    const char *name;
+    const char *val;
     Tcl_Namespace *callingNs;
     ItclClass *contextClass;
     ItclObject *contextObj;
@@ -891,7 +891,7 @@ fprintf(stderr, "ERR 2 archComp == NULL\n");
 } else {
             if (Itcl_CanAccess2(archComp->iclsPtr, archComp->protection,
 	            callingNs)) {
-                name = Tcl_GetHashKey(&info->components, entry);
+                name = (char *)Tcl_GetHashKey(&info->components, entry);
                 Tcl_AppendElement(interp, (const char *)name);
             }
 }
@@ -967,8 +967,8 @@ fprintf(stderr, "ERR 2 archComp == NULL\n");
             return TCL_ERROR;
         }
 	/*
-	 * Casting away CONST is safe because TCL_VOLATILE guarantees
-	 * CONST treatment.
+	 * Casting away const is safe because TCL_VOLATILE guarantees
+	 * const treatment.
 	 */
         Tcl_SetResult(interp, (char *) val, TCL_VOLATILE);
         return TCL_OK;
@@ -1020,10 +1020,10 @@ Itk_ArchConfigureCmd(
     ClientData dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
-    Tcl_Obj *CONST objv[])   /* argument objects */
+    Tcl_Obj *const objv[])   /* argument objects */
 {
     int i;
-    CONST char *val;
+    const char *val;
     char *token;
     ItclClass *contextClass;
     ItclObject *contextObj;
@@ -1126,7 +1126,7 @@ Itk_ArchConfigureCmd(
                 (archOpt->init) ? archOpt->init : "");
             Tcl_AppendElement(interp, (const char *)val);
             return TCL_OK;
-        } 
+        }
     }
 
     /*
@@ -1176,10 +1176,10 @@ Itk_ArchCgetCmd(
     ClientData dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
-    Tcl_Obj *CONST objv[])   /* argument objects */
+    Tcl_Obj *const objv[])   /* argument objects */
 {
-    CONST char *token;
-    CONST char *val;
+    const char *token;
+    const char *val;
     ItclClass *contextClass;
     ItclObject *contextObj;
     ArchInfo *info;
@@ -1231,8 +1231,8 @@ Itk_ArchCgetCmd(
     }
 
     /*
-     * Casting away CONST is safe because TCL_VOLATILE guarantees
-     * CONST treatment.
+     * Casting away const is safe because TCL_VOLATILE guarantees
+     * const treatment.
      */
     Tcl_SetResult(interp, (char *) val, TCL_VOLATILE);
     return TCL_OK;

@@ -9,7 +9,7 @@
 
 package prefer latest
 
-package require Tcl 8.6
+package require Tcl 8.6-
 package require tcltest 2.2
 
 tcltest::configure {*}$argv -testdir [file dir [info script]]

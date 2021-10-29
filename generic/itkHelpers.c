@@ -175,9 +175,9 @@ ItkGetObjsWithArchInfo(
  * ------------------------------------------------------------------------
  */
 void
-ItkFreeObjsWithArchInfo(clientData, interp)
-    ClientData clientData;       /* associated data */
-    Tcl_Interp *interp;          /* interpreter being freed */
+ItkFreeObjsWithArchInfo(
+    ClientData clientData,       /* associated data */
+    Tcl_Interp *interp)          /* interpreter being freed */
 {
     Tcl_HashTable *tablePtr = (Tcl_HashTable*)clientData;
     Tcl_HashSearch place;
