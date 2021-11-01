@@ -502,13 +502,13 @@ Itk_CreateClassOption(
     Tcl_IncrRefCount(opt->fullNamePtr);
     opt->codePtr = mcode;
 
-    opt->resName = (char*)ckalloc((unsigned)(strlen(resName)+1));
+    opt->resName = (char*)ckalloc((strlen(resName)+1));
     strcpy(opt->resName, resName);
 
-    opt->resClass = (char*)ckalloc((unsigned)(strlen(resClass)+1));
+    opt->resClass = (char*)ckalloc((strlen(resClass)+1));
     strcpy(opt->resClass, resClass);
 
-    opt->init = (char*)ckalloc((unsigned)(strlen(defVal)+1));
+    opt->init = (char*)ckalloc((strlen(defVal)+1));
     strcpy(opt->init, defVal);
 
     *optPtr = opt;

@@ -311,7 +311,7 @@ Itk_ArchCompAddCmd(
      *  this, since the interpreter will get used in the mean time.
      */
     resultStr = Tcl_GetStringResult(interp);
-    path = (char*)ckalloc((unsigned)(strlen(resultStr)+1));
+    path = (char*)ckalloc((strlen(resultStr)+1));
     strcpy(path, resultStr);
 
     /*
@@ -1767,7 +1767,7 @@ Itk_ArchConfigOption(
 #endif
 
     if (v) {
-        lastval = (char*)ckalloc((unsigned)(strlen(v)+1));
+        lastval = (char*)ckalloc((strlen(v)+1));
         strcpy(lastval, v);
     } else {
         lastval = NULL;
@@ -1912,7 +1912,7 @@ Itk_CreateArchComponent(
                 if (!archOpt->init) {
                     ckfree(archOpt->init);
                 }
-                archOpt->init = (char*)ckalloc((unsigned)(strlen(init)+1));
+                archOpt->init = (char*)ckalloc((strlen(init)+1));
                 strcpy(archOpt->init, init);
 
                 if (Itk_ArchSetOption(interp, info,
@@ -1936,7 +1936,7 @@ Itk_CreateArchComponent(
     archComp->protection  = ITCL_PUBLIC;
     archComp->accessCmd  = accessCmd;
     archComp->tkwin      = tkwin;
-    archComp->pathName   = (char *) ckalloc((unsigned)(strlen(wname)+1));
+    archComp->pathName   = (char *) ckalloc((strlen(wname)+1));
     strcpy(archComp->pathName, wname);
 
     return archComp;
@@ -2005,7 +2005,7 @@ Itk_GetArchOption(
      *  If the switch does not have a leading "-", add it on.
      */
     if (*switchName != '-') {
-        name = (char *)ckalloc((unsigned)(strlen(switchName)+2));
+        name = (char *)ckalloc((strlen(switchName)+2));
         *name = '-';
         strcpy(name+1, switchName);
     } else {
@@ -2022,7 +2022,7 @@ Itk_GetArchOption(
         archOpt = (ArchOption*)Tcl_GetHashValue(entry);
 
         if (resName && !archOpt->resName) {
-            archOpt->resName = (char*)ckalloc((unsigned)(strlen(resName)+1));
+            archOpt->resName = (char*)ckalloc((strlen(resName)+1));
             strcpy(archOpt->resName, resName);
         }
         else if (resName && strcmp(archOpt->resName, resName) != 0) {
@@ -2035,7 +2035,7 @@ Itk_GetArchOption(
         }
 
         if (resClass && !archOpt->resClass) {
-            archOpt->resClass = (char*)ckalloc((unsigned)(strlen(resClass)+1));
+            archOpt->resClass = (char*)ckalloc((strlen(resClass)+1));
             strcpy(archOpt->resClass, resClass);
         } else {
 	    if (resClass && strcmp(archOpt->resClass, resClass) != 0) {
@@ -2063,18 +2063,18 @@ Itk_GetArchOption(
      */
     archOpt = (ArchOption*)ckalloc(sizeof(ArchOption));
 
-    archOpt->switchName = (char*)ckalloc((unsigned)(strlen(name)+1));
+    archOpt->switchName = (char*)ckalloc((strlen(name)+1));
     strcpy(archOpt->switchName, name);
 
     if (resName) {
-        archOpt->resName = (char*)ckalloc((unsigned)(strlen(resName)+1));
+        archOpt->resName = (char*)ckalloc((strlen(resName)+1));
         strcpy(archOpt->resName, resName);
     } else {
         archOpt->resName = NULL;
     }
 
     if (resClass) {
-        archOpt->resClass = (char*)ckalloc((unsigned)(strlen(resClass)+1));
+        archOpt->resClass = (char*)ckalloc((strlen(resClass)+1));
         strcpy(archOpt->resClass, resClass);
     } else {
         archOpt->resClass = NULL;
@@ -2168,7 +2168,7 @@ Itk_InitArchOption(
             (char *)((ival) ? ival : ""), 0);
 
     if (ival) {
-        archOpt->init = (char*)ckalloc((unsigned)(strlen(ival)+1));
+        archOpt->init = (char*)ckalloc((strlen(ival)+1));
         strcpy(archOpt->init, ival);
     }
 }
@@ -2370,7 +2370,7 @@ Itk_FindArchOptionPart(
      *  If the switch does not have a leading "-", add it on.
      */
     if (*switchName != '-') {
-        name = (char *)ckalloc((unsigned)(strlen(switchName)+2));
+        name = (char *)ckalloc((strlen(switchName)+2));
         *name = '-';
         strcpy(name+1, switchName);
     } else {
@@ -2813,7 +2813,7 @@ Itk_CreateGenericOpt(
      *  If the switch does not have a leading "-", add it on.
      */
     if (*switchName != '-') {
-        name = (char *)ckalloc((unsigned)(strlen(switchName)+2));
+        name = (char *)ckalloc((strlen(switchName)+2));
         *name = '-';
         strcpy(name+1, switchName);
 	my_name = name;

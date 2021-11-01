@@ -41,7 +41,7 @@ Itk_OptListInit(
     olist->len = 0;
     olist->max = 10;
     olist->list = (Tcl_HashEntry**)ckalloc(
-        (unsigned)(olist->max*sizeof(Tcl_HashEntry*))
+        (olist->max*sizeof(Tcl_HashEntry*))
     );
 }
 
@@ -94,7 +94,7 @@ Itk_OptListAdd(
      */
     if (olist->len >= olist->max) {
         size = olist->max*sizeof(Tcl_HashEntry*);
-        newOrder = (Tcl_HashEntry**)ckalloc((unsigned)2*size);
+        newOrder = (Tcl_HashEntry**)ckalloc(2*size);
         memcpy((void*)newOrder, (void*)olist->list, (size_t)size);
         ckfree((char*)olist->list);
 
