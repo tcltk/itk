@@ -480,7 +480,7 @@ Itk_CreateClassOption(
         }
         Itcl_PreserveData((ClientData)mcode);
 #ifdef NOTDEF
-        Itcl_EventuallyFree((ClientData)mcode, Itcl_DeleteMemberCode);
+        Itcl_EventuallyFree((ClientData)mcode, (Tcl_FreeProc *)Itcl_DeleteMemberCode);
 #endif
     } else {
         mcode = NULL;
