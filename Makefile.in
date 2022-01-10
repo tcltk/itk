@@ -60,6 +60,8 @@ PKG_HEADERS	= @PKG_HEADERS@
 #========================================================================
 
 PKG_LIB_FILE	= @PKG_LIB_FILE@
+PKG_LIB_FILE8	= @PKG_LIB_FILE8@
+PKG_LIB_FILE9	= @PKG_LIB_FILE9@
 PKG_STUB_LIB_FILE = @PKG_STUB_LIB_FILE@
 
 lib_BINARIES	= $(PKG_LIB_FILE)
@@ -75,6 +77,7 @@ bindir		= @bindir@
 libdir		= @libdir@
 includedir	= @includedir@
 datarootdir	= @datarootdir@
+runstatedir	= @runstatedir@
 datadir		= @datadir@
 mandir		= @mandir@
 
@@ -100,7 +103,6 @@ PACKAGE_VERSION	= @PACKAGE_VERSION@
 CC		= @CC@
 CFLAGS_DEFAULT	= @CFLAGS_DEFAULT@
 CFLAGS_WARNING	= @CFLAGS_WARNING@
-CLEANFILES	= @CLEANFILES@
 EXEEXT		= @EXEEXT@
 LDFLAGS_DEFAULT	= @LDFLAGS_DEFAULT@
 MAKE_LIB	= @MAKE_LIB@
@@ -164,11 +166,12 @@ PKG_CFLAGS	= @PKG_CFLAGS@
 DEFS		= @DEFS@ $(PKG_CFLAGS) -DITK_LIBRARY=\"$(pkglibdir)\"
 
 CONFIG_CLEAN_FILES = @CONFIG_CLEAN_FILES@ Makefile itkConfig.sh pkgIndex.tcl
+CLEANFILES	= @CLEANFILES@
 
 CPPFLAGS	= @CPPFLAGS@
 LIBS		= @PKG_LIBS@ @LIBS@
 AR		= @AR@
-CFLAGS		= @CFLAGS@
+CFLAGS		= @CFLAGS@ -DTCL_NO_DEPRECATED
 COMPILE		= $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 
 GDB		= gdb
@@ -220,11 +223,11 @@ install-binaries: binaries install-lib-binaries install-bin-binaries
 #========================================================================
 
 install-libraries: libraries
-	@$(INSTALL_DATA_DIR) $(DESTDIR)$(includedir)
+	@$(INSTALL_DATA_DIR) "$(DESTDIR)$(includedir)"
 	@echo "Installing header files in $(DESTDIR)$(includedir)"
 	@list='$(PKG_HEADERS)'; for i in $$list; do \
 	    echo "Installing $(srcdir)/$$i" ; \
-	    $(INSTALL_DATA) $(srcdir)/$$i $(DESTDIR)$(includedir) ; \
+	    $(INSTALL_DATA) $(srcdir)/$$i "$(DESTDIR)$(includedir)" ; \
 	done;
 
 #========================================================================
@@ -233,19 +236,19 @@ install-libraries: libraries
 #========================================================================
 
 install-doc: doc
-	@$(INSTALL_DATA_DIR) $(DESTDIR)$(mandir)/mann
+	@$(INSTALL_DATA_DIR) "$(DESTDIR)$(mandir)/mann"
 	@echo "Installing documentation in $(DESTDIR)$(mandir)"
 	@list='$(srcdir)/doc/*.n'; for i in $$list; do \
 	    if test X"$$i" = X'$(srcdir)/doc/*.n'; then break; fi; \
 	    bi=`basename $$i`; \
 	    echo "Installing $$bi"; \
 	    sed -e '/man\.macros/r $(srcdir)/doc/man.macros' -e '/man\.macros/d' $$i > $$bi.tmp \
-	    && $(INSTALL_DATA) $$bi.tmp $(DESTDIR)$(mandir)/mann/$$bi \
+	    && $(INSTALL_DATA) $$bi.tmp "$(DESTDIR)$(mandir)/mann/$$bi" \
 	    && rm -f $$bi.tmp; \
 	done
 
 test: binaries libraries
-	$(WISH) `@CYGPATH@ $(srcdir)/tests/all.tcl` -load "package require -exact itk $(PACKAGE_VERSION)" $(TESTFLAGS)
+	$(WISH) `@CYGPATH@ $(srcdir)/tests/all.tcl` $(TESTFLAGS) -load "package require -exact itk $(PACKAGE_VERSION)"
 
 shell: binaries libraries
 	@$(WISH) $(SCRIPT)
@@ -310,7 +313,21 @@ $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
 VPATH = $(srcdir)/unix:$(srcdir)/generic:$(srcdir)/win
 
 .c.@OBJEXT@:
-	$(COMPILE) -c `@CYGPATH@ $<` -o $@
+	$(COMPILE) -c `@CYGPATH@ $<` -I. -o $@
+
+itkBase.@OBJEXT@:	itkUuid.h
+
+$(srcdir)/manifest.uuid:
+	printf "git-" >$(srcdir)/manifest.uuid
+	(cd $(srcdir); git rev-parse HEAD >>$(srcdir)/manifest.uuid || \
+	    (printf "svn-r" >$(srcdir)/manifest.uuid ; \
+	    svn info --show-item last-changed-revision >>$(srcdir)/manifest.uuid) || \
+	    printf "unknown" >$(srcdir)/manifest.uuid)
+
+itkUuid.h:	$(srcdir)/manifest.uuid
+	echo "#define ITK_VERSION_UUID \\" >$@
+	cat $(srcdir)/manifest.uuid >>$@
+	echo "" >>$@
 
 #========================================================================
 # Distribution creation
@@ -328,11 +345,12 @@ DIST_INSTALL_SCRIPT	= CPPROG='cp -p' $(INSTALL) -m 755
 dist-clean:
 	rm -rf $(DIST_DIR) $(DIST_ROOT)/$(PKG_DIR).tar.*
 
-dist: dist-clean
+dist: dist-clean $(srcdir)/manifest.uuid
 	$(INSTALL_DATA_DIR) $(DIST_DIR)
 
 	# TEA files
 	$(DIST_INSTALL_DATA) $(srcdir)/Makefile.in \
+	    $(srcdir)/manifest.uuid $(DISTDIR) \
 	    $(srcdir)/aclocal.m4 $(srcdir)/configure.ac \
 	    $(DIST_DIR)/
 	$(DIST_INSTALL_SCRIPT) $(srcdir)/configure $(DIST_DIR)/
@@ -392,17 +410,17 @@ distclean: clean
 #========================================================================
 
 install-lib-binaries: binaries
-	@$(INSTALL_DATA_DIR) $(DESTDIR)$(pkglibdir)
+	@$(INSTALL_DATA_DIR) "$(DESTDIR)$(pkglibdir)"
 	@list='$(lib_BINARIES)'; for p in $$list; do \
 	  if test -f $$p; then \
 	    echo " $(INSTALL_LIBRARY) $$p $(DESTDIR)$(pkglibdir)/$$p"; \
-	    $(INSTALL_LIBRARY) $$p $(DESTDIR)$(pkglibdir)/$$p; \
+	    $(INSTALL_LIBRARY) $$p "$(DESTDIR)$(pkglibdir)/$$p"; \
 	    ext=`echo $$p|sed -e "s/.*\.//"`; \
 	    if test "x$$ext" = "xdll"; then \
 		lib=`basename $$p|sed -e 's/.[^.]*$$//'`.lib; \
 		if test -f $$lib; then \
 		    echo " $(INSTALL_DATA) $$lib $(DESTDIR)$(pkglibdir)/$$lib"; \
-	            $(INSTALL_DATA) $$lib $(DESTDIR)$(pkglibdir)/$$lib; \
+	            $(INSTALL_DATA) $$lib "$(DESTDIR)$(pkglibdir)/$$lib"; \
 		fi; \
 	    fi; \
 	  fi; \
@@ -411,14 +429,14 @@ install-lib-binaries: binaries
 	  if test -f $(srcdir)/$$p; then \
 	    destp=`basename $$p`; \
 	    echo " Install $$destp $(DESTDIR)$(pkglibdir)/$$destp"; \
-	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkglibdir)/$$destp; \
+	    $(INSTALL_DATA) $(srcdir)/$$p "$(DESTDIR)$(pkglibdir)/$$destp"; \
 	  fi; \
 	done
 	@if test "x$(SHARED_BUILD)" = "x1"; then \
 	    echo " Install pkgIndex.tcl $(DESTDIR)$(pkglibdir)"; \
-	    $(INSTALL_DATA) pkgIndex.tcl $(DESTDIR)$(pkglibdir); \
+	    $(INSTALL_DATA) pkgIndex.tcl "$(DESTDIR)$(pkglibdir)"; \
 	fi
-	$(INSTALL_DATA) itkConfig.sh $(DESTDIR)$(pkglibdir)
+	$(INSTALL_DATA) itkConfig.sh "$(DESTDIR)$(pkglibdir)"
 
 #========================================================================
 # Install binary executables (e.g. .exe files and dependent .dll files)
@@ -430,11 +448,11 @@ install-lib-binaries: binaries
 #========================================================================
 
 install-bin-binaries: binaries
-	@$(INSTALL_DATA_DIR) $(DESTDIR)$(bindir)
+	@$(INSTALL_DATA_DIR) "$(DESTDIR)$(bindir)"
 	@list='$(bin_BINARIES)'; for p in $$list; do \
 	  if test -f $$p; then \
 	    echo " $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/$$p"; \
-	    $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/$$p; \
+	    $(INSTALL_PROGRAM) $$p "$(DESTDIR)$(bindir)/$$p"; \
 	  fi; \
 	done
 
@@ -444,14 +462,14 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 
 uninstall-binaries:
 	list='$(lib_BINARIES)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(pkglibdir)/$$p; \
+	  rm -f "$(DESTDIR)$(pkglibdir)/$$p"; \
 	done
 	list='$(PKG_TCL_SOURCES)'; for p in $$list; do \
 	  p=`basename $$p`; \
-	  rm -f $(DESTDIR)$(pkglibdir)/$$p; \
+	  rm -f "$(DESTDIR)$(pkglibdir)/$$p"; \
 	done
 	list='$(bin_BINARIES)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(bindir)/$$p; \
+	  rm -f "$(DESTDIR)$(bindir)/$$p"; \
 	done
 
 .PHONY: all binaries clean depend distclean doc install libraries test

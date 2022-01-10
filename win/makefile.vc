@@ -228,6 +228,35 @@ all :     setup $(ITKLIB) $(ITKSTUBLIB)
 release : setup $(ITKLIB) $(ITKSTUBLIB)
 install	: install-binaries install-docs
 
+(ROOT)\manifest.uuid:
+   copy $(WIN_DIR)\gitmanifest.in $(ROOT)\manifest.uuid
+   git rev-parse HEAD >>$(ROOT)\manifest.uuid
+
+$(TMP_DIR)\itkUuid.h:	$(ROOT)\manifest.uuid
+	copy $(WIN_DIR)\itclUuid.h.in+$(ROOT)\manifest.uuid $(TMP_DIR)\itkUuid.h
+
+(TMP_DIR)\itkBase.obj: $(TMP_DIR)\itkUuid.h
+
+pkgindex:   $(OUT_DIR)\pkgIndex.tcl
+$(OUT_DIR)\pkgIndex.tcl:
+	@$(COPY) << "$(OUT_DIR)\pkgIndex.tcl"
+# -*- tcl -*-
+# Tcl package index file, version 1.1
+#
+
+if {![package vsatisfies [package provide Tcl] 8.6-]} {return}
+
+if {[package vsatisfies [package provide Tcl] 9.0-]} {
+    package ifneeded itk $(DOTVERSION) \
+	    [list load [file join $$dir tcl9itk$(VERSION).dll] Itk]
+} else {
+    package ifneeded itcl $(DOTVERSION) \
+	    [list load [file join $$dir itk$(VERSION).dll] Itk]
+}
+package ifneeded Itk $(DOTVERSION) [list package require -exact itk $(DOTVERSION)]
+<<
+
+
 !if $(STATIC_BUILD)
 test :
 	@echo test target not supported for a static library.
@@ -273,26 +302,6 @@ install-binaries:
 	copy $(ROOT)\generic\itk.h "$(INCLUDE_INSTALL_DIR)"
 	copy $(ROOT)\generic\itkDecls.h "$(INCLUDE_INSTALL_DIR)"
 	copy $(ROOT)\library\*.* "$(SCRIPT_INSTALL_DIR)"
-	echo if {[package vsatisfies 8.0 [package provide Tcl]]} {\
-		> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo ^ ^ ^ ^ set add 80>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo } else {>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo ^ ^ ^ ^ set add {$(SUFX:g=)}>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo }>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo if {[info exists ::tcl_platform(debug)] ^&^&\
-		$$::tcl_platform(debug)	^&^& \>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo ^ ^ ^ ^ ^ ^ ^ ^ [file exists [file join $$dir\
-		$(PROJECT)$(ITK_VERSION)$${add}g.dll]]}\
-		{>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo ^ ^ ^ ^ package ifneeded Itk $(DOTVERSION) [list load\
-		[file join $$dir $(PROJECT)$(ITK_VERSION)$${add}g.dll]\
-		Itk]>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo } else {>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo ^ ^ ^ ^ package ifneeded Itk $(DOTVERSION) [list load\
-		[file join $$dir $(PROJECT)$(ITK_VERSION)$${add}.dll]\
-		Itk]>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo }>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
-	echo unset add>> "$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 
 
 #---------------------------------------------------------------------
