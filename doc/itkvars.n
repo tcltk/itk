@@ -28,9 +28,9 @@ or from a compiled-in value otherwise.
 .sp
 When \fB[incr\ Tk]\fR is added to an interpreter, it executes
 the script "\fCinit.itk\fR" in this directory.  This script,
-in turn, looks for other script files with the name "\fCinit.\fIxxx\fR".
+in turn, looks for other script files with the name "\fCinit.\fR\fIxxx\fR".
 Mega-widget libraries will be automatically initialized if they
-install a script named "\fCinit.\fIxxx\fR" in this directory,
+install a script named "\fCinit.\fR\fIxxx\fR" in this directory,
 where "\fIxxx\fR" is the name of the mega-widget library.
 For example, the \fB[incr\ Widgets]\fR library installs
 the script "\fCinit.iwidgets\fR" in this directory.

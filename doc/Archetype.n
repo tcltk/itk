@@ -48,7 +48,7 @@ inherits from \fBArchetype\fR, but adds a Tk toplevel which acts
 as the "hull".
 .PP
 \fIEach derived class must invoke the \fBitk_initialize\fP method
-within its constructor\fR, so that all options are properly
+within its constructor, so that all options are properly
 integrated and initialized in the composite list.
 
 
