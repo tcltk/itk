@@ -64,7 +64,7 @@ PKG_LIB_FILE8	= @PKG_LIB_FILE8@
 PKG_LIB_FILE9	= @PKG_LIB_FILE9@
 PKG_STUB_LIB_FILE = @PKG_STUB_LIB_FILE@
 
-lib_BINARIES	= $(PKG_LIB_FILE)
+lib_BINARIES	= $(PKG_LIB_FILE) $(PKG_STUB_LIB_FILE)
 BINARIES	= $(lib_BINARIES)
 
 SHELL		= @SHELL@
@@ -171,7 +171,7 @@ CLEANFILES	= @CLEANFILES@
 CPPFLAGS	= @CPPFLAGS@
 LIBS		= @PKG_LIBS@ @LIBS@
 AR		= @AR@
-CFLAGS		= @CFLAGS@ -DTCL_NO_DEPRECATED
+CFLAGS		= @CFLAGS@
 COMPILE		= $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 
 GDB		= gdb
@@ -220,6 +220,7 @@ install-binaries: binaries install-lib-binaries install-bin-binaries
 
 #========================================================================
 # This rule installs platform-independent files, such as header files.
+# The list=...; for p in $$list handles the empty list case x-platform.
 #========================================================================
 
 install-libraries: libraries
@@ -310,7 +311,7 @@ $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
 # As necessary, add $(srcdir):$(srcdir)/compat:....
 #========================================================================
 
-VPATH = $(srcdir)/unix:$(srcdir)/generic:$(srcdir)/win
+VPATH = $(srcdir):$(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win:$(srcdir)/macosx
 
 .c.@OBJEXT@:
 	$(COMPILE) -c `@CYGPATH@ $<` -I. -o $@

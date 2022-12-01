@@ -19,7 +19,7 @@ dnl	to configure the system for the local environment.
 # so that we create the export library with the dll.
 #-----------------------------------------------------------------------
 
-AC_INIT([itk], [4.2.3])
+AC_INIT([itk],[4.2.3])
 
 #--------------------------------------------------------------------
 # Call TEA_INIT as the first TEA_ macro to set up initial vars.
@@ -115,7 +115,7 @@ TEA_ADD_HEADERS([generic/itk.h generic/itkInt.h])
 TEA_ADD_INCLUDES([${ITCL_INCLUDES} -I\"`${CYGPATH} ${srcdir}/generic`\"])
 TEA_ADD_LIBS([])
 TEA_ADD_CFLAGS([])
-#TEA_ADD_STUB_SOURCES([itkStubLib.c])
+TEA_ADD_STUB_SOURCES([itkStubLib.c])
 TEA_ADD_TCL_SOURCES([library/Archetype.itk
                 library/Toplevel.itk
                 library/Widget.itk
@@ -259,4 +259,4 @@ AC_CONFIG_FILES([itkConfig.sh])
 # specified with AC_CONFIG_FILES.
 #--------------------------------------------------------------------
 
-AC_OUTPUT()
+AC_OUTPUT
