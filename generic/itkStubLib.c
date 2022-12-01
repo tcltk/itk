@@ -59,7 +59,7 @@ Itk_InitStubs (
     const char *actualVersion;
 
     actualVersion = Tcl_PkgRequireEx(interp, "itk", (const char *)version,
-            exact, (ClientData *) &itkStubsPtr);
+            exact, &itkStubsPtr);
     if (actualVersion == NULL) {
 	itkStubsPtr = NULL;
 	return NULL;

@@ -161,7 +161,7 @@ ItkGetObjsWithArchInfo(
         objTable = (Tcl_HashTable*)ckalloc(sizeof(Tcl_HashTable));
         Tcl_InitHashTable(objTable, TCL_ONE_WORD_KEYS);
         Tcl_SetAssocData(interp, "itk_objsWithArchInfo",
-            ItkFreeObjsWithArchInfo, (ClientData)objTable);
+            ItkFreeObjsWithArchInfo, (void *)objTable);
     }
     return objTable;
 }
@@ -176,7 +176,7 @@ ItkGetObjsWithArchInfo(
  */
 void
 ItkFreeObjsWithArchInfo(
-    ClientData clientData,       /* associated data */
+    void *clientData,       /* associated data */
     Tcl_Interp *interp)          /* interpreter being freed */
 {
     Tcl_HashTable *tablePtr = (Tcl_HashTable*)clientData;

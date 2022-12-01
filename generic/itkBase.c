@@ -120,13 +120,13 @@ Initialize(
     Tcl_Interp *interp)  /* interpreter to be updated */
 {
     Tcl_Namespace *itkNs, *parserNs;
-    ClientData parserInfo;
+    void *parserInfo;
     Tcl_CmdInfo info;
 
-    if (Tcl_InitStubs(interp, TCL_VERSION, 0) == NULL) {
+    if (Tcl_InitStubs(interp, "8.6-", 0) == NULL) {
       return TCL_ERROR;
     }
-    if (Tk_InitStubs(interp, TK_VERSION, 0) == NULL) {
+    if (Tk_InitStubs(interp, "8.6-", 0) == NULL) {
 	return TCL_ERROR;
     };
     if (Itcl_InitStubs(interp, "4.1", 0) == NULL) {
@@ -163,12 +163,12 @@ Initialize(
     if (Itcl_AddEnsemblePart(interp, "::itcl::parser::itk_option",
             "add", "name ?name name...?",
             Itk_ClassOptionIllegalCmd,
-            (ClientData)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
+            (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
 
         Itcl_AddEnsemblePart(interp, "::itcl::parser::itk_option",
             "remove", "name ?name name...?",
             Itk_ClassOptionIllegalCmd,
-            (ClientData)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK) {
+            (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK) {
 
         return TCL_ERROR;
     }
@@ -186,7 +186,7 @@ Initialize(
 	 *  such as "namespace import itk::*"
 	 */
 	itkNs = Tcl_CreateNamespace(interp, "::itk",
-	    (ClientData)NULL, (Tcl_NamespaceDeleteProc*)NULL);
+	    (void *)NULL, (Tcl_NamespaceDeleteProc*)NULL);
     }
 
     if (!itkNs ||
@@ -206,7 +206,7 @@ Initialize(
      *  options.
      */
     Tcl_CreateObjCommand(interp, "::itcl::configbody", Itk_ConfigBodyCmd,
-        (ClientData)NULL, (Tcl_CmdDeleteProc*)NULL);
+        (void *)NULL, (Tcl_CmdDeleteProc*)NULL);
 
     Tcl_SetVar(interp, "::itk::version", ITK_VERSION, TCL_NAMESPACE_ONLY);
     Tcl_SetVar(interp, "::itk::patchLevel", ITK_PATCH_LEVEL,
@@ -274,9 +274,9 @@ Initialize(
 #endif
 		), NULL);
     }
-    Tcl_PkgProvideEx(interp, "Itk", ITK_PATCH_LEVEL, (ClientData) &itkStubs);
+    Tcl_PkgProvideEx(interp, "Itk", ITK_PATCH_LEVEL, (void *) &itkStubs);
     return Tcl_PkgProvideEx(interp, "itk", ITK_PATCH_LEVEL,
-            (ClientData) &itkStubs);
+            (void *) &itkStubs);
 }
 
 /*

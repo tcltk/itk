@@ -29,7 +29,7 @@
  */
 
 static int Itk_PropagateOption (Tcl_Interp *interp,
-    ItclObject *contextObj, ClientData cdata, const char *newval);
+    ItclObject *contextObj, void *cdata, const char *newval);
 
 static int Itk_ArchSetOption (Tcl_Interp *interp,
     ArchInfo *info, const char *name, const char *value);
@@ -48,13 +48,13 @@ static void Itk_InitArchOption (Tcl_Interp *interp,
 static void Itk_DelArchOption (ArchOption *archOpt);
 
 static int Itk_RemoveArchOptionPart (ArchInfo *info,
-    char *switchName, ClientData from);
+    char *switchName, void *from);
 static int Itk_IgnoreArchOptionPart (ArchInfo *info,
     GenericConfigOpt *opt);
 
 static ConfigCmdline* Itk_CreateConfigCmdline (
     Tcl_Interp *interp, Tcl_Command accessCmd, char *switchName);
-static void Itk_DeleteConfigCmdline (ClientData cdata);
+static void Itk_DeleteConfigCmdline (void *cdata);
 
 static Tcl_HashTable* Itk_CreateGenericOptTable (Tcl_Interp *interp,
     const char *options);
@@ -112,7 +112,7 @@ Itk_DelMergeInfo(
  */
 void
 Itk_DelArchInfo(
-    ClientData cdata)    /* client data for Archetype objects */
+    void *cdata)    /* client data for Archetype objects */
 {
     ArchInfo *info = (ArchInfo*)cdata;
 
@@ -165,7 +165,7 @@ Itk_DelArchInfo(
 /* ARGSUSED */
 int
 Itk_ArchCompAddCmd(
-    ClientData dummy,        /* unused */
+    void *dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -348,7 +348,7 @@ Itk_ArchCompAddCmd(
         goto compFail;
     }
 
-    Tcl_SetHashValue(entry, (ClientData)archComp);
+    Tcl_SetHashValue(entry, (void *)archComp);
     archComp->protection = pLevel;
 
     /*
@@ -589,7 +589,7 @@ compFail:
 /* ARGSUSED */
 int
 Itk_ArchCompDeleteCmd(
-    ClientData dummy,        /* unused */
+    void *dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -674,8 +674,8 @@ if (archComp == NULL) {
             elem = Itcl_FirstListElem(&archOpt->parts);
             while (elem) {
                 optPart = (ArchOptionPart*)Itcl_GetListValue(elem);
-                if (optPart->from == (ClientData)archComp) {
-                    Itcl_AppendList(&delOptList, (ClientData)entry);
+                if (optPart->from == (void *)archComp) {
+                    Itcl_AppendList(&delOptList, (void *)entry);
                 }
                 elem = Itcl_NextListElem(elem);
             }
@@ -691,7 +691,7 @@ if (archComp == NULL) {
             entry = (Tcl_HashEntry*)Itcl_GetListValue(elem);
             token = (char *)Tcl_GetHashKey(&info->options, entry);
 
-            Itk_RemoveArchOptionPart(info, token, (ClientData)archComp);
+            Itk_RemoveArchOptionPart(info, token, (void *)archComp);
 
             elem = Itcl_NextListElem(elem);
         }
@@ -722,7 +722,7 @@ if (archComp == NULL) {
 /* ARGSUSED */
 int
 Itk_ArchOptKeepCmd(
-    ClientData clientData,   /* option merging info record */
+    void *clientData,   /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -788,9 +788,9 @@ Itk_ArchOptKeepCmd(
         cmdlinePtr = Itk_CreateConfigCmdline(interp,
             mergeInfo->archComp->accessCmd, token);
 
-        optPart = Itk_CreateOptionPart(interp, (ClientData)cmdlinePtr,
+        optPart = Itk_CreateOptionPart(interp, (void *)cmdlinePtr,
             Itk_PropagateOption, Itk_DeleteConfigCmdline,
-            (ClientData)mergeInfo->archComp);
+            (void *)mergeInfo->archComp);
 
         result = Itk_AddOptionPart(interp, mergeInfo->archInfo,
             opt->switchName, opt->resName, opt->resClass,
@@ -828,7 +828,7 @@ Itk_ArchOptKeepCmd(
 /* ARGSUSED */
 int
 Itk_ArchOptIgnoreCmd(
-    ClientData clientData,   /* option merging info record */
+    void *clientData,   /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -903,7 +903,7 @@ Itk_ArchOptIgnoreCmd(
 /* ARGSUSED */
 int
 Itk_ArchOptRenameCmd(
-    ClientData clientData,   /* option merging info record */
+    void *clientData,   /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -987,9 +987,9 @@ Itk_ArchOptRenameCmd(
     cmdlinePtr = Itk_CreateConfigCmdline(interp,
         mergeInfo->archComp->accessCmd, oldSwitch);
 
-    optPart = Itk_CreateOptionPart(interp, (ClientData)cmdlinePtr,
+    optPart = Itk_CreateOptionPart(interp, (void *)cmdlinePtr,
         Itk_PropagateOption, Itk_DeleteConfigCmdline,
-        (ClientData)mergeInfo->archComp);
+        (void *)mergeInfo->archComp);
 
     /*
      *  Merge this option into the mega-widget with a new name.
@@ -1033,7 +1033,7 @@ Itk_ArchOptRenameCmd(
 /* ARGSUSED */
 int
 Itk_ArchOptUsualCmd(
-    ClientData clientData,   /* option merging info record */
+    void *clientData,   /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -1117,7 +1117,7 @@ Itk_ArchOptUsualCmd(
 /* ARGSUSED */
 int
 Itk_UsualCmd(
-    ClientData clientData,   /* option merging info record */
+    void *clientData,   /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -1165,7 +1165,7 @@ Itk_UsualCmd(
 
             codePtr = objv[2];
             Tcl_IncrRefCount(codePtr);
-            Tcl_SetHashValue(entry, (ClientData)codePtr);
+            Tcl_SetHashValue(entry, (void *)codePtr);
 
             return TCL_OK;
         }
@@ -1206,7 +1206,7 @@ Itk_UsualCmd(
 /* ARGSUSED */
 int
 Itk_ArchOptionAddCmd(
-    ClientData dummy,        /* unused */
+    void *dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -1280,12 +1280,12 @@ Itk_ArchOptionAddCmd(
             }
 
             optPart = Itk_FindArchOptionPart(info, Tcl_GetString(opt->namePtr),
-                (ClientData)iclsPtr);
+                (void *)iclsPtr);
 
             if (!optPart) {
-                optPart = Itk_CreateOptionPart(interp, (ClientData)opt,
+                optPart = Itk_CreateOptionPart(interp, (void *)opt,
                     Itk_ConfigClassOption, (Tcl_CmdDeleteProc*)NULL,
-                    (ClientData)iclsPtr);
+                    (void *)iclsPtr);
 
                 result = Itk_AddOptionPart(interp, info,
 		        Tcl_GetString(opt->namePtr),
@@ -1334,15 +1334,15 @@ Itk_ArchOptionAddCmd(
             }
 
             optPart = Itk_FindArchOptionPart(info, generic->switchName,
-                (ClientData)archComp);
+                (void *)archComp);
 
             if (!optPart) {
                 cmdlinePtr = Itk_CreateConfigCmdline(interp,
                     archComp->accessCmd, generic->switchName);
 
-                optPart = Itk_CreateOptionPart(interp, (ClientData)cmdlinePtr,
+                optPart = Itk_CreateOptionPart(interp, (void *)cmdlinePtr,
                     Itk_PropagateOption, Itk_DeleteConfigCmdline,
-                    (ClientData)archComp);
+                    (void *)archComp);
 
                 result = Itk_AddOptionPart(interp, info,
                     generic->switchName, generic->resName, generic->resClass,
@@ -1395,7 +1395,7 @@ Itk_ArchOptionAddCmd(
 /* ARGSUSED */
 int
 Itk_ArchOptionRemoveCmd(
-    ClientData dummy,        /* unused */
+    void *dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -1465,7 +1465,7 @@ Itk_ArchOptionRemoveCmd(
             }
 
             Itk_RemoveArchOptionPart(info, Tcl_GetString(opt->namePtr),
-                (ClientData)iclsPtr);
+                (void *)iclsPtr);
 
             Tcl_DStringFree(&buffer);
             continue;
@@ -1503,7 +1503,7 @@ Itk_ArchOptionRemoveCmd(
             }
 
             Itk_RemoveArchOptionPart(info, generic->switchName,
-                (ClientData)archComp);
+                (void *)archComp);
 
             Itk_DelGenericOpt(generic);
             continue;
@@ -1542,7 +1542,7 @@ static int
 Itk_PropagateOption(
     Tcl_Interp *interp,        /* interpreter managing the class */
     ItclObject *contextObj,    /* itcl object being configured */
-    ClientData cdata,          /* command prefix to use for configuration */
+    void *cdata,          /* command prefix to use for configuration */
     const char *newval)        /* new value for this option */
 {
     ConfigCmdline *cmdlinePtr = (ConfigCmdline*)cdata;
@@ -1578,7 +1578,7 @@ int
 Itk_PropagatePublicVar(
     Tcl_Interp *interp,        /* interpreter managing the class */
     ItclObject *contextObj,    /* itcl object being configured */
-    ClientData cdata,          /* command prefix to use for configuration */
+    void *cdata,          /* command prefix to use for configuration */
     const char *newval)        /* new value for this option */
 {
     ItclVariable *ivPtr = (ItclVariable*)cdata;
@@ -2086,7 +2086,7 @@ Itk_GetArchOption(
     archOpt->init = NULL;
     Itk_InitArchOption(interp,info,archOpt,defVal,currVal);
 
-    Tcl_SetHashValue(entry, (ClientData)archOpt);
+    Tcl_SetHashValue(entry, (void *)archOpt);
     Itk_OptListAdd(&info->order, entry);
 
     *aoPtr = archOpt;
@@ -2237,10 +2237,10 @@ Itk_DelArchOption(
 ArchOptionPart*
 Itk_CreateOptionPart(
     Tcl_Interp *interp,              /* interpreter handling this request */
-    ClientData cdata,                /* data representing this part */
+    void *cdata,                /* data representing this part */
     Itk_ConfigOptionPartProc *cproc, /* proc used to apply config changes */
     Tcl_CmdDeleteProc *dproc,        /* proc used to clean up ClientData */
-    ClientData from)                 /* who contributed this option */
+    void *from)                 /* who contributed this option */
 {
     ArchOptionPart *optPart;
 
@@ -2308,7 +2308,7 @@ Itk_AddOptionPart(
      *  simply update this part to the current value.  Otherwise,
      *  leave the configuration to Itk_ArchInitCmd().
      */
-    elemPtr = Itcl_AppendList(&archOpt->parts, (ClientData)optPart);
+    elemPtr = Itcl_AppendList(&archOpt->parts, (void *)optPart);
 
     if ((archOpt->flags & ITK_ARCHOPT_INIT) != 0) {
 
@@ -2356,7 +2356,7 @@ ArchOptionPart*
 Itk_FindArchOptionPart(
     ArchInfo *info,                /* info for Archetype mega-widget */
     char *switchName,              /* name of command-line switch */
-    ClientData from)               /* who contributed this option */
+    void *from)               /* who contributed this option */
 {
     ArchOptionPart *optPart = NULL;
 
@@ -2427,7 +2427,7 @@ static int
 Itk_RemoveArchOptionPart(
     ArchInfo *info,                /* info for Archetype mega-widget */
     char *switchName,              /* name of command-line switch */
-    ClientData from)               /* who contributed this option */
+    void *from)               /* who contributed this option */
 {
     int result = 0;
 
@@ -2644,7 +2644,7 @@ Itk_CreateConfigCmdline(
  */
 static void
 Itk_DeleteConfigCmdline(
-    ClientData cdata)                /* command to be freed */
+    void *cdata)                /* command to be freed */
 {
     ConfigCmdline *cmdlinePtr = (ConfigCmdline*)cdata;
     int i;
@@ -2722,7 +2722,7 @@ Itk_CreateGenericOptTable(
                 info->storage    = (char **)optv;
                 info->integrated = NULL;
                 info->optPart    = NULL;
-                Tcl_SetHashValue(entry, (ClientData)info);
+                Tcl_SetHashValue(entry, (void *)info);
             }
         }
         else {

@@ -48,7 +48,7 @@
 /* ARGSUSED */
 int
 Itk_ConfigBodyCmd(
-    ClientData dummy,        /* unused */
+    void *dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -133,13 +133,13 @@ Itk_ConfigBodyCmd(
         goto configBodyCmdDone;
     }
 
-    Itcl_PreserveData((ClientData)mcode);
+    Itcl_PreserveData((void *)mcode);
 #ifdef NOTDEF
-    Itcl_EventuallyFree((ClientData)mcode, (Tcl_FreeProc *)Itcl_DeleteMemberCode);
+    Itcl_EventuallyFree((void *)mcode, (Tcl_FreeProc *)Itcl_DeleteMemberCode);
 #endif
 
     if (opt->codePtr) {
-        Itcl_ReleaseData((ClientData)opt->codePtr);
+        Itcl_ReleaseData((void *)opt->codePtr);
     }
     opt->codePtr = mcode;
 

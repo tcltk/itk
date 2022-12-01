@@ -26,11 +26,11 @@
 /*
  *  FORWARD DECLARATIONS
  */
-static char* ItkTraceClassDestroy (ClientData cdata,
+static char* ItkTraceClassDestroy (void *cdata,
     Tcl_Interp *interp, const char *name1, const char *name2, int flags);
 static Tcl_HashTable* ItkGetClassesWithOptInfo (
     Tcl_Interp *interp);
-static void ItkFreeClassesWithOptInfo (ClientData cdata,
+static void ItkFreeClassesWithOptInfo (void *cdata,
     Tcl_Interp *interp);
 
 
@@ -56,7 +56,7 @@ static void ItkFreeClassesWithOptInfo (ClientData cdata,
 /* ARGSUSED */
 int
 Itk_ClassOptionDefineCmd(
-    ClientData clientData,   /* class parser info */
+    void *clientData,   /* class parser info */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -158,7 +158,7 @@ Itk_ClassOptionDefineCmd(
         return TCL_ERROR;
     }
 
-    Tcl_SetHashValue(entry, (ClientData)opt);
+    Tcl_SetHashValue(entry, (void *)opt);
     Itk_OptListAdd(&optTable->order, entry);
     return TCL_OK;
 }
@@ -177,7 +177,7 @@ Itk_ClassOptionDefineCmd(
 /* ARGSUSED */
 int
 Itk_ClassOptionIllegalCmd(
-    ClientData clientData,   /* class parser info */
+    void *clientData,   /* class parser info */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -211,7 +211,7 @@ int
 Itk_ConfigClassOption(
     Tcl_Interp *interp,        /* interpreter managing the class */
     ItclObject *contextObj,    /* object being configured */
-    ClientData cdata,          /* class option */
+    void *cdata,          /* class option */
     const char *newval)        /* new value for this option */
 {
     ItkClassOption *opt = (ItkClassOption*)cdata;
@@ -333,7 +333,7 @@ Itk_CreateClassOptTable(
         Tcl_InitHashTable(&optTable->options, TCL_STRING_KEYS);
         Itk_OptListInit(&optTable->order, &optTable->options);
 
-        Tcl_SetHashValue(entry, (ClientData)optTable);
+        Tcl_SetHashValue(entry, (void *)optTable);
 
         result = Itcl_PushCallFrame(interp, &frame,
              iclsPtr->nsPtr, /* isProcCallFrame */ 0);
@@ -341,7 +341,7 @@ Itk_CreateClassOptTable(
         if (result == TCL_OK) {
             Tcl_TraceVar(interp, "_itk_option_data",
                     (TCL_TRACE_UNSETS | TCL_NAMESPACE_ONLY),
-                    ItkTraceClassDestroy, (ClientData)iclsPtr);
+                    ItkTraceClassDestroy, (void *)iclsPtr);
             Itcl_PopCallFrame(interp);
         }
     } else {
@@ -401,7 +401,7 @@ Itk_FindClassOptTable(
 /* ARGSUSED */
 static char*
 ItkTraceClassDestroy(
-    ClientData cdata,          /* class definition data */
+    void *cdata,          /* class definition data */
     Tcl_Interp *interp,        /* interpreter managing the class */
     const char *name1,       /* name of variable involved in trace */
     const char *name2,       /* name of array element within variable */
@@ -478,9 +478,9 @@ Itk_CreateClassOption(
 
             return TCL_ERROR;
         }
-        Itcl_PreserveData((ClientData)mcode);
+        Itcl_PreserveData((void *)mcode);
 #ifdef NOTDEF
-        Itcl_EventuallyFree((ClientData)mcode, (Tcl_FreeProc *)Itcl_DeleteMemberCode);
+        Itcl_EventuallyFree((void *)mcode, (Tcl_FreeProc *)Itcl_DeleteMemberCode);
 #endif
     } else {
         mcode = NULL;
@@ -613,7 +613,7 @@ ItkGetClassesWithOptInfo(
         classesTable = (Tcl_HashTable*)ckalloc(sizeof(Tcl_HashTable));
         Tcl_InitHashTable(classesTable, TCL_ONE_WORD_KEYS);
         Tcl_SetAssocData(interp, "itk_classesWithOptInfo",
-            ItkFreeClassesWithOptInfo, (ClientData)classesTable);
+            ItkFreeClassesWithOptInfo, (void *)classesTable);
     }
     return classesTable;
 }
@@ -628,7 +628,7 @@ ItkGetClassesWithOptInfo(
  */
 static void
 ItkFreeClassesWithOptInfo(
-    ClientData clientData,       /* associated data */
+    void *clientData,       /* associated data */
     Tcl_Interp *interp)          /* interpreter being freed */
 {
     Tcl_HashTable *tablePtr = (Tcl_HashTable*)clientData;

@@ -55,11 +55,11 @@ interface itkInt
 #
 
 declare 2 {
-    int Itk_ConfigBodyCmd (ClientData cdata, Tcl_Interp *interp, \
+    int Itk_ConfigBodyCmd (void *cdata, Tcl_Interp *interp, \
         int objc, Tcl_Obj *const objv[])
 }
 declare 3 {
-    int Itk_UsualCmd (ClientData cdata, Tcl_Interp *interp, int objc, \
+    int Itk_UsualCmd (void *cdata, Tcl_Interp *interp, int objc, \
         Tcl_Obj *const objv[])
 }
 
@@ -68,16 +68,16 @@ declare 3 {
 #
 
 declare 4 {
-    int Itk_ClassOptionDefineCmd (ClientData cdata, Tcl_Interp *interp, \
+    int Itk_ClassOptionDefineCmd (void *cdata, Tcl_Interp *interp, \
         int objc, Tcl_Obj *const objv[])
 }
 declare 5 {
-    int Itk_ClassOptionIllegalCmd (ClientData cdata, Tcl_Interp *interp, \
+    int Itk_ClassOptionIllegalCmd (void *cdata, Tcl_Interp *interp, \
         int objc, Tcl_Obj *const objv[])
 }
 declare 6 {
     int Itk_ConfigClassOption (Tcl_Interp *interp, ItclObject *contextObj, \
-        ClientData cdata, const char* newVal)
+        void *cdata, const char* newVal)
 }
 declare 7 {
     ItkClassOptTable* Itk_CreateClassOptTable( Tcl_Interp *interp, \

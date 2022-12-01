@@ -15,23 +15,22 @@ extern "C" {
 /* Slot 0 is reserved */
 /* Slot 1 is reserved */
 /* 2 */
-ITKAPI int		Itk_ConfigBodyCmd(ClientData cdata,
-				Tcl_Interp *interp, int objc,
-				Tcl_Obj *const objv[]);
+ITKAPI int		Itk_ConfigBodyCmd(void *cdata, Tcl_Interp *interp,
+				int objc, Tcl_Obj *const objv[]);
 /* 3 */
-ITKAPI int		Itk_UsualCmd(ClientData cdata, Tcl_Interp *interp,
+ITKAPI int		Itk_UsualCmd(void *cdata, Tcl_Interp *interp,
 				int objc, Tcl_Obj *const objv[]);
 /* 4 */
-ITKAPI int		Itk_ClassOptionDefineCmd(ClientData cdata,
+ITKAPI int		Itk_ClassOptionDefineCmd(void *cdata,
 				Tcl_Interp *interp, int objc,
 				Tcl_Obj *const objv[]);
 /* 5 */
-ITKAPI int		Itk_ClassOptionIllegalCmd(ClientData cdata,
+ITKAPI int		Itk_ClassOptionIllegalCmd(void *cdata,
 				Tcl_Interp *interp, int objc,
 				Tcl_Obj *const objv[]);
 /* 6 */
 ITKAPI int		Itk_ConfigClassOption(Tcl_Interp *interp,
-				ItclObject *contextObj, ClientData cdata,
+				ItclObject *contextObj, void *cdata,
 				const char*newVal);
 /* 7 */
 ITKAPI ItkClassOptTable* Itk_CreateClassOptTable(Tcl_Interp *interp,
@@ -70,11 +69,11 @@ typedef struct ItkIntStubs {
 
     void (*reserved0)(void);
     void (*reserved1)(void);
-    int (*itk_ConfigBodyCmd) (ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]); /* 2 */
-    int (*itk_UsualCmd) (ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]); /* 3 */
-    int (*itk_ClassOptionDefineCmd) (ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]); /* 4 */
-    int (*itk_ClassOptionIllegalCmd) (ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]); /* 5 */
-    int (*itk_ConfigClassOption) (Tcl_Interp *interp, ItclObject *contextObj, ClientData cdata, const char*newVal); /* 6 */
+    int (*itk_ConfigBodyCmd) (void *cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]); /* 2 */
+    int (*itk_UsualCmd) (void *cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]); /* 3 */
+    int (*itk_ClassOptionDefineCmd) (void *cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]); /* 4 */
+    int (*itk_ClassOptionIllegalCmd) (void *cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]); /* 5 */
+    int (*itk_ConfigClassOption) (Tcl_Interp *interp, ItclObject *contextObj, void *cdata, const char*newVal); /* 6 */
     ItkClassOptTable* (*itk_CreateClassOptTable) (Tcl_Interp *interp, ItclClass *cdefn); /* 7 */
     ItkClassOptTable* (*itk_FindClassOptTable) (ItclClass *cdefn); /* 8 */
     void (*reserved9)(void);
