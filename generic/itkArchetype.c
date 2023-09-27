@@ -361,7 +361,7 @@ Itk_ArchDeleteOptsCmd(
     if (Itcl_GetContext(interp, &contextClass, &contextObj) != TCL_OK ||
         !contextObj) {
 
-        char *token = Tcl_GetStringFromObj(objv[0], (int*)NULL);
+        char *token = Tcl_GetString(objv[0]);
         Tcl_ResetResult(interp);
         Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
             "cannot use \"", token, "\" without an object context",
@@ -474,7 +474,7 @@ Itk_ArchComponentCmd(
     /*
      *  Flag any errors.
      */
-    cmd = Tcl_GetStringFromObj(objv[0], (int*)NULL);
+    cmd = Tcl_GetString(objv[0]);
     Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
         "bad option \"", token,
         "\": should be one of...\n",
@@ -847,7 +847,7 @@ Itk_ArchCompAccessCmd(
     Tcl_HashSearch place;
     ArchInfo *info;
     ArchComponent *archComp;
-    int cmdlinec;
+    Tcl_Size cmdlinec;
     Tcl_Obj *objPtr;
     Tcl_Obj *cmdlinePtr;
     Tcl_Obj **cmdlinev;

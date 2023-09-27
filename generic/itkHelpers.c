@@ -54,7 +54,7 @@ Itk_ArchOptConfigError(
         Tcl_GetCommandFullName(interp, info->itclObj->accessCmd, objPtr);
         Tcl_AppendToObj(objPtr, "\")", -1);
     }
-    Tcl_AddErrorInfo(interp, Tcl_GetStringFromObj(objPtr, (int*)NULL));
+    Tcl_AddErrorInfo(interp, Tcl_GetString(objPtr));
     Tcl_DecrRefCount(objPtr);
 }
 

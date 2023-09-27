@@ -408,7 +408,7 @@ Itk_ArchCompAddCmd(
         Tcl_DStringAppend(&buffer, " <Destroy> [::itcl::code ", -1);
 
         Tcl_DStringAppend(&buffer,
-            Tcl_GetStringFromObj(objNamePtr,(int*)NULL), -1);
+            Tcl_GetString(objNamePtr), -1);
 
         Tcl_DStringAppend(&buffer, " itk_component delete ", -1);
         Tcl_DStringAppend(&buffer, name, -1);
@@ -434,7 +434,7 @@ Itk_ArchCompAddCmd(
      */
     Tcl_DStringSetLength(&buffer, 0);
     Tcl_DStringAppendElement(&buffer,
-        Tcl_GetStringFromObj(winNamePtr, (int*)NULL));
+        Tcl_GetString(winNamePtr));
     Tcl_DStringAppendElement(&buffer, "configure");
 
     result = Tcl_Eval(interp, Tcl_DStringValue(&buffer));
@@ -565,7 +565,7 @@ compFail:
     Tcl_AppendToObj(objPtr, "\")", -1);
     Tcl_IncrRefCount(objPtr);
 
-    Tcl_AddErrorInfo(interp, Tcl_GetStringFromObj(objPtr, (int*)NULL));
+    Tcl_AppendObjToErrorInfo(interp, objPtr);
     Tcl_DecrRefCount(objPtr);
 
 
@@ -750,7 +750,7 @@ Itk_ArchOptKeepCmd(
      *  properly.
      */
     if (!mergeInfo->archInfo || !mergeInfo->optionTable) {
-        token = Tcl_GetStringFromObj(objv[0], (int*)NULL);
+        token = Tcl_GetString(objv[0]);
         Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
                 "improper usage: \"", token,
                 "\" should only be accessed via itk_component",
@@ -764,7 +764,7 @@ Itk_ArchOptKeepCmd(
      *  Integrate them into the option info for the mega-widget.
      */
     for (i=1; i < objc; i++) {
-        token = Tcl_GetStringFromObj(objv[i], (int*)NULL);
+        token = Tcl_GetString(objv[i]);
         entry = Tcl_FindHashEntry(mergeInfo->optionTable, token);
         if (!entry) {
             Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
@@ -852,7 +852,7 @@ Itk_ArchOptIgnoreCmd(
      *  properly.
      */
     if (!mergeInfo->archInfo || !mergeInfo->optionTable) {
-        token = Tcl_GetStringFromObj(objv[0], (int*)NULL);
+        token = Tcl_GetString(objv[0]);
         Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
             "improper usage: \"", token,
             "\" should only be accessed via itk_component",
@@ -866,7 +866,7 @@ Itk_ArchOptIgnoreCmd(
      *  Remove them from the mega-widget.
      */
     for (i=1; i < objc; i++) {
-        token = Tcl_GetStringFromObj(objv[i], (int*)NULL);
+        token = Tcl_GetString(objv[i]);
         entry = Tcl_FindHashEntry(mergeInfo->optionTable, token);
         if (!entry) {
             Tcl_AppendResult(interp, "option not recognized: ", token,
@@ -931,7 +931,7 @@ Itk_ArchOptRenameCmd(
      *  properly.
      */
     if (!mergeInfo->archInfo || !mergeInfo->optionTable) {
-        char *token = Tcl_GetStringFromObj(objv[0], (int*)NULL);
+        char *token = Tcl_GetString(objv[0]);
         Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
             "improper usage: \"", token,
             "\" should only be accessed via itk_component",
@@ -939,10 +939,10 @@ Itk_ArchOptRenameCmd(
         return TCL_ERROR;
     }
 
-    oldSwitch = Tcl_GetStringFromObj(objv[1], (int*)NULL);
-    newSwitch = Tcl_GetStringFromObj(objv[2], (int*)NULL);
-    resName   = Tcl_GetStringFromObj(objv[3], (int*)NULL);
-    resClass  = Tcl_GetStringFromObj(objv[4], (int*)NULL);
+    oldSwitch = Tcl_GetString(objv[1]);
+    newSwitch = Tcl_GetString(objv[2]);
+    resName   = Tcl_GetString(objv[3]);
+    resClass  = Tcl_GetString(objv[4]);
 
     /*
      *  Make sure that the resource name and resource class look good.
@@ -1056,7 +1056,7 @@ Itk_ArchOptUsualCmd(
      *  properly.
      */
     if (!mergeInfo->archInfo || !mergeInfo->optionTable) {
-        char *token = Tcl_GetStringFromObj(objv[0], (int*)NULL);
+        char *token = Tcl_GetString(objv[0]);
         Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
             "improper usage: \"", token,
             "\" should only be accessed via itk_component",
@@ -1070,7 +1070,7 @@ Itk_ArchOptUsualCmd(
      *  the component widget.
      */
     if (objc == 2) {
-        tag = Tcl_GetStringFromObj(objv[1], (int*)NULL);
+        tag = Tcl_GetString(objv[1]);
     } else {
         tag = Tk_Class(mergeInfo->archComp->tkwin);
     }
@@ -1155,7 +1155,7 @@ Itk_UsualCmd(
          *  hash table for "usual" code.
          */
         if (objc == 3) {
-            token = Tcl_GetStringFromObj(objv[1], (int*)NULL);
+            token = Tcl_GetString(objv[1]);
             entry = Tcl_CreateHashEntry(&mergeInfo->usualCode, token,
 	            &newEntry);
             if (!newEntry) {
@@ -1174,7 +1174,7 @@ Itk_UsualCmd(
     /*
      *  Otherwise, look for a code fragment with the specified tag.
      */
-    token = Tcl_GetStringFromObj(objv[1], (int*)NULL);
+    token = Tcl_GetString(objv[1]);
     entry = Tcl_FindHashEntry(&mergeInfo->usualCode, token);
     if (entry) {
         codePtr = (Tcl_Obj*)Tcl_GetHashValue(entry);
@@ -2685,12 +2685,13 @@ Itk_CreateGenericOptTable(
     Tcl_Interp *interp,          /* interpreter handling this request */
     const char *options)               /* string description of config options */
 {
-    int confc;
+    Tcl_Size confc;
     const char **confv = NULL;
-    int optc;
+    Tcl_Size optc;
     const char **optv = NULL;
 
-    int i, newEntry;
+    Tcl_Size i;
+    int newEntry;
     Tcl_HashTable *tPtr;
     Tcl_HashEntry *entry;
     GenericConfigOpt *info;
@@ -2802,7 +2803,8 @@ Itk_CreateGenericOpt(
     GenericConfigOpt *genericOpt = NULL;
     Tcl_Obj *codePtr = NULL;
 
-    int optc, result;
+    Tcl_Size optc;
+    int result;
     const char **optv;
     char *name;
     const char *my_name;
@@ -2842,7 +2844,7 @@ Itk_CreateGenericOpt(
      */
     resultPtr = Tcl_GetObjResult(interp);
     Tcl_IncrRefCount(resultPtr);
-    info = Tcl_GetStringFromObj(resultPtr, (int*)NULL);
+    info = Tcl_GetString(resultPtr);
 
     result = Tcl_SplitList(interp, info, &optc, &optv);
 
