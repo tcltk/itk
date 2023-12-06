@@ -71,7 +71,7 @@
 #define ITK_RELEASE_SERIAL	3
 
 #define ITK_VERSION		"4.2"
-#define ITK_PATCH_LEVEL		"4.2.3"
+#define ITK_PATCH_LEVEL		"4.2.4"
 
 
 /*
