@@ -90,23 +90,23 @@ ITCL_VERSION     = $(ITCL_DOTVERSION:.=)
 ITCL_GENERIC_DIR = $(ITCL_DIR)\generic
 !if $(TCL_MAJOR_VERSION) == 8 || "$(TCL_BUILD_FOR)" == "8"
 ITCLSTUBLIBNAME	 = itclstub$(ITCL_VERSION).lib
+ITCL_LIB_FILE	 = itcl$(ITCL_VERSION).dll
 !else
 ITCLSTUBLIBNAME	 = itclstub.lib
+ITCL_LIB_FILE	 = tcl9itcl$(ITCL_VERSION).dll
 !endif
 ITCLSTUBLIB 	 = $(ITCL_DIR)\win\$(BUILDDIRTOP)\$(ITCLSTUBLIBNAME)
-ITCL_LIB_FILE	 = itcl$(ITCL_VERSION).dll
 ITCL_BIN_DIR     = $(ITCL_DIR)/win/$(BUILDDIRTOP)
 
 TK_VERSION     = $(TK_DOTVERSION:.=)
 TK_GENERIC_DIR = $(TK_DIR)\generic
 TK_XLIB_DIR = $(TK_DIR)\xlib
 !if $(TCL_MAJOR_VERSION) == 8 || "$(TCL_BUILD_FOR)" == "8"
-TKSTUBLIBNAME	 = tkstub$(ITCL_VERSION).lib
+TKSTUBLIBNAME	 = tkstub$(TK_VERSION).lib
 !else
 TKSTUBLIBNAME	 = tkstub.lib
 !endif
 TKSTUBLIB 	 = $(TK_DIR)\win\$(BUILDDIRTOP)\$(TKSTUBLIBNAME)
-TK_LIB_FILE	 = tk$(TK_VERSION).dll
 TK_BIN_DIR     = $(TK_DIR)/win/$(BUILDDIRTOP)
 
 PRJ_INCLUDES	= -I"$(ITCL_GENERIC_DIR)" -I"$(TK_GENERIC_DIR)" -I"$(TK_XLIB_DIR)"
@@ -115,15 +115,15 @@ PRJ_INCLUDES	= -I"$(ITCL_GENERIC_DIR)" -I"$(TK_GENERIC_DIR)" -I"$(TK_XLIB_DIR)"
 PRJ_LIBS  = $(ITCLSTUBLIB) $(TKSTUBLIB)
 !endif
 
-# Disable standard tes target because we have a custom one.
+# Disable standard test target because we have a custom one
 DISABLE_TARGET_test = 1
 !include "$(_RULESDIR)\targets.vc"
 
-# Install needs some extra default actions.
+# Additional default actions for install
 install: default-install-docs-n
 
 # The TIP 477 generation of pkgIndex.tcl from pkgIndex.tcl.in does not include
-# all replacements below so define our own it.
+# all replacements below so define our own target.
 pkgindex:   $(OUT_DIR)\pkgIndex.tcl
 $(OUT_DIR)\pkgIndex.tcl: $(ROOT)\pkgIndex.tcl.in
 	@nmakehlp -s << $** > $@
@@ -144,20 +144,18 @@ $(TMP_DIR)\itkUuid.h:	$(ROOT)\manifest.uuid
 
 test: setup $(PROJECT)
 	@echo testing itk
-        @set TCL_LIBRARY=$(TCL_LIBRARY:\=/)
-        @set TCLLIBPATH=$(OUT_DIR_PATH:\=/)
-	@set ITCL_LIBRARY=$(LIBDIR:\=/)
+	@set ITK_LIBRARY=$(LIBDIR:\=/)
 	@$(CPY) $(LIBDIR)\*.tcl $(OUT_DIR)
-!if $(TCLINSTALL)
-        @set PATH=$(_TCLDIR)\bin;$(PATH)
-	$(DEBUGGER) $(TCLSH) "$(ROOT:\=/)/tests/all.tcl" $(TESTFLAGS)
+!if $(TKINSTALL)
+	@set PATH=$(_TKDIR)\bin;$(PATH)
+	$(DEBUGGER) $(WISH) "$(ROOT:\=/)/tests/all.tcl" $(TESTFLAGS)
 !else
-        @set PATH=$(_TCLDIR)\win\$(BUILDDIRTOP);$(PATH)
-	$(DEBUGGER) $(TCLSH) "$(ROOT:\=/)/tests/all.tcl" $(TESTFLAGS) \
+	@set PATH=$(_TKDIR)\win\$(BUILDDIRTOP);$(PATH)
+	$(DEBUGGER) $(WISH) "$(ROOT:\=/)/tests/all.tcl" $(TESTFLAGS) \
 		-load "package ifneeded itk $(DOTVERSION) \
-			{source {$(LIBDIR:\=/)/itk.tcl};load {$(PRJLIB:\=/)} $(PROJECT)};\
+			{source {$(LIBDIR:\=/)/itk.tcl};load {$(PRJLIB:\=/)} [string totitle $(PROJECT)]};\
 		package ifneeded itcl $(ITCL_DOTVERSION) \
-			{source {$(ITCL_BIN_DIR:\=/)/itcl.tcl};load {$(ITCL_BIN_DIR:\=/)/$(ITCL_LIB_FILE)} itcl}"
+			{source {$(ITCL_BIN_DIR:\=/)/itcl.tcl};load {$(ITCL_BIN_DIR:\=/)/$(ITCL_LIB_FILE)} Itcl}"
 !endif
 
 
