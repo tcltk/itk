@@ -42,10 +42,10 @@ void
 ItclShowArgs(
     int level,
     const char *str,
-    int objc,
+    size_t objc,
     Tcl_Obj * const* objv)
 {
-    int i;
+    size_t i;
 
     if (level > _itcl_debug_level) {
         return;
@@ -118,11 +118,11 @@ Itk_ArchetypeInit(
             (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
 
         Itcl_RegisterObjC(interp,
-            "Archetype-configure",Itk_ArchConfigureCmd,
+            "Archetype-configure", Itk_ArchConfigureCmd,
             (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
 
         Itcl_RegisterObjC(interp,
-            "Archetype-cget",Itk_ArchCgetCmd,
+            "Archetype-cget", Itk_ArchCgetCmd,
             (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK) {
 
         return TCL_ERROR;
@@ -211,12 +211,11 @@ fprintf(stderr, "error in creating namespace: ::itcl::builtin::Archetype \n");
  *
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchetypeCmd(
-    void *clientData,   /* class definition */
+    void *clientData,        /* class definition */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,           /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     ItclShowArgs(2, "Itk_ArchetypeCmd", objc, objv);
@@ -245,10 +244,9 @@ Itk_ArchetypeCmd(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchInitOptsCmd(
-    void *dummy,        /* unused */
+    void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -340,10 +338,9 @@ Itk_ArchInitOptsCmd(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchDeleteOptsCmd(
-    void *dummy,        /* unused */
+    void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -398,10 +395,9 @@ Itk_ArchDeleteOptsCmd(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchComponentCmd(
-    void *dummy,        /* unused */
+    void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -449,7 +445,7 @@ Itk_ArchComponentCmd(
             return TCL_ERROR;
         }
 	Tcl_DStringFree(&buffer);
-        return Itk_ArchCompAddCmd(dummy, interp, objc-1, objv+1);
+	return Itk_ArchCompAddCmd(dummy, interp, objc-1, objv+1);
     } else {
 
         /*
@@ -502,10 +498,9 @@ Itk_ArchComponentCmd(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchInitCmd(
-    void *dummy,        /* unused */
+    void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -718,10 +713,9 @@ Itk_ArchInitCmd(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchOptionCmd(
-    void *dummy,        /* unused */
+    void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -827,10 +821,9 @@ Itk_ArchOptionCmd(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchCompAccessCmd(
-    void *dummy,        /* unused */
+    void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -1014,10 +1007,9 @@ fprintf(stderr, "ERR 2 archComp == NULL\n");
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchConfigureCmd(
-    void *dummy,        /* unused */
+    void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -1170,10 +1162,9 @@ Itk_ArchConfigureCmd(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchCgetCmd(
-    void *dummy,        /* unused */
+    void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */

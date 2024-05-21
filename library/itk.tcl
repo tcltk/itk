@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and
 # redistribution of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
-package require -exact Itk 4.2.4
+package require -exact Itk 4.2.5
 #
 # Provide transparent access to all [incr Tk] commands
 #

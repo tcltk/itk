@@ -53,10 +53,9 @@ static void ItkFreeClassesWithOptInfo (void *cdata,
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ClassOptionDefineCmd(
-    void *clientData,   /* class parser info */
+    void *clientData,        /* class parser info */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -65,11 +64,11 @@ Itk_ClassOptionDefineCmd(
     ItclClass *iclsPtr = (ItclClass*)Itcl_PeekStack(&info->clsStack);
 
     int newEntry;
-    char *switchName;
-    char *resName;
-    char *resClass;
-    char *init;
-    char *config;
+    const char *switchName;
+    const char *resName;
+    const char *resClass;
+    const char *init;
+    const char *config;
     ItkClassOptTable *optTable;
     Tcl_HashEntry *entry;
     ItkClassOption *opt;
@@ -174,10 +173,9 @@ Itk_ClassOptionDefineCmd(
  *  been created.  Returns TCL_ERROR along with an error message.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ClassOptionIllegalCmd(
-    void *clientData,   /* class parser info */
+    void *clientData,        /* class parser info */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -206,7 +204,6 @@ Itk_ClassOptionIllegalCmd(
  *  message in the interpreter) if anything goes wrong.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ConfigClassOption(
     Tcl_Interp *interp,        /* interpreter managing the class */
@@ -398,7 +395,6 @@ Itk_FindClassOptTable(
  *  error that is encountered.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 static char*
 ItkTraceClassDestroy(
     void *cdata,          /* class definition data */
@@ -458,11 +454,11 @@ int
 Itk_CreateClassOption(
     Tcl_Interp *interp,            /* interpreter managing the class */
     ItclClass *iclsPtr,            /* class containing this option */
-    char *switchName,              /* name of command-line switch */
-    char *resName,                 /* resource name in X11 database */
-    char *resClass,                /* resource class name in X11 database */
-    char *defVal,                  /* last-resort default value */
-    char *config,                  /* configuration code */
+    const char *switchName,        /* name of command-line switch */
+    const char *resName,           /* resource name in X11 database */
+    const char *resClass,          /* resource class name in X11 database */
+    const char *defVal,            /* last-resort default value */
+    const char *config,            /* configuration code */
     ItkClassOption **optPtr)       /* returns: option record */
 {
     ItkClassOption *opt;

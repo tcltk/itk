@@ -26,10 +26,10 @@ scspec ITKAPI
 #
 
 declare 0 {
-    int Itk_Init (Tcl_Interp *interp)
+    int Itk_Init(Tcl_Interp *interp)
 }
 declare 1 {
-    int Itk_SafeInit (Tcl_Interp *interp)
+    int Itk_SafeInit(Tcl_Interp *interp)
 }
 
 
@@ -38,7 +38,7 @@ declare 1 {
 #
 
 declare 13 {
-    int Itk_ArchetypeInit (Tcl_Interp* interp)
+    int Itk_ArchetypeInit(Tcl_Interp *interp)
 }
 
 
@@ -55,11 +55,11 @@ interface itkInt
 #
 
 declare 2 {
-    int Itk_ConfigBodyCmd (void *cdata, Tcl_Interp *interp, \
+    int Itk_ConfigBodyCmd(void *cdata, Tcl_Interp *interp,
         int objc, Tcl_Obj *const objv[])
 }
 declare 3 {
-    int Itk_UsualCmd (void *cdata, Tcl_Interp *interp, int objc, \
+    int Itk_UsualCmd(void *cdata, Tcl_Interp *interp, int objc,
         Tcl_Obj *const objv[])
 }
 
@@ -68,37 +68,37 @@ declare 3 {
 #
 
 declare 4 {
-    int Itk_ClassOptionDefineCmd (void *cdata, Tcl_Interp *interp, \
+    int Itk_ClassOptionDefineCmd(void *cdata, Tcl_Interp *interp,
         int objc, Tcl_Obj *const objv[])
 }
 declare 5 {
-    int Itk_ClassOptionIllegalCmd (void *cdata, Tcl_Interp *interp, \
+    int Itk_ClassOptionIllegalCmd(void *cdata, Tcl_Interp *interp, \
         int objc, Tcl_Obj *const objv[])
 }
 declare 6 {
-    int Itk_ConfigClassOption (Tcl_Interp *interp, ItclObject *contextObj, \
-        void *cdata, const char* newVal)
+    int Itk_ConfigClassOption(Tcl_Interp *interp, ItclObject *contextObj, \
+        void *cdata, const char *newVal)
 }
 declare 7 {
-    ItkClassOptTable* Itk_CreateClassOptTable( Tcl_Interp *interp, \
+    ItkClassOptTable* Itk_CreateClassOptTable(Tcl_Interp *interp, \
         ItclClass *cdefn)
 }
 declare 8 {
-    ItkClassOptTable* Itk_FindClassOptTable (ItclClass *cdefn)
+    ItkClassOptTable* Itk_FindClassOptTable(ItclClass *cdefn)
 }
 #declare 9 {
-#    void Itk_DeleteClassOptTable (Tcl_Interp *interp, ItclClass *cdefn)
+#    void Itk_DeleteClassOptTable(Tcl_Interp *interp, ItclClass *cdefn)
 #}
 declare 10 {
-    int Itk_CreateClassOption (Tcl_Interp *interp, ItclClass *cdefn, \
-        char *switchName, char *resName, char *resClass, char *defVal, \
-        char *config, ItkClassOption **optPtr)
+    int Itk_CreateClassOption(Tcl_Interp *interp, ItclClass *cdefn,
+        const char *switchName, const char *resName, const char *resClass, const char *defVal,
+        const char *config, ItkClassOption **optPtr)
 }
 declare 11 {
-    ItkClassOption* Itk_FindClassOption (ItclClass *cdefn, const char *switchName)
+    ItkClassOption* Itk_FindClassOption(ItclClass *cdefn, const char *switchName)
 }
 declare 12 {
-    void Itk_DelClassOption (ItkClassOption *opt)
+    void Itk_DelClassOption(ItkClassOption *opt)
 }
 
 #
@@ -106,16 +106,16 @@ declare 12 {
 #
 
 declare 14 {
-    void Itk_OptListInit (ItkOptList* olist, Tcl_HashTable *options)
+    void Itk_OptListInit(ItkOptList *olist, Tcl_HashTable *options)
 }
 declare 15 {
-    void Itk_OptListFree (ItkOptList* olist)
+    void Itk_OptListFree(ItkOptList *olist)
 }
 declare 16 {
-    void Itk_OptListAdd (ItkOptList* olist, Tcl_HashEntry *entry)
+    void Itk_OptListAdd(ItkOptList *olist, Tcl_HashEntry *entry)
 }
 declare 17 {
-    void Itk_OptListRemove (ItkOptList* olist, Tcl_HashEntry *entry)
+    void Itk_OptListRemove(ItkOptList *olist, Tcl_HashEntry *entry)
 }
 
 

@@ -85,8 +85,8 @@ Itk_OptListAdd(
     int pos;
     int size;
     Tcl_HashEntry** newOrder;
-    char *swname;
-    char *optname;
+    const char *swname;
+    const char *optname;
 
     /*
      *  Make sure that the option list is big enough.  Resize
@@ -107,11 +107,11 @@ Itk_OptListAdd(
      */
     first = 0;
     last  = olist->len-1;
-    swname = ((char *)Tcl_GetHashKey(olist->options, entry)) + 1;
+    swname = ((const char *)Tcl_GetHashKey(olist->options, entry)) + 1;
 
     while (last >= first) {
         pos = (first+last)/2;
-        optname = ((char *)Tcl_GetHashKey(olist->options,
+        optname = ((const char *)Tcl_GetHashKey(olist->options,
 		olist->list[pos])) + 1;
         if (*swname == *optname) {
             cmp = strcmp(swname, optname);
@@ -168,16 +168,16 @@ Itk_OptListRemove(
     int first;
     int last;
     int cmp;
-    char *swname;
-    char *optname;
+    const char *swname;
+    const char *optname;
 
     first = 0;
     last  = olist->len-1;
-    swname = ((char *)Tcl_GetHashKey(olist->options, entry)) + 1;
+    swname = ((const char *)Tcl_GetHashKey(olist->options, entry)) + 1;
 
     while (last >= first) {
         pos = (first+last)/2;
-        optname = ((char *)Tcl_GetHashKey(olist->options,
+        optname = ((const char *)Tcl_GetHashKey(olist->options,
 		olist->list[pos])) + 1;
         if (*swname == *optname) {
             cmp = strcmp(swname, optname);

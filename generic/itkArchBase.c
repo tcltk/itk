@@ -35,25 +35,25 @@ static int Itk_ArchSetOption (Tcl_Interp *interp,
     ArchInfo *info, const char *name, const char *value);
 
 static ArchComponent* Itk_CreateArchComponent (
-    Tcl_Interp *interp, ArchInfo *info, char *name,
+    Tcl_Interp *interp, ArchInfo *info, const char *name,
     ItclClass *iclsPtr, Tcl_Command accessCmd);
 static void Itk_DelArchComponent (ArchComponent *archComp);
 
 static int Itk_GetArchOption (Tcl_Interp *interp,
-    ArchInfo *info, char *switchName, char *resName, char *resClass,
-    const char *defVal, char *currVal, ArchOption **aoPtr);
+    ArchInfo *info, const char *switchName, const char *resName, const char *resClass,
+    const char *defVal, const char *currVal, ArchOption **aoPtr);
 static void Itk_InitArchOption (Tcl_Interp *interp,
     ArchInfo *info, ArchOption *archOpt, const char *defVal,
-    char *currVal);
+    const char *currVal);
 static void Itk_DelArchOption (ArchOption *archOpt);
 
 static int Itk_RemoveArchOptionPart (ArchInfo *info,
-    char *switchName, void *from);
+    const char *switchName, void *from);
 static int Itk_IgnoreArchOptionPart (ArchInfo *info,
     GenericConfigOpt *opt);
 
 static ConfigCmdline* Itk_CreateConfigCmdline (
-    Tcl_Interp *interp, Tcl_Command accessCmd, char *switchName);
+    Tcl_Interp *interp, Tcl_Command accessCmd, const char *switchName);
 static void Itk_DeleteConfigCmdline (void *cdata);
 
 static Tcl_HashTable* Itk_CreateGenericOptTable (Tcl_Interp *interp,
@@ -162,12 +162,11 @@ Itk_DelArchInfo(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchCompAddCmd(
     void *dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,           /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     Tcl_HashEntry *entry = NULL;
@@ -586,12 +585,11 @@ compFail:
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchCompDeleteCmd(
     void *dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,           /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     int i;
@@ -719,10 +717,9 @@ if (archComp == NULL) {
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchOptKeepCmd(
-    void *clientData,   /* option merging info record */
+    void *clientData,        /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -825,10 +822,9 @@ Itk_ArchOptKeepCmd(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchOptIgnoreCmd(
-    void *clientData,   /* option merging info record */
+    void *clientData,        /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -900,10 +896,9 @@ Itk_ArchOptIgnoreCmd(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchOptRenameCmd(
-    void *clientData,   /* option merging info record */
+    void *clientData,        /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -1030,10 +1025,9 @@ Itk_ArchOptRenameCmd(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchOptUsualCmd(
-    void *clientData,   /* option merging info record */
+    void *clientData,        /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -1114,10 +1108,9 @@ Itk_ArchOptUsualCmd(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_UsualCmd(
-    void *clientData,   /* option merging info record */
+    void *clientData,        /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -1203,12 +1196,11 @@ Itk_UsualCmd(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchOptionAddCmd(
     void *dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,           /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     ItclClass *contextClass;
@@ -1392,12 +1384,11 @@ Itk_ArchOptionAddCmd(
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ArchOptionRemoveCmd(
     void *dummy,        /* unused */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,           /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     ItclClass *contextClass;
@@ -1537,7 +1528,6 @@ Itk_ArchOptionRemoveCmd(
  *  message in the interpreter) if anything goes wrong.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 static int
 Itk_PropagateOption(
     Tcl_Interp *interp,        /* interpreter managing the class */
@@ -1573,7 +1563,6 @@ Itk_PropagateOption(
  *  message in the interpreter) if anything goes wrong.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_PropagatePublicVar(
     Tcl_Interp *interp,        /* interpreter managing the class */
@@ -1858,7 +1847,7 @@ static ArchComponent*
 Itk_CreateArchComponent(
     Tcl_Interp *interp,            /* interpreter managing the object */
     ArchInfo *info,                /* info associated with mega-widget */
-    char *name,                    /* symbolic name for this component */
+    const char *name,              /* symbolic name for this component */
     ItclClass *iclsPtr,            /* component created in this class */
     Tcl_Command accessCmd)         /* access command for component */
 {
@@ -1987,11 +1976,11 @@ static int
 Itk_GetArchOption(
     Tcl_Interp *interp,            /* interpreter managing the object */
     ArchInfo *info,                /* info for Archetype mega-widget */
-    char *switchName,              /* name of command-line switch */
-    char *resName,                 /* resource name in X11 database */
-    char *resClass,                /* resource class name in X11 database */
+    const char *switchName,        /* name of command-line switch */
+    const char *resName,           /* resource name in X11 database */
+    const char *resClass,          /* resource class name in X11 database */
     const char *defVal,            /* last-resort default value */
-    char *currVal,                 /* current option value */
+    const char *currVal,           /* current option value */
     ArchOption **aoPtr)            /* returns: option record */
 {
     int result = TCL_OK;
@@ -2009,7 +1998,7 @@ Itk_GetArchOption(
         *name = '-';
         strcpy(name+1, switchName);
     } else {
-        name = switchName;
+        name = (char *)switchName;
     }
 
     /*
@@ -2029,7 +2018,7 @@ Itk_GetArchOption(
             Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
                 "bad resource name \"", resName, "\" for option \"",
                 name, "\": should be \"", archOpt->resName, "\"",
-                (char*)NULL);
+                (char *)NULL);
             result = TCL_ERROR;
             goto getArchOptionDone;
         }
@@ -2042,7 +2031,7 @@ Itk_GetArchOption(
                 Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
                     "bad resource class \"", resClass, "\" for option \"",
                     name, "\": should be \"", archOpt->resClass, "\"",
-                    (char*)NULL);
+                    (char *)NULL);
                 result = TCL_ERROR;
                 goto getArchOptionDone;
 	    }
@@ -2121,7 +2110,7 @@ Itk_InitArchOption(
     ArchInfo *info,                /* info for Archetype mega-widget */
     ArchOption *archOpt,           /* option to initialize */
     const char *defVal,            /* last-resort default value */
-    char *currVal)                 /* current option value */
+    const char *currVal)           /* current option value */
 {
     const char *init = NULL;
     const char *ival;
@@ -2426,7 +2415,7 @@ Itk_FindArchOptionPart(
 static int
 Itk_RemoveArchOptionPart(
     ArchInfo *info,                /* info for Archetype mega-widget */
-    char *switchName,              /* name of command-line switch */
+    const char *switchName,        /* name of command-line switch */
     void *from)               /* who contributed this option */
 {
     int result = 0;
@@ -2446,7 +2435,7 @@ Itk_RemoveArchOptionPart(
         *name = '-';
         strcpy(name+1, switchName);
     } else {
-        name = switchName;
+        name = (char *)switchName;
     }
 
     /*
@@ -2609,7 +2598,7 @@ static ConfigCmdline*
 Itk_CreateConfigCmdline(
     Tcl_Interp *interp,              /* interpreter handling this request */
     Tcl_Command accessCmd,           /* command for <object> being config'd */
-    char *switchName)                /* switch name of option being config'd */
+    const char *switchName)          /* switch name of option being config'd */
 {
     int i;
     ConfigCmdline *cmdlinePtr;

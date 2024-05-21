@@ -31,7 +31,7 @@ ITKAPI int		Itk_ClassOptionIllegalCmd(void *cdata,
 /* 6 */
 ITKAPI int		Itk_ConfigClassOption(Tcl_Interp *interp,
 				ItclObject *contextObj, void *cdata,
-				const char*newVal);
+				const char *newVal);
 /* 7 */
 ITKAPI ItkClassOptTable* Itk_CreateClassOptTable(Tcl_Interp *interp,
 				ItclClass *cdefn);
@@ -40,9 +40,10 @@ ITKAPI ItkClassOptTable* Itk_FindClassOptTable(ItclClass *cdefn);
 /* Slot 9 is reserved */
 /* 10 */
 ITKAPI int		Itk_CreateClassOption(Tcl_Interp *interp,
-				ItclClass *cdefn, char *switchName,
-				char *resName, char *resClass, char *defVal,
-				char *config, ItkClassOption **optPtr);
+				ItclClass *cdefn, const char *switchName,
+				const char *resName, const char *resClass,
+				const char *defVal, const char *config,
+				ItkClassOption **optPtr);
 /* 11 */
 ITKAPI ItkClassOption*	Itk_FindClassOption(ItclClass *cdefn,
 				const char *switchName);
@@ -50,15 +51,15 @@ ITKAPI ItkClassOption*	Itk_FindClassOption(ItclClass *cdefn,
 ITKAPI void		Itk_DelClassOption(ItkClassOption *opt);
 /* Slot 13 is reserved */
 /* 14 */
-ITKAPI void		Itk_OptListInit(ItkOptList*olist,
+ITKAPI void		Itk_OptListInit(ItkOptList *olist,
 				Tcl_HashTable *options);
 /* 15 */
-ITKAPI void		Itk_OptListFree(ItkOptList*olist);
+ITKAPI void		Itk_OptListFree(ItkOptList *olist);
 /* 16 */
-ITKAPI void		Itk_OptListAdd(ItkOptList*olist,
+ITKAPI void		Itk_OptListAdd(ItkOptList *olist,
 				Tcl_HashEntry *entry);
 /* 17 */
-ITKAPI void		Itk_OptListRemove(ItkOptList*olist,
+ITKAPI void		Itk_OptListRemove(ItkOptList *olist,
 				Tcl_HashEntry *entry);
 
 typedef struct ItkIntStubs {
@@ -73,18 +74,18 @@ typedef struct ItkIntStubs {
     int (*itk_UsualCmd) (void *cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]); /* 3 */
     int (*itk_ClassOptionDefineCmd) (void *cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]); /* 4 */
     int (*itk_ClassOptionIllegalCmd) (void *cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]); /* 5 */
-    int (*itk_ConfigClassOption) (Tcl_Interp *interp, ItclObject *contextObj, void *cdata, const char*newVal); /* 6 */
+    int (*itk_ConfigClassOption) (Tcl_Interp *interp, ItclObject *contextObj, void *cdata, const char *newVal); /* 6 */
     ItkClassOptTable* (*itk_CreateClassOptTable) (Tcl_Interp *interp, ItclClass *cdefn); /* 7 */
     ItkClassOptTable* (*itk_FindClassOptTable) (ItclClass *cdefn); /* 8 */
     void (*reserved9)(void);
-    int (*itk_CreateClassOption) (Tcl_Interp *interp, ItclClass *cdefn, char *switchName, char *resName, char *resClass, char *defVal, char *config, ItkClassOption **optPtr); /* 10 */
+    int (*itk_CreateClassOption) (Tcl_Interp *interp, ItclClass *cdefn, const char *switchName, const char *resName, const char *resClass, const char *defVal, const char *config, ItkClassOption **optPtr); /* 10 */
     ItkClassOption* (*itk_FindClassOption) (ItclClass *cdefn, const char *switchName); /* 11 */
     void (*itk_DelClassOption) (ItkClassOption *opt); /* 12 */
     void (*reserved13)(void);
-    void (*itk_OptListInit) (ItkOptList*olist, Tcl_HashTable *options); /* 14 */
-    void (*itk_OptListFree) (ItkOptList*olist); /* 15 */
-    void (*itk_OptListAdd) (ItkOptList*olist, Tcl_HashEntry *entry); /* 16 */
-    void (*itk_OptListRemove) (ItkOptList*olist, Tcl_HashEntry *entry); /* 17 */
+    void (*itk_OptListInit) (ItkOptList *olist, Tcl_HashTable *options); /* 14 */
+    void (*itk_OptListFree) (ItkOptList *olist); /* 15 */
+    void (*itk_OptListAdd) (ItkOptList *olist, Tcl_HashEntry *entry); /* 16 */
+    void (*itk_OptListRemove) (ItkOptList *olist, Tcl_HashEntry *entry); /* 17 */
 } ItkIntStubs;
 
 extern const ItkIntStubs *itkIntStubsPtr;

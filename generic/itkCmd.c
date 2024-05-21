@@ -45,10 +45,9 @@
  *  Returns TCL_OK/TCL_ERROR to indicate success/failure.
  * ------------------------------------------------------------------------
  */
-/* ARGSUSED */
 int
 Itk_ConfigBodyCmd(
-    void *dummy,        /* unused */
+    void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */

@@ -174,47 +174,47 @@ MODULE_SCOPE int Itk_ArchConfigureCmd (void *cdata,
 MODULE_SCOPE int Itk_ArchCgetCmd (void *cdata,
     Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 
-MODULE_SCOPE int Itk_ArchCompAddCmd (void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
-MODULE_SCOPE int Itk_ArchCompDeleteCmd (void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
-MODULE_SCOPE int Itk_ArchConfigOption (Tcl_Interp *interp,
+MODULE_SCOPE int Itk_ArchCompAddCmd(void *cdata,
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchCompDeleteCmd(void *cdata,
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchConfigOption(Tcl_Interp *interp,
     ArchInfo *info, char *name, char *value);
-MODULE_SCOPE int Itk_ArchOptionAddCmd (void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
-MODULE_SCOPE int Itk_ArchOptionRemoveCmd (void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
-MODULE_SCOPE int Itk_PropagatePublicVar (Tcl_Interp *interp,
+MODULE_SCOPE int Itk_ArchOptionAddCmd(void *cdata,
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_ArchOptionRemoveCmd(void *cdata,
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
+MODULE_SCOPE int Itk_PropagatePublicVar(Tcl_Interp *interp,
     ItclObject *contextObj, void *cdata, const char *newval);
-MODULE_SCOPE int Itk_GetArchInfo (Tcl_Interp *interp,
+MODULE_SCOPE int Itk_GetArchInfo(Tcl_Interp *interp,
     ItclObject* contextObj, ArchInfo **infoPtr);
-MODULE_SCOPE void Itk_ArchOptConfigError (Tcl_Interp *interp,
+MODULE_SCOPE void Itk_ArchOptConfigError(Tcl_Interp *interp,
     ArchInfo *info, ArchOption *archOpt);
-MODULE_SCOPE void Itk_ArchOptAccessError (Tcl_Interp *interp,
+MODULE_SCOPE void Itk_ArchOptAccessError(Tcl_Interp *interp,
     ArchInfo *info, ArchOption *archOpt);
-MODULE_SCOPE ArchOptionPart* Itk_CreateOptionPart (
+MODULE_SCOPE ArchOptionPart* Itk_CreateOptionPart(
     Tcl_Interp *interp, void *cdata, Itk_ConfigOptionPartProc* cproc,
     Tcl_CmdDeleteProc *dproc, void *from);
-MODULE_SCOPE int Itk_AddOptionPart (Tcl_Interp *interp,
+MODULE_SCOPE int Itk_AddOptionPart(Tcl_Interp *interp,
     ArchInfo *info, char *switchName, char *resName, char *resClass,
     const char *defVal, char *currVal, ArchOptionPart *optPart,
     ArchOption **raOpt);
-MODULE_SCOPE ArchOptionPart* Itk_FindArchOptionPart (
+MODULE_SCOPE ArchOptionPart* Itk_FindArchOptionPart(
     ArchInfo *info, char *switchName, void *from);
-MODULE_SCOPE void Itk_DelOptionPart (ArchOptionPart *optPart);
-MODULE_SCOPE void Itk_DelArchInfo (void *cdata);
+MODULE_SCOPE void Itk_DelOptionPart(ArchOptionPart *optPart);
+MODULE_SCOPE void Itk_DelArchInfo(void *cdata);
 MODULE_SCOPE Tcl_HashTable* ItkGetObjsWithArchInfo
     (Tcl_Interp *interp);
-MODULE_SCOPE void ItkFreeObjsWithArchInfo (void *cdata,
+MODULE_SCOPE void ItkFreeObjsWithArchInfo(void *cdata,
     Tcl_Interp *interp);
-MODULE_SCOPE void Itk_DelMergeInfo (void* cdata);
-MODULE_SCOPE int Itk_ArchOptKeepCmd (void *cdata,
+MODULE_SCOPE void Itk_DelMergeInfo(void *cdata);
+MODULE_SCOPE int Itk_ArchOptKeepCmd(void *cdata,
     Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
-MODULE_SCOPE int Itk_ArchOptIgnoreCmd (void *cdata,
+MODULE_SCOPE int Itk_ArchOptIgnoreCmd(void *cdata,
     Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
-MODULE_SCOPE int Itk_ArchOptRenameCmd (void *cdata,
+MODULE_SCOPE int Itk_ArchOptRenameCmd(void *cdata,
     Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
-MODULE_SCOPE int Itk_ArchOptUsualCmd (void *cdata,
+MODULE_SCOPE int Itk_ArchOptUsualCmd(void *cdata,
     Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 
 

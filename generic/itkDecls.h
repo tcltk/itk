@@ -28,7 +28,7 @@ ITKAPI int		Itk_SafeInit(Tcl_Interp *interp);
 /* Slot 11 is reserved */
 /* Slot 12 is reserved */
 /* 13 */
-ITKAPI int		Itk_ArchetypeInit(Tcl_Interp*interp);
+ITKAPI int		Itk_ArchetypeInit(Tcl_Interp *interp);
 
 typedef struct {
     const struct ItkIntStubs *itkIntStubs;
@@ -53,7 +53,7 @@ typedef struct ItkStubs {
     void (*reserved10)(void);
     void (*reserved11)(void);
     void (*reserved12)(void);
-    int (*itk_ArchetypeInit) (Tcl_Interp*interp); /* 13 */
+    int (*itk_ArchetypeInit) (Tcl_Interp *interp); /* 13 */
 } ItkStubs;
 
 extern const ItkStubs *itkStubsPtr;
