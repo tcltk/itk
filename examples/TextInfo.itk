@@ -13,24 +13,24 @@ class TextInfo {
     inherit Info
 
     constructor {args} {
-        itk_component add textArea {
-            TextDisplay $itk_interior.txt -scrollbar auto
-        } {
-            usual
-            keep -wrap -tabs
-            rename -font -textfont textFont Font
-        }
-        pack $itk_component(textArea) -expand yes -fill both
+	itk_component add textArea {
+	    TextDisplay $itk_interior.txt -scrollbar auto
+	} {
+	    usual
+	    keep -wrap -tabs
+	    rename -font -textfont textFont Font
+	}
+	pack $itk_component(textArea) -expand yes -fill both
 
-        eval itk_initialize $args
+	eval itk_initialize $args
     }
 
     public method display {args} {
-        eval $itk_component(textArea) display $args
+	eval $itk_component(textArea) display $args
     }
 
     public method append {args} {
-        eval $itk_component(textArea) append $args
+	eval $itk_component(textArea) append $args
     }
 }
 

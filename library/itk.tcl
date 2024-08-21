@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and
 # redistribution of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
-package require -exact Itk 4.2.5
+package require -exact Itk 4.2.6
 #
 # Provide transparent access to all [incr Tk] commands
 #
@@ -36,7 +36,7 @@ proc ::itk::remove_destroy_hook {widget} {
     set tags [bindtags $widget]
     set i [lsearch $tags "itk-destroy-$widget"]
     if {$i >= 0} {
-        bindtags $widget [lreplace $tags $i $i]
+	bindtags $widget [lreplace $tags $i $i]
     }
     bind itk-destroy-$widget <Destroy> {}
 }

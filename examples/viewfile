@@ -31,14 +31,14 @@ bind .file <KeyPress-Return> {show_file [.file get]}
 
 proc show_file {file} {
     set cmd {
-        set fid [open $file r]
-        set info [read $fid]
-        close $fid
+	set fid [open $file r]
+	set info [read $fid]
+	close $fid
     }
     if {[catch $cmd] == 0} {
-        set win [TextInfo .#auto -wrap none]
-        $win display $info
+	set win [TextInfo .#auto -wrap none]
+	$win display $info
     } else {
-        MessageInfo .#auto -message "Cannot read file:\n$file"
+	MessageInfo .#auto -message "Cannot read file:\n$file"
     }
 }

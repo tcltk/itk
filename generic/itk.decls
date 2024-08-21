@@ -56,11 +56,11 @@ interface itkInt
 
 declare 2 {
     int Itk_ConfigBodyCmd(void *cdata, Tcl_Interp *interp,
-        int objc, Tcl_Obj *const objv[])
+	int objc, Tcl_Obj *const objv[])
 }
 declare 3 {
     int Itk_UsualCmd(void *cdata, Tcl_Interp *interp, int objc,
-        Tcl_Obj *const objv[])
+	Tcl_Obj *const objv[])
 }
 
 #
@@ -69,19 +69,19 @@ declare 3 {
 
 declare 4 {
     int Itk_ClassOptionDefineCmd(void *cdata, Tcl_Interp *interp,
-        int objc, Tcl_Obj *const objv[])
+	int objc, Tcl_Obj *const objv[])
 }
 declare 5 {
     int Itk_ClassOptionIllegalCmd(void *cdata, Tcl_Interp *interp, \
-        int objc, Tcl_Obj *const objv[])
+	int objc, Tcl_Obj *const objv[])
 }
 declare 6 {
     int Itk_ConfigClassOption(Tcl_Interp *interp, ItclObject *contextObj, \
-        void *cdata, const char *newVal)
+	void *cdata, const char *newVal)
 }
 declare 7 {
     ItkClassOptTable* Itk_CreateClassOptTable(Tcl_Interp *interp, \
-        ItclClass *cdefn)
+	ItclClass *cdefn)
 }
 declare 8 {
     ItkClassOptTable* Itk_FindClassOptTable(ItclClass *cdefn)
@@ -91,8 +91,8 @@ declare 8 {
 #}
 declare 10 {
     int Itk_CreateClassOption(Tcl_Interp *interp, ItclClass *cdefn,
-        const char *switchName, const char *resName, const char *resClass, const char *defVal,
-        const char *config, ItkClassOption **optPtr)
+	const char *switchName, const char *resName, const char *resClass, const char *defVal,
+	const char *config, ItkClassOption **optPtr)
 }
 declare 11 {
     ItkClassOption* Itk_FindClassOption(ItclClass *cdefn, const char *switchName)

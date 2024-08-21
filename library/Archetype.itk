@@ -54,12 +54,12 @@
 itcl::class itk::Archetype {
 
     constructor {args} {
-        ::itcl::builtin::Archetype init
-        eval itk_initialize $args
+	::itcl::builtin::Archetype init
+	eval itk_initialize $args
     }
 
     destructor {
-        ::itcl::builtin::Archetype delete
+	::itcl::builtin::Archetype delete
     }
 
     method cget {option} @Archetype-cget

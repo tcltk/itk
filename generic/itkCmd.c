@@ -65,8 +65,8 @@ Itk_ConfigBodyCmd(
     Tcl_DString buffer;
 
     if (objc != 3) {
-        Tcl_WrongNumArgs(interp, 1, objv, "class::option body");
-        return TCL_ERROR;
+	Tcl_WrongNumArgs(interp, 1, objv, "class::option body");
+	return TCL_ERROR;
     }
 
     /*
@@ -78,17 +78,17 @@ Itk_ConfigBodyCmd(
     Itcl_ParseNamespPath(token, &buffer, &head, &tail);
 
     if (!head || *head == '\0') {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
-                "missing class specifier for body declaration \"", token, "\"",
-                (char*)NULL);
-        result = TCL_ERROR;
-        goto configBodyCmdDone;
+	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+		"missing class specifier for body declaration \"", token, "\"",
+		(char*)NULL);
+	result = TCL_ERROR;
+	goto configBodyCmdDone;
     }
 
     iclsPtr = Itcl_FindClass(interp, head, /* autoload */ 1);
     if (iclsPtr == NULL) {
-        result = TCL_ERROR;
-        goto configBodyCmdDone;
+	result = TCL_ERROR;
+	goto configBodyCmdDone;
     }
 
     /*
@@ -101,23 +101,23 @@ Itk_ConfigBodyCmd(
     opt = NULL;
 
     if (optTable) {
-        Tcl_DString optName;
+	Tcl_DString optName;
 
-        Tcl_DStringInit(&optName);
-        Tcl_DStringAppend(&optName, "-", -1);
-        Tcl_DStringAppend(&optName, tail, -1);
-        entry = Tcl_FindHashEntry(&optTable->options,
-            Tcl_DStringValue(&optName));
+	Tcl_DStringInit(&optName);
+	Tcl_DStringAppend(&optName, "-", -1);
+	Tcl_DStringAppend(&optName, tail, -1);
+	entry = Tcl_FindHashEntry(&optTable->options,
+	    Tcl_DStringValue(&optName));
 
-        if (entry) {
-            opt = (ItkClassOption*)Tcl_GetHashValue(entry);
-        }
-        Tcl_DStringFree(&optName);
+	if (entry) {
+	    opt = (ItkClassOption*)Tcl_GetHashValue(entry);
+	}
+	Tcl_DStringFree(&optName);
     }
 
     if (opt == NULL) {
-        result = Itcl_ConfigBodyCmd(dummy, interp, objc, objv);
-        goto configBodyCmdDone;
+	result = Itcl_ConfigBodyCmd(dummy, interp, objc, objv);
+	goto configBodyCmdDone;
     }
 
     /*
@@ -126,10 +126,10 @@ Itk_ConfigBodyCmd(
     token = Tcl_GetString(objv[2]);
 
     if (Itcl_CreateMemberCode(interp, iclsPtr, (char*)NULL, token,
-        &mcode) != TCL_OK) {
+	&mcode) != TCL_OK) {
 
-        result = TCL_ERROR;
-        goto configBodyCmdDone;
+	result = TCL_ERROR;
+	goto configBodyCmdDone;
     }
 
     Itcl_PreserveData((void *)mcode);
@@ -138,7 +138,7 @@ Itk_ConfigBodyCmd(
 #endif
 
     if (opt->codePtr) {
-        Itcl_ReleaseData((void *)opt->codePtr);
+	Itcl_ReleaseData((void *)opt->codePtr);
     }
     opt->codePtr = mcode;
 

@@ -81,10 +81,10 @@ typedef struct ArchComponent {
     Tcl_Command accessCmd;      /* access command for component widget */
     Tk_Window tkwin;            /* Tk window for this component widget */
     char *pathName;             /* Tk path name for this component widget.
-                                   We can't use the tkwin pointer after
-                                   the window has been destroyed so we
-                                   need to save a copy for use in
-                                   Itk_ArchCompDeleteCmd() */
+				   We can't use the tkwin pointer after
+				   the window has been destroyed so we
+				   need to save a copy for use in
+				   Itk_ArchCompDeleteCmd() */
 } ArchComponent;
 
 /*
@@ -116,7 +116,7 @@ typedef struct ArchOptionPart {
     Tcl_CmdDeleteProc *deleteProc;         /* clean up after clientData */
 
     void *from;                       /* token that indicates who
-                                            * contributed this option part */
+					    * contributed this option part */
 } ArchOptionPart;
 
 
@@ -126,12 +126,12 @@ typedef struct ArchOptionPart {
  */
 typedef struct ArchMergeInfo {
     Tcl_HashTable usualCode;      /* usual option handling code for the
-                                   * various widget classes */
+				   * various widget classes */
 
     ArchInfo *archInfo;           /* internal option info for mega-widget */
     ArchComponent *archComp;      /* component being merged into mega-widget */
     Tcl_HashTable *optionTable;   /* table of valid configuration options
-                                   * for component being merged */
+				   * for component being merged */
 } ArchMergeInfo;
 
 /*

@@ -29,25 +29,25 @@ test toplevel-1.1 {define a toplevel mega-widget class} {
     option add *TestToplevel.text ""
 
     itcl::class TestToplevel {
-        inherit itk::Toplevel
-        constructor {args} {
-            itk_component add test1 {
-                label $itk_interior.t1
-            } {
-                keep -background -foreground -cursor
-                keep -text
-            }
-            pack $itk_component(test1) -side left -padx 2
-            eval itk_initialize $args
-        }
-        public method do {cmd} {
-            eval $cmd
-        }
+	inherit itk::Toplevel
+	constructor {args} {
+	    itk_component add test1 {
+		label $itk_interior.t1
+	    } {
+		keep -background -foreground -cursor
+		keep -text
+	    }
+	    pack $itk_component(test1) -side left -padx 2
+	    eval itk_initialize $args
+	}
+	public method do {cmd} {
+	    eval $cmd
+	}
 
-        private variable status ""
-        itk_option define -background background Background {} {
-            lappend status "background: $itk_option(-background)"
-        }
+	private variable status ""
+	itk_option define -background background Background {} {
+	    lappend status "background: $itk_option(-background)"
+	}
     }
     TestToplevel .#auto
 } {.testToplevel0}
@@ -63,8 +63,8 @@ test toplevel-1.3 {check the list components} {
 test toplevel-1.4 {check the propagation of configuration options} {
     .testToplevel0 configure -background red
     list [.testToplevel0 component hull cget -background] \
-         [.testToplevel0 component test1 cget -background] \
-         [.testToplevel0 do {set status}]
+	 [.testToplevel0 component test1 cget -background] \
+	 [.testToplevel0 do {set status}]
 } {red red {{background: linen} {background: red}}}
 
 test toplevel-1.5 {mega-widgets show up on the object list} {
@@ -77,7 +77,7 @@ test toplevel-1.6 {when a mega-widget is destroyed, its object is deleted} {
 } {}
 
 test toplevel-1.7 {when an mega-widget object is deleted, its window and any
-        components are destroyed } {
+	components are destroyed } {
     TestToplevel .delme
     set label [.delme component test1]
     itcl::delete object .delme
@@ -85,25 +85,25 @@ test toplevel-1.7 {when an mega-widget object is deleted, its window and any
 } {0 0}
 
 test toplevel-1.8 {when a mega-widget object is deleted, its window and any
-        components are destroyed (even if in another window) } {
+	components are destroyed (even if in another window) } {
     catch {destroy .t1}
     catch {destroy .t2}
     catch {rename .t2 {}}
     catch {itcl::delete class ButtonTop}
 
     itcl::class ButtonTop {
-        inherit itk::Toplevel
+	inherit itk::Toplevel
 
-        constructor {args} {
-            eval itk_initialize $args
+	constructor {args} {
+	    eval itk_initialize $args
 
-            itk_component add button {
-                button $itk_option(-container).b -text Button
-            } {}
-            pack $itk_component(button)
-        }
+	    itk_component add button {
+		button $itk_option(-container).b -text Button
+	    } {}
+	    pack $itk_component(button)
+	}
 
-        itk_option define -container container Container {}
+	itk_option define -container container Container {}
     }
 
     toplevel .t1
@@ -117,25 +117,25 @@ test toplevel-1.8 {when a mega-widget object is deleted, its window and any
 } {.t1.b 0}
 
 test toplevel-1.9 {when a window that contains a megawidget component
-        is destroyed, the component is removed from the megawidget} {
+	is destroyed, the component is removed from the megawidget} {
     catch {destroy .t1}
     catch {destroy .t2}
     catch {rename .t2 {}}
     catch {itcl::delete class ButtonTop}
 
     itcl::class ButtonTop {
-        inherit itk::Toplevel
+	inherit itk::Toplevel
 
-        constructor {args} {
-            eval itk_initialize $args
+	constructor {args} {
+	    eval itk_initialize $args
 
-            itk_component add button {
-                button $itk_option(-container).b -text Button
-            } {}
-            pack $itk_component(button)
-        }
+	    itk_component add button {
+		button $itk_option(-container).b -text Button
+	    } {}
+	    pack $itk_component(button)
+	}
 
-        itk_option define -container container Container {}
+	itk_option define -container container Container {}
     }
 
     toplevel .t1
@@ -149,36 +149,36 @@ test toplevel-1.9 {when a window that contains a megawidget component
 } {{button hull} hull}
 
 test toplevel-1.10 {when destroying a component that is inside another
-        window protect against that case where one component destroy
-        actually destroys other contained components} {
+	window protect against that case where one component destroy
+	actually destroys other contained components} {
     catch {destroy .t1}
     catch {destroy .t2}
     catch {rename .t2 {}}
     catch {itcl::delete class ButtonTop}
 
     itcl::class ButtonTop {
-        inherit itk::Toplevel
+	inherit itk::Toplevel
 
-        constructor {args} {
-            eval itk_initialize $args
+	constructor {args} {
+	    eval itk_initialize $args
 
-            # Note, the component names matter here since
-            # [.t2 component] returns names in hash order.
-            # We need to delete cframe first since it
-            # is the parent of cbutton.
+	    # Note, the component names matter here since
+	    # [.t2 component] returns names in hash order.
+	    # We need to delete cframe first since it
+	    # is the parent of cbutton.
 
-            itk_component add cframe {
-                button $itk_option(-container).cframe
-            } {}
-            pack $itk_component(cframe)
+	    itk_component add cframe {
+		button $itk_option(-container).cframe
+	    } {}
+	    pack $itk_component(cframe)
 
-            itk_component add cbutton {
-                button $itk_component(cframe).b -text Button
-            } {}
-            pack $itk_component(cbutton)
-        }
+	    itk_component add cbutton {
+		button $itk_component(cframe).b -text Button
+	    } {}
+	    pack $itk_component(cbutton)
+	}
 
-        itk_option define -container container Container {}
+	itk_option define -container container Container {}
     }
 
     toplevel .t1

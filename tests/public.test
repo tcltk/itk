@@ -22,17 +22,17 @@ namespace import -force ::tcltest::*
 # ----------------------------------------------------------------------
 test public-1.1 {define base class and simple mega-widget class} {
     itcl::class test_public_base {
-        public variable null
-        public variable background "not used"
-        public variable message
+	public variable null
+	public variable background "not used"
+	public variable message
     }
     itcl::configbody test_public_base::message {
-        global ::test_public_status
-        lappend test_public_status "message: $message"
+	global ::test_public_status
+	lappend test_public_status "message: $message"
     }
     itcl::configbody test_public_base::background {
-        global ::test_public_status
-        lappend test_public_status "background: $background"
+	global ::test_public_status
+	lappend test_public_status "background: $background"
     }
     option add *TestPublic.background red
     option add *TestPublic.foreground white
@@ -40,18 +40,18 @@ test public-1.1 {define base class and simple mega-widget class} {
     option add *TestPublic.message "Hello, World!"
 
     itcl::class TestPublic {
-        inherit itk::Widget test_public_base
-        constructor {args} {
-            itk_component add mesg {
-                label $itk_interior.mesg
-            } {
-                keep -background -foreground -cursor
-                rename -text -message message Message
-            }
-            pack $itk_component(mesg) -side left -padx 2
+	inherit itk::Widget test_public_base
+	constructor {args} {
+	    itk_component add mesg {
+		label $itk_interior.mesg
+	    } {
+		keep -background -foreground -cursor
+		rename -text -message message Message
+	    }
+	    pack $itk_component(mesg) -side left -padx 2
 
-            eval itk_initialize $args
-        }
+	    eval itk_initialize $args
+	}
     }
     set testobj [TestPublic .#auto]
     pack $testobj

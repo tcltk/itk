@@ -50,9 +50,9 @@ Itk_ArchOptConfigError(
     Tcl_AppendToObj(objPtr, "\"", -1);
 
     if (info->itclObj && info->itclObj->accessCmd) {
-        Tcl_AppendToObj(objPtr, " for widget \"", -1);
-        Tcl_GetCommandFullName(interp, info->itclObj->accessCmd, objPtr);
-        Tcl_AppendToObj(objPtr, "\")", -1);
+	Tcl_AppendToObj(objPtr, " for widget \"", -1);
+	Tcl_GetCommandFullName(interp, info->itclObj->accessCmd, objPtr);
+	Tcl_AppendToObj(objPtr, "\")", -1);
     }
     Tcl_AddErrorInfo(interp, Tcl_GetString(objPtr));
     Tcl_DecrRefCount(objPtr);
@@ -77,14 +77,14 @@ Itk_ArchOptAccessError(
     Tcl_ResetResult(interp);
 
     Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
-        "internal error: cannot access itk_option(", archOpt->switchName, ")",
-        (char*)NULL);
+	"internal error: cannot access itk_option(", archOpt->switchName, ")",
+	(char*)NULL);
 
     if (info->itclObj->accessCmd) {
-        Tcl_Obj *resultPtr = Tcl_GetObjResult(interp);
-        Tcl_AppendToObj(resultPtr, " in widget \"", -1);
-        Tcl_GetCommandFullName(interp, info->itclObj->accessCmd, resultPtr);
-        Tcl_AppendToObj(resultPtr, "\"", -1);
+	Tcl_Obj *resultPtr = Tcl_GetObjResult(interp);
+	Tcl_AppendToObj(resultPtr, " in widget \"", -1);
+	Tcl_GetCommandFullName(interp, info->itclObj->accessCmd, resultPtr);
+	Tcl_AppendToObj(resultPtr, "\"", -1);
     }
 }
 
@@ -115,17 +115,17 @@ Itk_GetArchInfo(
     entry = Tcl_FindHashEntry(objsWithArchInfo, (char*)contextObj);
 
     if (!entry) {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
-            "internal error: no Archetype information for widget",
-            (char*)NULL);
+	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+	    "internal error: no Archetype information for widget",
+	    (char*)NULL);
 
-        if (contextObj->accessCmd) {
-            Tcl_Obj *resultPtr = Tcl_GetObjResult(interp);
-            Tcl_AppendToObj(resultPtr, " \"", -1);
-            Tcl_GetCommandFullName(interp, contextObj->accessCmd, resultPtr);
-            Tcl_AppendToObj(resultPtr, "\"", -1);
-        }
-        return TCL_ERROR;
+	if (contextObj->accessCmd) {
+	    Tcl_Obj *resultPtr = Tcl_GetObjResult(interp);
+	    Tcl_AppendToObj(resultPtr, " \"", -1);
+	    Tcl_GetCommandFullName(interp, contextObj->accessCmd, resultPtr);
+	    Tcl_AppendToObj(resultPtr, "\"", -1);
+	}
+	return TCL_ERROR;
     }
 
     /*
@@ -155,13 +155,13 @@ ItkGetObjsWithArchInfo(
      *  If the registration table does not yet exist, then create it.
      */
     objTable = (Tcl_HashTable*)Tcl_GetAssocData(interp,
-        "itk_objsWithArchInfo", (Tcl_InterpDeleteProc**)NULL);
+	"itk_objsWithArchInfo", (Tcl_InterpDeleteProc**)NULL);
 
     if (!objTable) {
-        objTable = (Tcl_HashTable*)ckalloc(sizeof(Tcl_HashTable));
-        Tcl_InitHashTable(objTable, TCL_ONE_WORD_KEYS);
-        Tcl_SetAssocData(interp, "itk_objsWithArchInfo",
-            ItkFreeObjsWithArchInfo, (void *)objTable);
+	objTable = (Tcl_HashTable*)ckalloc(sizeof(Tcl_HashTable));
+	Tcl_InitHashTable(objTable, TCL_ONE_WORD_KEYS);
+	Tcl_SetAssocData(interp, "itk_objsWithArchInfo",
+	    ItkFreeObjsWithArchInfo, (void *)objTable);
     }
     return objTable;
 }
@@ -185,8 +185,8 @@ ItkFreeObjsWithArchInfo(
 
     entry = Tcl_FirstHashEntry(tablePtr, &place);
     while (entry) {
-        Itk_DelArchInfo( Tcl_GetHashValue(entry) );
-        entry = Tcl_NextHashEntry(&place);
+	Itk_DelArchInfo( Tcl_GetHashValue(entry) );
+	entry = Tcl_NextHashEntry(&place);
     }
 
     Tcl_DeleteHashTable(tablePtr);

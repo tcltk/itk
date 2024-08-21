@@ -41,7 +41,7 @@ Itk_OptListInit(
     olist->len = 0;
     olist->max = 10;
     olist->list = (Tcl_HashEntry**)ckalloc(
-        (olist->max*sizeof(Tcl_HashEntry*))
+	(olist->max*sizeof(Tcl_HashEntry*))
     );
 }
 
@@ -93,13 +93,13 @@ Itk_OptListAdd(
      *  if needed.
      */
     if (olist->len >= olist->max) {
-        size = olist->max*sizeof(Tcl_HashEntry*);
-        newOrder = (Tcl_HashEntry**)ckalloc(2*size);
-        memcpy((void*)newOrder, (void*)olist->list, (size_t)size);
-        ckfree((char*)olist->list);
+	size = olist->max*sizeof(Tcl_HashEntry*);
+	newOrder = (Tcl_HashEntry**)ckalloc(2*size);
+	memcpy((void*)newOrder, (void*)olist->list, (size_t)size);
+	ckfree((char*)olist->list);
 
-        olist->list = newOrder;
-        olist->max *= 2;
+	olist->list = newOrder;
+	olist->max *= 2;
     }
 
     /*
@@ -110,39 +110,39 @@ Itk_OptListAdd(
     swname = ((const char *)Tcl_GetHashKey(olist->options, entry)) + 1;
 
     while (last >= first) {
-        pos = (first+last)/2;
-        optname = ((const char *)Tcl_GetHashKey(olist->options,
+	pos = (first+last)/2;
+	optname = ((const char *)Tcl_GetHashKey(olist->options,
 		olist->list[pos])) + 1;
-        if (*swname == *optname) {
-            cmp = strcmp(swname, optname);
-            if (cmp == 0) {
-                break;    /* found it! */
-            }
-        }
-        else if (*swname < *optname) {
-            cmp = -1;
-        }
-        else {
-            cmp = 1;
-        }
+	if (*swname == *optname) {
+	    cmp = strcmp(swname, optname);
+	    if (cmp == 0) {
+		break;    /* found it! */
+	    }
+	}
+	else if (*swname < *optname) {
+	    cmp = -1;
+	}
+	else {
+	    cmp = 1;
+	}
 
-        if (cmp > 0)
-            first = pos+1;
-        else
-            last = pos-1;
+	if (cmp > 0)
+	    first = pos+1;
+	else
+	    last = pos-1;
     }
 
     /*
      *  If a matching entry was not found, then insert one.
      */
     if (last < first) {
-        pos = first;
+	pos = first;
 
-        for (i=olist->len; i > pos; i--) {
-            olist->list[i] = olist->list[i-1];
-        }
-        olist->list[pos] = entry;
-        olist->len++;
+	for (i=olist->len; i > pos; i--) {
+	    olist->list[i] = olist->list[i-1];
+	}
+	olist->list[pos] = entry;
+	olist->len++;
     }
 }
 
@@ -176,35 +176,35 @@ Itk_OptListRemove(
     swname = ((const char *)Tcl_GetHashKey(olist->options, entry)) + 1;
 
     while (last >= first) {
-        pos = (first+last)/2;
-        optname = ((const char *)Tcl_GetHashKey(olist->options,
+	pos = (first+last)/2;
+	optname = ((const char *)Tcl_GetHashKey(olist->options,
 		olist->list[pos])) + 1;
-        if (*swname == *optname) {
-            cmp = strcmp(swname, optname);
-            if (cmp == 0) {
-                break;    /* found it! */
-            }
-        }
-        else if (*swname < *optname) {
-            cmp = -1;
-        }
-        else {
-            cmp = 1;
-        }
+	if (*swname == *optname) {
+	    cmp = strcmp(swname, optname);
+	    if (cmp == 0) {
+		break;    /* found it! */
+	    }
+	}
+	else if (*swname < *optname) {
+	    cmp = -1;
+	}
+	else {
+	    cmp = 1;
+	}
 
-        if (cmp > 0)
-            first = pos+1;
-        else
-            last = pos-1;
+	if (cmp > 0)
+	    first = pos+1;
+	else
+	    last = pos-1;
     }
 
     /*
      *  If a matching entry was found, then remove it.
      */
     if (last >= first) {
-        olist->len--;
-        for (i=pos; i < olist->len; i++) {
-            olist->list[i] = olist->list[i+1];
-        }
+	olist->len--;
+	for (i=pos; i < olist->len; i++) {
+	    olist->list[i] = olist->list[i+1];
+	}
     }
 }

@@ -53,26 +53,26 @@ proc file_load {} {
 
     .files buttonconfigure OK -text "Load"
     if {[.files activate]} {
-        set fname [.files get]
-        set cmd {
-            set fid [open $fname r]
-            set text [read $fid]
-            close $fid
-        }
-        if {[catch $cmd err] != 0} {
-            .notice configure -bitmap error \
-                -text "Cannot load file \"$fname\":\n$err"
-            .notice activate
-            return
-        }
+	set fname [.files get]
+	set cmd {
+	    set fid [open $fname r]
+	    set text [read $fid]
+	    close $fid
+	}
+	if {[catch $cmd err] != 0} {
+	    .notice configure -bitmap error \
+		-text "Cannot load file \"$fname\":\n$err"
+	    .notice activate
+	    return
+	}
 
-        set pane [$PaneMenu get]
-        set win [.edit childsite $pane]
-        clear_text $win
-        $win.text insert end $text
-        $win.text configure -labeltext "file: $fname"
+	set pane [$PaneMenu get]
+	set win [.edit childsite $pane]
+	clear_text $win
+	$win.text insert end $text
+	$win.text configure -labeltext "file: $fname"
 
-        set FileName($win) $fname
+	set FileName($win) $fname
     }
 }
 
@@ -89,12 +89,12 @@ proc file_save_as {} {
 
     .files buttonconfigure OK -text "Save"
     if {[.files activate]} {
-        set pane [$PaneMenu get]
-        set win [.edit childsite $pane]
+	set pane [$PaneMenu get]
+	set win [.edit childsite $pane]
 
-        set FileName($win) [.files get]
+	set FileName($win) [.files get]
 
-        file_save $win
+	file_save $win
     }
 }
 
@@ -108,16 +108,16 @@ proc file_save {win} {
     global FileName FileChanged
 
     set cmd {
-        set fid [open $FileName($win) w]
-        puts $fid [$win.text get 1.0 end]
-        close $fid
-        set FileChanged($win) 0
-        $win.text configure -labeltext "file: $FileName($win)"
+	set fid [open $FileName($win) w]
+	puts $fid [$win.text get 1.0 end]
+	close $fid
+	set FileChanged($win) 0
+	$win.text configure -labeltext "file: $FileName($win)"
     }
     if {[catch $cmd err] != 0} {
-        .notice configure -bitmap error \
-            -text "Cannot save file \"$FileName($win)\":\n$err"
-        .notice activate
+	.notice configure -bitmap error \
+	    -text "Cannot save file \"$FileName($win)\":\n$err"
+	.notice activate
     }
 }
 
@@ -132,22 +132,22 @@ proc clear_text {{areas ""}} {
     global FileName FileChanged FileWindows
 
     if {$areas == ""} {
-        for {set i 0} {$i < $FileWindows} {incr i} {
-            set pane "area #[expr $i+1]"
-            lappend areas [.edit childsite $pane]
-        }
+	for {set i 0} {$i < $FileWindows} {incr i} {
+	    set pane "area #[expr $i+1]"
+	    lappend areas [.edit childsite $pane]
+	}
     }
 
     foreach win $areas {
-        if {$FileChanged($win)} {
-            set fname [file tail $FileName($win)]
-            .confirm configure -text "File \"$fname\" has changed.\nSave changes?"
-            if {[.confirm activate]} {
-                file_save $win
-            }
-        }
-        $win.text delete 1.0 end
-        set FileChanged($win) 0
+	if {$FileChanged($win)} {
+	    set fname [file tail $FileName($win)]
+	    .confirm configure -text "File \"$fname\" has changed.\nSave changes?"
+	    if {[.confirm activate]} {
+		file_save $win
+	    }
+	}
+	$win.text delete 1.0 end
+	set FileChanged($win) 0
     }
 }
 
@@ -169,11 +169,11 @@ proc split_view {} {
     set FileChanged($win) 0
 
     iwidgets::scrolledtext $win.text -wrap none -labeltext "file: $FileName($win)" \
-        -hscrollmode none -vscrollmode dynamic -visibleitems 1x1
+	-hscrollmode none -vscrollmode dynamic -visibleitems 1x1
     pack $win.text -expand yes -fill both
 
     bind [$win.text component text] <KeyPress> "
-        set FileChanged($win) 1
+	set FileChanged($win) 1
     "
 }
 

@@ -53,45 +53,45 @@ static int Initialize (Tcl_Interp *interp);
 static char initScript[] = "\n\
 namespace eval ::itk {\n\
     proc _find_init {} {\n\
-        global env tcl_library\n\
-        variable library\n\
-        variable patchLevel\n\
-        rename _find_init {}\n\
-        if {[info exists library]} {\n\
-            lappend dirs $library\n\
-        } else {\n\
-            set dirs {}\n\
-            if {[info exists env(ITK_LIBRARY)]} {\n\
-                lappend dirs $env(ITK_LIBRARY)\n\
-            }\n\
-            lappend dirs [file join [file dirname $tcl_library] itk$patchLevel]\n\
-            set bindir [file dirname [info nameofexecutable]]\n\
-            lappend dirs [file join $bindir .. lib itk$patchLevel]\n\
-            lappend dirs [file join $bindir .. library]\n\
-            lappend dirs [file join $bindir .. .. library]\n\
-            lappend dirs [file join $bindir .. .. itk library]\n\
-            # On MacOSX, check the directories in the tcl_pkgPath\n\
-            if {[string equal $::tcl_platform(platform) \"unix\"] && \
-                    [string equal $::tcl_platform(os) \"Darwin\"]} {\n\
-                foreach d $::tcl_pkgPath {\n\
-                    lappend dirs [file join $d itk$patchLevel]\n\
-                }\n\
-            }\n\
-        }\n\
-        foreach i $dirs {\n\
-            set library $i\n\
-            set itkfile [file join $i itk.tcl]\n\
-            if {![catch {uplevel #0 [list source $itkfile]} msg]} {\n\
-                return\n\
-            }\n\
-        }\n\
-        set msg \"Can't find a usable itk.tcl in the following directories:\n\"\n\
-        append msg \"    $dirs\n\"\n\
-        append msg \"This probably means that Itcl/Itk weren't installed properly.\n\"\n\
-        append msg \"If you know where the Itk library directory was installed,\n\"\n\
-        append msg \"you can set the environment variable ITK_LIBRARY to point\n\"\n\
-        append msg \"to the library directory.\n\"\n\
-        error $msg\n\
+	global env tcl_library\n\
+	variable library\n\
+	variable patchLevel\n\
+	rename _find_init {}\n\
+	if {[info exists library]} {\n\
+	    lappend dirs $library\n\
+	} else {\n\
+	    set dirs {}\n\
+	    if {[info exists env(ITK_LIBRARY)]} {\n\
+		lappend dirs $env(ITK_LIBRARY)\n\
+	    }\n\
+	    lappend dirs [file join [file dirname $tcl_library] itk$patchLevel]\n\
+	    set bindir [file dirname [info nameofexecutable]]\n\
+	    lappend dirs [file join $bindir .. lib itk$patchLevel]\n\
+	    lappend dirs [file join $bindir .. library]\n\
+	    lappend dirs [file join $bindir .. .. library]\n\
+	    lappend dirs [file join $bindir .. .. itk library]\n\
+	    # On MacOSX, check the directories in the tcl_pkgPath\n\
+	    if {[string equal $::tcl_platform(platform) \"unix\"] && \
+		    [string equal $::tcl_platform(os) \"Darwin\"]} {\n\
+		foreach d $::tcl_pkgPath {\n\
+		    lappend dirs [file join $d itk$patchLevel]\n\
+		}\n\
+	    }\n\
+	}\n\
+	foreach i $dirs {\n\
+	    set library $i\n\
+	    set itkfile [file join $i itk.tcl]\n\
+	    if {![catch {uplevel #0 [list source $itkfile]} msg]} {\n\
+		return\n\
+	    }\n\
+	}\n\
+	set msg \"Can't find a usable itk.tcl in the following directories:\n\"\n\
+	append msg \"    $dirs\n\"\n\
+	append msg \"This probably means that Itcl/Itk weren't installed properly.\n\"\n\
+	append msg \"If you know where the Itk library directory was installed,\n\"\n\
+	append msg \"you can set the environment variable ITK_LIBRARY to point\n\"\n\
+	append msg \"to the library directory.\n\"\n\
+	error $msg\n\
     }\n\
     _find_init\n\
 }";
@@ -137,47 +137,47 @@ Initialize(
      *  Add the "itk_option" ensemble to the itcl class definition parser.
      */
     parserNs = Tcl_FindNamespace(interp, "::itcl::parser",
-        (Tcl_Namespace*)NULL, /* flags */ 0);
+	(Tcl_Namespace*)NULL, /* flags */ 0);
 
     if (!parserNs) {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
-            "cannot initialize [incr Tk]: [incr Tcl] has not been installed\n",
-            "Make sure that Itcl_Init() is called before Itk_Init()",
-            (char*)NULL);
-        return TCL_ERROR;
+	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+	    "cannot initialize [incr Tk]: [incr Tcl] has not been installed\n",
+	    "Make sure that Itcl_Init() is called before Itk_Init()",
+	    (char*)NULL);
+	return TCL_ERROR;
     }
     parserInfo = parserNs->clientData;
 
     if (Itcl_CreateEnsemble(interp, "::itcl::parser::itk_option") != TCL_OK) {
-        return TCL_ERROR;
+	return TCL_ERROR;
     }
     if (Itcl_AddEnsemblePart(interp, "::itcl::parser::itk_option",
-            "define", "-switch resourceName resourceClass init ?config?",
-            Itk_ClassOptionDefineCmd,
-            parserInfo, Itcl_ReleaseData) != TCL_OK) {
+	    "define", "-switch resourceName resourceClass init ?config?",
+	    Itk_ClassOptionDefineCmd,
+	    parserInfo, Itcl_ReleaseData) != TCL_OK) {
 
-        return TCL_ERROR;
+	return TCL_ERROR;
     }
     Itcl_PreserveData(parserInfo);
 
     if (Itcl_AddEnsemblePart(interp, "::itcl::parser::itk_option",
-            "add", "name ?name name...?",
-            Itk_ClassOptionIllegalCmd,
-            (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
+	    "add", "name ?name name...?",
+	    Itk_ClassOptionIllegalCmd,
+	    (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
 
-        Itcl_AddEnsemblePart(interp, "::itcl::parser::itk_option",
-            "remove", "name ?name name...?",
-            Itk_ClassOptionIllegalCmd,
-            (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK) {
+	Itcl_AddEnsemblePart(interp, "::itcl::parser::itk_option",
+	    "remove", "name ?name name...?",
+	    Itk_ClassOptionIllegalCmd,
+	    (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK) {
 
-        return TCL_ERROR;
+	return TCL_ERROR;
     }
 
     /*
      *  Install [incr Tk] facilities if not already installed.
      */
     itkNs = Tcl_FindNamespace(interp, "::itk", (Tcl_Namespace*)NULL,
-        /* flags */ 0);
+	/* flags */ 0);
 
     if (itkNs == NULL) {
 	/*
@@ -190,15 +190,15 @@ Initialize(
     }
 
     if (!itkNs ||
-        Tcl_Export(interp, itkNs, "*", /* resetListFirst */ 1) != TCL_OK) {
-        return TCL_ERROR;
+	Tcl_Export(interp, itkNs, "*", /* resetListFirst */ 1) != TCL_OK) {
+	return TCL_ERROR;
     }
 
     /*
      *  Setup things for itk::Archetype base class.
      */
     if (Itk_ArchetypeInit(interp) != TCL_OK) {
-        return TCL_ERROR;
+	return TCL_ERROR;
     }
 
     /*
@@ -206,11 +206,11 @@ Initialize(
      *  options.
      */
     Tcl_CreateObjCommand(interp, "::itcl::configbody", Itk_ConfigBodyCmd,
-        (void *)NULL, (Tcl_CmdDeleteProc*)NULL);
+	(void *)NULL, (Tcl_CmdDeleteProc*)NULL);
 
     Tcl_SetVar(interp, "::itk::version", ITK_VERSION, TCL_NAMESPACE_ONLY);
     Tcl_SetVar(interp, "::itk::patchLevel", ITK_PATCH_LEVEL,
-            TCL_NAMESPACE_ONLY);
+	    TCL_NAMESPACE_ONLY);
 
     /*
      *  Signal that the package has been loaded and provide the Itk Stubs table
@@ -276,7 +276,7 @@ Initialize(
     }
     Tcl_PkgProvideEx(interp, "Itk", ITK_PATCH_LEVEL, (void *) &itkStubs);
     return Tcl_PkgProvideEx(interp, "itk", ITK_PATCH_LEVEL,
-            (void *) &itkStubs);
+	    (void *) &itkStubs);
 }
 
 /*
@@ -323,7 +323,7 @@ Itk_SafeInit(
     Tcl_Interp *interp)  /* interpreter to be updated */
 {
     if (Initialize(interp) != TCL_OK) {
-        return TCL_ERROR;
+	return TCL_ERROR;
     }
     return Tcl_EvalEx(interp, safeInitScript, -1, 0);
 }

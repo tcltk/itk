@@ -79,46 +79,46 @@ Itk_ClassOptionDefineCmd(
      *  name must start with a '-'.
      */
     if (objc < 5 || objc > 6) {
-        Tcl_WrongNumArgs(interp, 1, objv,
-                "-switch resourceName resourceClass init ?config?");
-        return TCL_ERROR;
+	Tcl_WrongNumArgs(interp, 1, objv,
+		"-switch resourceName resourceClass init ?config?");
+	return TCL_ERROR;
     }
 
     switchName = Tcl_GetString(objv[1]);
     if (*switchName != '-') {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
-                "bad option name \"", switchName, "\": should be -",
+	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+		"bad option name \"", switchName, "\": should be -",
 		switchName, (char*)NULL);
-        return TCL_ERROR;
+	return TCL_ERROR;
     }
     if (strstr(switchName, ".")) {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
-                "bad option name \"", switchName,
+	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+		"bad option name \"", switchName,
 		"\": illegal character \".\"", (char*)NULL);
-        return TCL_ERROR;
+	return TCL_ERROR;
     }
 
     resName = Tcl_GetString(objv[2]);
     if (!islower((int)*resName)) {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
-                "bad resource name \"", resName,
-                "\": should start with a lower case letter",
-                (char*)NULL);
-        return TCL_ERROR;
+	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+		"bad resource name \"", resName,
+		"\": should start with a lower case letter",
+		(char*)NULL);
+	return TCL_ERROR;
     }
 
     resClass = Tcl_GetString(objv[3]);
     if (!isupper((int)*resClass)) {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
-               "bad resource class \"", resClass,
-               "\": should start with an upper case letter",
-               (char*)NULL);
-        return TCL_ERROR;
+	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+	       "bad resource class \"", resClass,
+	       "\": should start with an upper case letter",
+	       (char*)NULL);
+	return TCL_ERROR;
     }
 
     if (iclsPtr == NULL) {
-        Tcl_AppendResult(interp, "can only handle options on class level",
-	        NULL);
+	Tcl_AppendResult(interp, "can only handle options on class level",
+		NULL);
 	return TCL_ERROR;
     }
     /*
@@ -133,11 +133,11 @@ Itk_ClassOptionDefineCmd(
     entry = Tcl_CreateHashEntry(&optTable->options, switchName, &newEntry);
 
     if (!newEntry) {
-        Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
-                "option \"", switchName, "\" already defined in class \"",
-                Tcl_GetString(iclsPtr->fullNamePtr), "\"",
-                (char*)NULL);
-        return TCL_ERROR;
+	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+		"option \"", switchName, "\" already defined in class \"",
+		Tcl_GetString(iclsPtr->fullNamePtr), "\"",
+		(char*)NULL);
+	return TCL_ERROR;
     }
 
     /*
@@ -147,14 +147,14 @@ Itk_ClassOptionDefineCmd(
     init = Tcl_GetString(objv[4]);
 
     if (objc == 6) {
-        config = Tcl_GetString(objv[5]);
+	config = Tcl_GetString(objv[5]);
     } else {
-        config = NULL;
+	config = NULL;
     }
 
     if (Itk_CreateClassOption(interp, iclsPtr, switchName, resName, resClass,
-            init, config, &opt) != TCL_OK) {
-        return TCL_ERROR;
+	    init, config, &opt) != TCL_OK) {
+	return TCL_ERROR;
     }
 
     Tcl_SetHashValue(entry, (void *)opt);
@@ -183,9 +183,9 @@ Itk_ClassOptionIllegalCmd(
     char *op = Tcl_GetString(objv[0]);
 
     Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
-            "can only ", op, " options for a specific widget\n",
-            "(move this command into the constructor)",
-            (char*)NULL);
+	    "can only ", op, " options for a specific widget\n",
+	    "(move this command into the constructor)",
+	    (char*)NULL);
 
     return TCL_ERROR;
 }
@@ -226,7 +226,7 @@ Itk_ConfigClassOption(
 	Itcl_PushCallFrame(interp, &frame, opt->iclsPtr->nsPtr, 1);
 	Itcl_SetContext(interp, contextObj);
 
-        result = Tcl_EvalObjEx(interp, mcode->bodyPtr, 0);
+	result = Tcl_EvalObjEx(interp, mcode->bodyPtr, 0);
 
 	Itcl_UnsetContext(interp);
 	Itcl_PopCallFrame(interp);
@@ -241,8 +241,8 @@ Itk_ConfigClassOption(
 	 * code here looked like:
 	 *
 
-        result = Itcl_EvalMemberCode(interp, (ItclMemberFunc*)NULL,
-            opt->member, contextObj, 0, (Tcl_Obj**)NULL);
+	result = Itcl_EvalMemberCode(interp, (ItclMemberFunc*)NULL,
+	    opt->member, contextObj, 0, (Tcl_Obj**)NULL);
 
 	 *
 	 * In Itcl 4, Itcl methods have become (a particular variant)
@@ -326,23 +326,23 @@ Itk_CreateClassOptTable(
 
     entry = Tcl_CreateHashEntry(itkClasses, (char*)iclsPtr, &newEntry);
     if (newEntry) {
-        optTable = (ItkClassOptTable*)ckalloc(sizeof(ItkClassOptTable));
-        Tcl_InitHashTable(&optTable->options, TCL_STRING_KEYS);
-        Itk_OptListInit(&optTable->order, &optTable->options);
+	optTable = (ItkClassOptTable*)ckalloc(sizeof(ItkClassOptTable));
+	Tcl_InitHashTable(&optTable->options, TCL_STRING_KEYS);
+	Itk_OptListInit(&optTable->order, &optTable->options);
 
-        Tcl_SetHashValue(entry, (void *)optTable);
+	Tcl_SetHashValue(entry, (void *)optTable);
 
-        result = Itcl_PushCallFrame(interp, &frame,
-             iclsPtr->nsPtr, /* isProcCallFrame */ 0);
+	result = Itcl_PushCallFrame(interp, &frame,
+	     iclsPtr->nsPtr, /* isProcCallFrame */ 0);
 
-        if (result == TCL_OK) {
-            Tcl_TraceVar(interp, "_itk_option_data",
-                    (TCL_TRACE_UNSETS | TCL_NAMESPACE_ONLY),
-                    ItkTraceClassDestroy, (void *)iclsPtr);
-            Itcl_PopCallFrame(interp);
-        }
+	if (result == TCL_OK) {
+	    Tcl_TraceVar(interp, "_itk_option_data",
+		    (TCL_TRACE_UNSETS | TCL_NAMESPACE_ONLY),
+		    ItkTraceClassDestroy, (void *)iclsPtr);
+	    Itcl_PopCallFrame(interp);
+	}
     } else {
-        optTable = (ItkClassOptTable*)Tcl_GetHashValue(entry);
+	optTable = (ItkClassOptTable*)Tcl_GetHashValue(entry);
     }
     return optTable;
 }
@@ -375,7 +375,7 @@ Itk_FindClassOptTable(
     itkClasses = ItkGetClassesWithOptInfo(iclsPtr->interp);
     entry = Tcl_FindHashEntry(itkClasses, (char*)iclsPtr);
     if (entry) {
-        return (ItkClassOptTable*)Tcl_GetHashValue(entry);
+	return (ItkClassOptTable*)Tcl_GetHashValue(entry);
     }
     return NULL;
 }
@@ -419,18 +419,18 @@ ItkTraceClassDestroy(
     itkClasses = ItkGetClassesWithOptInfo(interp);
     entry = Tcl_FindHashEntry(itkClasses, (char*)iclsPtr);
     if (entry) {
-        optTable = (ItkClassOptTable*)Tcl_GetHashValue(entry);
-        Tcl_DeleteHashEntry(entry);
+	optTable = (ItkClassOptTable*)Tcl_GetHashValue(entry);
+	Tcl_DeleteHashEntry(entry);
 
-        entry = Tcl_FirstHashEntry(&optTable->options, &place);
-        while (entry) {
-            opt = (ItkClassOption*)Tcl_GetHashValue(entry);
-            Itk_DelClassOption(opt);
-            entry = Tcl_NextHashEntry(&place);
-        }
-        Tcl_DeleteHashTable(&optTable->options);
-        Itk_OptListFree(&optTable->order);
-        ckfree((char*)optTable);
+	entry = Tcl_FirstHashEntry(&optTable->options, &place);
+	while (entry) {
+	    opt = (ItkClassOption*)Tcl_GetHashValue(entry);
+	    Itk_DelClassOption(opt);
+	    entry = Tcl_NextHashEntry(&place);
+	}
+	Tcl_DeleteHashTable(&optTable->options);
+	Itk_OptListFree(&optTable->order);
+	ckfree((char*)optTable);
     }
     return NULL;
 }
@@ -469,17 +469,17 @@ Itk_CreateClassOption(
      *  an implementation for it.
      */
     if (config) {
-        if (Itcl_CreateMemberCode(interp, iclsPtr, (char*)NULL, config,
-            &mcode) != TCL_OK) {
+	if (Itcl_CreateMemberCode(interp, iclsPtr, (char*)NULL, config,
+	    &mcode) != TCL_OK) {
 
-            return TCL_ERROR;
-        }
-        Itcl_PreserveData((void *)mcode);
+	    return TCL_ERROR;
+	}
+	Itcl_PreserveData((void *)mcode);
 #ifdef NOTDEF
-        Itcl_EventuallyFree((void *)mcode, (Tcl_FreeProc *)Itcl_DeleteMemberCode);
+	Itcl_EventuallyFree((void *)mcode, (Tcl_FreeProc *)Itcl_DeleteMemberCode);
 #endif
     } else {
-        mcode = NULL;
+	mcode = NULL;
     }
 
     /*
@@ -541,9 +541,9 @@ Itk_FindClassOption(
      */
     Tcl_DStringInit(&buffer);
     if (*switchName != '-') {
-        Tcl_DStringAppend(&buffer, "-", -1);
-        Tcl_DStringAppend(&buffer, switchName, -1);
-        switchName = Tcl_DStringValue(&buffer);
+	Tcl_DStringAppend(&buffer, "-", -1);
+	Tcl_DStringAppend(&buffer, switchName, -1);
+	switchName = Tcl_DStringValue(&buffer);
     }
 
     /*
@@ -552,10 +552,10 @@ Itk_FindClassOption(
      */
     optTable = Itk_FindClassOptTable(iclsPtr);
     if (optTable) {
-        entry = Tcl_FindHashEntry(&optTable->options, switchName);
-        if (entry) {
-            opt = (ItkClassOption*)Tcl_GetHashValue(entry);
-        }
+	entry = Tcl_FindHashEntry(&optTable->options, switchName);
+	if (entry) {
+	    opt = (ItkClassOption*)Tcl_GetHashValue(entry);
+	}
     }
     Tcl_DStringFree(&buffer);
     return opt;
@@ -603,13 +603,13 @@ ItkGetClassesWithOptInfo(
      *  If the registration table does not yet exist, then create it.
      */
     classesTable = (Tcl_HashTable*)Tcl_GetAssocData(interp,
-        "itk_classesWithOptInfo", (Tcl_InterpDeleteProc**)NULL);
+	"itk_classesWithOptInfo", (Tcl_InterpDeleteProc**)NULL);
 
     if (!classesTable) {
-        classesTable = (Tcl_HashTable*)ckalloc(sizeof(Tcl_HashTable));
-        Tcl_InitHashTable(classesTable, TCL_ONE_WORD_KEYS);
-        Tcl_SetAssocData(interp, "itk_classesWithOptInfo",
-            ItkFreeClassesWithOptInfo, (void *)classesTable);
+	classesTable = (Tcl_HashTable*)ckalloc(sizeof(Tcl_HashTable));
+	Tcl_InitHashTable(classesTable, TCL_ONE_WORD_KEYS);
+	Tcl_SetAssocData(interp, "itk_classesWithOptInfo",
+	    ItkFreeClassesWithOptInfo, (void *)classesTable);
     }
     return classesTable;
 }
@@ -637,19 +637,19 @@ ItkFreeClassesWithOptInfo(
 
     entry = Tcl_FirstHashEntry(tablePtr, &place);
     while (entry) {
-        optTable = (ItkClassOptTable*)Tcl_GetHashValue(entry);
+	optTable = (ItkClassOptTable*)Tcl_GetHashValue(entry);
 
-        entry2 = Tcl_FirstHashEntry(&optTable->options, &place2);
-        while (entry2) {
-            opt = (ItkClassOption*)Tcl_GetHashValue(entry2);
-            Itk_DelClassOption(opt);
-            entry2 = Tcl_NextHashEntry(&place2);
-        }
-        Tcl_DeleteHashTable(&optTable->options);
-        Itk_OptListFree(&optTable->order);
-        ckfree((char*)optTable);
+	entry2 = Tcl_FirstHashEntry(&optTable->options, &place2);
+	while (entry2) {
+	    opt = (ItkClassOption*)Tcl_GetHashValue(entry2);
+	    Itk_DelClassOption(opt);
+	    entry2 = Tcl_NextHashEntry(&place2);
+	}
+	Tcl_DeleteHashTable(&optTable->options);
+	Itk_OptListFree(&optTable->order);
+	ckfree((char*)optTable);
 
-        entry = Tcl_NextHashEntry(&place);
+	entry = Tcl_NextHashEntry(&place);
     }
 
     Tcl_DeleteHashTable(tablePtr);
