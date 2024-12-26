@@ -59,7 +59,7 @@ ItclShowArgs(
 }
 #endif
 
-struct NameProcMap { const char *name; Tcl_ObjCmdProc *proc; };
+struct NameProcMap { const char *name; Tcl_ObjCmdProc2 *proc; };
 
 /*
  * List of commands that are used to implement the [info object] subcommands.
@@ -93,35 +93,35 @@ Itk_ArchetypeInit(
      *  Declare all of the C routines that are integrated into
      *  the Archetype base class.
      */
-    if (Itcl_RegisterObjC(interp,
+    if (Itcl_RegisterObjC2(interp,
 	    "Archetype-init", Itk_ArchInitOptsCmd,
 	    (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
 
-	Itcl_RegisterObjC(interp,
+	Itcl_RegisterObjC2(interp,
 	    "Archetype-delete", Itk_ArchDeleteOptsCmd,
 	    (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
 
-	Itcl_RegisterObjC(interp,
+	Itcl_RegisterObjC2(interp,
 	    "Archetype-itk_component", Itk_ArchComponentCmd,
 	    (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
 
-	Itcl_RegisterObjC(interp,
+	Itcl_RegisterObjC2(interp,
 	    "Archetype-itk_option", Itk_ArchOptionCmd,
 	    (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
 
-	Itcl_RegisterObjC(interp,
+	Itcl_RegisterObjC2(interp,
 	    "Archetype-itk_initialize", Itk_ArchInitCmd,
 	    (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
 
-	Itcl_RegisterObjC(interp,
+	Itcl_RegisterObjC2(interp,
 	    "Archetype-component", Itk_ArchCompAccessCmd,
 	    (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
 
-	Itcl_RegisterObjC(interp,
+	Itcl_RegisterObjC2(interp,
 	    "Archetype-configure", Itk_ArchConfigureCmd,
 	    (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
 
-	Itcl_RegisterObjC(interp,
+	Itcl_RegisterObjC2(interp,
 	    "Archetype-cget", Itk_ArchCgetCmd,
 	    (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK) {
 
@@ -143,7 +143,7 @@ fprintf(stderr, "error in creating namespace: ::itcl::builtin::Archetype \n");
     Tcl_CreateEnsemble(interp, nsPtr->fullName, nsPtr, TCL_ENSEMBLE_PREFIX);
     Tcl_Export(interp, nsPtr, "[a-z]*", 1);
     for (i=0 ; archetypeCmds[i].name!=NULL ; i++) {
-	Tcl_CreateObjCommand(interp, archetypeCmds[i].name,
+	Tcl_CreateObjCommand2(interp, archetypeCmds[i].name,
 		archetypeCmds[i].proc, NULL, NULL);
     }
 
@@ -167,26 +167,26 @@ fprintf(stderr, "error in creating namespace: ::itcl::builtin::Archetype \n");
     Itcl_PreserveData((void *)mergeInfo);
     Itcl_EventuallyFree((void *)mergeInfo, (Tcl_FreeProc *)Itk_DelMergeInfo);
 
-    Tcl_CreateObjCommand(interp, "::itk::option-parser::keep",
+    Tcl_CreateObjCommand2(interp, "::itk::option-parser::keep",
 	Itk_ArchOptKeepCmd,
 	(void *)mergeInfo, (Tcl_CmdDeleteProc*)NULL);
 
-    Tcl_CreateObjCommand(interp, "::itk::option-parser::ignore",
+    Tcl_CreateObjCommand2(interp, "::itk::option-parser::ignore",
 	Itk_ArchOptIgnoreCmd,
 	(void *)mergeInfo, (Tcl_CmdDeleteProc*)NULL);
 
-    Tcl_CreateObjCommand(interp, "::itk::option-parser::rename",
+    Tcl_CreateObjCommand2(interp, "::itk::option-parser::rename",
 	Itk_ArchOptRenameCmd,
 	(void *)mergeInfo, (Tcl_CmdDeleteProc*)NULL);
 
-    Tcl_CreateObjCommand(interp, "::itk::option-parser::usual",
+    Tcl_CreateObjCommand2(interp, "::itk::option-parser::usual",
 	Itk_ArchOptUsualCmd,
 	(void *)mergeInfo, (Tcl_CmdDeleteProc*)NULL);
 
     /*
      *  Add the "itk::usual" command to register option handling code.
      */
-    Tcl_CreateObjCommand(interp, "::itk::usual", Itk_UsualCmd,
+    Tcl_CreateObjCommand2(interp, "::itk::usual", Itk_UsualCmd,
 	(void *)mergeInfo, Itcl_ReleaseData);
     Itcl_PreserveData((void *)mergeInfo);
 
@@ -248,7 +248,7 @@ int
 Itk_ArchInitOptsCmd(
     void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     int newEntry;
@@ -342,7 +342,7 @@ int
 Itk_ArchDeleteOptsCmd(
     void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     ItclClass *contextClass;
@@ -399,7 +399,7 @@ int
 Itk_ArchComponentCmd(
     void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     char *cmd;
@@ -502,7 +502,7 @@ int
 Itk_ArchInitCmd(
     void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     ItclClass *contextClass;
@@ -717,7 +717,7 @@ int
 Itk_ArchOptionCmd(
     void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     char *cmd;
@@ -825,7 +825,7 @@ int
 Itk_ArchCompAccessCmd(
     void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     int i;
@@ -1011,7 +1011,7 @@ int
 Itk_ArchConfigureCmd(
     void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     int i;
@@ -1166,7 +1166,7 @@ int
 Itk_ArchCgetCmd(
     void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     const char *token;

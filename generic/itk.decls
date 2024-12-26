@@ -56,10 +56,10 @@ interface itkInt
 
 declare 2 {
     int Itk_ConfigBodyCmd(void *cdata, Tcl_Interp *interp,
-	int objc, Tcl_Obj *const objv[])
+	Tcl_Size objc, Tcl_Obj *const objv[])
 }
 declare 3 {
-    int Itk_UsualCmd(void *cdata, Tcl_Interp *interp, int objc,
+    int Itk_UsualCmd(void *cdata, Tcl_Interp *interp, Tcl_Size objc,
 	Tcl_Obj *const objv[])
 }
 
@@ -69,11 +69,11 @@ declare 3 {
 
 declare 4 {
     int Itk_ClassOptionDefineCmd(void *cdata, Tcl_Interp *interp,
-	int objc, Tcl_Obj *const objv[])
+	Tcl_Size objc, Tcl_Obj *const objv[])
 }
 declare 5 {
     int Itk_ClassOptionIllegalCmd(void *cdata, Tcl_Interp *interp, \
-	int objc, Tcl_Obj *const objv[])
+	Tcl_Size objc, Tcl_Obj *const objv[])
 }
 declare 6 {
     int Itk_ConfigClassOption(Tcl_Interp *interp, ItclObject *contextObj, \

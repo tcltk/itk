@@ -151,7 +151,7 @@ Initialize(
     if (Itcl_CreateEnsemble(interp, "::itcl::parser::itk_option") != TCL_OK) {
 	return TCL_ERROR;
     }
-    if (Itcl_AddEnsemblePart(interp, "::itcl::parser::itk_option",
+    if (Itcl_AddEnsemblePart2(interp, "::itcl::parser::itk_option",
 	    "define", "-switch resourceName resourceClass init ?config?",
 	    Itk_ClassOptionDefineCmd,
 	    parserInfo, Itcl_ReleaseData) != TCL_OK) {
@@ -160,12 +160,12 @@ Initialize(
     }
     Itcl_PreserveData(parserInfo);
 
-    if (Itcl_AddEnsemblePart(interp, "::itcl::parser::itk_option",
+    if (Itcl_AddEnsemblePart2(interp, "::itcl::parser::itk_option",
 	    "add", "name ?name name...?",
 	    Itk_ClassOptionIllegalCmd,
 	    (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK ||
 
-	Itcl_AddEnsemblePart(interp, "::itcl::parser::itk_option",
+	Itcl_AddEnsemblePart2(interp, "::itcl::parser::itk_option",
 	    "remove", "name ?name name...?",
 	    Itk_ClassOptionIllegalCmd,
 	    (void *)NULL, (Tcl_CmdDeleteProc*)NULL) != TCL_OK) {
@@ -205,7 +205,7 @@ Initialize(
      *  Fix the "itcl::configbody" command to recognize mega-widget
      *  options.
      */
-    Tcl_CreateObjCommand(interp, "::itcl::configbody", Itk_ConfigBodyCmd,
+    Tcl_CreateObjCommand2(interp, "::itcl::configbody", Itk_ConfigBodyCmd,
 	(void *)NULL, (Tcl_CmdDeleteProc*)NULL);
 
     Tcl_SetVar(interp, "::itk::version", ITK_VERSION, TCL_NAMESPACE_ONLY);
@@ -220,8 +220,8 @@ Initialize(
      */
 
     if (Tcl_GetCommandInfo(interp, "::tcl::build-info", &info)) {
-	Tcl_CreateObjCommand(interp, "::itk::build-info",
-		info.objProc, (void *)(PACKAGE_VERSION "+" STRINGIFY(ITK_VERSION_UUID)
+	Tcl_CreateObjCommand2(interp, "::itk::build-info",
+		info.objProc2, (void *)(PACKAGE_VERSION "+" STRINGIFY(ITK_VERSION_UUID)
 #if defined(__clang__) && defined(__clang_major__)
 	    ".clang-" STRINGIFY(__clang_major__)
 #if __clang_minor__ < 10
