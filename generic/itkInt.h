@@ -158,21 +158,21 @@ typedef struct ConfigCmdline {
 } ConfigCmdline;
 
 MODULE_SCOPE int Itk_ArchInitOptsCmd (void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
 MODULE_SCOPE int Itk_ArchDeleteOptsCmd (void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
 MODULE_SCOPE int Itk_ArchComponentCmd (void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
 MODULE_SCOPE int Itk_ArchInitCmd (void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
 MODULE_SCOPE int Itk_ArchOptionCmd (void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
 MODULE_SCOPE int Itk_ArchCompAccessCmd (void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
 MODULE_SCOPE int Itk_ArchConfigureCmd (void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
 MODULE_SCOPE int Itk_ArchCgetCmd (void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
 
 MODULE_SCOPE int Itk_ArchCompAddCmd(void *cdata,
     Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
@@ -209,13 +209,13 @@ MODULE_SCOPE void ItkFreeObjsWithArchInfo(void *cdata,
     Tcl_Interp *interp);
 MODULE_SCOPE void Itk_DelMergeInfo(void *cdata);
 MODULE_SCOPE int Itk_ArchOptKeepCmd(void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
 MODULE_SCOPE int Itk_ArchOptIgnoreCmd(void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
 MODULE_SCOPE int Itk_ArchOptRenameCmd(void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
 MODULE_SCOPE int Itk_ArchOptUsualCmd(void *cdata,
-    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+    Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const objv[]);
 
 
 #include "itkIntDecls.h"

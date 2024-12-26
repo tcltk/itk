@@ -49,7 +49,7 @@ int
 Itk_ConfigBodyCmd(
     void *dummy,             /* unused */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,           /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     int result = TCL_OK;

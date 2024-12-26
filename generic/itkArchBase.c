@@ -721,7 +721,7 @@ int
 Itk_ArchOptKeepCmd(
     void *clientData,        /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     ArchMergeInfo *mergeInfo = (ArchMergeInfo*)clientData;
@@ -826,7 +826,7 @@ int
 Itk_ArchOptIgnoreCmd(
     void *clientData,        /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     ArchMergeInfo *mergeInfo = (ArchMergeInfo*)clientData;
@@ -900,7 +900,7 @@ int
 Itk_ArchOptRenameCmd(
     void *clientData,        /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     ArchMergeInfo *mergeInfo = (ArchMergeInfo*)clientData;
@@ -1029,7 +1029,7 @@ int
 Itk_ArchOptUsualCmd(
     void *clientData,        /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     ArchMergeInfo *mergeInfo = (ArchMergeInfo*)clientData;
@@ -1112,7 +1112,7 @@ int
 Itk_UsualCmd(
     void *clientData,        /* option merging info record */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     ArchMergeInfo *mergeInfo = (ArchMergeInfo*)clientData;
