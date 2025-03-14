@@ -926,18 +926,18 @@ fprintf(stderr, "ERR 2 archComp == NULL\n");
     if (objc == 2) {
 
 	/*
- 	 * This is moderately ugly.  We want to resolve the instance
- 	 * variable "itk_component".  We have the contextObj context,
- 	 * but the only way to make that context control variable
- 	 * resolution is to force the context namespace to be the class
- 	 * namespace of the contextObj, while at the same time, not
- 	 * pushing any frame, so that the same contextObj context is
- 	 * still in force, when that custom resolver attached to that
- 	 * namespace finally gets the chance to resolve.
- 	 *
- 	 * Instance variable resolution, even (especially?) in C code,
- 	 * shouldn't need quite so many contortions.
- 	 */
+	 * This is moderately ugly.  We want to resolve the instance
+	 * variable "itk_component".  We have the contextObj context,
+	 * but the only way to make that context control variable
+	 * resolution is to force the context namespace to be the class
+	 * namespace of the contextObj, while at the same time, not
+	 * pushing any frame, so that the same contextObj context is
+	 * still in force, when that custom resolver attached to that
+	 * namespace finally gets the chance to resolve.
+	 *
+	 * Instance variable resolution, even (especially?) in C code,
+	 * shouldn't need quite so many contortions.
+	 */
 
 	Tcl_Namespace *save = Tcl_GetCurrentNamespace(interp);
 
