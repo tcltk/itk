@@ -23,6 +23,15 @@
 #include <itclInt.h>
 #include "itk.h"
 
+#if (TCL_MAJOR_VERSION < 9)
+# ifndef Tcl_ObjCmdProc2
+#   define Tcl_ObjCmdProc2 Tcl_ObjCmdProc
+# endif
+# ifndef Tcl_CreateObjCommand2
+#   define Tcl_CreateObjCommand2 Tcl_CreateObjCommand
+# endif
+#endif
+
 /*
  *  List of options in alphabetical order:
  */

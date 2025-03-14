@@ -263,7 +263,7 @@ Itk_ConfigClassOption(
 	 * for (result == TCL_RETURN) here.  This is essentially a
 	 * reproduction of the Tcl internal routine TclUpdateReturnInfo()
 	 * but without the benefit of internals access.
- 	 */
+	 */
 
 	if (result == TCL_RETURN) {
 	    Tcl_Obj *opts = Tcl_GetReturnOptions(interp, TCL_RETURN);

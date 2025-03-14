@@ -38,6 +38,10 @@ static char safeInitScript[] =
     return $ptr\n\
 }";
 
+#if TCL_MAJOR_VERSION < 9
+#   define objProc2 objProc
+#endif
+
 /*
  *  FORWARD DECLARATIONS
  */
