@@ -24,7 +24,7 @@ _RULES_VC = 1
 # For modifications that are not backward-compatible, you *must* change
 # the major version.
 RULES_VERSION_MAJOR = 1
-RULES_VERSION_MINOR = 14
+RULES_VERSION_MINOR = 15
 
 # The PROJECT macro must be defined by parent makefile.
 !if "$(PROJECT)" == ""
@@ -804,10 +804,10 @@ DOTSEPARATED=$(DOTSEPARATED:b=.)
 # MSVCRT  - 1 -> link to dynamic C runtime even when building static Tcl build
 #           0 -> link to static C runtime for static Tcl build.
 #           Does not impact shared Tcl builds (STATIC_BUILD == 0)
-#           Default: 1 for Tcl 8.7 and up, 0 otherwise.
+#           Default: 1 for Tcl 9.0 and up, 0 otherwise.
 # TCL_USE_STATIC_PACKAGES - 1 -> statically link the registry and dde extensions
 #           in the Tcl and Wish shell. 0 -> keep them as shared libraries. Does
-#           not impact shared Tcl builds. Implied by STATIC_BUILD since Tcl 8.7.
+#           not impact shared Tcl builds. Implied by STATIC_BUILD since Tcl 9.0.
 # USE_THREAD_ALLOC - 1 -> Use a shared global free pool for allocation.
 #           0 -> Use the non-thread allocator.
 # UNCHECKED - 1 -> when doing a debug build with symbols, use the release
@@ -880,10 +880,6 @@ USE_THREAD_ALLOC= 0
 !if [nmakehlp -f $(OPTS) "tcl8"]
 !message *** Build for Tcl8
 TCL_BUILD_FOR = 8
-!endif
-!if [nmakehlp -f $(OPTS) "tk8"]
-!message *** Build for Tk8
-TK_BUILD_FOR = 8
 !endif
 
 !if $(TCL_MAJOR_VERSION) == 8
@@ -1046,7 +1042,7 @@ WARNINGS		    = $(WARNINGS) -Wp64
 # different compilers, build configurations etc.,
 #
 # Naming convention (suffixes):
-#   t = full thread support. (Not used for Tcl >= 8.7)
+#   t = full thread support. (Not used for Tcl >= 9.0)
 #   s = static library (as opposed to an import library)
 #   g = linked to the debug enabled C run-time.
 #   x = special static build when it links to the dynamic C run-time.
@@ -1177,7 +1173,7 @@ TCLSTUBLIB	= $(_TCLDIR)\lib\tclstub.lib
 !endif
 TCLIMPLIB	= $(_TCLDIR)\lib\tcl$(TCL_VERSION)$(SUFX:t=).lib
 # When building extensions, may be linking against Tcl that does not add
-# "t" suffix (e.g. 8.5 or 8.7). If lib not found check for that possibility.
+# "t" suffix (e.g. 8.6). If lib not found check for that possibility.
 !if !exist("$(TCLIMPLIB)")
 TCLIMPLIB	= $(_TCLDIR)\lib\tcl$(TCL_VERSION)t$(SUFX:t=).lib
 !endif
@@ -1201,7 +1197,7 @@ TCLSTUBLIB	= $(_TCLDIR)\win\$(BUILDDIRTOP)\tclstub.lib
 !endif
 TCLIMPLIB	= $(_TCLDIR)\win\$(BUILDDIRTOP)\tcl$(TCL_VERSION)$(SUFX:t=).lib
 # When building extensions, may be linking against Tcl that does not add
-# "t" suffix (e.g. 8.5 or 8.7). If lib not found check for that possibility.
+# "t" suffix (e.g. 8.6). If lib not found check for that possibility.
 !if !exist("$(TCLIMPLIB)")
 TCLIMPLIB	= $(_TCLDIR)\win\$(BUILDDIRTOP)\tcl$(TCL_VERSION)t$(SUFX:t=).lib
 !endif
@@ -1266,7 +1262,7 @@ WISH		= $(_TKDIR)\bin\$(WISHNAME)
 TKSTUBLIB	= $(_TKDIR)\lib\$(TKSTUBLIBNAME)
 TKIMPLIB	= $(_TKDIR)\lib\$(TKIMPLIBNAME)
 # When building extensions, may be linking against Tk that does not add
-# "t" suffix (e.g. 8.5 or 8.7). If lib not found check for that possibility.
+# "t" suffix (e.g. 8.6). If lib not found check for that possibility.
 !if !exist("$(TKIMPLIB)")
 TKIMPLIBNAME	= tk$(TK_VERSION)$(SUFX:t=).lib
 TKIMPLIB	= $(_TKDIR)\lib\$(TKIMPLIBNAME)
@@ -1280,7 +1276,7 @@ WISH		= $(_TKDIR)\win\$(BUILDDIRTOP)\$(WISHNAME)
 TKSTUBLIB	= $(_TKDIR)\win\$(BUILDDIRTOP)\$(TKSTUBLIBNAME)
 TKIMPLIB	= $(_TKDIR)\win\$(BUILDDIRTOP)\$(TKIMPLIBNAME)
 # When building extensions, may be linking against Tk that does not add
-# "t" suffix (e.g. 8.5 or 8.7). If lib not found check for that possibility.
+# "t" suffix (e.g. 8.6). If lib not found check for that possibility.
 !if !exist("$(TKIMPLIB)")
 TKIMPLIBNAME	= tk$(TK_VERSION)$(SUFX:t=).lib
 TKIMPLIB	= $(_TKDIR)\win\$(BUILDDIRTOP)\$(TKIMPLIBNAME)
@@ -1454,10 +1450,7 @@ OPTDEFINES	= $(OPTDEFINES) /D_USE_64BIT_TIME_T=1
 !endif
 !endif
 !if "$(TCL_BUILD_FOR)" == "8"
-OPTDEFINES	= $(OPTDEFINES) /DTCL_MAJOR_VERSION=8
-!endif
-!if "$(TK_BUILD_FOR)" == "8"
-OPTDEFINES	= $(OPTDEFINES) /DTK_MAJOR_VERSION=8
+OPTDEFINES	= $(OPTDEFINES) /DTCL_MAJOR_VERSION=8 /DTK_MAJOR_VERSION=8
 !endif
 
 # Like the TEA system only set this non empty for non-Tk extensions
@@ -1589,7 +1582,7 @@ ldebug= $(ldebug) -profile
 lflags	= -nologo -machine:$(MACHINE) $(LINKERFLAGS) $(ldebug)
 
 !if $(MSVCRT) && !($(DEBUG) && !$(UNCHECKED)) && $(VCVERSION) >= 1900
-lflags	= $(lflags) -nodefaultlib:libucrt.lib
+lflags	= $(lflags) -nodefaultlib:ucrt.lib
 !endif
 
 dlllflags = $(lflags) -dll
@@ -1648,7 +1641,7 @@ default-target: $(DEFAULT_BUILD_TARGET)
 
 !if $(MULTIPLATFORM_INSTALL)
 default-pkgindex:
-	@echo if {[package vsatisfies [package provide Tcl] 9.0-]} { > $(OUT_DIR)\pkgIndex.tcl
+	@echo if {[package vsatisfies [package provide Tcl] 9.0]} { > $(OUT_DIR)\pkgIndex.tcl
 	@echo package ifneeded $(PRJ_PACKAGE_TCLNAME) $(DOTVERSION) \
 	    [list load [file join $$dir $(PLATFORM_IDENTIFY) $(PRJLIBNAME9)]] >> $(OUT_DIR)\pkgIndex.tcl
 	@echo } else { >> $(OUT_DIR)\pkgIndex.tcl
@@ -1657,7 +1650,7 @@ default-pkgindex:
 	@echo } >> $(OUT_DIR)\pkgIndex.tcl
 !else
 default-pkgindex:
-	@echo if {[package vsatisfies [package provide Tcl] 9.0-]} { > $(OUT_DIR)\pkgIndex.tcl
+	@echo if {[package vsatisfies [package provide Tcl] 9.0]} { > $(OUT_DIR)\pkgIndex.tcl
 	@echo package ifneeded $(PRJ_PACKAGE_TCLNAME) $(DOTVERSION) \
 	    [list load [file join $$dir $(PRJLIBNAME9)]] >> $(OUT_DIR)\pkgIndex.tcl
 	@echo } else { >> $(OUT_DIR)\pkgIndex.tcl
@@ -1697,6 +1690,7 @@ default-install-libraries: default-install-scripts
 
 default-install-scripts: $(OUT_DIR)\pkgIndex.tcl
 	@echo Installing libraries to '$(SCRIPT_INSTALL_DIR)'
+	@if not exist "$(SCRIPT_INSTALL_DIR)" mkdir "$(SCRIPT_INSTALL_DIR)"
 	@if exist $(LIBDIR) $(CPY) $(LIBDIR)\*.tcl "$(SCRIPT_INSTALL_DIR)"
 	@echo Installing package index in '$(SCRIPT_INSTALL_DIR)'
 	@$(CPY) $(OUT_DIR)\pkgIndex.tcl $(SCRIPT_INSTALL_DIR)
