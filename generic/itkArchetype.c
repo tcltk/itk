@@ -42,10 +42,10 @@ void
 ItclShowArgs(
     int level,
     const char *str,
-    size_t objc,
+    Tcl_Size objc,
     Tcl_Obj * const* objv)
 {
-    size_t i;
+    Tcl_Size i;
 
     if (level > _itcl_debug_level) {
 	return;
@@ -150,7 +150,7 @@ fprintf(stderr, "error in creating namespace: ::itcl::builtin::Archetype \n");
     /*
      *  Create the namespace containing the option parser commands.
      */
-    mergeInfo = (ArchMergeInfo*)ckalloc(sizeof(ArchMergeInfo));
+    mergeInfo = (ArchMergeInfo*)Tcl_Alloc(sizeof(ArchMergeInfo));
     Tcl_InitHashTable(&mergeInfo->usualCode, TCL_STRING_KEYS);
     mergeInfo->archInfo    = NULL;
     mergeInfo->archComp    = NULL;
@@ -227,7 +227,7 @@ Itk_ArchetypeCmd(
 	Tcl_SetResult(interp, Tcl_GetString(objPtr), TCL_DYNAMIC);
 	return TCL_ERROR;
     }
-    return ItclEnsembleSubCmd(clientData, interp, "::itcl::builtin::Archetype",
+    return ItclEnsembleSubCmd2(clientData, interp, "::itcl::builtin::Archetype",
 	    objc, objv, "Itk_ArchetypeCmd");
 }
 
@@ -284,7 +284,7 @@ Itk_ArchInitOptsCmd(
      */
     objsWithArchInfo = ItkGetObjsWithArchInfo(interp);
 
-    info = (ArchInfo*)ckalloc(sizeof(ArchInfo));
+    info = (ArchInfo*)Tcl_Alloc(sizeof(ArchInfo));
     info->itclObj = contextObj;
     info->tkwin = NULL;  /* not known yet */
     Tcl_InitHashTable(&info->components, TCL_STRING_KEYS);
@@ -405,7 +405,7 @@ Itk_ArchComponentCmd(
     char *cmd;
     char *token;
     char c;
-    int length;
+    size_t length;
     Tcl_DString buffer;
     const char *head;
     const char *tail;
@@ -510,7 +510,7 @@ Itk_ArchInitCmd(
     ItclObject *contextObj;
     ArchInfo *info;
 
-    int i;
+    Tcl_Size i;
     int result;
     const char *val;
     char *token;
@@ -723,7 +723,7 @@ Itk_ArchOptionCmd(
     char *cmd;
     char *token;
     char c;
-    int length;
+    size_t length;
 
     ItclShowArgs(2,"Itk_ArchOptionCmd", objc, objv);
     /*
@@ -828,7 +828,7 @@ Itk_ArchCompAccessCmd(
     Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
-    int i;
+    Tcl_Size i;
     int result;
     char *token;
     const char *name;
@@ -1014,7 +1014,7 @@ Itk_ArchConfigureCmd(
     Tcl_Size objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
-    int i;
+    Tcl_Size i;
     const char *val;
     char *token;
     ItclClass *contextClass;

@@ -38,8 +38,8 @@
 typedef struct ItkOptList {
     Tcl_HashTable *options;     /* list containing the real options */
     Tcl_HashEntry **list;       /* gives ordering of options */
-    int len;                    /* number of entries in order list */
-    int max;                    /* maximum size of order list */
+    Tcl_Size len;               /* number of entries in order list */
+    Tcl_Size max;               /* maximum size of order list */
 } ItkOptList;
 
 /*

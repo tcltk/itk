@@ -116,7 +116,7 @@ Itk_ConfigBodyCmd(
     }
 
     if (opt == NULL) {
-	result = Itcl_ConfigBodyCmd(dummy, interp, objc, objv);
+	result = Itcl_ConfigBodyCmd2(dummy, interp, objc, objv);
 	goto configBodyCmdDone;
     }
 

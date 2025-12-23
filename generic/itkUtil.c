@@ -40,8 +40,8 @@ Itk_OptListInit(
     olist->options = options;
     olist->len = 0;
     olist->max = 10;
-    olist->list = (Tcl_HashEntry**)ckalloc(
-	(olist->max*sizeof(Tcl_HashEntry*))
+    olist->list = (Tcl_HashEntry**)Tcl_Alloc(
+	((size_t)olist->max*sizeof(Tcl_HashEntry*))
     );
 }
 
@@ -59,7 +59,7 @@ void
 Itk_OptListFree(
     ItkOptList *olist)     /* list to be freed */
 {
-    ckfree((char*)olist->list);
+    Tcl_Free((char*)olist->list);
     olist->len = olist->max = 0;
 }
 
@@ -78,12 +78,12 @@ Itk_OptListAdd(
     ItkOptList *olist,     /* ordered list */
     Tcl_HashEntry *entry)  /* entry to be added to the list */
 {
-    int i;
-    int first;
-    int last;
+    Tcl_Size i;
+    Tcl_Size first;
+    Tcl_Size last;
     int cmp;
-    int pos;
-    int size;
+    Tcl_Size pos;
+    Tcl_Size size;
     Tcl_HashEntry** newOrder;
     const char *swname;
     const char *optname;
@@ -93,10 +93,10 @@ Itk_OptListAdd(
      *  if needed.
      */
     if (olist->len >= olist->max) {
-	size = olist->max*sizeof(Tcl_HashEntry*);
-	newOrder = (Tcl_HashEntry**)ckalloc(2*size);
+	size = olist->max*(Tcl_Size)sizeof(Tcl_HashEntry*);
+	newOrder = (Tcl_HashEntry**)Tcl_Alloc(2*(size_t)size);
 	memcpy((void*)newOrder, (void*)olist->list, (size_t)size);
-	ckfree((char*)olist->list);
+	Tcl_Free((char*)olist->list);
 
 	olist->list = newOrder;
 	olist->max *= 2;
@@ -163,10 +163,10 @@ Itk_OptListRemove(
     ItkOptList *olist,     /* ordered list */
     Tcl_HashEntry *entry)  /* entry to be removed from the list */
 {
-    int pos = 0;
-    int i;
-    int first;
-    int last;
+    Tcl_Size pos = 0;
+    Tcl_Size i;
+    Tcl_Size first;
+    Tcl_Size last;
     int cmp;
     const char *swname;
     const char *optname;

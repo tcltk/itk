@@ -158,7 +158,7 @@ ItkGetObjsWithArchInfo(
 	"itk_objsWithArchInfo", (Tcl_InterpDeleteProc**)NULL);
 
     if (!objTable) {
-	objTable = (Tcl_HashTable*)ckalloc(sizeof(Tcl_HashTable));
+	objTable = (Tcl_HashTable*)Tcl_Alloc(sizeof(Tcl_HashTable));
 	Tcl_InitHashTable(objTable, TCL_ONE_WORD_KEYS);
 	Tcl_SetAssocData(interp, "itk_objsWithArchInfo",
 	    ItkFreeObjsWithArchInfo, (void *)objTable);
@@ -190,6 +190,6 @@ ItkFreeObjsWithArchInfo(
     }
 
     Tcl_DeleteHashTable(tablePtr);
-    ckfree((char*)tablePtr);
+    Tcl_Free((char*)tablePtr);
 }
 
