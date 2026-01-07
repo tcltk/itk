@@ -175,9 +175,9 @@ Itk_ClassOptionDefineCmd(
  */
 int
 Itk_ClassOptionIllegalCmd(
-    void *clientData,        /* class parser info */
+    TCL_UNUSED(void *),      /* class parser info */
     Tcl_Interp *interp,      /* current interpreter */
-    int objc,                /* number of arguments */
+    TCL_UNUSED(int),         /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     char *op = Tcl_GetString(objv[0]);
@@ -208,8 +208,8 @@ int
 Itk_ConfigClassOption(
     Tcl_Interp *interp,        /* interpreter managing the class */
     ItclObject *contextObj,    /* object being configured */
-    void *cdata,          /* class option */
-    const char *newval)        /* new value for this option */
+    void *cdata,               /* class option */
+    TCL_UNUSED(const char *))  /* new value for this option */
 {
     ItkClassOption *opt = (ItkClassOption*)cdata;
     int result = TCL_OK;
@@ -397,11 +397,11 @@ Itk_FindClassOptTable(
  */
 static char*
 ItkTraceClassDestroy(
-    void *cdata,          /* class definition data */
+    void *cdata,               /* class definition data */
     Tcl_Interp *interp,        /* interpreter managing the class */
-    const char *name1,       /* name of variable involved in trace */
-    const char *name2,       /* name of array element within variable */
-    int flags)                 /* flags describing trace */
+    TCL_UNUSED(const char *),  /* name of variable involved in trace */
+    TCL_UNUSED(const char *),  /* name of array element within variable */
+    TCL_UNUSED(int))           /* flags describing trace */
 {
     ItclClass *iclsPtr = (ItclClass*)cdata;
 
@@ -624,8 +624,8 @@ ItkGetClassesWithOptInfo(
  */
 static void
 ItkFreeClassesWithOptInfo(
-    void *clientData,       /* associated data */
-    Tcl_Interp *interp)          /* interpreter being freed */
+    void *clientData,         /* associated data */
+    TCL_UNUSED(Tcl_Interp *)) /* interpreter being freed */
 {
     Tcl_HashTable *tablePtr = (Tcl_HashTable*)clientData;
     Tcl_HashSearch place;

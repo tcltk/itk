@@ -219,7 +219,7 @@ Itk_ArchetypeCmd(
     Tcl_Obj *const objv[])   /* argument objects */
 {
     ItclShowArgs(2, "Itk_ArchetypeCmd", objc, objv);
-    if (objc == 1) {
+    if (objc < 2 || objc > INT_MAX) {
 	/* produce usage message */
 	Tcl_Obj *objPtr = Tcl_NewStringObj(
 		"wrong # args: should be one of...\n", -1);
@@ -228,7 +228,7 @@ Itk_ArchetypeCmd(
 	return TCL_ERROR;
     }
     return ItclEnsembleSubCmd(clientData, interp, "::itcl::builtin::Archetype",
-	    objc, objv, "Itk_ArchetypeCmd");
+	    (int)objc, objv, "Itk_ArchetypeCmd");
 }
 
 /*
@@ -246,7 +246,7 @@ Itk_ArchetypeCmd(
  */
 int
 Itk_ArchInitOptsCmd(
-    void *dummy,             /* unused */
+    TCL_UNUSED(void *),      /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -340,7 +340,7 @@ Itk_ArchInitOptsCmd(
  */
 int
 Itk_ArchDeleteOptsCmd(
-    void *dummy,             /* unused */
+    TCL_UNUSED(void *),      /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -405,7 +405,7 @@ Itk_ArchComponentCmd(
     char *cmd;
     char *token;
     char c;
-    int length;
+    size_t length;
     Tcl_DString buffer;
     const char *head;
     const char *tail;
@@ -500,7 +500,7 @@ Itk_ArchComponentCmd(
  */
 int
 Itk_ArchInitCmd(
-    void *dummy,             /* unused */
+    TCL_UNUSED(void *),      /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -510,7 +510,7 @@ Itk_ArchInitCmd(
     ItclObject *contextObj;
     ArchInfo *info;
 
-    int i;
+    size_t i;
     int result;
     const char *val;
     char *token;
@@ -723,7 +723,7 @@ Itk_ArchOptionCmd(
     char *cmd;
     char *token;
     char c;
-    int length;
+    size_t length;
 
     ItclShowArgs(2,"Itk_ArchOptionCmd", objc, objv);
     /*
@@ -823,7 +823,7 @@ Itk_ArchOptionCmd(
  */
 int
 Itk_ArchCompAccessCmd(
-    void *dummy,             /* unused */
+    TCL_UNUSED(void *),      /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -1009,12 +1009,12 @@ fprintf(stderr, "ERR 2 archComp == NULL\n");
  */
 int
 Itk_ArchConfigureCmd(
-    void *dummy,             /* unused */
+    TCL_UNUSED(void *),      /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
-    int i;
+    size_t i;
     const char *val;
     char *token;
     ItclClass *contextClass;
@@ -1164,7 +1164,7 @@ Itk_ArchConfigureCmd(
  */
 int
 Itk_ArchCgetCmd(
-    void *dummy,             /* unused */
+    TCL_UNUSED(void *),      /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     int objc,                /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */

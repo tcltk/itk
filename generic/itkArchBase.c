@@ -164,7 +164,7 @@ Itk_DelArchInfo(
  */
 int
 Itk_ArchCompAddCmd(
-    void *dummy,        /* unused */
+    TCL_UNUSED(void *),      /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     Tcl_Size objc,           /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -587,7 +587,7 @@ compFail:
  */
 int
 Itk_ArchCompDeleteCmd(
-    void *dummy,        /* unused */
+    TCL_UNUSED(void *),      /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     Tcl_Size objc,           /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -1198,7 +1198,7 @@ Itk_UsualCmd(
  */
 int
 Itk_ArchOptionAddCmd(
-    void *dummy,        /* unused */
+    TCL_UNUSED(void *),      /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     Tcl_Size objc,           /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -1386,7 +1386,7 @@ Itk_ArchOptionAddCmd(
  */
 int
 Itk_ArchOptionRemoveCmd(
-    void *dummy,        /* unused */
+    TCL_UNUSED(void *),      /* unused */
     Tcl_Interp *interp,      /* current interpreter */
     Tcl_Size objc,           /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
@@ -1531,7 +1531,7 @@ Itk_ArchOptionRemoveCmd(
 static int
 Itk_PropagateOption(
     Tcl_Interp *interp,        /* interpreter managing the class */
-    ItclObject *contextObj,    /* itcl object being configured */
+    TCL_UNUSED(ItclObject *),  /* itcl object being configured */
     void *cdata,          /* command prefix to use for configuration */
     const char *newval)        /* new value for this option */
 {
@@ -2225,7 +2225,7 @@ Itk_DelArchOption(
  */
 ArchOptionPart*
 Itk_CreateOptionPart(
-    Tcl_Interp *interp,              /* interpreter handling this request */
+    TCL_UNUSED(Tcl_Interp *),   /* interpreter handling this request */
     void *cdata,                /* data representing this part */
     Itk_ConfigOptionPartProc *cproc, /* proc used to apply config changes */
     Tcl_CmdDeleteProc *dproc,        /* proc used to clean up ClientData */
@@ -2859,7 +2859,7 @@ Itk_CreateGenericOpt(
 
 optionDone:
     if (my_name != switchName) {
-	Tcl_Free(my_name);
+	Tcl_Free((char *)my_name);
     }
     if (codePtr) {
 	Tcl_DecrRefCount(codePtr);

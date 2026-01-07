@@ -78,12 +78,12 @@ Itk_OptListAdd(
     ItkOptList *olist,     /* ordered list */
     Tcl_HashEntry *entry)  /* entry to be added to the list */
 {
-    int i;
-    int first;
-    int last;
+    size_t i;
+    size_t first;
+    size_t last;
     int cmp;
-    int pos;
-    int size;
+    size_t pos;
+    size_t size;
     Tcl_HashEntry** newOrder;
     const char *swname;
     const char *optname;
@@ -163,10 +163,10 @@ Itk_OptListRemove(
     ItkOptList *olist,     /* ordered list */
     Tcl_HashEntry *entry)  /* entry to be removed from the list */
 {
-    int pos = 0;
-    int i;
-    int first;
-    int last;
+    size_t pos = 0;
+    size_t i;
+    size_t first;
+    size_t last;
     int cmp;
     const char *swname;
     const char *optname;
