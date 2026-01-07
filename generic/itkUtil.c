@@ -40,7 +40,7 @@ Itk_OptListInit(
     olist->options = options;
     olist->len = 0;
     olist->max = 10;
-    olist->list = (Tcl_HashEntry**)ckalloc(
+    olist->list = (Tcl_HashEntry**)Tcl_Alloc(
 	(olist->max*sizeof(Tcl_HashEntry*))
     );
 }
@@ -59,7 +59,7 @@ void
 Itk_OptListFree(
     ItkOptList *olist)     /* list to be freed */
 {
-    ckfree((char*)olist->list);
+    Tcl_Free(olist->list);
     olist->len = olist->max = 0;
 }
 
@@ -94,9 +94,9 @@ Itk_OptListAdd(
      */
     if (olist->len >= olist->max) {
 	size = olist->max*sizeof(Tcl_HashEntry*);
-	newOrder = (Tcl_HashEntry**)ckalloc(2*size);
+	newOrder = (Tcl_HashEntry**)Tcl_Alloc(2*size);
 	memcpy((void*)newOrder, (void*)olist->list, (size_t)size);
-	ckfree((char*)olist->list);
+	Tcl_Free(olist->list);
 
 	olist->list = newOrder;
 	olist->max *= 2;

@@ -150,7 +150,7 @@ fprintf(stderr, "error in creating namespace: ::itcl::builtin::Archetype \n");
     /*
      *  Create the namespace containing the option parser commands.
      */
-    mergeInfo = (ArchMergeInfo*)ckalloc(sizeof(ArchMergeInfo));
+    mergeInfo = (ArchMergeInfo*)Tcl_Alloc(sizeof(ArchMergeInfo));
     Tcl_InitHashTable(&mergeInfo->usualCode, TCL_STRING_KEYS);
     mergeInfo->archInfo    = NULL;
     mergeInfo->archComp    = NULL;
@@ -284,7 +284,7 @@ Itk_ArchInitOptsCmd(
      */
     objsWithArchInfo = ItkGetObjsWithArchInfo(interp);
 
-    info = (ArchInfo*)ckalloc(sizeof(ArchInfo));
+    info = (ArchInfo*)Tcl_Alloc(sizeof(ArchInfo));
     info->itclObj = contextObj;
     info->tkwin = NULL;  /* not known yet */
     Tcl_InitHashTable(&info->components, TCL_STRING_KEYS);

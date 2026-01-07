@@ -326,7 +326,7 @@ Itk_CreateClassOptTable(
 
     entry = Tcl_CreateHashEntry(itkClasses, (char*)iclsPtr, &newEntry);
     if (newEntry) {
-	optTable = (ItkClassOptTable*)ckalloc(sizeof(ItkClassOptTable));
+	optTable = (ItkClassOptTable*)Tcl_Alloc(sizeof(ItkClassOptTable));
 	Tcl_InitHashTable(&optTable->options, TCL_STRING_KEYS);
 	Itk_OptListInit(&optTable->order, &optTable->options);
 
@@ -430,7 +430,7 @@ ItkTraceClassDestroy(
 	}
 	Tcl_DeleteHashTable(&optTable->options);
 	Itk_OptListFree(&optTable->order);
-	ckfree((char*)optTable);
+	Tcl_Free(optTable);
     }
     return NULL;
 }
@@ -485,7 +485,7 @@ Itk_CreateClassOption(
     /*
      *  Create the record to represent this option.
      */
-    opt = (ItkClassOption*)ckalloc(sizeof(ItkClassOption));
+    opt = (ItkClassOption*)Tcl_Alloc(sizeof(ItkClassOption));
     memset(opt, 0, sizeof(ItkClassOption));
     opt->iclsPtr      = iclsPtr;
     opt->flags        = 0;
@@ -498,13 +498,13 @@ Itk_CreateClassOption(
     Tcl_IncrRefCount(opt->fullNamePtr);
     opt->codePtr = mcode;
 
-    opt->resName = (char*)ckalloc((strlen(resName)+1));
+    opt->resName = (char*)Tcl_Alloc((strlen(resName)+1));
     strcpy(opt->resName, resName);
 
-    opt->resClass = (char*)ckalloc((strlen(resClass)+1));
+    opt->resClass = (char*)Tcl_Alloc((strlen(resClass)+1));
     strcpy(opt->resClass, resClass);
 
-    opt->init = (char*)ckalloc((strlen(defVal)+1));
+    opt->init = (char*)Tcl_Alloc((strlen(defVal)+1));
     strcpy(opt->init, defVal);
 
     *optPtr = opt;
@@ -576,11 +576,11 @@ Itk_DelClassOption(
 #ifdef NOTDEF
     Itcl_DeleteMember(opt->member);
 #endif
-    ckfree(opt->resName);
-    ckfree(opt->resClass);
-    ckfree(opt->init);
+    Tcl_Free(opt->resName);
+    Tcl_Free(opt->resClass);
+    Tcl_Free(opt->init);
 
-    ckfree((char*)opt);
+    Tcl_Free(opt);
 }
 
 
@@ -606,7 +606,7 @@ ItkGetClassesWithOptInfo(
 	"itk_classesWithOptInfo", (Tcl_InterpDeleteProc**)NULL);
 
     if (!classesTable) {
-	classesTable = (Tcl_HashTable*)ckalloc(sizeof(Tcl_HashTable));
+	classesTable = (Tcl_HashTable*)Tcl_Alloc(sizeof(Tcl_HashTable));
 	Tcl_InitHashTable(classesTable, TCL_ONE_WORD_KEYS);
 	Tcl_SetAssocData(interp, "itk_classesWithOptInfo",
 	    ItkFreeClassesWithOptInfo, (void *)classesTable);
@@ -647,11 +647,11 @@ ItkFreeClassesWithOptInfo(
 	}
 	Tcl_DeleteHashTable(&optTable->options);
 	Itk_OptListFree(&optTable->order);
-	ckfree((char*)optTable);
+	Tcl_Free(optTable);
 
 	entry = Tcl_NextHashEntry(&place);
     }
 
     Tcl_DeleteHashTable(tablePtr);
-    ckfree((char*)tablePtr);
+    Tcl_Free(tablePtr);
 }

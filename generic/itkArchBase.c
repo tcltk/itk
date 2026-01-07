@@ -96,7 +96,7 @@ Itk_DelMergeInfo(
     }
     Tcl_DeleteHashTable(&mergeInfo->usualCode);
 
-    ckfree((char*)mergeInfo);
+    Tcl_Free(mergeInfo);
 }
 
 
@@ -144,7 +144,7 @@ Itk_DelArchInfo(
     Tcl_DeleteHashTable(&info->options);
     Itk_OptListFree(&info->order);
 
-    ckfree((char*)info);
+    Tcl_Free(info);
 }
 
 
@@ -310,7 +310,7 @@ Itk_ArchCompAddCmd(
      *  this, since the interpreter will get used in the mean time.
      */
     resultStr = Tcl_GetStringResult(interp);
-    path = (char*)ckalloc((strlen(resultStr)+1));
+    path = (char*)Tcl_Alloc((strlen(resultStr)+1));
     strcpy(path, resultStr);
 
     /*
@@ -499,7 +499,7 @@ Itk_ArchCompAddCmd(
     mergeInfo->archInfo    = NULL;
     mergeInfo->archComp    = NULL;
 
-    ckfree(path);
+    Tcl_Free(path);
 
     Tcl_DStringFree(&buffer);
     if (objNamePtr) {
@@ -529,7 +529,7 @@ compFail:
 	Tcl_DeleteHashEntry(entry);
     }
     if (path) {
-	ckfree(path);
+	Tcl_Free(path);
     }
     if (mergeInfo && mergeInfo->optionTable) {
 	Itk_DelGenericOptTable(mergeInfo->optionTable);
@@ -1756,7 +1756,7 @@ Itk_ArchConfigOption(
 #endif
 
     if (v) {
-	lastval = (char*)ckalloc((strlen(v)+1));
+	lastval = (char*)Tcl_Alloc((strlen(v)+1));
 	strcpy(lastval, v);
     } else {
 	lastval = NULL;
@@ -1824,7 +1824,7 @@ Itk_ArchConfigOption(
 
 configDone:
     if (lastval) {
-	ckfree(lastval);
+	Tcl_Free(lastval);
     }
     return result;
 }
@@ -1899,9 +1899,9 @@ Itk_CreateArchComponent(
 	    if (init &&
 		    (!archOpt->init || (strcmp(init, archOpt->init) != 0))) {
 		if (!archOpt->init) {
-		    ckfree(archOpt->init);
+		    Tcl_Free(archOpt->init);
 		}
-		archOpt->init = (char*)ckalloc((strlen(init)+1));
+		archOpt->init = (char*)Tcl_Alloc((strlen(init)+1));
 		strcpy(archOpt->init, init);
 
 		if (Itk_ArchSetOption(interp, info,
@@ -1916,7 +1916,7 @@ Itk_CreateArchComponent(
     /*
      *  Create the record to represent this component.
      */
-    archComp = (ArchComponent*)ckalloc(sizeof(ArchComponent));
+    archComp = (ArchComponent*)Tcl_Alloc(sizeof(ArchComponent));
 
     memset(archComp, 0, sizeof(ArchComponent));
     archComp->namePtr = Tcl_NewStringObj(name, -1);
@@ -1925,7 +1925,7 @@ Itk_CreateArchComponent(
     archComp->protection  = ITCL_PUBLIC;
     archComp->accessCmd  = accessCmd;
     archComp->tkwin      = tkwin;
-    archComp->pathName   = (char *) ckalloc((strlen(wname)+1));
+    archComp->pathName   = (char *)Tcl_Alloc((strlen(wname)+1));
     strcpy(archComp->pathName, wname);
 
     return archComp;
@@ -1945,10 +1945,10 @@ Itk_DelArchComponent(
     ArchComponent *archComp)  /* pointer to component data */
 {
 #ifdef NOTDEF
-    ckfree((char*)archComp->member);
+    Tcl_Free(archComp->member);
 #endif
-    ckfree((char*)archComp->pathName);
-    ckfree((char*)archComp);
+    Tcl_Free(archComp->pathName);
+    Tcl_Free(archComp);
 }
 
 
@@ -1994,7 +1994,7 @@ Itk_GetArchOption(
      *  If the switch does not have a leading "-", add it on.
      */
     if (*switchName != '-') {
-	name = (char *)ckalloc((strlen(switchName)+2));
+	name = (char *)Tcl_Alloc((strlen(switchName)+2));
 	*name = '-';
 	strcpy(name+1, switchName);
     } else {
@@ -2011,7 +2011,7 @@ Itk_GetArchOption(
 	archOpt = (ArchOption*)Tcl_GetHashValue(entry);
 
 	if (resName && !archOpt->resName) {
-	    archOpt->resName = (char*)ckalloc((strlen(resName)+1));
+	    archOpt->resName = (char*)Tcl_Alloc((strlen(resName)+1));
 	    strcpy(archOpt->resName, resName);
 	}
 	else if (resName && strcmp(archOpt->resName, resName) != 0) {
@@ -2024,7 +2024,7 @@ Itk_GetArchOption(
 	}
 
 	if (resClass && !archOpt->resClass) {
-	    archOpt->resClass = (char*)ckalloc((strlen(resClass)+1));
+	    archOpt->resClass = (char*)Tcl_Alloc((strlen(resClass)+1));
 	    strcpy(archOpt->resClass, resClass);
 	} else {
 	    if (resClass && strcmp(archOpt->resClass, resClass) != 0) {
@@ -2050,20 +2050,20 @@ Itk_GetArchOption(
      *  Create the record to represent this option, and save it
      *  in the option table.
      */
-    archOpt = (ArchOption*)ckalloc(sizeof(ArchOption));
+    archOpt = (ArchOption*)Tcl_Alloc(sizeof(ArchOption));
 
-    archOpt->switchName = (char*)ckalloc((strlen(name)+1));
+    archOpt->switchName = (char*)Tcl_Alloc((strlen(name)+1));
     strcpy(archOpt->switchName, name);
 
     if (resName) {
-	archOpt->resName = (char*)ckalloc((strlen(resName)+1));
+	archOpt->resName = (char*)Tcl_Alloc((strlen(resName)+1));
 	strcpy(archOpt->resName, resName);
     } else {
 	archOpt->resName = NULL;
     }
 
     if (resClass) {
-	archOpt->resClass = (char*)ckalloc((strlen(resClass)+1));
+	archOpt->resClass = (char*)Tcl_Alloc((strlen(resClass)+1));
 	strcpy(archOpt->resClass, resClass);
     } else {
 	archOpt->resClass = NULL;
@@ -2082,7 +2082,7 @@ Itk_GetArchOption(
 
 getArchOptionDone:
     if (name != switchName) {
-	ckfree(name);
+	Tcl_Free(name);
     }
     return result;
 }
@@ -2157,7 +2157,7 @@ Itk_InitArchOption(
 	    (char *)((ival) ? ival : ""), 0);
 
     if (ival) {
-	archOpt->init = (char*)ckalloc((strlen(ival)+1));
+	archOpt->init = (char*)Tcl_Alloc((strlen(ival)+1));
 	strcpy(archOpt->init, ival);
     }
 }
@@ -2190,17 +2190,17 @@ Itk_DelArchOption(
     /*
      *  Free any remaining data.
      */
-    ckfree(archOpt->switchName);
+    Tcl_Free(archOpt->switchName);
     if (archOpt->resName) {
-	ckfree(archOpt->resName);
+	Tcl_Free(archOpt->resName);
     }
     if (archOpt->resClass) {
-	ckfree(archOpt->resClass);
+	Tcl_Free(archOpt->resClass);
     }
     if (archOpt->init) {
-	ckfree(archOpt->init);
+	Tcl_Free(archOpt->init);
     }
-    ckfree((char*)archOpt);
+    Tcl_Free(archOpt);
 }
 
 
@@ -2236,7 +2236,7 @@ Itk_CreateOptionPart(
     /*
      *  Create the record to represent this part of the option.
      */
-    optPart = (ArchOptionPart*)ckalloc(sizeof(ArchOptionPart));
+    optPart = (ArchOptionPart*)Tcl_Alloc(sizeof(ArchOptionPart));
     optPart->clientData = cdata;
     optPart->configProc = cproc;
     optPart->deleteProc = dproc;
@@ -2359,7 +2359,7 @@ Itk_FindArchOptionPart(
      *  If the switch does not have a leading "-", add it on.
      */
     if (*switchName != '-') {
-	name = (char *)ckalloc((strlen(switchName)+2));
+	name = (char *)Tcl_Alloc((strlen(switchName)+2));
 	*name = '-';
 	strcpy(name+1, switchName);
     } else {
@@ -2386,7 +2386,7 @@ Itk_FindArchOptionPart(
     }
 
     if (name != switchName) {
-	ckfree(name);
+	Tcl_Free(name);
     }
     return optPart;
 }
@@ -2431,7 +2431,7 @@ Itk_RemoveArchOptionPart(
      *  If the switch does not have a leading "-", add it on.
      */
     if (*switchName != '-') {
-	name = (char *)ckalloc(strlen(switchName)+2);
+	name = (char *)Tcl_Alloc(strlen(switchName)+2);
 	*name = '-';
 	strcpy(name+1, switchName);
     } else {
@@ -2475,7 +2475,7 @@ Itk_RemoveArchOptionPart(
     }
 
     if (name != switchName) {
-	ckfree(name);
+	Tcl_Free(name);
     }
     return result;
 }
@@ -2574,7 +2574,7 @@ Itk_DelOptionPart(
     if (optPart->clientData && optPart->deleteProc) {
 	(*optPart->deleteProc)(optPart->clientData);
     }
-    ckfree((char*)optPart);
+    Tcl_Free(optPart);
 }
 
 
@@ -2607,7 +2607,7 @@ Itk_CreateConfigCmdline(
     /*
      *  Create the record to represent this part of the option.
      */
-    cmdlinePtr = (ConfigCmdline*)ckalloc(sizeof(ConfigCmdline));
+    cmdlinePtr = (ConfigCmdline*)Tcl_Alloc(sizeof(ConfigCmdline));
     memset(cmdlinePtr, 0, sizeof(ConfigCmdline));
 
     objPtr = Tcl_NewStringObj((char*)NULL, 0);
@@ -2646,7 +2646,7 @@ Itk_DeleteConfigCmdline(
     for (i=0; i < 3; i++) {
 	Tcl_DecrRefCount(cmdlinePtr->objv[i]);
     }
-    ckfree((char*)cmdlinePtr);
+    Tcl_Free(cmdlinePtr);
 }
 
 
@@ -2685,7 +2685,7 @@ Itk_CreateGenericOptTable(
     Tcl_HashEntry *entry;
     GenericConfigOpt *info;
 
-    tPtr = (Tcl_HashTable*)ckalloc(sizeof(Tcl_HashTable));
+    tPtr = (Tcl_HashTable*)Tcl_Alloc(sizeof(Tcl_HashTable));
     Tcl_InitHashTable(tPtr, TCL_STRING_KEYS);
 
     /*
@@ -2703,7 +2703,7 @@ Itk_CreateGenericOptTable(
 	if (optc == 5) {    /* avoid aliased options */
 	    entry = Tcl_CreateHashEntry(tPtr, optv[0], &newEntry);
 	    if (newEntry) {
-		info = (GenericConfigOpt*)ckalloc(sizeof(GenericConfigOpt));
+		info = (GenericConfigOpt*)Tcl_Alloc(sizeof(GenericConfigOpt));
 		info->switchName = (char *)optv[0];
 		info->resName    = (char *)optv[1];
 		info->resClass   = (char *)optv[2];
@@ -2716,16 +2716,16 @@ Itk_CreateGenericOptTable(
 	    }
 	}
 	else {
-	    ckfree((char*)optv);
+	    Tcl_Free(optv);
 	}
     }
 
-    ckfree((char*)confv);
+    Tcl_Free(confv);
     return tPtr;
 
 tableFail:
     if (confv) {
-	ckfree((char*)confv);
+	Tcl_Free(confv);
     }
     Itk_DelGenericOptTable(tPtr);
     return NULL;
@@ -2756,13 +2756,13 @@ Itk_DelGenericOptTable(
     entry = Tcl_FirstHashEntry(tPtr, &place);
     while (entry) {
 	info = (GenericConfigOpt*)Tcl_GetHashValue(entry);
-	ckfree((char*)info->storage);
-	ckfree((char*)info);
+	Tcl_Free(info->storage);
+	Tcl_Free(info);
 	entry = Tcl_NextHashEntry(&place);
     }
 
     Tcl_DeleteHashTable(tPtr);
-    ckfree((char*)tPtr);
+    Tcl_Free(tPtr);
 }
 
 
@@ -2804,7 +2804,7 @@ Itk_CreateGenericOpt(
      *  If the switch does not have a leading "-", add it on.
      */
     if (*switchName != '-') {
-	name = (char *)ckalloc((strlen(switchName)+2));
+	name = (char *)Tcl_Alloc((strlen(switchName)+2));
 	*name = '-';
 	strcpy(name+1, switchName);
 	my_name = name;
@@ -2843,7 +2843,7 @@ Itk_CreateGenericOpt(
 	goto optionDone;
     }
     if (optc == 5) {    /* avoid aliased options */
-	genericOpt = (GenericConfigOpt*)ckalloc(sizeof(GenericConfigOpt));
+	genericOpt = (GenericConfigOpt*)Tcl_Alloc(sizeof(GenericConfigOpt));
 	genericOpt->switchName = (char *)optv[0];
 	genericOpt->resName    = (char *)optv[1];
 	genericOpt->resClass   = (char *)optv[2];
@@ -2854,12 +2854,12 @@ Itk_CreateGenericOpt(
 	genericOpt->optPart    = NULL;
     }
     else {
-	ckfree((char*)optv);
+	Tcl_Free(optv);
     }
 
 optionDone:
     if (my_name != switchName) {
-	ckfree((char *)my_name);
+	Tcl_Free(my_name);
     }
     if (codePtr) {
 	Tcl_DecrRefCount(codePtr);
@@ -2884,7 +2884,7 @@ static void
 Itk_DelGenericOpt(
     GenericConfigOpt *opt)  /* option info to be destroyed */
 {
-    ckfree((char*)opt->storage);
-    ckfree((char*)opt);
+    Tcl_Free(opt->storage);
+    Tcl_Free(opt);
 }
 
