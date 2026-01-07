@@ -86,13 +86,13 @@ Itk_ClassOptionDefineCmd(
 
     switchName = Tcl_GetString(objv[1]);
     if (*switchName != '-') {
-	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+	Tcl_AppendResult(interp,
 		"bad option name \"", switchName, "\": should be -",
 		switchName, (char*)NULL);
 	return TCL_ERROR;
     }
     if (strstr(switchName, ".")) {
-	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+	Tcl_AppendResult(interp,
 		"bad option name \"", switchName,
 		"\": illegal character \".\"", (char*)NULL);
 	return TCL_ERROR;
@@ -100,7 +100,7 @@ Itk_ClassOptionDefineCmd(
 
     resName = Tcl_GetString(objv[2]);
     if (!islower((int)*resName)) {
-	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+	Tcl_AppendResult(interp,
 		"bad resource name \"", resName,
 		"\": should start with a lower case letter",
 		(char*)NULL);
@@ -109,7 +109,7 @@ Itk_ClassOptionDefineCmd(
 
     resClass = Tcl_GetString(objv[3]);
     if (!isupper((int)*resClass)) {
-	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+	Tcl_AppendResult(interp,
 	       "bad resource class \"", resClass,
 	       "\": should start with an upper case letter",
 	       (char*)NULL);
@@ -133,7 +133,7 @@ Itk_ClassOptionDefineCmd(
     entry = Tcl_CreateHashEntry(&optTable->options, switchName, &newEntry);
 
     if (!newEntry) {
-	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+	Tcl_AppendResult(interp,
 		"option \"", switchName, "\" already defined in class \"",
 		Tcl_GetString(iclsPtr->fullNamePtr), "\"",
 		(char*)NULL);
@@ -177,12 +177,12 @@ int
 Itk_ClassOptionIllegalCmd(
     TCL_UNUSED(void *),      /* class parser info */
     Tcl_Interp *interp,      /* current interpreter */
-    TCL_UNUSED(Tcl_Size),        /* number of arguments */
+    TCL_UNUSED(Tcl_Size),    /* number of arguments */
     Tcl_Obj *const objv[])   /* argument objects */
 {
     char *op = Tcl_GetString(objv[0]);
 
-    Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+    Tcl_AppendResult(interp,
 	    "can only ", op, " options for a specific widget\n",
 	    "(move this command into the constructor)",
 	    (char*)NULL);

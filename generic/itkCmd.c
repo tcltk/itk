@@ -78,7 +78,7 @@ Itk_ConfigBodyCmd(
     Itcl_ParseNamespPath(token, &buffer, &head, &tail);
 
     if (!head || *head == '\0') {
-	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+	Tcl_AppendResult(interp,
 		"missing class specifier for body declaration \"", token, "\"",
 		(char*)NULL);
 	result = TCL_ERROR;
