@@ -41,7 +41,7 @@ Itk_OptListInit(
     olist->len = 0;
     olist->max = 10;
     olist->list = (Tcl_HashEntry**)Tcl_Alloc(
-	(olist->max*sizeof(Tcl_HashEntry*))
+	((size_t)olist->max*sizeof(Tcl_HashEntry*))
     );
 }
 
@@ -83,7 +83,7 @@ Itk_OptListAdd(
     int last;
     int cmp;
     int pos;
-    int size;
+    size_t size;
     Tcl_HashEntry** newOrder;
     const char *swname;
     const char *optname;
@@ -93,9 +93,9 @@ Itk_OptListAdd(
      *  if needed.
      */
     if (olist->len >= olist->max) {
-	size = olist->max*sizeof(Tcl_HashEntry*);
+	size = (size_t)olist->max*sizeof(Tcl_HashEntry*);
 	newOrder = (Tcl_HashEntry**)Tcl_Alloc(2*size);
-	memcpy((void*)newOrder, (void*)olist->list, (size_t)size);
+	memcpy((void*)newOrder, (void*)olist->list, size);
 	Tcl_Free(olist->list);
 
 	olist->list = newOrder;

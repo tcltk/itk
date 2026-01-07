@@ -412,7 +412,7 @@ Itk_ArchComponentCmd(
 	/*
 	 *  Handle:  itk_component delete...
 	 */
-	if (c == 'd' && strncmp(token, "delete", length) == 0) {
+	if (c == 'd' && strncmp(token, "delete", (size_t)length) == 0) {
 	    if (objc < 3) {
 		Tcl_AppendResult(interp,
 		    "wrong # args: should be \"",
@@ -707,7 +707,7 @@ Itk_ArchOptionCmd(
     /*
      *  Handle:  itk_option add...
      */
-    if (c == 'a' && strncmp(token, "add", length) == 0) {
+    if (c == 'a' && strncmp(token, "add", (size_t)length) == 0) {
 	if (objc < 3) {
 	    Tcl_WrongNumArgs(interp, 1, objv, "add name ?name name...?");
 	    return TCL_ERROR;
