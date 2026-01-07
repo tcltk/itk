@@ -78,12 +78,12 @@ Itk_OptListAdd(
     ItkOptList *olist,     /* ordered list */
     Tcl_HashEntry *entry)  /* entry to be added to the list */
 {
-    Tcl_Size i;
-    Tcl_Size first;
-    Tcl_Size last;
+    size_t i;
+    size_t first;
+    size_t last;
     int cmp;
-    Tcl_Size pos;
-    Tcl_Size size;
+    size_t pos;
+    size_t size;
     Tcl_HashEntry** newOrder;
     const char *swname;
     const char *optname;
