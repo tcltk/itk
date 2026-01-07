@@ -96,7 +96,7 @@ Itk_DelMergeInfo(
     }
     Tcl_DeleteHashTable(&mergeInfo->usualCode);
 
-    Tcl_Free((char*)mergeInfo);
+    Tcl_Free(mergeInfo);
 }
 
 
@@ -144,7 +144,7 @@ Itk_DelArchInfo(
     Tcl_DeleteHashTable(&info->options);
     Itk_OptListFree(&info->order);
 
-    Tcl_Free((char*)info);
+    Tcl_Free(info);
 }
 
 
@@ -1925,7 +1925,7 @@ Itk_CreateArchComponent(
     archComp->protection  = ITCL_PUBLIC;
     archComp->accessCmd  = accessCmd;
     archComp->tkwin      = tkwin;
-    archComp->pathName   = (char *) Tcl_Alloc((strlen(wname)+1));
+    archComp->pathName   = (char *)Tcl_Alloc((strlen(wname)+1));
     strcpy(archComp->pathName, wname);
 
     return archComp;
@@ -1945,10 +1945,10 @@ Itk_DelArchComponent(
     ArchComponent *archComp)  /* pointer to component data */
 {
 #ifdef NOTDEF
-    Tcl_Free((char*)archComp->member);
+    Tcl_Free(archComp->member);
 #endif
-    Tcl_Free((char*)archComp->pathName);
-    Tcl_Free((char*)archComp);
+    Tcl_Free(archComp->pathName);
+    Tcl_Free(archComp);
 }
 
 
@@ -2200,7 +2200,7 @@ Itk_DelArchOption(
     if (archOpt->init) {
 	Tcl_Free(archOpt->init);
     }
-    Tcl_Free((char*)archOpt);
+    Tcl_Free(archOpt);
 }
 
 
@@ -2574,7 +2574,7 @@ Itk_DelOptionPart(
     if (optPart->clientData && optPart->deleteProc) {
 	(*optPart->deleteProc)(optPart->clientData);
     }
-    Tcl_Free((char*)optPart);
+    Tcl_Free(optPart);
 }
 
 
@@ -2646,7 +2646,7 @@ Itk_DeleteConfigCmdline(
     for (i=0; i < 3; i++) {
 	Tcl_DecrRefCount(cmdlinePtr->objv[i]);
     }
-    Tcl_Free((char*)cmdlinePtr);
+    Tcl_Free(cmdlinePtr);
 }
 
 
@@ -2716,16 +2716,16 @@ Itk_CreateGenericOptTable(
 	    }
 	}
 	else {
-	    Tcl_Free((char*)optv);
+	    Tcl_Free(optv);
 	}
     }
 
-    Tcl_Free((char*)confv);
+    Tcl_Free(confv);
     return tPtr;
 
 tableFail:
     if (confv) {
-	Tcl_Free((char*)confv);
+	Tcl_Free(confv);
     }
     Itk_DelGenericOptTable(tPtr);
     return NULL;
@@ -2756,13 +2756,13 @@ Itk_DelGenericOptTable(
     entry = Tcl_FirstHashEntry(tPtr, &place);
     while (entry) {
 	info = (GenericConfigOpt*)Tcl_GetHashValue(entry);
-	Tcl_Free((char*)info->storage);
-	Tcl_Free((char*)info);
+	Tcl_Free(info->storage);
+	Tcl_Free(info);
 	entry = Tcl_NextHashEntry(&place);
     }
 
     Tcl_DeleteHashTable(tPtr);
-    Tcl_Free((char*)tPtr);
+    Tcl_Free(tPtr);
 }
 
 
@@ -2854,7 +2854,7 @@ Itk_CreateGenericOpt(
 	genericOpt->optPart    = NULL;
     }
     else {
-	Tcl_Free((char*)optv);
+	Tcl_Free(optv);
     }
 
 optionDone:
@@ -2884,7 +2884,7 @@ static void
 Itk_DelGenericOpt(
     GenericConfigOpt *opt)  /* option info to be destroyed */
 {
-    Tcl_Free((char*)opt->storage);
-    Tcl_Free((char*)opt);
+    Tcl_Free(opt->storage);
+    Tcl_Free(opt);
 }
 

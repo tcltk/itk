@@ -41,7 +41,7 @@ Itk_OptListInit(
     olist->len = 0;
     olist->max = 10;
     olist->list = (Tcl_HashEntry**)Tcl_Alloc(
-	((size_t)olist->max*sizeof(Tcl_HashEntry*))
+	(olist->max*sizeof(Tcl_HashEntry*))
     );
 }
 
@@ -59,7 +59,7 @@ void
 Itk_OptListFree(
     ItkOptList *olist)     /* list to be freed */
 {
-    Tcl_Free((char*)olist->list);
+    Tcl_Free(olist->list);
     olist->len = olist->max = 0;
 }
 
@@ -93,10 +93,10 @@ Itk_OptListAdd(
      *  if needed.
      */
     if (olist->len >= olist->max) {
-	size = olist->max*(Tcl_Size)sizeof(Tcl_HashEntry*);
-	newOrder = (Tcl_HashEntry**)Tcl_Alloc(2*(size_t)size);
+	size = olist->max*sizeof(Tcl_HashEntry*);
+	newOrder = (Tcl_HashEntry**)Tcl_Alloc(2*size);
 	memcpy((void*)newOrder, (void*)olist->list, (size_t)size);
-	Tcl_Free((char*)olist->list);
+	Tcl_Free(olist->list);
 
 	olist->list = newOrder;
 	olist->max *= 2;
@@ -118,18 +118,17 @@ Itk_OptListAdd(
 	    if (cmp == 0) {
 		break;    /* found it! */
 	    }
-	}
-	else if (*swname < *optname) {
+	} else if (*swname < *optname) {
 	    cmp = -1;
-	}
-	else {
+	} else {
 	    cmp = 1;
 	}
 
-	if (cmp > 0)
+	if (cmp > 0) {
 	    first = pos+1;
-	else
+	} else {
 	    last = pos-1;
+	}
     }
 
     /*
@@ -184,11 +183,9 @@ Itk_OptListRemove(
 	    if (cmp == 0) {
 		break;    /* found it! */
 	    }
-	}
-	else if (*swname < *optname) {
+	} else if (*swname < *optname) {
 	    cmp = -1;
-	}
-	else {
+	} else {
 	    cmp = 1;
 	}
 

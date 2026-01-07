@@ -190,6 +190,6 @@ ItkFreeObjsWithArchInfo(
     }
 
     Tcl_DeleteHashTable(tablePtr);
-    Tcl_Free((char*)tablePtr);
+    Tcl_Free(tablePtr);
 }
 

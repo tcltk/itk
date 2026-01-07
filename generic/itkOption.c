@@ -430,7 +430,7 @@ ItkTraceClassDestroy(
 	}
 	Tcl_DeleteHashTable(&optTable->options);
 	Itk_OptListFree(&optTable->order);
-	Tcl_Free((char*)optTable);
+	Tcl_Free(optTable);
     }
     return NULL;
 }
@@ -580,7 +580,7 @@ Itk_DelClassOption(
     Tcl_Free(opt->resClass);
     Tcl_Free(opt->init);
 
-    Tcl_Free((char*)opt);
+    Tcl_Free(opt);
 }
 
 
@@ -647,11 +647,11 @@ ItkFreeClassesWithOptInfo(
 	}
 	Tcl_DeleteHashTable(&optTable->options);
 	Itk_OptListFree(&optTable->order);
-	Tcl_Free((char*)optTable);
+	Tcl_Free(optTable);
 
 	entry = Tcl_NextHashEntry(&place);
     }
 
     Tcl_DeleteHashTable(tablePtr);
-    Tcl_Free((char*)tablePtr);
+    Tcl_Free(tablePtr);
 }
