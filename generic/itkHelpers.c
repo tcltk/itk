@@ -76,7 +76,7 @@ Itk_ArchOptAccessError(
 {
     Tcl_ResetResult(interp);
 
-    Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+    Tcl_AppendResult(interp,
 	"internal error: cannot access itk_option(", archOpt->switchName, ")",
 	(char*)NULL);
 
@@ -115,7 +115,7 @@ Itk_GetArchInfo(
     entry = Tcl_FindHashEntry(objsWithArchInfo, (char*)contextObj);
 
     if (!entry) {
-	Tcl_AppendStringsToObj(Tcl_GetObjResult(interp),
+	Tcl_AppendResult(interp,
 	    "internal error: no Archetype information for widget",
 	    (char*)NULL);
 
