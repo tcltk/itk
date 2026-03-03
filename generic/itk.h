@@ -54,24 +54,13 @@
 #       define ITKAPI DLLIMPORT
 #endif
 
-#ifndef TCL_ALPHA_RELEASE
-#   define TCL_ALPHA_RELEASE	0
-#endif
-#ifndef TCL_BETA_RELEASE
-#   define TCL_BETA_RELEASE	1
-#endif
-#ifndef TCL_FINAL_RELEASE
-#   define TCL_FINAL_RELEASE	2
-#endif
-
-
 #define ITK_MAJOR_VERSION	4
 #define ITK_MINOR_VERSION	2
 #define ITK_RELEASE_LEVEL	TCL_FINAL_RELEASE
-#define ITK_RELEASE_SERIAL	5
+#define ITK_RELEASE_SERIAL	7
 
 #define ITK_VERSION		"4.2"
-#define ITK_PATCH_LEVEL		"4.2.6"
+#define ITK_PATCH_LEVEL		"4.2.7"
 
 
 /*
